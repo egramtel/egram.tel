@@ -1,0 +1,12 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui">
+    
+    <Grid
+        RowDefinitions="*"
+        ColumnDefinitions="*"
+        Classes="WaitingForm"
+        >
+                
+    </Grid>
+    
+</UserControl>

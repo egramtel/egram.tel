@@ -1,0 +1,91 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:nav="clr-namespace:Egram.Gui.Navigation"
+    >
+        
+    <ListBox
+        Classes="Segments"
+        Items="{Binding Entities}"
+        SelectedIndex="{Binding SelectedEntityIndex, Mode=TwoWay}"
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+        >
+        
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                
+                <Grid
+                    Classes="Item"
+                    RowDefinitions="auto"
+                    ColumnDefinitions="auto,*,auto"
+                    >
+                    
+                    <Image
+                        IsVisible="{Binding IsChannel}"
+                        Grid.Column="0"
+                        Source="resm:Egram.Gui.Icons.section_channel.png?assembly=Egram.Gui"
+                        />
+                    <Image
+                        IsVisible="{Binding IsGroup}"
+                        Grid.Column="0"
+                        Source="resm:Egram.Gui.Icons.section_group.png?assembly=Egram.Gui"
+                        />
+                    <Image
+                        IsVisible="{Binding IsBot}"
+                        Grid.Column="0"
+                        Source="resm:Egram.Gui.Icons.section_bot.png?assembly=Egram.Gui"
+                        />
+                    <Image
+                        IsVisible="{Binding IsDirect}"
+                        Grid.Column="0"
+                        Source="resm:Egram.Gui.Icons.section_direct.png?assembly=Egram.Gui"
+                        />
+                    
+                    <Panel
+                        IsVisible="{Binding HasLabel}"
+                        Classes="Label"
+                        Grid.Column="1"
+                        >
+                        <TextBlock
+                            Text="{Binding Name}" />
+                    </Panel>
+                    
+                    <StackPanel
+                        IsVisible="{Binding HasHeader}"
+                        Classes="Header"
+                        Orientation="Horizontal"
+                        Grid.Column="0"
+                        >
+                        
+                        <TextBlock
+                            Text="{Binding Name}" />
+                        
+                        <Image
+                            Grid.Column="0"
+                            Source="resm:Egram.Gui.Icons.button_right.png?assembly=Egram.Gui"
+                            />
+                        
+                    </StackPanel>
+                    
+                    <Panel
+                        IsVisible="{Binding HasIndicator}"
+                        Classes="Indicator"
+                        Grid.Column="2"
+                        >
+                        <Border
+                            IsVisible="{Binding HasIndicator}"
+                            >
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Text="{Binding Indicator}" />
+                        </Border>
+                    </Panel>
+                    
+                </Grid>
+                
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+        
+    </ListBox>
+    
+</UserControl>

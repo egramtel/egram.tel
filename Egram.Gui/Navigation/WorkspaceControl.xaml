@@ -1,0 +1,7 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    >
+
+    <TextBlock Text="{Binding Label}"/>
+    
+</UserControl>

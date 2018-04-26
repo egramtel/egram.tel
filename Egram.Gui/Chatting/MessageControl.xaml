@@ -1,0 +1,63 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui">
+    
+    <Grid
+        Classes="Message"
+        RowDefinitions="auto,*"
+        ColumnDefinitions="auto,*,auto"
+        >
+        
+        <!-- info -->
+        <TextBlock
+            Classes="Author"
+            Grid.Row="0"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            IsVisible="{Binding HasAvatar}"
+            Text="{Binding MessageAuthor.Name}"
+            />
+        
+        <!-- avatar -->
+        <Image
+            Classes="Avatar"
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            IsVisible="{Binding HasAvatar}"
+            Source="{Binding MessageAuthor.Avatar}"
+            />
+        
+        <Rectangle
+            Classes="Avatar"
+            Grid.Row="1"
+            Grid.Column="0"
+            />
+        
+        <!-- text -->
+        <Border
+            Classes="Content"
+            Grid.Row="1"
+            Grid.Column="1"
+            >
+        
+            <TextBlock
+                Text="{Binding Text}"
+                />
+            
+        </Border>
+        
+        <StackPanel
+            Classes="Info"
+            Grid.Row="1"
+            Grid.Column="2"
+            >
+        
+            <TextBlock
+                Text="{Binding Time}"
+                />
+            
+        </StackPanel>
+        
+    </Grid>
+    
+</UserControl>

@@ -1,0 +1,20 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui">
+    
+    <Grid
+        Classes="Badge"
+        RowDefinitions="auto"
+        ColumnDefinitions="*,auto,*"
+        >
+        
+        <Border
+            Grid.Column="1">
+            
+            <TextBlock
+                Text="{Binding Text}" />
+            
+        </Border>
+        
+    </Grid>
+    
+</UserControl>

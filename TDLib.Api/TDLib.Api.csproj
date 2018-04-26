@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>netcoreapp2.0;netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Funcs\**" />
+    <EmbeddedResource Remove="Funcs\**" />
+    <None Remove="Funcs\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="**\*.tl" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Types" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+  </ItemGroup>
+</Project>
