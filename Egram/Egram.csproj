@@ -4,6 +4,15 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <None Update="**\*.dll" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="**\*.dylib" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="**\*.so" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.6.1" />
     <PackageReference Include="Avalonia.Desktop" Version="0.6.1" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.6.1" />
@@ -45,6 +54,5 @@
       <Project>{A9D83964-F1EF-42E3-9474-2FFA941F0E5B}</Project>
       <Name>Egram.Components</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TDLib\TDLib.csproj" />
   </ItemGroup>
 </Project>

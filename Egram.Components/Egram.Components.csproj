@@ -10,9 +10,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
     <PackageReference Include="System.Reactive" Version="3.1.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TDLib.Api\TDLib.Api.csproj" />
-    <ProjectReference Include="..\TDLib\TDLib.csproj" />
+    <PackageReference Include="TDLib" Version="1.2.0" />
   </ItemGroup>
 </Project>

@@ -8,9 +8,9 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.6.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
     <PackageReference Include="ReactiveUI" Version="8.0.0-alpha0117" />
+    <PackageReference Include="TDLib" Version="1.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Egram.Components\Egram.Components.csproj" />
-    <ProjectReference Include="..\TDLib.Api\TDLib.Api.csproj" />
   </ItemGroup>
 </Project>
