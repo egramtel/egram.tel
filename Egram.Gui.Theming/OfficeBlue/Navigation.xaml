@@ -91,11 +91,11 @@
     </Style>
     
     <Style Selector="Grid.Explorer ListBox.Segments Grid.Item StackPanel.Header Image">
-        <Setter Property="Opacity" Value="0" />
+        <Setter Property="Opacity" Value="0.8" />
     </Style>
     
     <Style Selector="Grid.Explorer ListBox.Segments Grid.Item StackPanel.Header:pointerover Image">
-        <Setter Property="Opacity" Value="0.9" />
+        <Setter Property="Opacity" Value="1" />
     </Style>
     
     <!-- Segment Icon -->
