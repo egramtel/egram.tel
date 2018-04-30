@@ -22,7 +22,7 @@ namespace Egram.Components.Navigation
             _agent = agent;
         }
 
-        public IObservable<Fetch> FetchAll()
+        public IObservable<Fetch> FetchAggregated()
         {
             return Observable.Create<Fetch>(async observer =>
             {
@@ -88,6 +88,53 @@ namespace Egram.Components.Navigation
                 {
                     Segment = new Segment("People", ExplorerEntityKind.People),
                     Targets = peopleTargets
+                });
+            });
+        }
+
+        public IObservable<Fetch> FetchByKind(ExplorerEntityKind kind)
+        {
+            return Observable.Create<Fetch>(async observer =>
+            {
+                var targets = new ReactiveList<SegmentTarget>();
+                var chats = await GetAllChatsAsync();
+                
+                foreach (var chat in chats)
+                {
+                    switch (chat.Type)
+                    {
+                        case TD.ChatType.ChatTypePrivate ctp:
+                            var user = await GetUserAsync(ctp.UserId);
+                            if (user.Type is TD.UserType.UserTypeRegular)
+                            {
+                                targets.Add(new SegmentTarget(ExplorerEntityKind.People, new Topic(chat)));
+                            }
+                            else if (user.Type is TD.UserType.UserTypeBot)
+                            {
+                                targets.Add(new SegmentTarget(ExplorerEntityKind.Bot, new Topic(chat)));
+                            }
+                            break;
+                        
+                        case TD.ChatType.ChatTypeBasicGroup _:
+                            targets.Add(new SegmentTarget(ExplorerEntityKind.Group, new Topic(chat)));
+                            break;
+                            
+                        case TD.ChatType.ChatTypeSupergroup cts:
+                            if (cts.IsChannel)
+                            {
+                                targets.Add(new SegmentTarget(ExplorerEntityKind.Channel, new Topic(chat)));
+                            }
+                            else
+                            {
+                                targets.Add(new SegmentTarget(ExplorerEntityKind.Group, new Topic(chat)));
+                            }
+                            break;
+                    }
+                }
+                
+                observer.OnNext(new Fetch
+                {
+                    Targets = targets.Where(t => t.Kind == kind).ToList()
                 });
             });
         }

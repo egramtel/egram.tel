@@ -43,7 +43,7 @@ namespace Egram.Components.Navigation
         private void ObserveSelectedSegment(Segment segment)
         {
             CatalogContext?.Dispose();
-            CatalogContext = _catalogContextFactory.FromSegment(segment);
+            CatalogContext = _catalogContextFactory.FromSegment(_scope, segment);
 
             AccessoryText = segment.Name;
 

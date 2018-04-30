@@ -32,7 +32,7 @@ namespace Egram.Components.Navigation
                 .Subscribe(ObserveExplorerNavigation);
             
             _segmentFetchSubscription = _segmentInteractor
-                .FetchAll()
+                .FetchAggregated()
                 .SubscribeOn(Scheduler.Default)
                 .Buffer(4)
                 .ObserveOn(AvaloniaScheduler.Instance)

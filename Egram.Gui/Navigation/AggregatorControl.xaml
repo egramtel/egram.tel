@@ -1,6 +1,5 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
-    xmlns:nav="clr-namespace:Egram.Gui.Navigation"
     >
         
     <ListBox
