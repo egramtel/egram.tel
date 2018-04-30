@@ -9,11 +9,11 @@ using Egram.Components.TDLib;
 
 namespace Egram.Components.Chatting
 {
-    public class ProfilePhotoLoader
+    public class AvatarLoader
     {
         private readonly FileLoader _fileLoader;
 
-        public ProfilePhotoLoader(FileLoader fileLoader)
+        public AvatarLoader(FileLoader fileLoader)
         {
             _fileLoader = fileLoader;
         }

@@ -20,24 +20,9 @@
                     >
                     
                     <Image
-                        IsVisible="{Binding IsChannel}"
+                        IsVisible="{Binding HasAvatar}"
                         Grid.Column="0"
-                        Source="resm:Egram.Gui.Icons.section_channel.png?assembly=Egram.Gui"
-                        />
-                    <Image
-                        IsVisible="{Binding IsGroup}"
-                        Grid.Column="0"
-                        Source="resm:Egram.Gui.Icons.section_group.png?assembly=Egram.Gui"
-                        />
-                    <Image
-                        IsVisible="{Binding IsBot}"
-                        Grid.Column="0"
-                        Source="resm:Egram.Gui.Icons.section_bot.png?assembly=Egram.Gui"
-                        />
-                    <Image
-                        IsVisible="{Binding IsDirect}"
-                        Grid.Column="0"
-                        Source="resm:Egram.Gui.Icons.section_direct.png?assembly=Egram.Gui"
+                        Source="{Binding Avatar}"
                         />
                     
                     <Panel
@@ -50,7 +35,7 @@
                     </Panel>
                     
                     <StackPanel
-                        IsVisible="{Binding HasHeader}"
+                        IsVisible="{Binding IsHeader}"
                         Classes="Header"
                         Orientation="Horizontal"
                         Grid.Column="0"

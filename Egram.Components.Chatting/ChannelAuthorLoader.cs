@@ -14,22 +14,22 @@ namespace Egram.Components.Chatting
     public class ChannelAuthorLoader : IDisposable
     {
         private readonly IAgent _agent;
-        private readonly ProfilePhotoLoader _profilePhotoLoader;
-        private readonly ConcurrentDictionary<long, ChannelAuthor> _channelAuthorCache;
+        private readonly AvatarLoader _avatarLoader;
+        private readonly ConcurrentDictionary<long, ChannelAuthor> _cache;
         
         public ChannelAuthorLoader(
             IAgent agent,
-            ProfilePhotoLoader profilePhotoLoader
+            AvatarLoader avatarLoader
             )
         {
             _agent = agent;
-            _profilePhotoLoader = profilePhotoLoader;
-            _channelAuthorCache = new ConcurrentDictionary<long, ChannelAuthor>();
+            _avatarLoader = avatarLoader;
+            _cache = new ConcurrentDictionary<long, ChannelAuthor>();
         }
         
         public bool Retrieve(long chatId, out ChannelAuthor channelAuthor)
         {
-            if (_channelAuthorCache.TryGetValue(chatId, out channelAuthor))
+            if (_cache.TryGetValue(chatId, out channelAuthor))
             {
                 return true;
             }
@@ -39,12 +39,12 @@ namespace Egram.Components.Chatting
                 ChatId = chatId
             };
 
-            if (_channelAuthorCache.TryAdd(chatId, channelAuthor))
+            if (_cache.TryAdd(chatId, channelAuthor))
             {
                 return false;
             }
 
-            _channelAuthorCache.TryGetValue(chatId, out channelAuthor);
+            _cache.TryGetValue(chatId, out channelAuthor);
             
             return true;
         }
@@ -58,7 +58,7 @@ namespace Egram.Components.Chatting
                 // load info
                 foreach (var chatId in chatIds)
                 {
-                    if (_channelAuthorCache.TryGetValue(chatId, out var channelAuthor))
+                    if (_cache.TryGetValue(chatId, out var channelAuthor))
                     {
                         var chat = await _agent.ExecuteAsync(
                             new TD.GetChat
@@ -78,9 +78,9 @@ namespace Egram.Components.Chatting
                 // load avatars
                 foreach (var chat in chats)
                 {
-                    if (_channelAuthorCache.TryGetValue(chat.Id, out var channelAuthor))
+                    if (_cache.TryGetValue(chat.Id, out var channelAuthor))
                     {
-                        var bitmap = await _profilePhotoLoader.LoadForChatAsync(chat);
+                        var bitmap = await _avatarLoader.LoadForChatAsync(chat);
 
                         observer.OnNext(new Load(
                             channelAuthor,

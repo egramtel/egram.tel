@@ -24,79 +24,74 @@ namespace Egram.Components.Navigation
 
         public IObservable<Fetch> FetchAggregated()
         {
-            return Observable.Create<Fetch>(async observer =>
+            return FetchAll().SelectMany(f =>
             {
-                var botConversations = new ReactiveList<Conversation>();
-                var channelConversations = new ReactiveList<Conversation>();
-                var groupConversations = new ReactiveList<Conversation>();
-                var peopleConversations = new ReactiveList<Conversation>();
-
-                var chats = await GetAllChatsAsync();
-
-                foreach (var chat in chats)
+                var fetches = new List<Fetch>(4);
+                
+                fetches.Add(new Fetch
                 {
-                    switch (chat.Type)
+                    Segment = new Segment
                     {
-                        case TD.ChatType.ChatTypePrivate ctp:
-                            var user = await GetUserAsync(ctp.UserId);
-                            if (user.Type is TD.UserType.UserTypeRegular)
-                            {
-                                peopleConversations.Add(new Conversation(ExplorerEntityKind.People, new Topic(chat)));
-                            }
-                            else if (user.Type is TD.UserType.UserTypeBot)
-                            {
-                                botConversations.Add(new Conversation(ExplorerEntityKind.Bot, new Topic(chat)));
-                            }
-                            break;
-                        
-                        case TD.ChatType.ChatTypeBasicGroup _:
-                            groupConversations.Add(new Conversation(ExplorerEntityKind.Group, new Topic(chat)));
-                            break;
-                            
-                        case TD.ChatType.ChatTypeSupergroup cts:
-                            if (cts.IsChannel)
-                            {
-                                channelConversations.Add(new Conversation(ExplorerEntityKind.Channel, new Topic(chat)));
-                            }
-                            else
-                            {
-                                groupConversations.Add(new Conversation(ExplorerEntityKind.Group, new Topic(chat)));
-                            }
-                            break;
-                    }
-                }
-                
-                observer.OnNext(new Fetch
+                        Name = "Bots",
+                        Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Bot
+                    },
+                    Conversations = f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Bot)
+                        .Take(3)
+                        .ToList()
+                });
+
+                fetches.Add(new Fetch
                 {
-                    Segment = new Segment("Bots", ExplorerEntityKind.Bot),
-                    Conversations = botConversations.Take(3).ToList()
+                    Segment = new Segment
+                    {
+                        Name = "Channels",
+                        Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Channel
+                    },
+                    Conversations = f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Channel)
+                        .Take(3)
+                        .ToList()
                 });
                 
-                observer.OnNext(new Fetch
+                fetches.Add(new Fetch
                 {
-                    Segment = new Segment("Channels", ExplorerEntityKind.Channel),
-                    Conversations = channelConversations.Take(3).ToList()
+                    Segment = new Segment
+                    {
+                        Name = "Groups",
+                        Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Group
+                    },
+                    Conversations = f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Group)
+                        .Take(3)
+                        .ToList()
                 });
                 
-                observer.OnNext(new Fetch
+                fetches.Add(new Fetch
                 {
-                    Segment = new Segment("Groups", ExplorerEntityKind.Group),
-                    Conversations = groupConversations.Take(3).ToList()
+                    Segment = new Segment
+                    {
+                        Name = "People",
+                        Kind = ExplorerEntityKind.Header | ExplorerEntityKind.People
+                    },
+                    Conversations = f.Conversations.Where(c => c.Kind == ExplorerEntityKind.People)
+                        .ToList()
                 });
                 
-                observer.OnNext(new Fetch
-                {
-                    Segment = new Segment("People", ExplorerEntityKind.People),
-                    Conversations = peopleConversations
-                });
+                return fetches;
             });
         }
 
         public IObservable<Fetch> FetchByKind(ExplorerEntityKind kind)
         {
+            return FetchAll().Select(f => new Fetch
+            {
+                Conversations = f.Conversations.Where(t => t.Kind == kind).ToList()
+            });
+        }
+
+        public IObservable<Fetch> FetchAll()
+        {
             return Observable.Create<Fetch>(async observer =>
             {
-                var conversations = new ReactiveList<Conversation>();
+                var conversations = new List<Conversation>();
                 var chats = await GetAllChatsAsync();
                 
                 foreach (var chat in chats)
@@ -107,26 +102,46 @@ namespace Egram.Components.Navigation
                             var user = await GetUserAsync(ctp.UserId);
                             if (user.Type is TD.UserType.UserTypeRegular)
                             {
-                                conversations.Add(new Conversation(ExplorerEntityKind.People, new Topic(chat)));
+                                conversations.Add(new Conversation
+                                {
+                                    Kind = ExplorerEntityKind.People,
+                                    Topic = new Topic(chat)
+                                });
                             }
                             else if (user.Type is TD.UserType.UserTypeBot)
                             {
-                                conversations.Add(new Conversation(ExplorerEntityKind.Bot, new Topic(chat)));
+                                conversations.Add(new Conversation
+                                {
+                                    Kind = ExplorerEntityKind.Bot,
+                                    Topic = new Topic(chat)
+                                });
                             }
                             break;
                         
                         case TD.ChatType.ChatTypeBasicGroup _:
-                            conversations.Add(new Conversation(ExplorerEntityKind.Group, new Topic(chat)));
+                            conversations.Add(new Conversation
+                            {
+                                Kind = ExplorerEntityKind.Group,
+                                Topic = new Topic(chat)
+                            });
                             break;
                             
                         case TD.ChatType.ChatTypeSupergroup cts:
                             if (cts.IsChannel)
                             {
-                                conversations.Add(new Conversation(ExplorerEntityKind.Channel, new Topic(chat)));
+                                conversations.Add(new Conversation
+                                {
+                                    Kind = ExplorerEntityKind.Channel,
+                                    Topic = new Topic(chat)
+                                });
                             }
                             else
                             {
-                                conversations.Add(new Conversation(ExplorerEntityKind.Group, new Topic(chat)));
+                                conversations.Add(new Conversation
+                                {
+                                    Kind = ExplorerEntityKind.Group,
+                                    Topic = new Topic(chat)
+                                });
                             }
                             break;
                     }
@@ -134,7 +149,7 @@ namespace Egram.Components.Navigation
                 
                 observer.OnNext(new Fetch
                 {
-                    Conversations = conversations.Where(t => t.Kind == kind).ToList()
+                    Conversations = conversations
                 });
             });
         }

@@ -14,16 +14,16 @@ namespace Egram.Components.Chatting
     public class UserAuthorLoader : IDisposable
     {
         private readonly IAgent _agent;
-        private readonly ProfilePhotoLoader _profilePhotoLoader;
+        private readonly AvatarLoader _avatarLoader;
         private readonly ConcurrentDictionary<int, UserAuthor> _userAuthorCache;
 
         public UserAuthorLoader(
             IAgent agent,
-            ProfilePhotoLoader profilePhotoLoader
+            AvatarLoader avatarLoader
             )
         {
             _agent = agent;
-            _profilePhotoLoader = profilePhotoLoader;
+            _avatarLoader = avatarLoader;
             _userAuthorCache = new ConcurrentDictionary<int, UserAuthor>();
         }
 
@@ -80,7 +80,7 @@ namespace Egram.Components.Chatting
                 {
                     if (_userAuthorCache.TryGetValue(user.Id, out var userAuthor))
                     {
-                        var bitmap = await _profilePhotoLoader.LoadForUserAsync(user);
+                        var bitmap = await _avatarLoader.LoadForUserAsync(user);
                     
                         observer.OnNext(new Load(
                             userAuthor,

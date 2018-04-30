@@ -10,7 +10,7 @@ namespace Egram.Registry
         {
             services.AddSingleton<Storage>();
             services.AddSingleton<FileLoader>();
-            services.AddScoped<ProfilePhotoLoader>();
+            services.AddScoped<AvatarLoader>();
         }
     }
 }
