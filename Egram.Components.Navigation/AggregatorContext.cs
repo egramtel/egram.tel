@@ -46,7 +46,7 @@ namespace Egram.Components.Navigation
             foreach (var fetch in fetches)
             {
                 entities.Add(fetch.Segment);
-                entities.AddRange(fetch.Targets);
+                entities.AddRange(fetch.Conversations);
             }
             
             Entities = new ReactiveList<ExplorerEntity>(entities);
@@ -74,8 +74,8 @@ namespace Egram.Components.Navigation
 
                     await Task.Delay(250);
                     
-                    var target = (SegmentTarget) entity;
-                    _navigator.Go(target.Topic);
+                    var conversation = (Conversation) entity;
+                    _navigator.Go(conversation.Topic);
                 }
             }
         }

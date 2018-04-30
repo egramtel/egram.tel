@@ -26,10 +26,10 @@ namespace Egram.Components.Navigation
         {
             return Observable.Create<Fetch>(async observer =>
             {
-                var botTargets = new ReactiveList<SegmentTarget>();
-                var channelTargets = new ReactiveList<SegmentTarget>();
-                var groupTargets = new ReactiveList<SegmentTarget>();
-                var peopleTargets = new ReactiveList<SegmentTarget>();
+                var botConversations = new ReactiveList<Conversation>();
+                var channelConversations = new ReactiveList<Conversation>();
+                var groupConversations = new ReactiveList<Conversation>();
+                var peopleConversations = new ReactiveList<Conversation>();
 
                 var chats = await GetAllChatsAsync();
 
@@ -41,26 +41,26 @@ namespace Egram.Components.Navigation
                             var user = await GetUserAsync(ctp.UserId);
                             if (user.Type is TD.UserType.UserTypeRegular)
                             {
-                                peopleTargets.Add(new SegmentTarget(ExplorerEntityKind.People, new Topic(chat)));
+                                peopleConversations.Add(new Conversation(ExplorerEntityKind.People, new Topic(chat)));
                             }
                             else if (user.Type is TD.UserType.UserTypeBot)
                             {
-                                botTargets.Add(new SegmentTarget(ExplorerEntityKind.Bot, new Topic(chat)));
+                                botConversations.Add(new Conversation(ExplorerEntityKind.Bot, new Topic(chat)));
                             }
                             break;
                         
                         case TD.ChatType.ChatTypeBasicGroup _:
-                            groupTargets.Add(new SegmentTarget(ExplorerEntityKind.Group, new Topic(chat)));
+                            groupConversations.Add(new Conversation(ExplorerEntityKind.Group, new Topic(chat)));
                             break;
                             
                         case TD.ChatType.ChatTypeSupergroup cts:
                             if (cts.IsChannel)
                             {
-                                channelTargets.Add(new SegmentTarget(ExplorerEntityKind.Channel, new Topic(chat)));
+                                channelConversations.Add(new Conversation(ExplorerEntityKind.Channel, new Topic(chat)));
                             }
                             else
                             {
-                                groupTargets.Add(new SegmentTarget(ExplorerEntityKind.Group, new Topic(chat)));
+                                groupConversations.Add(new Conversation(ExplorerEntityKind.Group, new Topic(chat)));
                             }
                             break;
                     }
@@ -69,25 +69,25 @@ namespace Egram.Components.Navigation
                 observer.OnNext(new Fetch
                 {
                     Segment = new Segment("Bots", ExplorerEntityKind.Bot),
-                    Targets = botTargets.Take(3).ToList()
+                    Conversations = botConversations.Take(3).ToList()
                 });
                 
                 observer.OnNext(new Fetch
                 {
                     Segment = new Segment("Channels", ExplorerEntityKind.Channel),
-                    Targets = channelTargets.Take(3).ToList()
+                    Conversations = channelConversations.Take(3).ToList()
                 });
                 
                 observer.OnNext(new Fetch
                 {
                     Segment = new Segment("Groups", ExplorerEntityKind.Group),
-                    Targets = groupTargets.Take(3).ToList()
+                    Conversations = groupConversations.Take(3).ToList()
                 });
                 
                 observer.OnNext(new Fetch
                 {
                     Segment = new Segment("People", ExplorerEntityKind.People),
-                    Targets = peopleTargets
+                    Conversations = peopleConversations
                 });
             });
         }
@@ -96,7 +96,7 @@ namespace Egram.Components.Navigation
         {
             return Observable.Create<Fetch>(async observer =>
             {
-                var targets = new ReactiveList<SegmentTarget>();
+                var conversations = new ReactiveList<Conversation>();
                 var chats = await GetAllChatsAsync();
                 
                 foreach (var chat in chats)
@@ -107,26 +107,26 @@ namespace Egram.Components.Navigation
                             var user = await GetUserAsync(ctp.UserId);
                             if (user.Type is TD.UserType.UserTypeRegular)
                             {
-                                targets.Add(new SegmentTarget(ExplorerEntityKind.People, new Topic(chat)));
+                                conversations.Add(new Conversation(ExplorerEntityKind.People, new Topic(chat)));
                             }
                             else if (user.Type is TD.UserType.UserTypeBot)
                             {
-                                targets.Add(new SegmentTarget(ExplorerEntityKind.Bot, new Topic(chat)));
+                                conversations.Add(new Conversation(ExplorerEntityKind.Bot, new Topic(chat)));
                             }
                             break;
                         
                         case TD.ChatType.ChatTypeBasicGroup _:
-                            targets.Add(new SegmentTarget(ExplorerEntityKind.Group, new Topic(chat)));
+                            conversations.Add(new Conversation(ExplorerEntityKind.Group, new Topic(chat)));
                             break;
                             
                         case TD.ChatType.ChatTypeSupergroup cts:
                             if (cts.IsChannel)
                             {
-                                targets.Add(new SegmentTarget(ExplorerEntityKind.Channel, new Topic(chat)));
+                                conversations.Add(new Conversation(ExplorerEntityKind.Channel, new Topic(chat)));
                             }
                             else
                             {
-                                targets.Add(new SegmentTarget(ExplorerEntityKind.Group, new Topic(chat)));
+                                conversations.Add(new Conversation(ExplorerEntityKind.Group, new Topic(chat)));
                             }
                             break;
                     }
@@ -134,7 +134,7 @@ namespace Egram.Components.Navigation
                 
                 observer.OnNext(new Fetch
                 {
-                    Targets = targets.Where(t => t.Kind == kind).ToList()
+                    Conversations = conversations.Where(t => t.Kind == kind).ToList()
                 });
             });
         }
@@ -207,7 +207,7 @@ namespace Egram.Components.Navigation
         {
             public Segment Segment { get; set; }
         
-            public IList<SegmentTarget> Targets { get; set; }
+            public IList<Conversation> Conversations { get; set; }
         }
     }
 }
