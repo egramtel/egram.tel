@@ -3,7 +3,7 @@
     >
         
     <ListBox
-        Classes="Segments"
+        Name="ExplorerSegments"
         Items="{Binding Entities}"
         SelectedIndex="{Binding SelectedEntityIndex, Mode=TwoWay}"
         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -14,42 +14,44 @@
             <DataTemplate>
                 
                 <Grid
-                    Classes="Item"
+                    Name="ExplorerSegmentItem"
                     RowDefinitions="auto"
                     ColumnDefinitions="auto,*,auto"
                     >
                     
                     <Ellipse
-                        Width="20"
-                        Height="20"
+                        Name="ExplorerSegmentAvatar"
                         IsVisible="{Binding HasAvatar}"
                         Grid.Column="0"
                         >
                         <Ellipse.Fill>
-                            <ImageBrush Source="{Binding Avatar}" Stretch="None" />
+                            <ImageBrush Source="{Binding Avatar}" Stretch="Fill" />
                         </Ellipse.Fill>
                     </Ellipse>
                     
                     <Panel
+                        Name="ExplorerSegmentLabelContainer"
                         IsVisible="{Binding HasLabel}"
-                        Classes="Label"
                         Grid.Column="1"
                         >
                         <TextBlock
+                            Name="ExplorerSegmentLabelText"
                             Text="{Binding Title}" />
                     </Panel>
                     
                     <StackPanel
+                        Name="ExplorerSegmentHeaderContainer"
                         IsVisible="{Binding IsHeader}"
-                        Classes="Header"
                         Orientation="Horizontal"
                         Grid.Column="0"
                         >
                         
                         <TextBlock
+                            Name="ExplorerSegmentHeaderText"
                             Text="{Binding Name}" />
                         
                         <Image
+                            Name="ExplorerSegmentHeaderImage"
                             Grid.Column="0"
                             Source="resm:Egram.Gui.Icons.button_right.png?assembly=Egram.Gui"
                             />
@@ -58,7 +60,7 @@
                     
                     <Panel
                         IsVisible="{Binding HasIndicator}"
-                        Classes="Indicator"
+                        Name="Indicator"
                         Grid.Column="2"
                         >
                         <Border
