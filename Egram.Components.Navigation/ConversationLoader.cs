@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Media.Imaging;
 using Egram.Components.Graphics;
 using Egram.Components.TDLib;
@@ -66,7 +67,7 @@ namespace Egram.Components.Navigation
 
         public Task<IBitmap> LoadAvatar(Conversation conversation)
         {
-            return _avatarLoader.LoadForChatAsync(conversation.Chat);
+            return _avatarLoader.LoadForChatAsync(conversation.Chat, AvatarLoader.Size.Explorer);
         }
         
         private bool Retrieve(long chatId, out Conversation conversation)

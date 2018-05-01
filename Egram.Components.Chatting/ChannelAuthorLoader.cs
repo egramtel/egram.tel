@@ -6,6 +6,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Media.Imaging;
 using Egram.Components.Graphics;
 using Egram.Components.TDLib;
@@ -81,7 +82,7 @@ namespace Egram.Components.Chatting
                 {
                     if (_cache.TryGetValue(chat.Id, out var channelAuthor))
                     {
-                        var bitmap = await _avatarLoader.LoadForChatAsync(chat);
+                        var bitmap = await _avatarLoader.LoadForChatAsync(chat, AvatarLoader.Size.Chat);
 
                         observer.OnNext(new Load(
                             channelAuthor,

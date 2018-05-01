@@ -18,6 +18,12 @@ namespace Egram.Components.Persistence
 
             TdlibDirectory = Path.Combine(BaseDirectory, "tdlib");
             Directory.CreateDirectory(TdlibDirectory);
+
+            CacheDirectory = Path.Combine(BaseDirectory, "cache");
+            Directory.CreateDirectory(CacheDirectory);
+
+            AvatarCacheDirectory = Path.Combine(CacheDirectory, "avatars");
+            Directory.CreateDirectory(AvatarCacheDirectory);
         }
 
         public string BaseDirectory { get; }
@@ -25,5 +31,9 @@ namespace Egram.Components.Persistence
         public string LogDirectory { get; }
 
         public string TdlibDirectory { get; }
+        
+        public string CacheDirectory { get; }
+        
+        public string AvatarCacheDirectory { get; }
     }
 }

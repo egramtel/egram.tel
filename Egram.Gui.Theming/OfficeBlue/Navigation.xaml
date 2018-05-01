@@ -82,7 +82,7 @@
     <!-- Conversation Label -->
     
     <Style Selector="Grid.Explorer ListBox.Segments Grid.Item Panel.Label">
-        <Setter Property="Height" Value="18" />
+        <Setter Property="Height" Value="20" />
     </Style>
     
     <Style Selector="Grid.Explorer ListBox.Segments Grid.Item Panel.Label TextBlock">
@@ -98,8 +98,8 @@
     <!-- Conversation Indicator -->
     
     <Style Selector="Grid.Explorer ListBox.Segments Grid.Item Panel.Indicator Border">
-        <Setter Property="Height" Value="18" />
-        <Setter Property="CornerRadius" Value="9" />
+        <Setter Property="Height" Value="20" />
+        <Setter Property="CornerRadius" Value="10" />
         <Setter Property="Background" Value="{DynamicResource BackgroundIndicatorBrush}" />
     </Style>
     

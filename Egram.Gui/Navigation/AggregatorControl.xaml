@@ -19,11 +19,16 @@
                     ColumnDefinitions="auto,*,auto"
                     >
                     
-                    <Image
+                    <Ellipse
+                        Width="20"
+                        Height="20"
                         IsVisible="{Binding HasAvatar}"
                         Grid.Column="0"
-                        Source="{Binding Avatar}"
-                        />
+                        >
+                        <Ellipse.Fill>
+                            <ImageBrush Source="{Binding Avatar}" />
+                        </Ellipse.Fill>
+                    </Ellipse>
                     
                     <Panel
                         IsVisible="{Binding HasLabel}"
