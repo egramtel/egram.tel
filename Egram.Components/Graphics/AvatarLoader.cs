@@ -1,9 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Egram.Components.Persistence;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Processing.Overlays;
 using SixLabors.ImageSharp.Processing.Transforms;
 
 namespace Egram.Components.Graphics
@@ -26,46 +29,81 @@ namespace Egram.Components.Graphics
         {   
             var localFile = await _fileLoader.LoadFileAsync(user.ProfilePhoto?.Small);
 
+            string avatarFile;
             if (localFile?.Path != null)
             {
-                var avatarFile = await CreateAvatar(localFile.Path, size);
-                return await CreateBitmap(avatarFile);
+                avatarFile = await CreateAvatar(localFile.Path, size);
+            }
+            else
+            {
+                avatarFile = await CreateFallbackAvatar(user.Id, size);
             }
 
-            return null;
+            return await CreateBitmap(avatarFile);
         }
 
         public async Task<IBitmap> LoadForChatAsync(TD.Chat chat, Size size)
         {   
             var localFile = await _fileLoader.LoadFileAsync(chat.Photo?.Small);
 
+            string avatarFile;
             if (localFile?.Path != null)
             {
-                var avatarFile = await CreateAvatar(localFile.Path, size);
-                return await CreateBitmap(avatarFile);
+                avatarFile = await CreateAvatar(localFile.Path, size);
+            }
+            else
+            {
+                avatarFile = await CreateFallbackAvatar(chat.Id, size);
             }
 
-            return null;
+            return await CreateBitmap(avatarFile);
         }
 
         private Task<string> CreateAvatar(string file, Size size)
         {
             return Task.Run(() =>
             {
-                var thumbFile = Path.Combine(
+                var s = (int)size;
+                
+                var avatarFile = Path.Combine(
                     _storage.AvatarCacheDirectory,
-                    $"avatar_{(int)size}x{(int)size}_{Path.GetFileName(file)}");
+                    $"avatar_{s}x{s}_{Path.GetFileName(file)}");
 
-                if (!File.Exists(thumbFile))
+                if (!File.Exists(avatarFile))
                 {
                     using (var image = Image.Load(file))
                     {
-                        image.Mutate(ctx => ctx.Resize((int)size, (int)size));
-                        image.Save(thumbFile);
+                        image.Mutate(ctx => ctx.Resize(s, s));
+                        image.Save(avatarFile);
                     }
                 }
                 
-                return thumbFile;
+                return avatarFile;
+            });
+        }
+
+        private Task<string> CreateFallbackAvatar(long id, Size size)
+        {
+            return Task.Run(() =>
+            {
+                var index = Math.Abs(id) % _colors.Length;
+                var color = _colors[index];
+                var s = (int)size;
+                
+                var avatarFile = Path.Combine(
+                    _storage.AvatarCacheDirectory,
+                    $"avatar_{s}x{s}_{color}.jpg");
+
+                if (!File.Exists(avatarFile))
+                {
+                    using (var image = new Image<Rgba32>(s, s))
+                    {
+                        image.Mutate(ctx => ctx.BackgroundColor(Rgba32.FromHex(color)));
+                        image.Save(avatarFile);
+                    }
+                }
+
+                return avatarFile;
             });
         }
 
@@ -73,6 +111,16 @@ namespace Egram.Components.Graphics
         {
             return Task.Run(() => File.Exists(filePath) ? new Bitmap(filePath) : null);
         }
+
+        private readonly string[] _colors =
+        {
+            "5caae9",
+            "e66b66",
+            "69cfbe",
+            "c57fe1",
+            "8ace7c",
+            "f5b870"
+        };
 
         public enum Size
         {
