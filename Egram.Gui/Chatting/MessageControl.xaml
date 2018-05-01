@@ -2,14 +2,14 @@
     xmlns="https://github.com/avaloniaui">
     
     <Grid
-        Classes="Message"
+        Name="TextMessage"
         RowDefinitions="auto,*"
         ColumnDefinitions="auto,*,auto"
         >
         
         <!-- info -->
         <TextBlock
-            Classes="Author"
+            Name="TextMessageAuthor"
             Grid.Row="0"
             Grid.Column="1"
             Grid.ColumnSpan="2"
@@ -18,41 +18,46 @@
             />
         
         <!-- avatar -->
-        <Image
-            Classes="Avatar"
+        <Ellipse
+            Name="TextMessageAvatar"
+            IsVisible="{Binding HasAvatar}"
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="0"
-            IsVisible="{Binding HasAvatar}"
-            Source="{Binding MessageAuthor.Avatar}"
-            />
+            >
+            <Ellipse.Fill>
+                <ImageBrush Source="{Binding MessageAuthor.Avatar}" Stretch="Fill" />
+            </Ellipse.Fill>
+        </Ellipse>
         
         <Rectangle
-            Classes="Avatar"
+            Name="TextMessageAvatarPlaceholder"
             Grid.Row="1"
             Grid.Column="0"
             />
         
         <!-- text -->
         <Border
-            Classes="Content"
+            Name="TextMessageContent"
             Grid.Row="1"
             Grid.Column="1"
             >
         
             <TextBlock
+                Name="TextMessageContentText"
                 Text="{Binding Text}"
                 />
             
         </Border>
         
         <StackPanel
-            Classes="Info"
+            Name="TextMessageInfo"
             Grid.Row="1"
             Grid.Column="2"
             >
         
             <TextBlock
+                Name="TextMessageInfoTime"
                 Text="{Binding Time}"
                 />
             

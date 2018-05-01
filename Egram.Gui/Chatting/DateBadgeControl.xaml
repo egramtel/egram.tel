@@ -2,15 +2,17 @@
     xmlns="https://github.com/avaloniaui">
     
     <Grid
-        Classes="Badge"
+        Name="BadgeMessage"
         RowDefinitions="auto"
         ColumnDefinitions="*,auto,*"
         >
         
         <Border
+            Name="BadgeMessageContainer"
             Grid.Column="1">
             
             <TextBlock
+                Name="BadgeMessageText"
                 Text="{Binding Text}" />
             
         </Border>

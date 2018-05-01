@@ -17,32 +17,32 @@
     
     <!-- badges -->
     
-    <Style Selector="ListBox.MessageExplorer Grid.Badge TextBlock">
+    <Style Selector="TextBlock#BadgeMessageText">
         <Setter Property="FontSize" Value="13" />
         <Setter Property="Foreground" Value="#666666" />
     </Style>
     
-    <Style Selector="ListBox.MessageExplorer Grid.Badge Border">
+    <Style Selector="Border#BadgeMessageContainer">
         <Setter Property="Margin" Value="0,16,0,0" />
     </Style>
     
     <!-- user -->
     
-    <Style Selector="Grid.Message Image.Avatar">
+    <Style Selector="Ellipse#TextMessageAvatar">
         <Setter Property="Width" Value="40" />
         <Setter Property="Height" Value="40" />
         <Setter Property="Margin" Value="0,22,10,0" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
     
-    <Style Selector="Grid.Message Rectangle.Avatar">
+    <Style Selector="Rectangle#TextMessageAvatarPlaceholder">
         <Setter Property="Width" Value="40" />
         <Setter Property="Height" Value="1" />
         <Setter Property="Margin" Value="0,0,10,0" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
     
-    <Style Selector="Grid.Message TextBlock.Author">
+    <Style Selector="TextBlock#TextMessageAuthor">
         <Setter Property="Height" Value="18" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Margin" Value="0,24,10,0" />
@@ -51,24 +51,24 @@
     
     <!-- content -->
     
-    <Style Selector="Grid.Message Border.Content">
+    <Style Selector="Border#TextMessageContent">
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Margin" Value="0,8" />
     </Style>
     
-    <Style Selector="Grid.Message StackPanel.Info">
+    <Style Selector="StackPanel#TextMessageInfo">
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Margin" Value="0,4" />
     </Style>
     
-    <Style Selector="Grid.Message Border.Content TextBlock">
+    <Style Selector="TextBlock#TextMessageContentText">
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="FontSize" Value="14" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Foreground" Value="#444444" />
     </Style>
     
-    <Style Selector="Grid.Message StackPanel.Info TextBlock">
+    <Style Selector="TextBlock#TextMessageInfoTime">
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="FontSize" Value="12" />
         <Setter Property="VerticalAlignment" Value="Top" />
