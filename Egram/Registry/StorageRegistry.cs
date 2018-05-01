@@ -1,4 +1,5 @@
 ﻿using Egram.Components.Chatting;
+using Egram.Components.Graphics;
 using Egram.Components.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 

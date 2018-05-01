@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
-using Egram.Components.Chatting;
+using Egram.Components.Graphics;
 using Egram.Components.TDLib;
 
 namespace Egram.Components.Navigation

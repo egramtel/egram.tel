@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
+using Egram.Components.Graphics;
 using Egram.Components.TDLib;
 
 namespace Egram.Components.Chatting

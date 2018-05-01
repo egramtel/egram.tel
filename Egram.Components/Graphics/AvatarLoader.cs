@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.IO;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Egram.Components.Persistence;
-using Egram.Components.TDLib;
 
-namespace Egram.Components.Chatting
+namespace Egram.Components.Graphics
 {
     public class AvatarLoader
     {
@@ -24,7 +19,7 @@ namespace Egram.Components.Chatting
 
             if (localFile?.Path != null)
             {
-                return new Bitmap(localFile.Path);
+                return await CreateBitmap(localFile.Path);
             }
 
             return null;
@@ -36,10 +31,15 @@ namespace Egram.Components.Chatting
 
             if (localFile?.Path != null)
             {
-                return new Bitmap(localFile.Path);
+                return await CreateBitmap(localFile.Path);
             }
 
             return null;
+        }
+
+        private Task<Bitmap> CreateBitmap(string filePath)
+        {
+            return Task.Run(() => new Bitmap(filePath));
         }
     }
 }
