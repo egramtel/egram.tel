@@ -21,13 +21,25 @@ namespace Egram.Components.Chatting
         public async Task<IBitmap> LoadForUserAsync(TD.User user)
         {
             var localFile = await _fileLoader.LoadFileAsync(user.ProfilePhoto?.Small);
-            return new Bitmap(localFile.Path);
+
+            if (localFile?.Path != null)
+            {
+                return new Bitmap(localFile.Path);
+            }
+
+            return null;
         }
 
         public async Task<IBitmap> LoadForChatAsync(TD.Chat chat)
-        {
+        {   
             var localFile = await _fileLoader.LoadFileAsync(chat.Photo?.Small);
-            return new Bitmap(localFile.Path);
+
+            if (localFile?.Path != null)
+            {
+                return new Bitmap(localFile.Path);
+            }
+
+            return null;
         }
     }
 }

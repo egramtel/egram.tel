@@ -31,27 +31,30 @@ namespace Egram.Components.Navigation
             _navigator = navigator;
             _segmentInteractor = segmentInteractor;
 
+            _entities = new ReactiveList<ExplorerEntity>();
+
             _explorerNavigationSubscription = this.WhenAnyValue(x => x.SelectedEntityIndex)
                 .Subscribe(ObserveExplorerNavigation);
             
             _segmentFetchSubscription = _segmentInteractor
                 .FetchByKind(segment.Kind ^ ExplorerEntityKind.Header)
+                .Buffer(TimeSpan.FromMilliseconds(200))
                 .SubscribeOn(Scheduler.Default)
-                .Buffer(4)
                 .ObserveOn(AvaloniaScheduler.Instance)
                 .Subscribe(ObserveSegmentsFetch);
         }
 
-        private void ObserveSegmentsFetch(IList<SegmentInteractor.Fetch> fetches)
+        private void ObserveSegmentsFetch(IList<SegmentInteractor.Result> results)
         {
-            var entities = new List<ExplorerEntity>();
-            
-            foreach (var fetch in fetches)
+            foreach (var result in results)
             {
-                entities.AddRange(fetch.Conversations);
+                switch (result)
+                {
+                    case SegmentInteractor.Fetch fetch:
+                        _entities.AddRange(fetch.Conversations);
+                        break;
+                }
             }
-            
-            Entities = new ReactiveList<ExplorerEntity>(entities);
         }
 
         private async void ObserveExplorerNavigation(int index)
@@ -64,7 +67,7 @@ namespace Egram.Components.Navigation
                 await Task.Delay(250);
                 
                 var conversation = (Conversation) entity;
-                _navigator.Go(conversation.Topic);
+                _navigator.Go(new Topic(conversation.Chat));
             }
         }
         

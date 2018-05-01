@@ -9,6 +9,7 @@ namespace Egram.Registry
         public static void AddNavigation(this IServiceCollection services)
         {
             services.AddScoped<Navigator>();
+            services.AddScoped<ConversationLoader>();
             services.AddScoped<SegmentInteractor>();
         }
     }

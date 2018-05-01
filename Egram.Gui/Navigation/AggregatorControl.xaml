@@ -31,7 +31,7 @@
                         Grid.Column="1"
                         >
                         <TextBlock
-                            Text="{Binding Name}" />
+                            Text="{Binding Title}" />
                     </Panel>
                     
                     <StackPanel

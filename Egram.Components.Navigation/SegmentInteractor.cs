@@ -5,6 +5,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Avalonia.Media.Imaging;
 using Egram.Components.Navigation;
 using Egram.Components.TDLib;
 using ReactiveUI;
@@ -14,143 +15,136 @@ namespace Egram.Components.Navigation
     public class SegmentInteractor : IDisposable
     {
         private readonly IAgent _agent;
+        private readonly ConversationLoader _conversationLoader;
 
         public SegmentInteractor(
-            IAgent agent
+            IAgent agent,
+            ConversationLoader conversationLoader
             )
         {
             _agent = agent;
+            _conversationLoader = conversationLoader;
         }
 
-        public IObservable<Fetch> FetchAggregated()
+        public IObservable<Result> FetchAggregated()
         {
-            return FetchAll().SelectMany(f =>
+            return FetchAll().SelectMany(result =>
             {
-                var fetches = new List<Fetch>(4);
-                
-                fetches.Add(new Fetch
-                {
-                    Segment = new Segment
-                    {
-                        Name = "Bots",
-                        Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Bot
-                    },
-                    Conversations = f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Bot)
-                        .Take(3)
-                        .ToList()
-                });
+                var results = new List<Result>();
 
-                fetches.Add(new Fetch
+                switch (result)
                 {
-                    Segment = new Segment
-                    {
-                        Name = "Channels",
-                        Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Channel
-                    },
-                    Conversations = f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Channel)
-                        .Take(3)
-                        .ToList()
-                });
+                    case Fetch f:
+                        results.Add(new Fetch(
+                            new Segment
+                            {
+                                Name = "Bots",
+                                Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Bot
+                            },
+                            f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Bot)
+                                .Take(3)
+                                .ToList()));
+
+                        results.Add(new Fetch(
+                            new Segment
+                            {
+                                Name = "Channels",
+                                Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Channel
+                            },
+                            f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Channel)
+                                .Take(3)
+                                .ToList()));
+
+                        results.Add(new Fetch(
+                            new Segment
+                            {
+                                Name = "Groups",
+                                Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Group
+                            },
+                            f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Group)
+                                .Take(3)
+                                .ToList()));
+
+                        results.Add(new Fetch(
+                            new Segment
+                            {
+                                Name = "People",
+                                Kind = ExplorerEntityKind.Header | ExplorerEntityKind.People
+                            },
+                            f.Conversations.Where(c => c.Kind == ExplorerEntityKind.People)
+                                .ToList()));
+                        break;
+                    
+                    default:
+                        results.Add(result);
+                        break;
+                }
                 
-                fetches.Add(new Fetch
-                {
-                    Segment = new Segment
-                    {
-                        Name = "Groups",
-                        Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Group
-                    },
-                    Conversations = f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Group)
-                        .Take(3)
-                        .ToList()
-                });
-                
-                fetches.Add(new Fetch
-                {
-                    Segment = new Segment
-                    {
-                        Name = "People",
-                        Kind = ExplorerEntityKind.Header | ExplorerEntityKind.People
-                    },
-                    Conversations = f.Conversations.Where(c => c.Kind == ExplorerEntityKind.People)
-                        .ToList()
-                });
-                
-                return fetches;
+                return results;
             });
         }
 
-        public IObservable<Fetch> FetchByKind(ExplorerEntityKind kind)
+        public IObservable<Result> FetchByKind(ExplorerEntityKind kind)
         {
-            return FetchAll().Select(f => new Fetch
+            return FetchAll().Select(result =>
             {
-                Conversations = f.Conversations.Where(t => t.Kind == kind).ToList()
+                switch (result)
+                {
+                    case Fetch f:
+                        return new Fetch(f.Conversations.Where(t => t.Kind == kind).ToList());
+                    default:
+                        return result;
+                }
             });
         }
 
-        public IObservable<Fetch> FetchAll()
+        public IObservable<Result> FetchAll()
         {
-            return Observable.Create<Fetch>(async observer =>
+            return Observable.Create<Result>(async observer =>
             {
                 var conversations = new List<Conversation>();
                 var chats = await GetAllChatsAsync();
+                var conversationsToLoad = new List<Conversation>();
                 
                 foreach (var chat in chats)
                 {
+                    Conversation conversation;
+                    
                     switch (chat.Type)
                     {
                         case TD.ChatType.ChatTypePrivate ctp:
                             var user = await GetUserAsync(ctp.UserId);
-                            if (user.Type is TD.UserType.UserTypeRegular)
+                            if (!_conversationLoader.Retrieve(chat, user, out conversation))
                             {
-                                conversations.Add(new Conversation
-                                {
-                                    Kind = ExplorerEntityKind.People,
-                                    Topic = new Topic(chat)
-                                });
-                            }
-                            else if (user.Type is TD.UserType.UserTypeBot)
-                            {
-                                conversations.Add(new Conversation
-                                {
-                                    Kind = ExplorerEntityKind.Bot,
-                                    Topic = new Topic(chat)
-                                });
+                                conversationsToLoad.Add(conversation);
                             }
                             break;
                         
-                        case TD.ChatType.ChatTypeBasicGroup _:
-                            conversations.Add(new Conversation
+                        default:
+                            if (!_conversationLoader.Retrieve(chat, out conversation))
                             {
-                                Kind = ExplorerEntityKind.Group,
-                                Topic = new Topic(chat)
-                            });
-                            break;
-                            
-                        case TD.ChatType.ChatTypeSupergroup cts:
-                            if (cts.IsChannel)
-                            {
-                                conversations.Add(new Conversation
-                                {
-                                    Kind = ExplorerEntityKind.Channel,
-                                    Topic = new Topic(chat)
-                                });
-                            }
-                            else
-                            {
-                                conversations.Add(new Conversation
-                                {
-                                    Kind = ExplorerEntityKind.Group,
-                                    Topic = new Topic(chat)
-                                });
+                                conversationsToLoad.Add(conversation);
                             }
                             break;
                     }
+
+                    if (conversation != null)
+                    {
+                        conversations.Add(conversation);
+                    }
+                }
+
+                observer.OnNext(new Fetch(conversations));
+
+                var f = conversationsToLoad.Where(c => c.Chat.Photo == null).ToList();
+                
+                foreach (var conversation in conversationsToLoad)
+                {
+                    var bitmap = await _conversationLoader.LoadAvatar(conversation);
+                    observer.OnNext(new Update(conversation, bitmap));
                 }
                 
-                observer.OnNext(new Fetch
-                {
-                    Conversations = conversations
-                });
+                observer.OnCompleted();
             });
         }
 
@@ -218,11 +212,38 @@ namespace Egram.Components.Navigation
             
         }
         
-        public class Fetch
+        public class Update : Result
         {
-            public Segment Segment { get; set; }
+            public readonly Conversation Conversation;
+            public readonly IBitmap Avatar;
+
+            public Update(Conversation conversation, IBitmap avatar)
+            {
+                Conversation = conversation;
+                Avatar = avatar;
+            }
+        }
         
-            public IList<Conversation> Conversations { get; set; }
+        public class Fetch : Result
+        {
+            public readonly Segment Segment;
+            public readonly IList<Conversation> Conversations;
+
+            public Fetch(Segment segment, IList<Conversation> conversations)
+            {
+                Segment = segment;
+                Conversations = conversations;
+            }
+
+            public Fetch(IList<Conversation> conversations)
+            {
+                Conversations = conversations;
+            }
+        }
+        
+        public class Result
+        {
+            
         }
     }
 }

@@ -6,14 +6,19 @@ namespace Egram.Components.Navigation
 {
     public class Conversation : ExplorerEntity
     {
-        private Topic _topic;
-        public Topic Topic
+        private TD.Chat _chat;
+        public TD.Chat Chat
         {
-            get => _topic;
-            set => this.RaiseAndSetIfChanged(ref _topic, value);
+            get => _chat;
+            set => this.RaiseAndSetIfChanged(ref _chat, value);
         }
-        
-        public string Name => Topic.Chat.Title;
+
+        private string _title;
+        public string Title
+        {
+            get => _title;
+            set => this.RaiseAndSetIfChanged(ref _title, value);
+        }
 
         private IBitmap _avatar;
         public IBitmap Avatar
