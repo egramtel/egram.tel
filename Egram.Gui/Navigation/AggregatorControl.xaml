@@ -49,6 +49,7 @@
                         
                         <Image
                             Name="ExplorerSegmentHeaderImage"
+                            IsVisible="True"
                             Grid.Column="0"
                             Source="resm:Egram.Gui.Icons.button_right.png?assembly=Egram.Gui"
                             />

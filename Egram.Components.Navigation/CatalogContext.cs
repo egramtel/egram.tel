@@ -51,6 +51,7 @@ namespace Egram.Components.Navigation
                 switch (result)
                 {
                     case SegmentInteractor.Fetch fetch:
+                        _entities.Add(fetch.Segment);
                         _entities.AddRange(fetch.Conversations);
                         break;
                     case SegmentInteractor.Update update:
@@ -60,17 +61,31 @@ namespace Egram.Components.Navigation
             }
         }
 
+        private int _prevIndex = -1;
         private async void ObserveExplorerNavigation(int index)
         {
             if (_entities != null && index >= 0 && index < _entities.Count)
             {
                 var entity = _entities[index];
-                SelectedEntityIndex = index;
+                if (entity.IsHeader)
+                {
+                    // HACK: do not allow header selection
+                    await Task.Delay(1);
+                    SelectedEntityIndex = _prevIndex;
 
-                await Task.Delay(250);
-                
-                var conversation = (Conversation) entity;
-                _navigator.Go(new Topic(conversation.Chat));
+                    //var segment = (Segment) entity;
+                    //SegmentSelected?.Invoke(this, segment);
+                }
+                else if (index != _prevIndex)
+                {
+                    SelectedEntityIndex = index;
+                    _prevIndex = index;
+
+                    await Task.Delay(250);
+                    
+                    var conversation = (Conversation) entity;
+                    _navigator.Go(new Topic(conversation.Chat));
+                }
             }
         }
         
