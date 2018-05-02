@@ -19,15 +19,12 @@
                     ColumnDefinitions="auto,*,auto"
                     >
                     
-                    <Ellipse
+                    <Image
                         Name="ExplorerSegmentAvatar"
                         IsVisible="{Binding HasAvatar}"
                         Grid.Column="0"
-                        >
-                        <Ellipse.Fill>
-                            <ImageBrush Source="{Binding Avatar}" Stretch="Fill" />
-                        </Ellipse.Fill>
-                    </Ellipse>
+                        Source="{Binding Avatar}"
+                        />
                     
                     <Panel
                         Name="ExplorerSegmentLabelContainer"

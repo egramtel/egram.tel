@@ -33,12 +33,8 @@ namespace Egram.Components.Graphics
                 return false;
             }
             
-            var s = (int)size;
+            var avatarFile = GetAvatarFilename(size, Path.GetFileNameWithoutExtension(localFilePath));
             
-            var avatarFile = Path.Combine(
-                _storage.AvatarCacheDirectory,
-                $"avatar_{s}x{s}_{Path.GetFileName(localFilePath)}");
-
             return File.Exists(avatarFile);
         }
 
@@ -50,11 +46,7 @@ namespace Egram.Components.Graphics
                 return false;
             }
             
-            var s = (int)size;
-            
-            var avatarFile = Path.Combine(
-                _storage.AvatarCacheDirectory,
-                $"avatar_{s}x{s}_{Path.GetFileName(localFilePath)}");
+            var avatarFile = GetAvatarFilename(size, Path.GetFileNameWithoutExtension(localFilePath));
 
             return File.Exists(avatarFile);
         }
@@ -98,16 +90,14 @@ namespace Egram.Components.Graphics
             return Task.Run(() =>
             {
                 var s = (int)size;
-                
-                var avatarFile = Path.Combine(
-                    _storage.AvatarCacheDirectory,
-                    $"avatar_{s}x{s}_{Path.GetFileName(file)}");
+
+                var avatarFile = GetAvatarFilename(size, Path.GetFileNameWithoutExtension(file));
 
                 if (!File.Exists(avatarFile))
                 {
                     using (var image = Image.Load(file))
                     {
-                        image.Mutate(ctx => ctx.Resize(s, s));
+                        image.Mutate(ctx => ctx.ConvertToAvatar(s, s));
                         image.Save(avatarFile);
                     }
                 }
@@ -123,16 +113,14 @@ namespace Egram.Components.Graphics
                 var index = Math.Abs(id) % _colors.Length;
                 var color = _colors[index];
                 var s = (int)size;
-                
-                var avatarFile = Path.Combine(
-                    _storage.AvatarCacheDirectory,
-                    $"avatar_{s}x{s}_{color}.jpg");
+
+                var avatarFile = GetAvatarFilename(size, color);
 
                 if (!File.Exists(avatarFile))
                 {
                     using (var image = new Image<Rgba32>(s, s))
                     {
-                        image.Mutate(ctx => ctx.BackgroundColor(Rgba32.FromHex(color)));
+                        image.Mutate(ctx => ctx.BackgroundColor(Rgba32.FromHex(color)).ConvertToAvatar(s, s));
                         image.Save(avatarFile);
                     }
                 }
@@ -144,6 +132,17 @@ namespace Egram.Components.Graphics
         private Task<Bitmap> CreateBitmap(string filePath)
         {
             return Task.Run(() => File.Exists(filePath) ? new Bitmap(filePath) : null);
+        }
+
+        private string GetAvatarFilename(Size size, string name)
+        {
+            int s = (int) size;
+            
+            var avatarFile = Path.Combine(
+                _storage.AvatarCacheDirectory,
+                $"avatar_{s}x{s}_{name}.png");
+
+            return avatarFile;
         }
 
         private readonly string[] _colors =

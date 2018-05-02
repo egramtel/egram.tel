@@ -18,17 +18,14 @@
             />
         
         <!-- avatar -->
-        <Ellipse
+        <Image
             Name="TextMessageAvatar"
             IsVisible="{Binding HasAvatar}"
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="0"
-            >
-            <Ellipse.Fill>
-                <ImageBrush Source="{Binding MessageAuthor.Avatar}" Stretch="Fill" />
-            </Ellipse.Fill>
-        </Ellipse>
+            Source="{Binding MessageAuthor.Avatar}"
+            />
         
         <Rectangle
             Name="TextMessageAvatarPlaceholder"
