@@ -1,13 +1,18 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Egram.Components.Persistence;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Processing.Drawing;
+using SixLabors.ImageSharp.Processing.Drawing.Brushes;
 using SixLabors.ImageSharp.Processing.Overlays;
 using SixLabors.ImageSharp.Processing.Transforms;
+using SixLabors.Shapes;
+using Path = System.IO.Path;
 
 namespace Egram.Components.Graphics
 {
@@ -95,9 +100,22 @@ namespace Egram.Components.Graphics
 
                 if (!File.Exists(avatarFile))
                 {
-                    using (var image = Image.Load(file))
+                    using (var source = Image.Load(file))
+                    using (var image = new Image<Rgba32>(s, s))
                     {
-                        image.Mutate(ctx => ctx.ConvertToAvatar(s, s));
+                        source.Mutate(ctx => ctx.Resize(s, s));
+                        
+                        var brush = new ImageBrush<Rgba32>(source);
+                        var ellipse = new EllipsePolygon(s / 2.0f, s / 2.0f, s, s);
+                        var options = new GraphicsOptions(true)
+                        {
+                            BlenderMode = PixelBlenderMode.Out
+                        };
+                        
+                        image.Mutate(ctx =>
+                            ctx.BackgroundColor(Rgba32.Transparent)
+                                .Fill(options, brush, ellipse));
+                        
                         image.Save(avatarFile);
                     }
                 }
@@ -120,7 +138,17 @@ namespace Egram.Components.Graphics
                 {
                     using (var image = new Image<Rgba32>(s, s))
                     {
-                        image.Mutate(ctx => ctx.BackgroundColor(Rgba32.FromHex(color)).ConvertToAvatar(s, s));
+                        var brush = new SolidBrush<Rgba32>(Rgba32.FromHex(color));
+                        var ellipse = new EllipsePolygon(s / 2.0f, s / 2.0f, s, s);
+                        var options = new GraphicsOptions(true)
+                        {
+                            BlenderMode = PixelBlenderMode.Out
+                        };
+                        
+                        image.Mutate(ctx =>
+                            ctx.BackgroundColor(Rgba32.Transparent)
+                                .Fill(options, brush, ellipse));
+                        
                         image.Save(avatarFile);
                     }
                 }
