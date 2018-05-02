@@ -11,6 +11,8 @@ namespace Egram.Registry
         {
             services.AddSingleton<Storage>();
             services.AddSingleton<FileLoader>();
+
+            services.AddScoped<ColorMaker>();
             services.AddScoped<AvatarLoader>();
         }
     }

@@ -46,7 +46,7 @@ namespace Egram.Components.Navigation
                                 Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Bot
                             },
                             f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Bot)
-                                .Take(3)
+                                .Take(4)
                                 .ToList()));
 
                         results.Add(new Fetch(
@@ -56,7 +56,7 @@ namespace Egram.Components.Navigation
                                 Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Channel
                             },
                             f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Channel)
-                                .Take(3)
+                                .Take(4)
                                 .ToList()));
 
                         results.Add(new Fetch(
@@ -66,7 +66,7 @@ namespace Egram.Components.Navigation
                                 Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Group
                             },
                             f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Group)
-                                .Take(3)
+                                .Take(4)
                                 .ToList()));
 
                         results.Add(new Fetch(
@@ -147,11 +147,16 @@ namespace Egram.Components.Navigation
                 {
                     if (_avatarLoader.IsAvatarReady(conversation.Chat, AvatarLoader.Size.Explorer))
                     {
+                        // load photo
                         var bitmap = await _avatarLoader.LoadForChatAsync(conversation.Chat, AvatarLoader.Size.Explorer);
                         observer.OnNext(new Update(conversation, bitmap));
                     }
                     else
                     {
+                        // load fallback avatar
+                        var bitmap = await _avatarLoader.LoadForChatAsync(conversation.Chat, AvatarLoader.Size.Explorer, true);
+                        observer.OnNext(new Update(conversation, bitmap));
+                        
                         nextToLoad.Add(conversation);
                     }
                 }

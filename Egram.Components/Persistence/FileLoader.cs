@@ -9,7 +9,7 @@ using Egram.Components.TDLib;
 
 namespace Egram.Components.Persistence
 {
-    public class FileLoader
+    public class FileLoader : IDisposable
     {
         private readonly IAgent _agent;
         private readonly ConcurrentDictionary<int, TaskCompletionSource<TD.File>> _downloadingFiles;
@@ -33,35 +33,41 @@ namespace Egram.Components.Persistence
         {
             if (!string.IsNullOrWhiteSpace(updateFile?.File?.Local?.Path))
             {
-                if (_downloadingFiles.TryRemove(updateFile?.File?.Id ?? 0, out var tcs))
+                if (_downloadingFiles.TryRemove(updateFile.File.Id, out var tcs))
                 {
-                    tcs.SetResult(updateFile?.File);
+                    tcs.SetResult(updateFile.File);
                 }
             }
         }
 
         public async Task<TD.LocalFile> LoadFileAsync(TD.File file)
         {
-            if (file != null && (string.IsNullOrWhiteSpace(file?.Local?.Path) || !File.Exists(file?.Local?.Path)))
+            if (file == null)
+            {
+                return null;
+            }
+            
+            if (!File.Exists(file?.Local?.Path))
             {
                 var tcs = new TaskCompletionSource<TD.File>();
-                _downloadingFiles.TryAdd(file.Id, tcs);
 
-                file = await _agent.ExecuteAsync(new TD.DownloadFile
+                if (_downloadingFiles.TryAdd(file.Id, tcs))
                 {
-                    FileId = file.Id,
-                    Priority = 32 // highest
-                });
+                    file = await _agent.ExecuteAsync(new TD.DownloadFile
+                    {
+                        FileId = file.Id,
+                        Priority = 32 // highest
+                    });
 
-                file = await tcs.Task;
+                    file = await tcs.Task;
+                }
+                else if (_downloadingFiles.TryGetValue(file.Id, out tcs))
+                {
+                    file = await tcs.Task;
+                }
             }
-
-            if (!string.IsNullOrWhiteSpace(file?.Local?.Path) && File.Exists(file?.Local?.Path))
-            {
-                return file.Local;
-            }
-
-            return null;
+            
+            return File.Exists(file?.Local?.Path) ? file.Local : null;
         }
 
         public void Dispose()

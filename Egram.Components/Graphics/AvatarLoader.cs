@@ -20,14 +20,17 @@ namespace Egram.Components.Graphics
     {
         private readonly Storage _storage;
         private readonly FileLoader _fileLoader;
+        private readonly ColorMaker _colorMaker;
 
         public AvatarLoader(
             Storage storage,
-            FileLoader fileLoader
+            FileLoader fileLoader,
+            ColorMaker colorMaker
             )
         {
             _storage = storage;
             _fileLoader = fileLoader;
+            _colorMaker = colorMaker;
         }
 
         public bool IsAvatarReady(TD.Chat chat, Size size)
@@ -56,35 +59,49 @@ namespace Egram.Components.Graphics
             return File.Exists(avatarFile);
         }
         
-        public async Task<IBitmap> LoadForUserAsync(TD.User user, Size size)
-        {   
-            var localFile = await _fileLoader.LoadFileAsync(user.ProfilePhoto?.Small);
-
+        public async Task<IBitmap> LoadForUserAsync(TD.User user, Size size, bool forceFallback = false)
+        {
             string avatarFile;
-            if (localFile?.Path != null)
+            if (forceFallback)
             {
-                avatarFile = await CreateAvatar(localFile.Path, size);
+                avatarFile = await CreateFallbackAvatar(user.Id, size);
             }
             else
             {
-                avatarFile = await CreateFallbackAvatar(user.Id, size);
+                var localFile = await _fileLoader.LoadFileAsync(user.ProfilePhoto?.Small);
+            
+                if (localFile?.Path != null)
+                {
+                    avatarFile = await CreateAvatar(localFile.Path, size);
+                }
+                else
+                {
+                    avatarFile = await CreateFallbackAvatar(user.Id, size);
+                }
             }
 
             return await CreateBitmap(avatarFile);
         }
 
-        public async Task<IBitmap> LoadForChatAsync(TD.Chat chat, Size size)
-        {   
-            var localFile = await _fileLoader.LoadFileAsync(chat.Photo?.Small);
-
+        public async Task<IBitmap> LoadForChatAsync(TD.Chat chat, Size size, bool forceFallback = false)
+        {
             string avatarFile;
-            if (localFile?.Path != null)
+            if (forceFallback)
             {
-                avatarFile = await CreateAvatar(localFile.Path, size);
+                avatarFile = await CreateFallbackAvatar(chat.Id, size);
             }
             else
             {
-                avatarFile = await CreateFallbackAvatar(chat.Id, size);
+                var localFile = await _fileLoader.LoadFileAsync(chat.Photo?.Small);
+            
+                if (localFile?.Path != null)
+                {
+                    avatarFile = await CreateAvatar(localFile.Path, size);
+                }
+                else
+                {
+                    avatarFile = await CreateFallbackAvatar(chat.Id, size);
+                }
             }
 
             return await CreateBitmap(avatarFile);
@@ -128,8 +145,7 @@ namespace Egram.Components.Graphics
         {
             return Task.Run(() =>
             {
-                var index = Math.Abs(id) % _colors.Length;
-                var color = _colors[index];
+                var color = _colorMaker.GetHexFromId(id);
                 var s = (int)size;
 
                 var avatarFile = GetAvatarFilename(size, color);
@@ -172,16 +188,6 @@ namespace Egram.Components.Graphics
 
             return avatarFile;
         }
-
-        private readonly string[] _colors =
-        {
-            "5caae9",
-            "e66b66",
-            "69cfbe",
-            "c57fe1",
-            "8ace7c",
-            "f5b870"
-        };
 
         public enum Size
         {
