@@ -12,14 +12,10 @@ namespace Egram.Components.Navigation
 {
     public class ConversationLoader : IDisposable
     {
-        private readonly AvatarLoader _avatarLoader;
         private readonly ConcurrentDictionary<long, Conversation> _cache;
 
-        public ConversationLoader(
-            AvatarLoader avatarLoader
-            )
+        public ConversationLoader()
         {
-            _avatarLoader = avatarLoader;
             _cache = new ConcurrentDictionary<long, Conversation>();
         }
 
@@ -63,11 +59,6 @@ namespace Egram.Components.Navigation
             conversation.Chat = chat;
             
             return result;
-        }
-
-        public Task<IBitmap> LoadAvatar(Conversation conversation)
-        {
-            return _avatarLoader.LoadForChatAsync(conversation.Chat, AvatarLoader.Size.Explorer);
         }
         
         private bool Retrieve(long chatId, out Conversation conversation)

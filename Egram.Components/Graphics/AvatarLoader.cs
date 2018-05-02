@@ -24,6 +24,40 @@ namespace Egram.Components.Graphics
             _storage = storage;
             _fileLoader = fileLoader;
         }
+
+        public bool IsAvatarReady(TD.Chat chat, Size size)
+        {
+            var localFilePath = chat.Photo?.Small?.Local?.Path;
+            if (!File.Exists(localFilePath))
+            {
+                return false;
+            }
+            
+            var s = (int)size;
+            
+            var avatarFile = Path.Combine(
+                _storage.AvatarCacheDirectory,
+                $"avatar_{s}x{s}_{Path.GetFileName(localFilePath)}");
+
+            return File.Exists(avatarFile);
+        }
+
+        public bool IsAvatarReady(TD.User user, Size size)
+        {
+            var localFilePath = user.ProfilePhoto?.Small?.Local?.Path;
+            if (!File.Exists(localFilePath))
+            {
+                return false;
+            }
+            
+            var s = (int)size;
+            
+            var avatarFile = Path.Combine(
+                _storage.AvatarCacheDirectory,
+                $"avatar_{s}x{s}_{Path.GetFileName(localFilePath)}");
+
+            return File.Exists(avatarFile);
+        }
         
         public async Task<IBitmap> LoadForUserAsync(TD.User user, Size size)
         {   

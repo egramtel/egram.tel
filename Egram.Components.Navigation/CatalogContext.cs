@@ -53,6 +53,9 @@ namespace Egram.Components.Navigation
                     case SegmentInteractor.Fetch fetch:
                         _entities.AddRange(fetch.Conversations);
                         break;
+                    case SegmentInteractor.Update update:
+                        update.Conversation.Avatar = update.Avatar;
+                        break;
                 }
             }
         }

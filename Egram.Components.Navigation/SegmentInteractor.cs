@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
+using Egram.Components.Graphics;
 using Egram.Components.Navigation;
 using Egram.Components.TDLib;
 using ReactiveUI;
@@ -16,14 +17,17 @@ namespace Egram.Components.Navigation
     {
         private readonly IAgent _agent;
         private readonly ConversationLoader _conversationLoader;
+        private readonly AvatarLoader _avatarLoader;
 
         public SegmentInteractor(
             IAgent agent,
-            ConversationLoader conversationLoader
+            ConversationLoader conversationLoader,
+            AvatarLoader avatarLoader
             )
         {
             _agent = agent;
             _conversationLoader = conversationLoader;
+            _avatarLoader = avatarLoader;
         }
 
         public IObservable<Result> FetchAggregated()
@@ -136,11 +140,26 @@ namespace Egram.Components.Navigation
 
                 observer.OnNext(new Fetch(conversations));
 
-                var f = conversationsToLoad.Where(c => c.Chat.Photo == null).ToList();
+                var nextToLoad = new List<Conversation>();
                 
+                // fast loading from disk
                 foreach (var conversation in conversationsToLoad)
                 {
-                    var bitmap = await _conversationLoader.LoadAvatar(conversation);
+                    if (_avatarLoader.IsAvatarReady(conversation.Chat, AvatarLoader.Size.Explorer))
+                    {
+                        var bitmap = await _avatarLoader.LoadForChatAsync(conversation.Chat, AvatarLoader.Size.Explorer);
+                        observer.OnNext(new Update(conversation, bitmap));
+                    }
+                    else
+                    {
+                        nextToLoad.Add(conversation);
+                    }
+                }
+                
+                // slow loading (networking, processing, etc.)
+                foreach (var conversation in nextToLoad)
+                {
+                    var bitmap = await _avatarLoader.LoadForChatAsync(conversation.Chat, AvatarLoader.Size.Explorer);
                     observer.OnNext(new Update(conversation, bitmap));
                 }
                 
