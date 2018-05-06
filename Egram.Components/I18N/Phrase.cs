@@ -7,9 +7,9 @@ using ReactiveUI;
 
 namespace Egram.Components.I18N
 {
-    public class I18N : ReactiveObject
+    public class Phrase : ReactiveObject
     {   
-        private I18N(string key, object[] args, string text)
+        private Phrase(string key, object[] args, string text)
         {
             _key = key;
             _args = args;
@@ -36,11 +36,16 @@ namespace Egram.Components.I18N
             get => _text;
             private set => this.RaiseAndSetIfChanged(ref _text, value);
         }
+
+        public static Phrase Get(string key, params object[] args)
+        {
+            return Manager.Instance.Get(key, args);
+        }
         
         public class Manager
         {
             private CultureInfo _cultureInfo;
-            private Dictionary<string, List<WeakReference<I18N>>> _references;
+            private Dictionary<string, List<WeakReference<Phrase>>> _references;
             private Dictionary<string, string> _strings;
             
             public static Manager Instance => lazy.Value;
@@ -49,20 +54,20 @@ namespace Egram.Components.I18N
             private Manager()
             {
                 _cultureInfo = CultureInfo.InvariantCulture;
-                _references = new Dictionary<string, List<WeakReference<I18N>>>();
+                _references = new Dictionary<string, List<WeakReference<Phrase>>>();
                 _strings = LoadStrings(CultureInfo.InvariantCulture);
             }
 
-            public I18N Get(string key, params object[] args)
+            public Phrase Get(string key, params object[] args)
             {
                 lock (_references)
                 {
-                    var i18n = new I18N(key, args, string.Format(_strings[key], args));
-                    var reference = new WeakReference<I18N>(i18n);
+                    var phrase = new Phrase(key, args, string.Format(_strings[key], args));
+                    var reference = new WeakReference<Phrase>(phrase);
 
                     if (!_references.TryGetValue(key, out var references))
                     {
-                        references = new List<WeakReference<I18N>>();
+                        references = new List<WeakReference<Phrase>>();
                         _references.Add(key, references);
                     }
                     else
@@ -72,7 +77,7 @@ namespace Egram.Components.I18N
                     
                     references.Add(reference);
                     
-                    return i18n;
+                    return phrase;
                 }
             }
 
@@ -80,8 +85,13 @@ namespace Egram.Components.I18N
             {
                 lock (_references)
                 {
-                    _strings = LoadStrings(cultureInfo);
+                    if (_cultureInfo.Equals(cultureInfo))
+                    {
+                        return;
+                    }
+                    
                     _cultureInfo = cultureInfo;
+                    _strings = LoadStrings(cultureInfo);
                     
                     var keys = _references.Keys;
                     foreach (var key in keys)
@@ -93,9 +103,9 @@ namespace Egram.Components.I18N
                         {
                             var reference = references[i];
                             
-                            if (reference.TryGetTarget(out var i18n))
+                            if (reference.TryGetTarget(out var phrase))
                             {
-                                i18n.Text = string.Format(format, i18n.Args);
+                                phrase.Text = string.Format(format, phrase.Args);
                             }
                             else
                             {
@@ -113,20 +123,21 @@ namespace Egram.Components.I18N
                     var document = XDocument.Load(stream);
                 
                     var culture = document.Root.Elements("culture")
-                        .FirstOrDefault(e => e.Attribute("culture").Value == cultureInfo.Name);
+                        .FirstOrDefault(e => e.Attribute("name").Value == cultureInfo.Name);
+
+                    var baseCulture = document.Root.Elements("culture")
+                        .FirstOrDefault(e => e.Attribute("name").Value == "");
 
                     var strings = culture.Elements("string")
                         .ToDictionary(e => e.Attribute("key").Value, e => e.Value);
+                    
+                    var baseStrings = baseCulture.Elements("string")
+                        .ToDictionary(e => e.Attribute("key").Value, e => e.Value);
 
-                    return strings;
+                    strings.ToList().ForEach(pair => baseStrings[pair.Key] = pair.Value);
+                    
+                    return baseStrings;
                 }
-            }
-
-            private string GetFootprint(string key, object[] args)
-            {
-                return args != null && args.Length > 0
-                    ? $"{key}\t{string.Join("\t", args)}"
-                    : key;
             }
         }
     }

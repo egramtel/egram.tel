@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
+using Egram.Components.I18N;
 using Egram.Components.Navigation;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
@@ -44,8 +46,6 @@ namespace Egram.Components.Navigation
         {
             CatalogContext?.Dispose();
             CatalogContext = _catalogContextFactory.FromSegment(_scope, segment);
-
-            AccessoryText = segment.Name;
 
             IsChannelSegment = segment.Kind.HasFlag(ExplorerEntityKind.Channel);
             IsGroupSegment = segment.Kind.HasFlag(ExplorerEntityKind.Group);

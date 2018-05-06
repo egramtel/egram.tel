@@ -7,6 +7,7 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Egram.Components.Graphics;
+using Egram.Components.I18N;
 using Egram.Components.Navigation;
 using Egram.Components.TDLib;
 using ReactiveUI;
@@ -179,18 +180,18 @@ namespace Egram.Components.Navigation
             });
         }
 
-        private string GetSegmentName(ExplorerEntityKind kind)
+        private Phrase GetSegmentName(ExplorerEntityKind kind)
         {
             switch (kind)
             {
                 case ExplorerEntityKind.Bot:
-                    return "Bots";
+                    return Phrase.Get("Bots");
                 case ExplorerEntityKind.Channel:
-                    return "Channels";
+                    return Phrase.Get("Channels");
                 case ExplorerEntityKind.Group:
-                    return "Groups";
+                    return Phrase.Get("Groups");
                 case ExplorerEntityKind.People:
-                    return "People";
+                    return Phrase.Get("People");
             }
 
             return null;

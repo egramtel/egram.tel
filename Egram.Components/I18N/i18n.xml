@@ -1,9 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <i18n>
+    
     <culture name="">
-        <string key="bots">Bots</string>
-        <string key="channels">Channels</string>
-        <string key="groups">Groups</string>
-        <string key="people">People</string>
+        <string key="Bots">Bots</string>
+        <string key="Channels">Channels</string>
+        <string key="Groups">Groups</string>
+        <string key="People">People</string>
     </culture>
+    
+    <culture name="ru-RU">
+        <string key="Bots">Боты</string>
+        <string key="Channels">Каналы</string>
+        <string key="Groups">Группы</string>
+        <string key="People">Люди</string>
+    </culture>
+    
 </i18n>

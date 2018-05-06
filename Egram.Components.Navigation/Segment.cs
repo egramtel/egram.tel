@@ -1,11 +1,12 @@
-﻿using ReactiveUI;
+﻿using Egram.Components.I18N;
+using ReactiveUI;
 
 namespace Egram.Components.Navigation
 {
     public class Segment : ExplorerEntity
     {   
-        private string _name;
-        public string Name
+        private Phrase _name;
+        public Phrase Name
         {
             get => _name;
             set => this.RaiseAndSetIfChanged(ref _name, value);

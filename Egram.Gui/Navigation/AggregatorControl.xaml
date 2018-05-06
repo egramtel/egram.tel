@@ -45,7 +45,7 @@
                         
                         <TextBlock
                             Name="ExplorerSegmentHeaderText"
-                            Text="{Binding Name}" />
+                            Text="{Binding Name.Text}" />
                         
                         <Image
                             Name="ExplorerSegmentHeaderImage"
