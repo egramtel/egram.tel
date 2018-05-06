@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<i18n>
+    <culture name="">
+        <string key="bots">Bots</string>
+        <string key="channels">Channels</string>
+        <string key="groups">Groups</string>
+        <string key="people">People</string>
+    </culture>
+</i18n>
