@@ -42,7 +42,7 @@ namespace Egram.Components.Navigation
                         results.Add(new Fetch(
                             new Segment
                             {
-                                Name = "Bots",
+                                Name = GetSegmentName(ExplorerEntityKind.Bot),
                                 Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Bot
                             },
                             f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Bot)
@@ -52,7 +52,7 @@ namespace Egram.Components.Navigation
                         results.Add(new Fetch(
                             new Segment
                             {
-                                Name = "Channels",
+                                Name = GetSegmentName(ExplorerEntityKind.Channel),
                                 Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Channel
                             },
                             f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Channel)
@@ -62,7 +62,7 @@ namespace Egram.Components.Navigation
                         results.Add(new Fetch(
                             new Segment
                             {
-                                Name = "Groups",
+                                Name = GetSegmentName(ExplorerEntityKind.Group),
                                 Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Group
                             },
                             f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Group)
@@ -72,7 +72,7 @@ namespace Egram.Components.Navigation
                         results.Add(new Fetch(
                             new Segment
                             {
-                                Name = "People",
+                                Name = GetSegmentName(ExplorerEntityKind.People),
                                 Kind = ExplorerEntityKind.Header | ExplorerEntityKind.People
                             },
                             f.Conversations.Where(c => c.Kind == ExplorerEntityKind.People)
@@ -95,7 +95,14 @@ namespace Egram.Components.Navigation
                 switch (result)
                 {
                     case Fetch f:
-                        return new Fetch(f.Conversations.Where(t => t.Kind == kind).ToList());
+                        return new Fetch(
+                            new Segment
+                            {
+                                Name = GetSegmentName(kind),
+                                Kind = ExplorerEntityKind.Header | kind
+                            },
+                            f.Conversations.Where(t => t.Kind == kind)
+                                .ToList());
                     default:
                         return result;
                 }
@@ -170,6 +177,23 @@ namespace Egram.Components.Navigation
                 
                 observer.OnCompleted();
             });
+        }
+
+        private string GetSegmentName(ExplorerEntityKind kind)
+        {
+            switch (kind)
+            {
+                case ExplorerEntityKind.Bot:
+                    return "Bots";
+                case ExplorerEntityKind.Channel:
+                    return "Channels";
+                case ExplorerEntityKind.Group:
+                    return "Groups";
+                case ExplorerEntityKind.People:
+                    return "People";
+            }
+
+            return null;
         }
 
         private async Task<TD.User> GetUserAsync(int userId)

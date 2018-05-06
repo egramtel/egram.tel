@@ -40,7 +40,7 @@ namespace Egram.Components.Navigation
                 .Subscribe(ObserveSelectedSegment);
         }
 
-        private void ObserveSelectedSegment(Segment segment)
+        private async void ObserveSelectedSegment(Segment segment)
         {
             CatalogContext?.Dispose();
             CatalogContext = _catalogContextFactory.FromSegment(_scope, segment);
@@ -51,7 +51,8 @@ namespace Egram.Components.Navigation
             IsGroupSegment = segment.Kind.HasFlag(ExplorerEntityKind.Group);
             IsBotSegment = segment.Kind.HasFlag(ExplorerEntityKind.Bot);
             IsDirectSegment = segment.Kind.HasFlag(ExplorerEntityKind.People);
-            
+
+            await Task.Delay(100);
             SelectedExplorerIndex = 1;
         }
         
