@@ -21,6 +21,7 @@ namespace Egram.Components.Graphics
         private readonly Storage _storage;
         private readonly FileLoader _fileLoader;
         private readonly ColorMaker _colorMaker;
+        private readonly object _locker = new object();
 
         public AvatarLoader(
             Storage storage,
@@ -115,25 +116,29 @@ namespace Egram.Components.Graphics
 
                 var avatarFile = GetAvatarFilename(size, Path.GetFileNameWithoutExtension(file));
 
-                if (!File.Exists(avatarFile))
+                // TODO: smarter locks based on filename
+                lock (_locker)
                 {
-                    using (var source = Image.Load(file))
-                    using (var image = new Image<Rgba32>(s, s))
+                    if (!File.Exists(avatarFile))
                     {
-                        source.Mutate(ctx => ctx.Resize(s, s));
-                        
-                        var brush = new ImageBrush<Rgba32>(source);
-                        var ellipse = new EllipsePolygon(s / 2.0f, s / 2.0f, s, s);
-                        var options = new GraphicsOptions(true)
+                        using (var source = Image.Load(file))
+                        using (var image = new Image<Rgba32>(s, s))
                         {
-                            BlenderMode = PixelBlenderMode.Out
-                        };
+                            source.Mutate(ctx => ctx.Resize(s, s));
                         
-                        image.Mutate(ctx =>
-                            ctx.BackgroundColor(Rgba32.Transparent)
-                                .Fill(options, brush, ellipse));
+                            var brush = new ImageBrush<Rgba32>(source);
+                            var ellipse = new EllipsePolygon(s / 2.0f, s / 2.0f, s, s);
+                            var options = new GraphicsOptions(true)
+                            {
+                                BlenderMode = PixelBlenderMode.Out
+                            };
                         
-                        image.Save(avatarFile);
+                            image.Mutate(ctx =>
+                                ctx.BackgroundColor(Rgba32.Transparent)
+                                    .Fill(options, brush, ellipse));
+                        
+                            image.Save(avatarFile);
+                        }
                     }
                 }
                 
@@ -150,22 +155,26 @@ namespace Egram.Components.Graphics
 
                 var avatarFile = GetAvatarFilename(size, color);
 
-                if (!File.Exists(avatarFile))
+                // TODO: smarter locks based on filename
+                lock (_locker)
                 {
-                    using (var image = new Image<Rgba32>(s, s))
+                    if (!File.Exists(avatarFile))
                     {
-                        var brush = new SolidBrush<Rgba32>(Rgba32.FromHex(color));
-                        var ellipse = new EllipsePolygon(s / 2.0f, s / 2.0f, s, s);
-                        var options = new GraphicsOptions(true)
+                        using (var image = new Image<Rgba32>(s, s))
                         {
-                            BlenderMode = PixelBlenderMode.Out
-                        };
+                            var brush = new SolidBrush<Rgba32>(Rgba32.FromHex(color));
+                            var ellipse = new EllipsePolygon(s / 2.0f, s / 2.0f, s, s);
+                            var options = new GraphicsOptions(true)
+                            {
+                                BlenderMode = PixelBlenderMode.Out
+                            };
                         
-                        image.Mutate(ctx =>
-                            ctx.BackgroundColor(Rgba32.Transparent)
-                                .Fill(options, brush, ellipse));
+                            image.Mutate(ctx =>
+                                ctx.BackgroundColor(Rgba32.Transparent)
+                                    .Fill(options, brush, ellipse));
                         
-                        image.Save(avatarFile);
+                            image.Save(avatarFile);
+                        }
                     }
                 }
 

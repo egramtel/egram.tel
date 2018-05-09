@@ -38,27 +38,26 @@ namespace Egram.Components.Navigation
             
             _segmentFetchSubscription = _segmentInteractor
                 .FetchByKind(segment.Kind ^ ExplorerEntityKind.Header)
-                .Buffer(TimeSpan.FromMilliseconds(200))
                 .SubscribeOn(Scheduler.Default)
                 .ObserveOn(AvaloniaScheduler.Instance)
                 .Subscribe(ObserveSegmentsFetch);
         }
 
-        private void ObserveSegmentsFetch(IList<SegmentInteractor.Result> results)
+        private void ObserveSegmentsFetch(SegmentInteractor.Fetch fetch)
         {
-            foreach (var result in results)
-            {
-                switch (result)
+            _entities.Add(fetch.Segment);
+            _entities.AddRange(fetch.Conversations);
+            
+            fetch.Updates
+                .Buffer(TimeSpan.FromMilliseconds(100))
+                .ObserveOn(AvaloniaScheduler.Instance)
+                .Subscribe(updates =>
                 {
-                    case SegmentInteractor.Fetch fetch:
-                        _entities.Add(fetch.Segment);
-                        _entities.AddRange(fetch.Conversations);
-                        break;
-                    case SegmentInteractor.Update update:
+                    foreach (var update in updates)
+                    {
                         update.Conversation.Avatar = update.Avatar;
-                        break;
-                }
-            }
+                    }
+                });
         }
 
         private int _prevIndex = -1;

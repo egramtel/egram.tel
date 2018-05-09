@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Egram.Components.Graphics;
@@ -31,127 +33,115 @@ namespace Egram.Components.Navigation
             _avatarLoader = avatarLoader;
         }
 
-        public IObservable<Result> FetchAggregated()
+        public IObservable<Fetch> FetchAggregated()
         {
-            return FetchAll().SelectMany(result =>
+            return FetchAll().SelectMany(fetch =>
             {
-                var results = new List<Result>();
+                var results = new List<Fetch>();
 
-                switch (result)
-                {
-                    case Fetch f:
-                        results.Add(new Fetch(
-                            new Segment
-                            {
-                                Name = GetSegmentName(ExplorerEntityKind.Bot),
-                                Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Bot
-                            },
-                            f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Bot)
-                                .Take(4)
-                                .ToList()));
+                results.Add(new Fetch(
+                    new Segment
+                    {
+                        Name = GetSegmentName(ExplorerEntityKind.Bot),
+                        Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Bot
+                    },
+                    fetch.Conversations.Where(c => c.Kind == ExplorerEntityKind.Bot)
+                        .Take(4)
+                        .ToList(),
+                    fetch.Updates));
 
-                        results.Add(new Fetch(
-                            new Segment
-                            {
-                                Name = GetSegmentName(ExplorerEntityKind.Channel),
-                                Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Channel
-                            },
-                            f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Channel)
-                                .Take(4)
-                                .ToList()));
+                results.Add(new Fetch(
+                    new Segment
+                    {
+                        Name = GetSegmentName(ExplorerEntityKind.Channel),
+                        Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Channel
+                    },
+                    fetch.Conversations.Where(c => c.Kind == ExplorerEntityKind.Channel)
+                        .Take(4)
+                        .ToList(),
+                    fetch.Updates));
 
-                        results.Add(new Fetch(
-                            new Segment
-                            {
-                                Name = GetSegmentName(ExplorerEntityKind.Group),
-                                Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Group
-                            },
-                            f.Conversations.Where(c => c.Kind == ExplorerEntityKind.Group)
-                                .Take(4)
-                                .ToList()));
+                results.Add(new Fetch(
+                    new Segment
+                    {
+                        Name = GetSegmentName(ExplorerEntityKind.Group),
+                        Kind = ExplorerEntityKind.Header | ExplorerEntityKind.Group
+                    },
+                    fetch.Conversations.Where(c => c.Kind == ExplorerEntityKind.Group)
+                        .Take(4)
+                        .ToList(),
+                    fetch.Updates));
 
-                        results.Add(new Fetch(
-                            new Segment
-                            {
-                                Name = GetSegmentName(ExplorerEntityKind.People),
-                                Kind = ExplorerEntityKind.Header | ExplorerEntityKind.People
-                            },
-                            f.Conversations.Where(c => c.Kind == ExplorerEntityKind.People)
-                                .ToList()));
-                        break;
-                    
-                    default:
-                        results.Add(result);
-                        break;
-                }
+                results.Add(new Fetch(
+                    new Segment
+                    {
+                        Name = GetSegmentName(ExplorerEntityKind.People),
+                        Kind = ExplorerEntityKind.Header | ExplorerEntityKind.People
+                    },
+                    fetch.Conversations.Where(c => c.Kind == ExplorerEntityKind.People)
+                        .ToList(),
+                    fetch.Updates));
                 
                 return results;
             });
         }
 
-        public IObservable<Result> FetchByKind(ExplorerEntityKind kind)
+        public IObservable<Fetch> FetchByKind(ExplorerEntityKind kind)
         {
-            return FetchAll().Select(result =>
-            {
-                switch (result)
-                {
-                    case Fetch f:
-                        return new Fetch(
-                            new Segment
-                            {
-                                Name = GetSegmentName(kind),
-                                Kind = ExplorerEntityKind.Header | kind
-                            },
-                            f.Conversations.Where(t => t.Kind == kind)
-                                .ToList());
-                    default:
-                        return result;
-                }
-            });
+            return FetchAll().Select(fetch =>
+                new Fetch(
+                    new Segment
+                    {
+                        Name = GetSegmentName(kind),
+                        Kind = ExplorerEntityKind.Header | kind
+                    },
+                    fetch.Conversations.Where(t => t.Kind == kind)
+                        .ToList(),
+                    fetch.Updates));
         }
 
-        public IObservable<Result> FetchAll()
+        public IObservable<Fetch> FetchAll()
         {
-            return Observable.Create<Result>(async observer =>
-            {
-                var conversations = new List<Conversation>();
-                var chats = await GetAllChatsAsync();
-                var conversationsToLoad = new List<Conversation>();
-                
-                foreach (var chat in chats)
+            return GetAllChatsAsync()
+                .ToObservable()
+                .SelectMany(list => list)
+                .SelectMany(chat =>
                 {
-                    Conversation conversation;
-                    
                     switch (chat.Type)
                     {
                         case TD.ChatType.ChatTypePrivate ctp:
-                            var user = await GetUserAsync(ctp.UserId);
-                            if (!_conversationLoader.Retrieve(chat, user, out conversation))
-                            {
-                                conversationsToLoad.Add(conversation);
-                            }
-                            break;
-                        
+                            return GetUserAsync(ctp.UserId).ToObservable()
+                                .Select(user =>
+                                {
+                                    _conversationLoader.Retrieve(chat, user, out var conversation);
+                                    return conversation;
+                                });
+
                         default:
-                            if (!_conversationLoader.Retrieve(chat, out conversation))
-                            {
-                                conversationsToLoad.Add(conversation);
-                            }
-                            break;
+                            return Observable.Range(0, 1)
+                                .Select(_ =>
+                                {
+                                    _conversationLoader.Retrieve(chat, out var conversation);
+                                    return conversation;
+                                });
                     }
+                })
+                .Aggregate(new List<Conversation>(), (acc, c) =>
+                {
+                    acc.Add(c);
+                    return acc;
+                })
+                .Select(conversations => new Fetch(conversations, LoadAvatars(conversations)));
+        }
 
-                    if (conversation != null)
-                    {
-                        conversations.Add(conversation);
-                    }
-                }
-
-                observer.OnNext(new Fetch(conversations));
-
+        private IObservable<Update> LoadAvatars(List<Conversation> conversations)
+        {
+            return Observable.Create<Update>(async observer =>
+            {
                 var nextToLoad = new List<Conversation>();
                 
                 // fast loading from disk
-                foreach (var conversation in conversationsToLoad)
+                foreach (var conversation in conversations)
                 {
                     if (_avatarLoader.IsAvatarReady(conversation.Chat, AvatarLoader.Size.Explorer))
                     {
@@ -175,8 +165,6 @@ namespace Egram.Components.Navigation
                     var bitmap = await _avatarLoader.LoadForChatAsync(conversation.Chat, AvatarLoader.Size.Explorer);
                     observer.OnNext(new Update(conversation, bitmap));
                 }
-                
-                observer.OnCompleted();
             });
         }
 
@@ -261,7 +249,7 @@ namespace Egram.Components.Navigation
             
         }
         
-        public class Update : Result
+        public class Update
         {
             public readonly Conversation Conversation;
             public readonly IBitmap Avatar;
@@ -273,26 +261,24 @@ namespace Egram.Components.Navigation
             }
         }
         
-        public class Fetch : Result
+        public class Fetch
         {
             public readonly Segment Segment;
             public readonly IList<Conversation> Conversations;
+            public readonly IObservable<Update> Updates;
 
-            public Fetch(Segment segment, IList<Conversation> conversations)
+            public Fetch(Segment segment, IList<Conversation> conversations, IObservable<Update> updates)
             {
                 Segment = segment;
                 Conversations = conversations;
+                Updates = updates;
             }
 
-            public Fetch(IList<Conversation> conversations)
+            public Fetch(IList<Conversation> conversations, IObservable<Update> updates)
             {
                 Conversations = conversations;
+                Updates = updates;
             }
-        }
-        
-        public class Result
-        {
-            
         }
     }
 }
