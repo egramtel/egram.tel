@@ -48,7 +48,7 @@ namespace Egram.Components.Navigation
                     fetch.Conversations.Where(c => c.Kind == ExplorerEntityKind.Bot)
                         .Take(4)
                         .ToList(),
-                    fetch.Updates));
+                    fetch.Updates.Where(u => u.Conversation.Kind == ExplorerEntityKind.Bot)));
 
                 results.Add(new Fetch(
                     new Segment
@@ -59,7 +59,7 @@ namespace Egram.Components.Navigation
                     fetch.Conversations.Where(c => c.Kind == ExplorerEntityKind.Channel)
                         .Take(4)
                         .ToList(),
-                    fetch.Updates));
+                    fetch.Updates.Where(u => u.Conversation.Kind == ExplorerEntityKind.Channel)));
 
                 results.Add(new Fetch(
                     new Segment
@@ -70,7 +70,7 @@ namespace Egram.Components.Navigation
                     fetch.Conversations.Where(c => c.Kind == ExplorerEntityKind.Group)
                         .Take(4)
                         .ToList(),
-                    fetch.Updates));
+                    fetch.Updates.Where(u => u.Conversation.Kind == ExplorerEntityKind.Group)));
 
                 results.Add(new Fetch(
                     new Segment
@@ -80,7 +80,7 @@ namespace Egram.Components.Navigation
                     },
                     fetch.Conversations.Where(c => c.Kind == ExplorerEntityKind.People)
                         .ToList(),
-                    fetch.Updates));
+                    fetch.Updates.Where(u => u.Conversation.Kind == ExplorerEntityKind.People)));
                 
                 return results;
             });
