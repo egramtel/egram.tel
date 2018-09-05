@@ -19,7 +19,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-rc7" />
-    <PackageReference Include="ReactiveUI" Version="8.0.0-alpha0117" />
+    <PackageReference Include="ReactiveUI" Version="8.3.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Egram.Components.App\Egram.Components.App.csproj">
