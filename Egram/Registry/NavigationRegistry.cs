@@ -1,5 +1,4 @@
 ﻿using Egram.Components.Navigation;
-using Egram.Components.Navigation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Egram.Registry
