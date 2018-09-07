@@ -1,0 +1,40 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:gui="clr-namespace:Tel.Egram.Gui">
+    
+    <Grid
+        RowDefinitions="*,auto"
+        >
+        
+        <ListBox
+            Grid.Row="0"
+            Items="{Binding Messages}"
+            BorderThickness="0"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            >
+            
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel VerticalAlignment="Bottom" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    
+                    <Panel>
+                        <gui:MessageControl />
+                    </Panel>
+                    
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            
+        </ListBox>
+            
+        <gui:MessageEditorControl
+            Grid.Row="1"
+            DataContext="{Binding MessageEditorContext}" />
+        
+    </Grid>
+    
+</UserControl>

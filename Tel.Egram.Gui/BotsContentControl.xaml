@@ -1,0 +1,12 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:gui="clr-namespace:Tel.Egram.Gui">
+    
+    <Carousel>
+        
+        <gui:MessengerControl
+            DataContext="{Binding MessengerContext}" />
+        
+    </Carousel>
+    
+</UserControl>

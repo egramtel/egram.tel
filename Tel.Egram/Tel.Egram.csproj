@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Update="**\*.dll" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="**\*.dylib" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="**\*.so" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tel.Egram.Components.Application\Tel.Egram.Components.Application.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Components.Navigation\Tel.Egram.Components.Navigation.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Gui\Tel.Egram.Gui.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj" />
+    <ProjectReference Include="..\Tel.Egram.TdLib\Tel.Egram.TdLib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.6.2-build5984-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.6.2-build5984-beta" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.6.2-build5984-beta" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
+    <PackageReference Include="ReactiveUI" Version="8.0.1" />
+    <PackageReference Include="System.Reactive" Version="3.1.1" />
+  </ItemGroup>
+</Project>

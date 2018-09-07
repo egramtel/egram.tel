@@ -1,0 +1,12 @@
+root = true
+
+[*.xml]
+indent_style = space
+
+[*.cs]
+indent_size = 4
+indent_style = space
+
+[*.csproj]
+indent_style = space
+indent_size = 2

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tel.Egram.Feeds\Tel.Egram.Feeds.csproj" />
+    <ProjectReference Include="..\Tel.Egram.TdLib\Tel.Egram.TdLib.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Reactive" Version="3.1.1" />
+  </ItemGroup>
+</Project>

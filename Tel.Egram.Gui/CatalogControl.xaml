@@ -1,0 +1,123 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:gui="clr-namespace:Tel.Egram.Gui">
+    
+    <ListBox
+        Items="{Binding Section.Entries}"
+        BorderThickness="0"
+        ScrollViewer.VerticalScrollBarVisibility="Hidden"
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        Background="Transparent"
+        >
+        
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel VerticalAlignment="Top" />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                
+                <Grid
+                    ColumnDefinitions="auto,*"
+                    >
+                    
+                    <Border
+                        Grid.ColumnSpan="2"
+                        />
+        
+                    <Panel
+                        Classes="Icon"
+                        Grid.Row="0"
+                        Grid.Column="0">
+            
+                        <Ellipse
+                            IsVisible="{Binding IsFallbackAvatar}"
+                            Fill="{Binding ColorBrush}"
+                            Width="22"
+                            Height="22" />
+            
+                        <TextBlock
+                            IsVisible="{Binding IsFallbackAvatar}"
+                            Text="{Binding Init}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="#ffffff"
+                            />
+            
+                        <Image
+                            Source="{Binding Avatar}"
+                            Width="22"
+                            Height="22"
+                            >
+                
+                            <Image.Clip>
+                                <EllipseGeometry Rect="0,0,22,22" />
+                            </Image.Clip>
+                
+                        </Image>
+            
+                    </Panel>
+        
+                    <Panel
+                        Classes="Title"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Height="22"
+                        VerticalAlignment="Center">
+            
+                        <TextBlock
+                            Text="{Binding Title}"
+                            FontWeight="Bold"
+                            TextWrapping="Wrap"
+                            VerticalAlignment="Center" />
+            
+                    </Panel>
+        
+                </Grid>
+                
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+        
+    </ListBox>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="ListBox">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        
+        <Style Selector="ListBoxItem Grid">
+            <Setter Property="Margin" Value="6,2,0,2"/>
+        </Style>
+        
+        <Style Selector="ListBoxItem Grid Border">
+            <Setter Property="CornerRadius" Value="14,0,0,14" />
+        </Style>
+        
+        <Style Selector="ListBoxItem:selected Grid Border">
+            <Setter Property="Background" Value="#5195e1" />
+        </Style>
+        
+        <Style Selector="ListBoxItem Panel">
+            <Setter Property="Margin" Value="4,3"/>
+        </Style>
+        
+        <Style Selector="ListBoxItem Panel.Title TextBlock">
+            <Setter Property="Foreground" Value="#a2a3a8"/>
+        </Style>
+        
+        <Style Selector="ListBoxItem:selected Panel.Title TextBlock">
+            <Setter Property="Foreground" Value="#ffffff"/>
+        </Style>
+        
+    </UserControl.Styles>
+    
+</UserControl>

@@ -1,0 +1,119 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:gui="clr-namespace:Tel.Egram.Gui">
+    
+    <Grid
+        Classes="AuthenticationPage"
+        ColumnDefinitions="*,260,*"
+        RowDefinitions="auto,auto,auto,auto"
+        >
+        
+        <TextBox
+            Grid.Row="0"
+            Grid.Column="1"
+            Text="{Binding PhoneNumber, Mode=TwoWay}"
+            Watermark="Phone" />
+        
+        <Button
+            Grid.Row="1"
+            Grid.Column="1"
+            Command="{Binding SendCodeCommand}"
+            >
+            <TextBlock Text="Send code" />
+        </Button>
+        
+        <Carousel
+            Grid.Row="2"
+            Grid.Column="1"
+            SelectedIndex="{Binding ConfirmIndex}"
+            >
+            
+            <Carousel.PageTransition>
+                <PageSlide Duration="00:00:01.300" Orientation="Vertical" />
+            </Carousel.PageTransition>
+            
+            <Panel Height="300" Width="260" />
+            
+            <Grid
+                ColumnDefinitions="*"
+                RowDefinitions="auto,auto,auto,auto"
+                >
+                
+                <TextBox
+                    Grid.Row="0"
+                    Text="{Binding ConfirmCode, Mode=TwoWay}"
+                    Watermark="Confirmation code" />
+                
+                <TextBox
+                    Grid.Row="1"
+                    Text="{Binding FirstName, Mode=TwoWay}"
+                    Watermark="First name" />
+                
+                <TextBox
+                    Grid.Row="2"
+                    Text="{Binding LastName, Mode=TwoWay}"
+                    Watermark="Last name (optional)" />
+                
+                <Button
+                    Grid.Row="3"
+                    Command="{Binding CheckCodeCommand}"
+                    >
+                    <TextBlock Text="Sign up" />
+                </Button>
+                
+            </Grid>
+            
+        </Carousel>
+        
+        <Carousel
+            Grid.Row="3"
+            Grid.Column="1"
+            SelectedIndex="{Binding PasswordIndex}"
+            >
+            
+            <Carousel.PageTransition>
+                <PageSlide Duration="00:00:00.300" Orientation="Vertical" />
+            </Carousel.PageTransition>
+                    
+            <Panel Height="300" Width="260" />
+                    
+            <Grid
+                ColumnDefinitions="*"
+                RowDefinitions="auto,auto"
+                >
+                        
+                <TextBox
+                    Grid.Row="0"
+                    Text="{Binding Password, Mode=TwoWay}"
+                    Watermark="Password" />
+                        
+                <Button
+                    Grid.Row="1"
+                    Command="{Binding CheckPasswordCommand}"
+                    >
+                    <TextBlock Text="Log in" />
+                </Button>
+                        
+            </Grid>
+                    
+        </Carousel>
+        
+    </Grid>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="Grid.AuthenticationPage">
+            <Setter Property="Margin" Value="0,64" />
+        </Style>
+    
+        <Style Selector="Grid.AuthenticationPage TextBox">
+            <Setter Property="Margin" Value="0,4" />
+        </Style>
+    
+        <Style Selector="Grid.AuthenticationPage Button">
+            <Setter Property="Margin" Value="0,4,0,20" />
+        </Style>
+        
+    </UserControl.Styles>
+    
+</UserControl>

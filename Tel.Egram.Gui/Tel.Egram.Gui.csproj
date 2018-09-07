@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.6.2-build5984-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.6.2-build5984-beta" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.6.2-build5984-beta" />
+    <PackageReference Include="ReactiveUI" Version="8.0.1" />
+    <PackageReference Include="System.Reactive" Version="3.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="**\*.png" />
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="**\*.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="BotsContentControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+</Project>

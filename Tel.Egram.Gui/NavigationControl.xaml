@@ -1,0 +1,184 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:gui="clr-namespace:Tel.Egram.Gui">
+    
+    <Grid
+        ColumnDefinitions="*"
+        RowDefinitions="48,*,48"
+        Classes="NavigationContainer"
+        Background="#2b313b"
+        >
+        
+        <Button
+            Classes="Profile"
+            Grid.Row="0"
+            >
+            
+            <Image
+                Source="{Binding ProfilePhoto}"
+                Width="40"
+                Height="40"
+                Margin="0,8,0,0"
+                >
+                
+                <Image.Clip>
+                    <EllipseGeometry Rect="0,0,38,38" />
+                </Image.Clip>
+                
+            </Image>
+            
+        </Button>
+        
+        <TabStrip
+            Grid.Row="1"
+            SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}"
+            >
+            <TabStrip.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </TabStrip.ItemsPanel>
+                
+            <TabStripItem
+                Classes="NavigationTab"
+                >
+                <Border>
+                    <Panel>
+                        <Ellipse />
+                        <Image Source="resm:Tel.Egram.Gui.Icons.home.png" />
+                    </Panel>
+                </Border>
+            </TabStripItem>
+                
+            <TabStripItem
+                Classes="NavigationTab"
+                >
+                <Border>
+                    <Panel>
+                        <Ellipse />
+                        <Image Source="resm:Tel.Egram.Gui.Icons.atsign.png" />
+                    </Panel>
+                </Border>
+            </TabStripItem>
+                
+            <TabStripItem
+                Classes="NavigationTab"
+                >
+                <Border>
+                    <Panel>
+                        <Ellipse />
+                        <Image Source="resm:Tel.Egram.Gui.Icons.grid.png" />
+                    </Panel>
+                </Border>
+            </TabStripItem>
+                
+            <TabStripItem
+                Classes="NavigationTab"
+                >
+                <Border>
+                    <Panel>
+                        <Ellipse />
+                        <Image Source="resm:Tel.Egram.Gui.Icons.cpu.png" />
+                    </Panel>
+                </Border>
+            </TabStripItem>
+                
+        </TabStrip>
+        
+        <Button
+            Classes="Settings"
+            Grid.Row="2"
+            >
+            <Panel>
+                <Ellipse />
+                <Image Source="resm:Tel.Egram.Gui.Icons.settings.png" />
+            </Panel>
+        </Button>
+        
+    </Grid>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="TabStrip">
+            <Setter Property="Margin" Value="0,4,0,0" />
+        </Style>
+        
+        <Style Selector="TabStripItem.NavigationTab">
+            <Setter Property="Margin" Value="0" />
+        </Style>
+        
+        <Style Selector="TabStripItem.NavigationTab > Border">
+            <Setter Property="Width" Value="64" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="BorderThickness" Value="2,0,0,0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        
+        <Style Selector="TabStripItem.NavigationTab:selected > Border">
+            <Setter Property="BorderBrush" Value="#5195e1" />
+        </Style>
+        
+        <Style Selector="TabStripItem.NavigationTab Image">
+            <Setter Property="Width" Value="12" />
+            <Setter Property="Height" Value="12" />
+            <Setter Property="Opacity" Value="0.8" />
+        </Style>
+        
+        <Style Selector="TabStripItem.NavigationTab Ellipse">
+            <Setter Property="Width" Value="22" />
+            <Setter Property="Height" Value="22" />
+            <Setter Property="Fill" Value="#ffffff" />
+            <Setter Property="Opacity" Value="0.1" />
+        </Style>
+        
+        <Style Selector="TabStripItem.NavigationTab:selected Image">
+            <Setter Property="Opacity" Value="1.0" />
+        </Style>
+        
+        <Style Selector="TabStripItem.NavigationTab:selected Ellipse">
+            <Setter Property="Opacity" Value="0.2" />
+        </Style>
+        
+        <Style Selector="Button.Profile">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="2,0,0,0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        
+        <Style Selector="Button.Profile Image">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+        </Style>
+        
+        <Style Selector="Button.Profile:pressed">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        
+        <Style Selector="Button.Settings">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="2,0,0,0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        
+        <Style Selector="Button.Settings:pressed">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        
+        <Style Selector="Button.Settings Image">
+            <Setter Property="Width" Value="12" />
+            <Setter Property="Height" Value="12" />
+            <Setter Property="Opacity" Value="0.7" />
+        </Style>
+        
+        <Style Selector="Button.Settings Ellipse">
+            <Setter Property="Width" Value="22" />
+            <Setter Property="Height" Value="22" />
+            <Setter Property="Fill" Value="#f3f3f3" />
+            <Setter Property="Opacity" Value="0.2" />
+        </Style>
+        
+    </UserControl.Styles>
+    
+</UserControl>

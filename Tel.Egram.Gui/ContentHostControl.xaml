@@ -1,0 +1,24 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:gui="clr-namespace:Tel.Egram.Gui">
+    
+    <Grid
+        ColumnDefinitions="*"
+        RowDefinitions="*"
+        >
+        
+        <gui:HomeContentControl
+            IsVisible="{Binding IsHomeContentVisible}" />
+        
+        <gui:DirectContentControl
+            IsVisible="{Binding IsDirectContentVisible}" />
+        
+        <gui:GroupContentControl
+            IsVisible="{Binding IsGroupsContentVisible}" />
+        
+        <gui:BotsContentControl
+            IsVisible="{Binding IsBotsContentVisible}" />
+      
+    </Grid>
+    
+</UserControl>
