@@ -2,6 +2,7 @@
 using Avalonia.Media.Imaging;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Navigation
@@ -19,19 +20,11 @@ namespace Tel.Egram.Components.Navigation
             _avatarLoadSubscription = _profileInteractor.LoadAvatar(this);
         }
         
-        private IBitmap _profilePhoto;
-        public IBitmap ProfilePhoto
-        {
-            get => _profilePhoto;
-            set => this.RaiseAndSetIfChanged(ref _profilePhoto, value);
-        }
+        [Reactive]
+        public IBitmap ProfilePhoto { get; set; }
 
-        private int _selectedTabIndex;
-        public int SelectedTabIndex
-        {
-            get => _selectedTabIndex;
-            set => this.RaiseAndSetIfChanged(ref _selectedTabIndex, value);
-        }
+        [Reactive]
+        public int? SelectedTabIndex { get; set; }
 
         public void OnProfilePhotoLoaded(IBitmap bitmap)
         {
