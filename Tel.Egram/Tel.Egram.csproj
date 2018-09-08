@@ -4,15 +4,6 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <None Update="**\*.dll" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="**\*.dylib" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="**\*.so" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Tel.Egram.Components.Application\Tel.Egram.Components.Application.csproj" />
     <ProjectReference Include="..\Tel.Egram.Components.Navigation\Tel.Egram.Components.Navigation.csproj" />
     <ProjectReference Include="..\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
