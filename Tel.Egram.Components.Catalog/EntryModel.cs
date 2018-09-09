@@ -1,7 +1,6 @@
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using PropertyChanged;
-using ReactiveUI;
 
 namespace Tel.Egram.Components.Catalog
 {

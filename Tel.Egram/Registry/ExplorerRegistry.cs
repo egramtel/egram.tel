@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using Tel.Egram.Components.Explorer;
-using Tel.Egram.Utils;
 
 namespace Tel.Egram.Registry
 {

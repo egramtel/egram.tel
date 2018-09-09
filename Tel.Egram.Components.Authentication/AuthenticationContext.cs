@@ -1,91 +1,82 @@
 ﻿using System;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Avalonia.Threading;
-using Microsoft.Extensions.DependencyInjection;
 using PropertyChanged;
 using ReactiveUI;
-using TdLib;
 using Tel.Egram.Authentication;
-using Tel.Egram.Utils;
+using TdLib;
 
 namespace Tel.Egram.Components.Authentication
 {
     [AddINotifyPropertyChangedInterface]
     public class AuthenticationContext : IDisposable
     {
-        private readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
-        private readonly IAuthenticator _authenticator;
-        
-        public ReactiveCommand<Unit, Unit> SendCodeCommand { get; }
-        public ReactiveCommand<Unit, Unit> CheckCodeCommand { get; }
+        private readonly CompositeDisposable _contextDisposable;
+
         public ReactiveCommand<Unit, Unit> CheckPasswordCommand { get; }
+        public ReactiveCommand<Unit, Unit> CheckCodeCommand { get; }
+        public ReactiveCommand<Unit, Unit> SendCodeCommand { get; }
+        
+        public int PasswordIndex { get; set; }
+        public int ConfirmIndex { get; set; }
         
         public string PhoneNumber { get; set; }
         public string ConfirmCode { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Password { get; set; }
-        
-        public int ConfirmIndex { get; set; }
-        public int PasswordIndex { get; set; }
 
         public AuthenticationContext(IAuthenticator authenticator)
         {
-            _authenticator = authenticator;
-            
-            SendCodeCommand = ReactiveCommand.Create<Unit, Unit>(_ =>  Unit.Default,
-                null,
-                AvaloniaScheduler.Instance);
-            
-            CheckCodeCommand = ReactiveCommand.Create<Unit, Unit>(_ => Unit.Default,
-                null,
-                AvaloniaScheduler.Instance);
-            
-            CheckPasswordCommand = ReactiveCommand.Create<Unit, Unit>(_ => Unit.Default,
-                null,
-                AvaloniaScheduler.Instance);
+            _contextDisposable = new CompositeDisposable();
 
-            SendCodeCommand
-                .ObserveOn(AvaloniaScheduler.Instance)
-                .SelectMany(_ => _authenticator.SetPhoneNumber(PhoneNumber) )
-                .Subscribe()
+            var canSendCode = this
+                .WhenAnyValue(x => x.PhoneNumber)
+                .Select(phone => !string.IsNullOrWhiteSpace(phone));
+            
+            SendCodeCommand = ReactiveCommand.CreateFromObservable(
+                () => authenticator.SetPhoneNumber(PhoneNumber),
+                canSendCode, RxApp.MainThreadScheduler);
+
+            var canCheckCode = this
+                .WhenAnyValue(x => x.ConfirmCode)
+                .Select(code => !string.IsNullOrWhiteSpace(code));
+            
+            CheckCodeCommand = ReactiveCommand.CreateFromObservable(
+                () => authenticator.CheckCode(ConfirmCode, FirstName, LastName),
+                canCheckCode, RxApp.MainThreadScheduler);
+
+            var canCheckPassword = this
+                .WhenAnyValue(x => x.Password)
+                .Select(password => !string.IsNullOrWhiteSpace(password));
+            
+            CheckPasswordCommand = ReactiveCommand.CreateFromObservable(
+                () => authenticator.CheckPassword(Password),
+                canCheckPassword, RxApp.MainThreadScheduler);
+            
+            var stateObservable = authenticator
+                .ObserveState()
+                .ObserveOn(RxApp.MainThreadScheduler);
+
+            stateObservable
+                .OfType<TdApi.AuthorizationState.AuthorizationStateWaitPhoneNumber>()
+                .Subscribe(state => OnWaitingPhoneNumber())
                 .DisposeWith(_contextDisposable);
 
-            CheckCodeCommand
-                .ObserveOn(AvaloniaScheduler.Instance)
-                .SelectMany(_ => _authenticator.CheckCode(ConfirmCode, FirstName, LastName))
-                .Subscribe()
+            stateObservable
+                .OfType<TdApi.AuthorizationState.AuthorizationStateWaitCode>()
+                .Subscribe(state => OnWaitingConfirmCode(!state.IsRegistered))
                 .DisposeWith(_contextDisposable);
 
-            CheckPasswordCommand
-                .ObserveOn(AvaloniaScheduler.Instance)
-                .SelectMany(_ => _authenticator.CheckPassword(Password))
-                .Subscribe()
-                .DisposeWith(_contextDisposable);
-            
-            _authenticator.ObserveState()
-                .ObserveOn(AvaloniaScheduler.Instance)
-                .Subscribe(state =>
-                {
-                    switch (state)
-                    {
-                        case TdApi.AuthorizationState.AuthorizationStateWaitPhoneNumber waitPhoneNumber:
-                            OnWaitingPhoneNumber();
-                            break;
-                        
-                        case TdApi.AuthorizationState.AuthorizationStateWaitCode waitCode:
-                            OnWaitingConfirmCode(!waitCode.IsRegistered);
-                            break;
-                        
-                        case TdApi.AuthorizationState.AuthorizationStateWaitPassword waitPassword:
-                            OnWaitingPassword();
-                            break;
-                    }
-                })
+            stateObservable
+                .OfType<TdApi.AuthorizationState.AuthorizationStateWaitPassword>()
+                .Subscribe(state => OnWaitingPassword())
                 .DisposeWith(_contextDisposable);
         }
+
+        public void Dispose() => _contextDisposable.Dispose();
 
         private void OnWaitingPhoneNumber()
         {
@@ -103,11 +94,6 @@ namespace Tel.Egram.Components.Authentication
         {
             ConfirmIndex = 1;
             PasswordIndex = 1;
-        }
-
-        public void Dispose()
-        {
-            _contextDisposable.Dispose();
         }
     }
 }

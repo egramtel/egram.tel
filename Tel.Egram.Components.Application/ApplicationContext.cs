@@ -19,8 +19,8 @@ namespace Tel.Egram.Components.Application
         private readonly IFactory<WorkspaceContext> _workspaceContextFactory;
         private readonly IAuthenticator _authenticator;
 
-        public WorkspaceContext WorkspaceContext { get; set; }
         public AuthenticationContext AuthenticationContext { get; set; }
+        public WorkspaceContext WorkspaceContext { get; set; }
         public string WindowTitle { get; set; } = "Egram";
         public int PageIndex { get; set; }
         
@@ -29,15 +29,17 @@ namespace Tel.Egram.Components.Application
             IFactory<WorkspaceContext> workspaceContextFactory,
             IAuthenticator authenticator)
         {
-            _authenticator = authenticator;
-            _workspaceContextFactory = workspaceContextFactory;
             _authenticationContextFactory = authenticationContextFactory;
+            _workspaceContextFactory = workspaceContextFactory;
+            _authenticator = authenticator;
             
             _authenticator
                 .ObserveState()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(state =>
-                {
+                {   
+                    Console.WriteLine("State update received.");
+                    Console.WriteLine(state.DataType);
                     switch (state)
                     {
                         case TdApi.AuthorizationState.AuthorizationStateWaitTdlibParameters _:

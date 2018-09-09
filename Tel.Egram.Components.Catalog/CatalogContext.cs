@@ -5,13 +5,10 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Avalonia.Media;
 using Avalonia.Threading;
-using Microsoft.Extensions.DependencyInjection;
 using PropertyChanged;
 using ReactiveUI;
 using TdLib;
-using Tel.Egram.Feeds;
 using Tel.Egram.Graphics;
-using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Catalog
 {

@@ -7,10 +7,11 @@ using Tel.Egram.Registry;
 
 namespace Tel.Egram
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+            Console.WriteLine("Hello world");
             var services = new ServiceCollection();
             ConfigureServices(services);
             
@@ -18,7 +19,7 @@ namespace Tel.Egram
             Run(provider);
         }
 
-        static void ConfigureServices(IServiceCollection services)
+        private static void ConfigureServices(IServiceCollection services)
         {
             services.AddUtils();
             services.AddApplication();
@@ -31,7 +32,7 @@ namespace Tel.Egram
             services.AddCatalog();
         }
 
-        static void Run(IServiceProvider provider)
+        private static void Run(IServiceProvider provider)
         {
             using (var scope = provider.CreateScope())
             {

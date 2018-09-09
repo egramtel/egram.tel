@@ -1,9 +1,5 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Tel.Egram.Components.Navigation;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Tel.Egram.Components.Workspace;
-using Tel.Egram.Graphics;
-using Tel.Egram.TdLib;
 
 namespace Tel.Egram.Registry
 {

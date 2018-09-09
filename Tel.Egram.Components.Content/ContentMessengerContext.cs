@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using ReactiveUI;
-using Tel.Egram.Components.Catalog;
 using Tel.Egram.Components.Messenger;
 using Tel.Egram.Feeds;
 using Tel.Egram.Utils;

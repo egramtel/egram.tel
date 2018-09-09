@@ -1,5 +1,4 @@
-﻿using System;
-using TdLib;
+﻿using TdLib;
 
 namespace Tel.Egram.Users
 {
