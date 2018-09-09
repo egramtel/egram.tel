@@ -6,18 +6,11 @@ namespace Tel.Egram.Components.Messenger
     {
         private readonly Aggregate _aggregate;
 
-        public AggregateMessengerContext(
-            Aggregate aggregate
-            )
+        public AggregateMessengerContext(Aggregate aggregate)
         {
             _aggregate = aggregate;
 
             IsMessageEditorVisible = false;
-        }
-        
-        public override void Dispose()
-        {
-            base.Dispose();
         }
     }
 }

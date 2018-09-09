@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using PropertyChanged;
 using ReactiveUI;
 using TdLib;
 using Tel.Egram.Authentication;
@@ -11,70 +12,26 @@ using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Authentication
 {
-    public class AuthenticationContext : ReactiveObject, IDisposable
+    [AddINotifyPropertyChangedInterface]
+    public class AuthenticationContext : IDisposable
     {
         private readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
-        
         private readonly IAuthenticator _authenticator;
         
         public ReactiveCommand<Unit, Unit> SendCodeCommand { get; }
-        
         public ReactiveCommand<Unit, Unit> CheckCodeCommand { get; }
-        
         public ReactiveCommand<Unit, Unit> CheckPasswordCommand { get; }
         
-        private int _confirmIndex;
-        public int ConfirmIndex
-        {
-            get => _confirmIndex;
-            set => this.RaiseAndSetIfChanged(ref _confirmIndex, value);
-        }
+        public string PhoneNumber { get; set; }
+        public string ConfirmCode { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Password { get; set; }
+        
+        public int ConfirmIndex { get; set; }
+        public int PasswordIndex { get; set; }
 
-        private int _passwordIndex;
-        public int PasswordIndex
-        {
-            get => _passwordIndex;
-            set => this.RaiseAndSetIfChanged(ref _passwordIndex, value);
-        }
-
-        private string _phoneNumber;
-        public string PhoneNumber
-        {
-            get => _phoneNumber;
-            set => this.RaiseAndSetIfChanged(ref _phoneNumber, value);
-        }
-
-        private string _confirmCode;
-        public string ConfirmCode
-        {
-            get => _confirmCode;
-            set => this.RaiseAndSetIfChanged(ref _confirmCode, value);
-        }
-
-        private string _firstName;
-        public string FirstName
-        {
-            get => _firstName;
-            set => this.RaiseAndSetIfChanged(ref _firstName, value);
-        }
-
-        private string _lastName;
-        public string LastName
-        {
-            get => _lastName;
-            set => this.RaiseAndSetIfChanged(ref _lastName, value);
-        }
-
-        private string _password;
-        public string Password
-        {
-            get => _password;
-            set => this.RaiseAndSetIfChanged(ref _password, value);
-        }
-
-        public AuthenticationContext(
-            IAuthenticator authenticator
-            )
+        public AuthenticationContext(IAuthenticator authenticator)
         {
             _authenticator = authenticator;
             

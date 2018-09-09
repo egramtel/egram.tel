@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Avalonia.Threading;
+using PropertyChanged;
 using ReactiveUI;
 using TdLib;
 using Tel.Egram.Authentication;
@@ -11,54 +11,31 @@ using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Application
 {
-    public class ApplicationContext : ReactiveObject, IDisposable
+    [AddINotifyPropertyChangedInterface]
+    public class ApplicationContext : IDisposable
     {
         private readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
-
-        private readonly IAuthenticator _authenticator;
-        private readonly IFactory<WorkspaceContext> _workspaceContextFactory;
         private readonly IFactory<AuthenticationContext> _authenticationContextFactory;
+        private readonly IFactory<WorkspaceContext> _workspaceContextFactory;
+        private readonly IAuthenticator _authenticator;
 
-        private WorkspaceContext _workspaceContext;
-        public WorkspaceContext WorkspaceContext
-        {
-            get => _workspaceContext;
-            set => this.RaiseAndSetIfChanged(ref _workspaceContext, value);
-        }
-
-        private AuthenticationContext _authenticationContext;
-        public AuthenticationContext AuthenticationContext
-        {
-            get => _authenticationContext;
-            set => this.RaiseAndSetIfChanged(ref _authenticationContext, value);
-        }
-
-        private int _pageIndex;
-        public int PageIndex
-        {
-            get => _pageIndex;
-            set => this.RaiseAndSetIfChanged(ref _pageIndex, value);
-        }
-
-        private string _windowTitle = "Egram";
-        public string WindowTitle
-        {
-            get => _windowTitle;
-            set => this.RaiseAndSetIfChanged(ref _windowTitle, value);
-        }
+        public WorkspaceContext WorkspaceContext { get; set; }
+        public AuthenticationContext AuthenticationContext { get; set; }
+        public string WindowTitle { get; set; } = "Egram";
+        public int PageIndex { get; set; }
         
         public ApplicationContext(
-            IAuthenticator authenticator,
+            IFactory<AuthenticationContext> authenticationContextFactory,
             IFactory<WorkspaceContext> workspaceContextFactory,
-            IFactory<AuthenticationContext> authenticationContextFactory
-            )
+            IAuthenticator authenticator)
         {
             _authenticator = authenticator;
             _workspaceContextFactory = workspaceContextFactory;
             _authenticationContextFactory = authenticationContextFactory;
             
-            _authenticator.ObserveState()
-                .ObserveOn(AvaloniaScheduler.Instance)
+            _authenticator
+                .ObserveState()
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(state =>
                 {
                     switch (state)

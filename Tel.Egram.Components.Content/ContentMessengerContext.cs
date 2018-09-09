@@ -10,27 +10,21 @@ namespace Tel.Egram.Components.Content
 {
     public class ContentMessengerContext : ContentContext
     {
-        private readonly Target _target;
         private readonly IFactory<Aggregate, AggregateMessengerContext> _aggregateMessengerContextFactory;
         private readonly IFactory<Chat, ChatMessengerContext> _chatMessengerContextFactory;
+        private readonly Target _target;
 
-        private MessengerContext _messengerContext;
-        public MessengerContext MessengerContext
-        {
-            get => _messengerContext;
-            set => this.RaiseAndSetIfChanged(ref _messengerContext, value);
-        }
+        public MessengerContext MessengerContext { get; set; }
         
         public ContentMessengerContext(
-            Target target,
             IFactory<Aggregate, AggregateMessengerContext> aggregateMessengerContextFactory,
-            IFactory<Chat, ChatMessengerContext> chatMessengerContextFactory
-            )
+            IFactory<Chat, ChatMessengerContext> chatMessengerContextFactory,
+            Target target)
             : base(ContentKind.Chat)
         {
-            _target = target;
             _aggregateMessengerContextFactory = aggregateMessengerContextFactory;
             _chatMessengerContextFactory = chatMessengerContextFactory;
+            _target = target;
 
             switch (_target)
             {
@@ -44,9 +38,6 @@ namespace Tel.Egram.Components.Content
             }
         }
 
-        public override void Dispose()
-        {
-            MessengerContext?.Dispose();
-        }
+        public override void Dispose() => MessengerContext?.Dispose();
     }
 }

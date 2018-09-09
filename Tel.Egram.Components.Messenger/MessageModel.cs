@@ -1,67 +1,30 @@
-﻿using System.Linq;
-using Avalonia.Media;
+﻿using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using ReactiveUI;
+using PropertyChanged;
 using TdLib;
-using Tel.Egram.Feeds;
 using Tel.Egram.Graphics;
 using Tel.Egram.Messages;
 
 namespace Tel.Egram.Components.Messenger
 {
-    public class MessageModel : ReactiveObject
+    [AddINotifyPropertyChangedInterface]
+    public class MessageModel
     {
         private static readonly ColorMapper _colorMapper = new ColorMapper();
         
         public Message Message { get; set; }
-        
-        private string _text;
-        public string Text
-        {
-            get => _text;
-            set => this.RaiseAndSetIfChanged(ref _text, value);
-        }
-
-        private string _authorName;
-        public string AuthorName
-        {
-            get => _authorName;
-            set => this.RaiseAndSetIfChanged(ref _authorName, value);
-        }
-
-        private IBrush _authorColor;
-        public IBrush AuthorColor
-        {
-            get => _authorColor;
-            set => this.RaiseAndSetIfChanged(ref _authorColor, value);
-        }
-
-        private string _authorInit;
-        public string AuthorInit
-        {
-            get => _authorInit;
-            set => this.RaiseAndSetIfChanged(ref _authorInit, value);
-        }
-
-        private IBitmap _authorAvatar;
-        public IBitmap AuthorAvatar
-        {
-            get => _authorAvatar;
-            set => this.RaiseAndSetIfChanged(ref _authorAvatar, value);
-        }
-
-        private bool _isFallbackAuthorAvatar;
-        public bool IsFallbackAuthorAvatar
-        {
-            get => _isFallbackAuthorAvatar;
-            set => this.RaiseAndSetIfChanged(ref _isFallbackAuthorAvatar, value);
-        }
-        
+        public string Text { get; set; }
+        public string AuthorName { get; set; }
+        public IBrush AuthorColor { get; set; }
+        public string AuthorInit { get; set; }
+        public IBitmap AuthorAvatar { get; set; }
+        public bool IsFallbackAuthorAvatar { get; set; }
+       
         public static MessageModel FromMessage(Message message)
         {
             var content = message.Msg.Content;
-            string text = "";
-            string authorName = message.Chat.Title ?? " ";
+            var text = "";
+            var authorName = message.Chat.Title ?? " ";
             
             switch (content)
             {
@@ -80,10 +43,10 @@ namespace Tel.Egram.Components.Messenger
             return new MessageModel
             {
                 Message = message,
-                _text = text,
-                _authorName = authorName,
-                _authorColor = color,
-                _authorInit = init
+                Text = text,
+                AuthorName = authorName,
+                AuthorColor = color,
+                AuthorInit = init
             };
         }
     }
