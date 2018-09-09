@@ -50,7 +50,7 @@ namespace Tel.Egram.Feeds
             });
         }
 
-        public IObservable<Chat> LoadUsers()
+        public IObservable<Chat> LoadDirects()
         {
             return LoadAllChats().Where(chat =>
             {

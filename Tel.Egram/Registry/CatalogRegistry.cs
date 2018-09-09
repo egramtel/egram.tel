@@ -8,8 +8,8 @@ namespace Tel.Egram.Registry
     {
         public static void AddCatalog(this IServiceCollection services)
         {
+            services.AddTransient<IEntryLoader, EntryLoader>();
             services.AddTransient<CatalogContext>();
-            services.AddTransient<CatalogInteractor>();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Tel.Egram.Feeds
     {
         IObservable<Chat> LoadAllChats();
         IObservable<Chat> LoadChannels();
-        IObservable<Chat> LoadUsers();
+        IObservable<Chat> LoadDirects();
         IObservable<Chat> LoadGroups();
         IObservable<Chat> LoadBots();
     }
