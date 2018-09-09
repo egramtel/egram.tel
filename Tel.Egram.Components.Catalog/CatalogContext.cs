@@ -94,12 +94,12 @@ namespace Tel.Egram.Components.Catalog
             switch (entry)
             {
                 case ChatEntryModel chatEntry:
-                    return _avatarLoader.LoadBitmap(chatEntry.Chat.Ch, AvatarSize.Small)
+                    return _avatarLoader.LoadBitmap(chatEntry.Chat.ChatData, AvatarSize.Small)
                         .SubscribeOn(TaskPoolScheduler.Default)
                         .ObserveOn(AvaloniaScheduler.Instance)
                         .Subscribe(bitmap =>
                         {
-                            var color = Color.Parse("#" + _colorMapper[chatEntry.Chat.Ch.Id]);
+                            var color = Color.Parse("#" + _colorMapper[chatEntry.Chat.ChatData.Id]);
                             chatEntry.ColorBrush = new SolidColorBrush(color);
                             
                             chatEntry.Avatar = bitmap;

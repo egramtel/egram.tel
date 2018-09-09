@@ -18,7 +18,7 @@ namespace Tel.Egram.Components.Messenger
 
         private bool IsChannel()
         {
-            if (_chat.Ch.Type is TdApi.ChatType.ChatTypeSupergroup supergroup)
+            if (_chat.ChatData.Type is TdApi.ChatType.ChatTypeSupergroup supergroup)
             {
                 return supergroup.IsChannel;
             }

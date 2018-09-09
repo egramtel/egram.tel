@@ -3,6 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Tel.Egram.Authentication\Tel.Egram.Authentication.csproj" />
     <ProjectReference Include="..\Tel.Egram.Components.Authentication\Tel.Egram.Components.Authentication.csproj" />
     <ProjectReference Include="..\Tel.Egram.Components.Workspace\Tel.Egram.Components.Workspace.csproj" />
     <ProjectReference Include="..\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj" />

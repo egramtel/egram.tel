@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
     <ProjectReference Include="..\Tel.Egram.TdLib\Tel.Egram.TdLib.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Users\Tel.Egram.Users.csproj" />
     <ProjectReference Include="..\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
   </ItemGroup>
 </Project>

@@ -43,6 +43,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Components.Messag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Messages", "Tel.Egram.Messages\Tel.Egram.Messages.csproj", "{39591E59-6FDE-46BA-BF41-E53F2BA200CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Users", "Tel.Egram.Users\Tel.Egram.Users.csproj", "{1F1FCFB7-29B1-4F82-8DAF-E3C5574B7381}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Authentication", "Tel.Egram.Authentication\Tel.Egram.Authentication.csproj", "{5B6A93BB-F649-4FF8-A316-55E81C43B506}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +121,14 @@ Global
 		{39591E59-6FDE-46BA-BF41-E53F2BA200CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39591E59-6FDE-46BA-BF41-E53F2BA200CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39591E59-6FDE-46BA-BF41-E53F2BA200CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F1FCFB7-29B1-4F82-8DAF-E3C5574B7381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F1FCFB7-29B1-4F82-8DAF-E3C5574B7381}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F1FCFB7-29B1-4F82-8DAF-E3C5574B7381}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F1FCFB7-29B1-4F82-8DAF-E3C5574B7381}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B6A93BB-F649-4FF8-A316-55E81C43B506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B6A93BB-F649-4FF8-A316-55E81C43B506}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B6A93BB-F649-4FF8-A316-55E81C43B506}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B6A93BB-F649-4FF8-A316-55E81C43B506}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,6 +151,8 @@ Global
 		{13BCEE34-90BA-4837-A74B-A394ACFF1ED0} = {023AD020-281E-4DD4-AB74-99D9235C467E}
 		{415A5BD3-32EE-45CC-8D53-28B00BE23443} = {023AD020-281E-4DD4-AB74-99D9235C467E}
 		{39591E59-6FDE-46BA-BF41-E53F2BA200CF} = {800BCC36-C57E-41FA-A5F7-21EB841913CE}
+		{1F1FCFB7-29B1-4F82-8DAF-E3C5574B7381} = {800BCC36-C57E-41FA-A5F7-21EB841913CE}
+		{5B6A93BB-F649-4FF8-A316-55E81C43B506} = {800BCC36-C57E-41FA-A5F7-21EB841913CE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D35C07F-9F13-4E04-A5E0-36C92839CCD3}

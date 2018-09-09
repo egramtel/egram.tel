@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using Avalonia.Threading;
 using ReactiveUI;
+using TdLib;
+using Tel.Egram.Authentication;
 using Tel.Egram.Components.Authentication;
 using Tel.Egram.Components.Workspace;
 using Tel.Egram.Utils;
@@ -8,15 +13,11 @@ namespace Tel.Egram.Components.Application
 {
     public class ApplicationContext : ReactiveObject, IDisposable
     {
-        private const int PageLoading = 0;
-        private const int PageAuthentication = 1;
-        private const int PageWorkspace = 2;
-        
+        private readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
+
+        private readonly IAuthenticator _authenticator;
         private readonly IFactory<WorkspaceContext> _workspaceContextFactory;
         private readonly IFactory<AuthenticationContext> _authenticationContextFactory;
-        private readonly AuthenticationInteractor _authenticationInteractor;
-
-        private readonly IDisposable _authenticationSubscription;
 
         private WorkspaceContext _workspaceContext;
         public WorkspaceContext WorkspaceContext
@@ -47,21 +48,52 @@ namespace Tel.Egram.Components.Application
         }
         
         public ApplicationContext(
+            IAuthenticator authenticator,
             IFactory<WorkspaceContext> workspaceContextFactory,
-            IFactory<AuthenticationContext> authenticationContextFactory,
-            IFactory<ApplicationContext, AuthenticationInteractor> authenticationInteractorFactory
+            IFactory<AuthenticationContext> authenticationContextFactory
             )
         {
+            _authenticator = authenticator;
             _workspaceContextFactory = workspaceContextFactory;
             _authenticationContextFactory = authenticationContextFactory;
-
-            _authenticationInteractor = authenticationInteractorFactory.Create(this);
-            _authenticationSubscription = _authenticationInteractor.Bind(this);
+            
+            _authenticator.ObserveState()
+                .ObserveOn(AvaloniaScheduler.Instance)
+                .Subscribe(state =>
+                {
+                    switch (state)
+                    {
+                        case TdApi.AuthorizationState.AuthorizationStateWaitTdlibParameters _:
+                            GoToInitialPage();
+                            _authenticator.SetupParameters()
+                                .Subscribe()
+                                .DisposeWith(_contextDisposable);
+                            break;
+                    
+                        case TdApi.AuthorizationState.AuthorizationStateWaitEncryptionKey _:
+                            GoToInitialPage();
+                            _authenticator.CheckEncryptionKey()
+                                .Subscribe()
+                                .DisposeWith(_contextDisposable);
+                            break;
+                    
+                        case TdApi.AuthorizationState.AuthorizationStateWaitPhoneNumber _:
+                        case TdApi.AuthorizationState.AuthorizationStateWaitCode _:
+                        case TdApi.AuthorizationState.AuthorizationStateWaitPassword _:
+                            GoToAuthenticationPage();
+                            break;
+                
+                        case TdApi.AuthorizationState.AuthorizationStateReady _:
+                            GoToWorkspacePage();
+                            break;
+                    }
+                })
+                .DisposeWith(_contextDisposable);
         }
 
-        public void InitLoading()
+        private void GoToInitialPage()
         {
-            PageIndex = PageLoading;
+            PageIndex = (int) Page.Initial;
             
             AuthenticationContext?.Dispose();
             AuthenticationContext = null;
@@ -70,9 +102,9 @@ namespace Tel.Egram.Components.Application
             WorkspaceContext = null;
         }
 
-        public void InitAuthentication()
+        private void GoToAuthenticationPage()
         {
-            PageIndex = PageAuthentication;
+            PageIndex = (int) Page.Authentication;
 
             if (AuthenticationContext == null)
             {
@@ -83,9 +115,9 @@ namespace Tel.Egram.Components.Application
             }
         }
 
-        public void InitWorkspace()
+        private void GoToWorkspacePage()
         {
-            PageIndex = PageWorkspace;
+            PageIndex = (int) Page.Workspace;
 
             if (WorkspaceContext == null)
             {
@@ -97,12 +129,11 @@ namespace Tel.Egram.Components.Application
         }
 
         public void Dispose()
-        {
-            _authenticationSubscription.Dispose();
-            _authenticationInteractor.Dispose();
-            
+        {   
             WorkspaceContext?.Dispose();
             AuthenticationContext?.Dispose();
+            
+            _contextDisposable.Dispose();
         }
     }
 }

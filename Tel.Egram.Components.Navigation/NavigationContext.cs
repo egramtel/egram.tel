@@ -1,22 +1,38 @@
 ﻿using System;
+using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
+using Tel.Egram.Graphics;
+using Tel.Egram.Users;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Navigation
 {
     public class NavigationContext : ReactiveObject, IDisposable
     {
-        private readonly ProfileInteractor _profileInteractor;
-        private readonly IDisposable _avatarLoadSubscription;
+        private readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
+        
+        private readonly IUserLoader _userLoader;
+        private readonly IAvatarLoader _avatarLoader;
         
         public NavigationContext(
-            IFactory<ProfileInteractor> profileInteractorFactory
+            IUserLoader userLoader,
+            IAvatarLoader avatarLoader
             )
         {
-            _profileInteractor = profileInteractorFactory.Create();
-            _avatarLoadSubscription = _profileInteractor.LoadAvatar(this);
+            _userLoader = userLoader;
+            _avatarLoader = avatarLoader;
+            
+            _userLoader.GetMe()
+                .SelectMany(user => _avatarLoader.LoadBitmap(user.UserData, AvatarSize.Big))
+                .SubscribeOn(TaskPoolScheduler.Default)
+                .ObserveOn(AvaloniaScheduler.Instance)
+                .Subscribe(HandleProfilePhoto)
+                .DisposeWith(_contextDisposable);
         }
         
         private IBitmap _profilePhoto;
@@ -33,14 +49,14 @@ namespace Tel.Egram.Components.Navigation
             set => this.RaiseAndSetIfChanged(ref _selectedTabIndex, value);
         }
 
-        public void OnProfilePhotoLoaded(IBitmap bitmap)
+        public void HandleProfilePhoto(IBitmap bitmap)
         {
             ProfilePhoto = bitmap;
         }
         
         public void Dispose()
         {
-            _avatarLoadSubscription.Dispose();
+            _contextDisposable.Dispose();
         }
     }
 }

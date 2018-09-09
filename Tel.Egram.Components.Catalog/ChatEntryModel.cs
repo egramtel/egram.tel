@@ -9,7 +9,7 @@ namespace Tel.Egram.Components.Catalog
         
         public static ChatEntryModel FromChat(Chat chat)
         {
-            var title = chat.Ch.Title;
+            var title = chat.ChatData.Title;
             var init = string.IsNullOrEmpty(title) ? null : title.Substring(0, 1).ToUpper();
             
             return new ChatEntryModel

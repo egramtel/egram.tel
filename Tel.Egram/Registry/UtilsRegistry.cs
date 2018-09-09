@@ -2,11 +2,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using TdLib;
+using Tel.Egram.Authentication;
 using Tel.Egram.Feeds;
 using Tel.Egram.Graphics;
 using Tel.Egram.Messages;
 using Tel.Egram.Persistance;
 using Tel.Egram.TdLib;
+using Tel.Egram.Users;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Registry
@@ -50,6 +52,12 @@ namespace Tel.Egram.Registry
             services.AddScoped<IChatLoader, ChatLoader>();
             services.AddScoped<IFeedLoader, FeedLoader>();
             services.AddScoped<IMessageLoader, MessageLoader>();
+            
+            // users
+            services.AddScoped<IUserLoader, UserLoader>();
+            
+            // auth
+            services.AddScoped<IAuthenticator, Authenticator>();
         }
     }
 }

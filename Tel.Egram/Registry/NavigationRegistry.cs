@@ -8,7 +8,6 @@ namespace Tel.Egram.Registry
     {
         public static void AddNavigation(this IServiceCollection services)
         {
-            services.AddTransient<ProfileInteractor>();
             services.AddTransient<NavigationContext>();
         }
     }

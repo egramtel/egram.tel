@@ -26,14 +26,14 @@ namespace Tel.Egram.Feeds
                         return GetUser(type.UserId)
                             .Select(user => new Chat
                             {
-                                Ch = chat,
+                                ChatData = chat,
                                 User = user
                             });
                     }
                     
                     return Observable.Return(new Chat
                     {
-                        Ch = chat
+                        ChatData = chat
                     });
                 });
         }
@@ -42,7 +42,7 @@ namespace Tel.Egram.Feeds
         {
             return LoadAllChats().Where(chat =>
             {
-                if (chat.Ch.Type is TdApi.ChatType.ChatTypeSupergroup supergroupType)
+                if (chat.ChatData.Type is TdApi.ChatType.ChatTypeSupergroup supergroupType)
                 {
                     return supergroupType.IsChannel;
                 }
@@ -54,7 +54,7 @@ namespace Tel.Egram.Feeds
         {
             return LoadAllChats().Where(chat =>
             {
-                if (chat.Ch.Type is TdApi.ChatType.ChatTypePrivate)
+                if (chat.ChatData.Type is TdApi.ChatType.ChatTypePrivate)
                 {
                     return chat.User != null &&
                            chat.User.Type is TdApi.UserType.UserTypeRegular;
@@ -67,12 +67,12 @@ namespace Tel.Egram.Feeds
         {
             return LoadAllChats().Where(chat =>
             {
-                if (chat.Ch.Type is TdApi.ChatType.ChatTypeSupergroup supergroupType)
+                if (chat.ChatData.Type is TdApi.ChatType.ChatTypeSupergroup supergroupType)
                 {
                     return !supergroupType.IsChannel;
                 }
 
-                return chat.Ch.Type is TdApi.ChatType.ChatTypeBasicGroup;
+                return chat.ChatData.Type is TdApi.ChatType.ChatTypeBasicGroup;
             });
         }
 
@@ -80,7 +80,7 @@ namespace Tel.Egram.Feeds
         {
             return LoadAllChats().Where(chat =>
             {
-                if (chat.Ch.Type is TdApi.ChatType.ChatTypePrivate)
+                if (chat.ChatData.Type is TdApi.ChatType.ChatTypePrivate)
                 {
                     return chat.User != null &&
                            chat.User.Type is TdApi.UserType.UserTypeBot;
