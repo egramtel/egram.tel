@@ -2,7 +2,7 @@ using TdLib;
 
 namespace Tel.Egram.Feeds
 {
-    public class Chat
+    public class Chat : Target
     {
         public TdApi.Chat Ch { get; set; }
         

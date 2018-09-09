@@ -10,11 +10,7 @@ namespace Tel.Egram.Registry
     public static class WorkspaceRegistry
     {
         public static void AddWorkspace(this IServiceCollection services)
-        {   
-            services.AddTransient<ProfileInteractor>();
-            
-            services.AddTransient<NavigationInteractor>();
-            
+        {
             services.AddTransient<WorkspaceContext>();
         }
     }

@@ -1,21 +1,26 @@
 ﻿using System;
+using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using Tel.Egram.Components.Content;
 using Tel.Egram.Components.Explorer;
 using Tel.Egram.Components.Navigation;
+using Tel.Egram.Feeds;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Workspace
 {
     public class WorkspaceContext : ReactiveObject, IDisposable
     {
+        private readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
+        
+        private readonly IFactory<NavigationContext> _navigationContextFactory;
         private readonly IFactory<ExplorerKind, ExplorerContext> _explorerContextFactory;
         private readonly IFactory<ContentKind, ContentContext> _contentContextFactory;
-        private readonly NavigationInteractor _navigationInteractor;
-
-        private readonly IDisposable _navigationSubscription;
         
         private NavigationContext _navigationContext;
         public NavigationContext NavigationContext
@@ -41,35 +46,55 @@ namespace Tel.Egram.Components.Workspace
         public WorkspaceContext(
             IFactory<NavigationContext> navigationContextFactory,
             IFactory<ExplorerKind, ExplorerContext> explorerContextFactory,
-            IFactory<ContentKind, ContentContext> contentContextFactory,
-            IFactory<NavigationInteractor> navigationInteractorFactory
+            IFactory<ContentKind, ContentContext> contentContextFactory
             )
-        {
+        {   
+            _navigationContextFactory = navigationContextFactory;
             _explorerContextFactory = explorerContextFactory;
             _contentContextFactory = contentContextFactory;
             
-            NavigationContext = navigationContextFactory.Create();
-            _navigationInteractor = navigationInteractorFactory.Create();
-            
-            _navigationSubscription = _navigationInteractor.Bind(this);
+            NavigationContext = _navigationContextFactory.Create();
+            NavigationContext.WhenAnyValue(context => context.SelectedTabIndex)
+                .SubscribeOn(TaskPoolScheduler.Default)
+                .ObserveOn(AvaloniaScheduler.Instance)
+                .Subscribe(HandleContentNavigation)
+                .DisposeWith(_contextDisposable);
         }
 
-        public void OnContentNavigation(ContentKind kind)
+        private void HandleContentNavigation(int index)
         {
-            var contentKind = kind;
-            var explorerKind = (ExplorerKind) kind;
+            var contentKind = (ContentKind) index;
+            var explorerKind = (ExplorerKind) index;
             
+            ExplorerContext?.Dispose();
             ExplorerContext = _explorerContextFactory.Create(explorerKind);
+            ExplorerContext.WhenAnyValue(context => context.Target)
+                .SubscribeOn(TaskPoolScheduler.Default)
+                .ObserveOn(AvaloniaScheduler.Instance)
+                .Subscribe(HandleTarget)
+                .DisposeWith(_contextDisposable);
+            
+            ContentContext?.Dispose();
             ContentContext = _contentContextFactory.Create(contentKind);
         }
 
+        private void HandleTarget(Target target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+            
+            
+        }
+        
         public void Dispose()
         {
-            _navigationSubscription.Dispose();
-            
             NavigationContext?.Dispose();
             ExplorerContext?.Dispose();
             ContentContext?.Dispose();
+            
+            _contextDisposable.Dispose();
         }
     }
 }

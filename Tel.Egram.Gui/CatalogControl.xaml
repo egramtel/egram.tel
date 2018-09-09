@@ -3,18 +3,13 @@
     xmlns:gui="clr-namespace:Tel.Egram.Gui">
     
     <ListBox
-        Items="{Binding Section.Entries}"
+        Items="{Binding Entries}"
+        SelectedIndex="{Binding SelectedEntryIndex, Mode=TwoWay}"
         BorderThickness="0"
         ScrollViewer.VerticalScrollBarVisibility="Hidden"
         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
         Background="Transparent"
         >
-        
-        <ListBox.ItemsPanel>
-            <ItemsPanelTemplate>
-                <VirtualizingStackPanel VerticalAlignment="Top" />
-            </ItemsPanelTemplate>
-        </ListBox.ItemsPanel>
         
         <ListBox.ItemTemplate>
             <DataTemplate>

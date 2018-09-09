@@ -16,13 +16,27 @@ namespace Tel.Egram.Components.Catalog
 {
     public class CatalogContext : ReactiveObject, IDisposable
     {
+        private readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
+        
         private readonly CatalogKind _kind;
         private readonly IEntryLoader _entryLoader;
         private readonly IAvatarLoader _avatarLoader;
         private readonly IColorMapper _colorMapper;
+        
+        private ReactiveList<EntryModel> _entries = new ReactiveList<EntryModel>();
+        public ReactiveList<EntryModel> Entries
+        {
+            get => _entries;
+            set => this.RaiseAndSetIfChanged(ref _entries, value);
+        }
 
-        private readonly IDisposable _entryLoaderSubscription;
-
+        private int _selectedEntryIndex = -1;
+        public int SelectedEntryIndex
+        {
+            get => _selectedEntryIndex;
+            set => this.RaiseAndSetIfChanged(ref _selectedEntryIndex, value);
+        }
+        
         public CatalogContext(
             CatalogKind kind,
             IEntryLoader entryLoader,
@@ -37,7 +51,7 @@ namespace Tel.Egram.Components.Catalog
 
             IObservable<IList<EntryModel>> entryLoaderObservable;
             
-            switch (kind)
+            switch (_kind)
             {
                 case CatalogKind.Bots:
                     entryLoaderObservable = _entryLoader.LoadBotEntries();
@@ -57,30 +71,22 @@ namespace Tel.Egram.Components.Catalog
                     break;
             }
 
-            _entryLoaderSubscription = entryLoaderObservable
+            entryLoaderObservable
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(AvaloniaScheduler.Instance)
-                .Subscribe(HandleEntriesLoaded);
-        }
-        
-        private SectionModel _section;
-        public SectionModel Section
-        {
-            get => _section;
-            set => this.RaiseAndSetIfChanged(ref _section, value);
+                .Subscribe(HandleEntriesLoaded)
+                .DisposeWith(_contextDisposable);
         }
 
         private void HandleEntriesLoaded(IList<EntryModel> entries)
         {
             foreach (var entry in entries)
             {
-                LoadAvatar(entry);
+                LoadAvatar(entry).DisposeWith(_contextDisposable);
             }
-            
-            Section = new SectionModel
-            {
-                Entries = new ReactiveList<EntryModel>(entries)
-            };
+
+            Entries = new ReactiveList<EntryModel>(entries);
+            SelectedEntryIndex = 0;
         }
 
         private IDisposable LoadAvatar(EntryModel entry)
@@ -122,7 +128,7 @@ namespace Tel.Egram.Components.Catalog
 
         public void Dispose()
         {
-            _entryLoaderSubscription.Dispose();
+            _contextDisposable.Dispose();
         }
     }
 }
