@@ -3,9 +3,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Tel.Egram.Gui
 {
-    public class HomeContentControl : UserControl
+    public class ContentMessengerControl : UserControl
     {
-        public HomeContentControl()
+        public ContentMessengerControl()
         {
             AvaloniaXamlLoader.Load(this);
         }

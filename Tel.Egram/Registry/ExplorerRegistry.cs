@@ -1,7 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Tel.Egram.Components.Content;
-using Tel.Egram.Components.Content.Direct;
-using Tel.Egram.Components.Content.Home;
 using Tel.Egram.Components.Explorer;
 using Tel.Egram.Utils;
 

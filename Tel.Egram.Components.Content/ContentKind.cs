@@ -2,9 +2,6 @@
 {
     public enum ContentKind
     {
-        Home,
-        Direct,
-        Groups,
-        Bots
+        Chat
     }
 }

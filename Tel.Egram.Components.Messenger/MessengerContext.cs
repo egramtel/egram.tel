@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using Tel.Egram.Components.MessageEditor;
-using Tel.Egram.Components.Messenger.Aggregate;
 using Tel.Egram.Feeds;
 using Tel.Egram.Messages;
 using Tel.Egram.Utils;
@@ -20,6 +19,13 @@ namespace Tel.Egram.Components.Messenger
             set => this.RaiseAndSetIfChanged(ref _messages, value);
         }
 
+        private bool _isMessageEditorVisible;
+        public bool IsMessageEditorVisible
+        {
+            get => _isMessageEditorVisible;
+            set => this.RaiseAndSetIfChanged(ref _isMessageEditorVisible, value);
+        }
+        
         private MessageEditorContext _messageEditorContext;
         public MessageEditorContext MessageEditorContext
         {
@@ -27,10 +33,9 @@ namespace Tel.Egram.Components.Messenger
             set => this.RaiseAndSetIfChanged(ref _messageEditorContext, value);
         }
 
-        public abstract void OnPrependMessages(List<Message> messages);
-
-        public abstract void OnAppendMessages(List<Message> messages);
-        
-        public abstract void Dispose();
+        public virtual void Dispose()
+        {
+            MessageEditorContext?.Dispose();
+        }
     }
 }

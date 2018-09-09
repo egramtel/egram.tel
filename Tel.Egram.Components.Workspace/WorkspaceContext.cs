@@ -20,8 +20,8 @@ namespace Tel.Egram.Components.Workspace
         
         private readonly IFactory<NavigationContext> _navigationContextFactory;
         private readonly IFactory<ExplorerKind, ExplorerContext> _explorerContextFactory;
-        private readonly IFactory<ContentKind, ContentContext> _contentContextFactory;
-        
+        private readonly IFactory<Target, ContentMessengerContext> _contentMessengerContextFactory;
+
         private NavigationContext _navigationContext;
         public NavigationContext NavigationContext
         {
@@ -46,13 +46,13 @@ namespace Tel.Egram.Components.Workspace
         public WorkspaceContext(
             IFactory<NavigationContext> navigationContextFactory,
             IFactory<ExplorerKind, ExplorerContext> explorerContextFactory,
-            IFactory<ContentKind, ContentContext> contentContextFactory
+            IFactory<Target, ContentMessengerContext> contentMessengerContextFactory
             )
         {   
             _navigationContextFactory = navigationContextFactory;
             _explorerContextFactory = explorerContextFactory;
-            _contentContextFactory = contentContextFactory;
-            
+            _contentMessengerContextFactory = contentMessengerContextFactory;
+
             NavigationContext = _navigationContextFactory.Create();
             NavigationContext.WhenAnyValue(context => context.SelectedTabIndex)
                 .SubscribeOn(TaskPoolScheduler.Default)
@@ -63,29 +63,28 @@ namespace Tel.Egram.Components.Workspace
 
         private void HandleContentNavigation(int index)
         {
-            var contentKind = (ContentKind) index;
             var explorerKind = (ExplorerKind) index;
+
+            ContentContext?.Dispose();
             
             ExplorerContext?.Dispose();
             ExplorerContext = _explorerContextFactory.Create(explorerKind);
             ExplorerContext.WhenAnyValue(context => context.Target)
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(AvaloniaScheduler.Instance)
-                .Subscribe(HandleTarget)
+                .Subscribe(HandleTargetChange)
                 .DisposeWith(_contextDisposable);
-            
-            ContentContext?.Dispose();
-            ContentContext = _contentContextFactory.Create(contentKind);
         }
 
-        private void HandleTarget(Target target)
+        private void HandleTargetChange(Target target)
         {
             if (target == null)
             {
                 return;
             }
             
-            
+            ContentContext?.Dispose();
+            ContentContext = _contentMessengerContextFactory.Create(target);
         }
         
         public void Dispose()

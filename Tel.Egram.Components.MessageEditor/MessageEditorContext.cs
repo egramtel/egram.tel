@@ -2,7 +2,11 @@
 
 namespace Tel.Egram.Components.MessageEditor
 {
-    public class MessageEditorContext
+    public class MessageEditorContext : IDisposable
     {
+        public void Dispose()
+        {
+            
+        }
     }
 }
