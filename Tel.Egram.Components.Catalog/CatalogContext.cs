@@ -57,6 +57,10 @@ namespace Tel.Egram.Components.Catalog
                     entryLoaderObservable = _entryLoader.LoadBotEntries();
                     break;
                 
+                case CatalogKind.Channels:
+                    entryLoaderObservable = _entryLoader.LoadChannelEntries();
+                    break;
+                
                 case CatalogKind.Groups:
                     entryLoaderObservable = _entryLoader.LoadGroupEntries();
                     break;

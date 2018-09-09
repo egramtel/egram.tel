@@ -17,12 +17,15 @@ namespace Tel.Egram.Components.Catalog
         
         public IObservable<IList<EntryModel>> LoadHomeEntries()
         {
-            return LoadEntries(_chatLoader.LoadChannels)
+            return LoadEntries(_chatLoader.LoadAllChats)
                 .Select(list =>
                 {
                     var aggregateEntry = AggregateEntryModel.Main();
                     list.Insert(0, aggregateEntry);
-                    return list;
+                    
+                    return list
+                        .Where(entry => (entry as ChatEntryModel)?.Chat.ChatData.IsPinned ?? true)
+                        .ToList();
                 });
         }
 
@@ -34,6 +37,11 @@ namespace Tel.Egram.Components.Catalog
         public IObservable<IList<EntryModel>> LoadGroupEntries()
         {
             return LoadEntries(_chatLoader.LoadGroups);
+        }
+
+        public IObservable<IList<EntryModel>> LoadChannelEntries()
+        {
+            return LoadEntries(_chatLoader.LoadChannels);
         }
 
         public IObservable<IList<EntryModel>> LoadBotEntries()

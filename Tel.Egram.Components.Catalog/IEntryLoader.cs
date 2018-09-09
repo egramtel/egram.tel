@@ -8,6 +8,7 @@ namespace Tel.Egram.Components.Catalog
         IObservable<IList<EntryModel>> LoadHomeEntries();
         IObservable<IList<EntryModel>> LoadDirectEntries();
         IObservable<IList<EntryModel>> LoadGroupEntries();
+        IObservable<IList<EntryModel>> LoadChannelEntries();
         IObservable<IList<EntryModel>> LoadBotEntries();
     }
 }

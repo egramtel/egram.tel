@@ -56,7 +56,7 @@
                 <Border>
                     <Panel>
                         <Ellipse />
-                        <Image Source="resm:Tel.Egram.Gui.Icons.atsign.png" />
+                        <Image Source="resm:Tel.Egram.Gui.Icons.head.png" />
                     </Panel>
                 </Border>
             </TabStripItem>
@@ -68,6 +68,17 @@
                     <Panel>
                         <Ellipse />
                         <Image Source="resm:Tel.Egram.Gui.Icons.grid.png" />
+                    </Panel>
+                </Border>
+            </TabStripItem>
+                
+            <TabStripItem
+                Classes="NavigationTab"
+                >
+                <Border>
+                    <Panel>
+                        <Ellipse />
+                        <Image Source="resm:Tel.Egram.Gui.Icons.radio.png" />
                     </Panel>
                 </Border>
             </TabStripItem>

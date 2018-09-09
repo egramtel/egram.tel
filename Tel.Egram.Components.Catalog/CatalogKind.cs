@@ -5,6 +5,7 @@ namespace Tel.Egram.Components.Catalog
         Home,
         Direct,
         Groups,
+        Channels,
         Bots
     }
 }
