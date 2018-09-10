@@ -38,8 +38,6 @@ namespace Tel.Egram.Components.Application
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(state =>
                 {   
-                    Console.WriteLine("State update received.");
-                    Console.WriteLine(state.DataType);
                     switch (state)
                     {
                         case TdApi.AuthorizationState.AuthorizationStateWaitTdlibParameters _:

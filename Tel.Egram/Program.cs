@@ -11,7 +11,6 @@ namespace Tel.Egram
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello world");
             var services = new ServiceCollection();
             ConfigureServices(services);
             
