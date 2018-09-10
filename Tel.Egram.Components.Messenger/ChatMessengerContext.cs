@@ -7,9 +7,7 @@ namespace Tel.Egram.Components.Messenger
     {
         private readonly Chat _chat;
 
-        public ChatMessengerContext(
-            Chat chat
-            )
+        public ChatMessengerContext(Chat chat)
         {
             _chat = chat;
 
@@ -24,11 +22,6 @@ namespace Tel.Egram.Components.Messenger
             }
 
             return false;
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
         }
     }
 }

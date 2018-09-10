@@ -5,49 +5,35 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Avalonia.Media;
 using Avalonia.Threading;
-using Microsoft.Extensions.DependencyInjection;
+using PropertyChanged;
 using ReactiveUI;
 using TdLib;
-using Tel.Egram.Feeds;
 using Tel.Egram.Graphics;
-using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Catalog
 {
-    public class CatalogContext : ReactiveObject, IDisposable
+    [AddINotifyPropertyChangedInterface]
+    public class CatalogContext : IDisposable
     {
         private readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
-        
-        private readonly CatalogKind _kind;
-        private readonly IEntryLoader _entryLoader;
         private readonly IAvatarLoader _avatarLoader;
+        private readonly IEntryLoader _entryLoader;
         private readonly IColorMapper _colorMapper;
+        private readonly CatalogKind _kind;
         
-        private ReactiveList<EntryModel> _entries = new ReactiveList<EntryModel>();
-        public ReactiveList<EntryModel> Entries
-        {
-            get => _entries;
-            set => this.RaiseAndSetIfChanged(ref _entries, value);
-        }
+        public ReactiveList<EntryModel> Entries { get; set; } = new ReactiveList<EntryModel>();
+        public int SelectedEntryIndex { get; set; } = -1;
 
-        private int _selectedEntryIndex = -1;
-        public int SelectedEntryIndex
-        {
-            get => _selectedEntryIndex;
-            set => this.RaiseAndSetIfChanged(ref _selectedEntryIndex, value);
-        }
-        
         public CatalogContext(
-            CatalogKind kind,
-            IEntryLoader entryLoader,
             IAvatarLoader avatarLoader,
-            IColorMapper colorMapper
-            )
+            IEntryLoader entryLoader,
+            IColorMapper colorMapper,
+            CatalogKind kind)
         {
-            _kind = kind;
             _entryLoader = entryLoader;
             _avatarLoader = avatarLoader;
             _colorMapper = colorMapper;
+            _kind = kind;
 
             IObservable<IList<EntryModel>> entryLoaderObservable;
             

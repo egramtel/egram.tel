@@ -1,134 +1,82 @@
 ﻿using System;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Avalonia.Threading;
-using Microsoft.Extensions.DependencyInjection;
+using PropertyChanged;
 using ReactiveUI;
-using TdLib;
 using Tel.Egram.Authentication;
-using Tel.Egram.Utils;
+using TdLib;
 
 namespace Tel.Egram.Components.Authentication
 {
-    public class AuthenticationContext : ReactiveObject, IDisposable
+    [AddINotifyPropertyChangedInterface]
+    public class AuthenticationContext : IDisposable
     {
-        private readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
-        
-        private readonly IAuthenticator _authenticator;
-        
+        private readonly CompositeDisposable _contextDisposable;
+
+        public ReactiveCommand<Unit, Unit> CheckPasswordCommand { get; }
+        public ReactiveCommand<Unit, Unit> CheckCodeCommand { get; }
         public ReactiveCommand<Unit, Unit> SendCodeCommand { get; }
         
-        public ReactiveCommand<Unit, Unit> CheckCodeCommand { get; }
+        public int PasswordIndex { get; set; }
+        public int ConfirmIndex { get; set; }
         
-        public ReactiveCommand<Unit, Unit> CheckPasswordCommand { get; }
-        
-        private int _confirmIndex;
-        public int ConfirmIndex
-        {
-            get => _confirmIndex;
-            set => this.RaiseAndSetIfChanged(ref _confirmIndex, value);
-        }
+        public string PhoneNumber { get; set; }
+        public string ConfirmCode { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Password { get; set; }
 
-        private int _passwordIndex;
-        public int PasswordIndex
+        public AuthenticationContext(IAuthenticator authenticator)
         {
-            get => _passwordIndex;
-            set => this.RaiseAndSetIfChanged(ref _passwordIndex, value);
-        }
+            _contextDisposable = new CompositeDisposable();
 
-        private string _phoneNumber;
-        public string PhoneNumber
-        {
-            get => _phoneNumber;
-            set => this.RaiseAndSetIfChanged(ref _phoneNumber, value);
-        }
-
-        private string _confirmCode;
-        public string ConfirmCode
-        {
-            get => _confirmCode;
-            set => this.RaiseAndSetIfChanged(ref _confirmCode, value);
-        }
-
-        private string _firstName;
-        public string FirstName
-        {
-            get => _firstName;
-            set => this.RaiseAndSetIfChanged(ref _firstName, value);
-        }
-
-        private string _lastName;
-        public string LastName
-        {
-            get => _lastName;
-            set => this.RaiseAndSetIfChanged(ref _lastName, value);
-        }
-
-        private string _password;
-        public string Password
-        {
-            get => _password;
-            set => this.RaiseAndSetIfChanged(ref _password, value);
-        }
-
-        public AuthenticationContext(
-            IAuthenticator authenticator
-            )
-        {
-            _authenticator = authenticator;
+            var canSendCode = this
+                .WhenAnyValue(x => x.PhoneNumber)
+                .Select(phone => !string.IsNullOrWhiteSpace(phone));
             
-            SendCodeCommand = ReactiveCommand.Create<Unit, Unit>(_ =>  Unit.Default,
-                null,
-                AvaloniaScheduler.Instance);
-            
-            CheckCodeCommand = ReactiveCommand.Create<Unit, Unit>(_ => Unit.Default,
-                null,
-                AvaloniaScheduler.Instance);
-            
-            CheckPasswordCommand = ReactiveCommand.Create<Unit, Unit>(_ => Unit.Default,
-                null,
-                AvaloniaScheduler.Instance);
+            SendCodeCommand = ReactiveCommand.CreateFromObservable(
+                () => authenticator.SetPhoneNumber(PhoneNumber),
+                canSendCode, RxApp.MainThreadScheduler);
 
-            SendCodeCommand
-                .ObserveOn(AvaloniaScheduler.Instance)
-                .SelectMany(_ => _authenticator.SetPhoneNumber(PhoneNumber) )
-                .Subscribe()
+            var canCheckCode = this
+                .WhenAnyValue(x => x.ConfirmCode)
+                .Select(code => !string.IsNullOrWhiteSpace(code));
+            
+            CheckCodeCommand = ReactiveCommand.CreateFromObservable(
+                () => authenticator.CheckCode(ConfirmCode, FirstName, LastName),
+                canCheckCode, RxApp.MainThreadScheduler);
+
+            var canCheckPassword = this
+                .WhenAnyValue(x => x.Password)
+                .Select(password => !string.IsNullOrWhiteSpace(password));
+            
+            CheckPasswordCommand = ReactiveCommand.CreateFromObservable(
+                () => authenticator.CheckPassword(Password),
+                canCheckPassword, RxApp.MainThreadScheduler);
+            
+            var stateObservable = authenticator
+                .ObserveState()
+                .ObserveOn(RxApp.MainThreadScheduler);
+
+            stateObservable
+                .OfType<TdApi.AuthorizationState.AuthorizationStateWaitPhoneNumber>()
+                .Subscribe(state => OnWaitingPhoneNumber())
                 .DisposeWith(_contextDisposable);
 
-            CheckCodeCommand
-                .ObserveOn(AvaloniaScheduler.Instance)
-                .SelectMany(_ => _authenticator.CheckCode(ConfirmCode, FirstName, LastName))
-                .Subscribe()
+            stateObservable
+                .OfType<TdApi.AuthorizationState.AuthorizationStateWaitCode>()
+                .Subscribe(state => OnWaitingConfirmCode(!state.IsRegistered))
                 .DisposeWith(_contextDisposable);
 
-            CheckPasswordCommand
-                .ObserveOn(AvaloniaScheduler.Instance)
-                .SelectMany(_ => _authenticator.CheckPassword(Password))
-                .Subscribe()
-                .DisposeWith(_contextDisposable);
-            
-            _authenticator.ObserveState()
-                .ObserveOn(AvaloniaScheduler.Instance)
-                .Subscribe(state =>
-                {
-                    switch (state)
-                    {
-                        case TdApi.AuthorizationState.AuthorizationStateWaitPhoneNumber waitPhoneNumber:
-                            OnWaitingPhoneNumber();
-                            break;
-                        
-                        case TdApi.AuthorizationState.AuthorizationStateWaitCode waitCode:
-                            OnWaitingConfirmCode(!waitCode.IsRegistered);
-                            break;
-                        
-                        case TdApi.AuthorizationState.AuthorizationStateWaitPassword waitPassword:
-                            OnWaitingPassword();
-                            break;
-                    }
-                })
+            stateObservable
+                .OfType<TdApi.AuthorizationState.AuthorizationStateWaitPassword>()
+                .Subscribe(state => OnWaitingPassword())
                 .DisposeWith(_contextDisposable);
         }
+
+        public void Dispose() => _contextDisposable.Dispose();
 
         private void OnWaitingPhoneNumber()
         {
@@ -146,11 +94,6 @@ namespace Tel.Egram.Components.Authentication
         {
             ConfirmIndex = 1;
             PasswordIndex = 1;
-        }
-
-        public void Dispose()
-        {
-            _contextDisposable.Dispose();
         }
     }
 }

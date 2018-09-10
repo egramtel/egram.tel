@@ -1,4 +1,3 @@
-using Avalonia.Media;
 using Tel.Egram.Feeds;
 
 namespace Tel.Egram.Components.Catalog

@@ -3,6 +3,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Avalonia.Threading;
+using PropertyChanged;
 using ReactiveUI;
 using Tel.Egram.Components.Catalog;
 using Tel.Egram.Feeds;
@@ -10,28 +11,17 @@ using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Explorer
 {
-    public class ExplorerContext : ReactiveObject, IDisposable
+    [AddINotifyPropertyChangedInterface]
+    public class ExplorerContext : IDisposable
     {
         private readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
         
-        private CatalogContext _catalogContext;
-        public CatalogContext CatalogContext
-        {
-            get => _catalogContext;
-            set => this.RaiseAndSetIfChanged(ref _catalogContext, value);
-        }
-
-        private Target _target;
-        public Target Target
-        {
-            get => _target;
-            set => this.RaiseAndSetIfChanged(ref _target, value);
-        }
+        public CatalogContext CatalogContext { get; set; }
+        public Target Target { get; set; }
 
         public ExplorerContext(
-            ExplorerKind explorerKind,
-            IFactory<CatalogKind, CatalogContext> catalogContextFactory
-            )
+            IFactory<CatalogKind, CatalogContext> catalogContextFactory,
+            ExplorerKind explorerKind)
         {
             var catalogKind = (CatalogKind) explorerKind;
             
@@ -67,7 +57,6 @@ namespace Tel.Egram.Components.Explorer
         public void Dispose()
         {
             CatalogContext?.Dispose();
-            
             _contextDisposable.Dispose();
         }
     }
