@@ -3,6 +3,6 @@
     public enum AvatarSize
     {
         Small = 44,
-        Big = 76
+        Big = 72
     }
 }

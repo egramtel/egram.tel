@@ -5,10 +5,15 @@ namespace Tel.Egram.Components.Messenger
 {
     public class ChatMessengerContext : MessengerContext
     {
+        private readonly IChatService _chatService;
         private readonly Chat _chat;
 
-        public ChatMessengerContext(Chat chat)
+        public ChatMessengerContext(
+            IChatService chatService,
+            Chat chat
+            )
         {
+            _chatService = chatService;
             _chat = chat;
 
             IsMessageEditorVisible = !IsChannel();

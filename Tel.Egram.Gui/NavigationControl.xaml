@@ -16,13 +16,13 @@
             
             <Image
                 Source="{Binding ProfilePhoto}"
-                Width="40"
-                Height="40"
+                Width="36"
+                Height="36"
                 Margin="0,8,0,0"
                 >
                 
                 <Image.Clip>
-                    <EllipseGeometry Rect="0,0,38,38" />
+                    <EllipseGeometry Rect="0,0,36,36" />
                 </Image.Clip>
                 
             </Image>

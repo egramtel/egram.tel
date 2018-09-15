@@ -22,6 +22,7 @@ namespace Tel.Egram.Components.Content
             _chatMessengerContextFactory = chatMessengerContextFactory;
             _target = target;
 
+            MessengerContext?.Dispose();
             switch (_target)
             {
                 case Aggregate aggregate:
