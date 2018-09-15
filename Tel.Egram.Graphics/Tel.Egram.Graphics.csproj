@@ -3,21 +3,13 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.6.2-build5881-beta" />
+    <PackageReference Include="Avalonia" Version="0.6.2-build6191-beta" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0005" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0005" />
-    <PackageReference Include="System.Reactive" Version="3.1.1" />
+    <PackageReference Include="System.Reactive" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Avalonia.Visuals, Version=0.6.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\.nuget\packages\avalonia\0.6.2-build5881-beta\lib\netstandard2.0\Avalonia.Visuals.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263">
-      <HintPath>..\..\..\.nuget\packages\system.reactive.linq\3.1.1\lib\netstandard1.3\System.Reactive.Linq.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>
