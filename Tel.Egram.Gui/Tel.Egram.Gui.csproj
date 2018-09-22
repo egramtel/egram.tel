@@ -11,6 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="**\*.png" />
+    <EmbeddedResource Include="**\*.ttf" />
     <Compile Update="**\*.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
@@ -22,5 +23,8 @@
     <None Update="BotsContentControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Fonts\Roboto" />
   </ItemGroup>
 </Project>

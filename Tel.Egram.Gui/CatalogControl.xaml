@@ -64,7 +64,6 @@
             
                         <TextBlock
                             Text="{Binding Title}"
-                            FontWeight="Bold"
                             TextWrapping="Wrap"
                             VerticalAlignment="Center" />
             

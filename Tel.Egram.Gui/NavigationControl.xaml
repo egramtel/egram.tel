@@ -16,13 +16,13 @@
             
             <Image
                 Source="{Binding ProfilePhoto}"
-                Width="36"
-                Height="36"
                 Margin="0,8,0,0"
+                Width="32"
+                Height="32"
                 >
                 
                 <Image.Clip>
-                    <EllipseGeometry Rect="0,0,36,36" />
+                    <EllipseGeometry Rect="0,0,32,32" />
                 </Image.Clip>
                 
             </Image>
@@ -111,7 +111,7 @@
     <UserControl.Styles>
         
         <Style Selector="TabStrip">
-            <Setter Property="Margin" Value="0,4,0,0" />
+            <Setter Property="Margin" Value="0" />
         </Style>
         
         <Style Selector="TabStripItem.NavigationTab">

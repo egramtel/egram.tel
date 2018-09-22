@@ -50,7 +50,6 @@
             <TextBlock
                 Text="{Binding AuthorName}"
                 Foreground="{Binding AuthorColor}"
-                FontWeight="Bold"
                 TextWrapping="Wrap"
                 VerticalAlignment="Center" />
             
