@@ -1,9 +1,11 @@
 ﻿using System.Reactive.Disposables;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TdLib;
 using Tel.Egram.Components.Application;
 using Tel.Egram.Gui;
+using Tel.Egram.Persistance;
 
 namespace Tel.Egram.Registry
 {
@@ -16,8 +18,10 @@ namespace Tel.Egram.Registry
             
             services.AddScoped(provider => new MainApplication.Initializer(() =>
             {
-                var hub = provider.GetService<Hub>();
+                var db = provider.GetService<IDatabaseContextFactory>().CreateDbContext();
+                db.Database.Migrate();
                 
+                var hub = provider.GetService<Hub>();
                 Task.Run(() => hub.Start());
 
                 return Disposable.Create(() =>

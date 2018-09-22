@@ -5,7 +5,7 @@ namespace Tel.Egram.Persistance
 {
     public class Storage : IStorage
     {
-        public Storage(string directory)
+        private Storage(string directory)
         {
             BaseDirectory = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), directory);
@@ -22,6 +22,15 @@ namespace Tel.Egram.Persistance
             
             AvatarDirectory = Path.Combine(CacheDirectory, "avatars");
             Directory.CreateDirectory(AvatarDirectory);
+
+            DataDirectory = Path.Combine(CacheDirectory, "data");
+            Directory.CreateDirectory(DataDirectory);
+            
+            DatabaseFile = Path.Combine(DataDirectory, "app.db");
+        }
+        
+        public Storage() : this("Egram")
+        {
         }
 
         public string BaseDirectory { get; }
@@ -33,5 +42,9 @@ namespace Tel.Egram.Persistance
         public string CacheDirectory { get; }
         
         public string AvatarDirectory { get; }
+        
+        public string DataDirectory { get; }
+        
+        public string DatabaseFile { get; }
     }
 }

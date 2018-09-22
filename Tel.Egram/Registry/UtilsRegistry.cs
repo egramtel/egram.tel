@@ -34,8 +34,10 @@ namespace Tel.Egram.Registry
             services.AddScoped<TdAgent>();
             
             // persistance
-            services.AddScoped<IStorage>(p => new Storage("Egram"));
+            services.AddScoped<IStorage, Storage>();
             services.AddScoped<IFileLoader, FileLoader>();
+            services.AddScoped<IDatabaseContextFactory, DatabaseContextFactory>();
+            services.AddScoped<IKeyValueStorage, KeyValueStorage>();
 
             // graphics
             services.AddScoped<IColorMapper, ColorMapper>();
