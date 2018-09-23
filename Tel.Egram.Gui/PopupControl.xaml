@@ -1,0 +1,122 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:gui="clr-namespace:Tel.Egram.Gui"
+    xmlns:popup="clr-namespace:Tel.Egram.Gui.Popups">
+    
+    <Grid
+        RowDefinitions="auto,*"
+        ColumnDefinitions="*,auto,*"
+        >
+        
+        <Rectangle
+            Grid.RowSpan="3"
+            Grid.ColumnSpan="3"
+            Fill="#000000"
+            Opacity="0.66"
+            />
+        
+        <Border
+            Grid.Column="1"
+            Grid.Row="0"
+            Margin="0,24,0,0"
+            Background="#ffffff"
+            CornerRadius="4"
+            >
+            
+            <Grid
+                RowDefinitions="auto,auto,auto"
+                ColumnDefinitions="auto,*,auto"
+                >
+                
+                <Border
+                    Grid.Row="0"
+                    Grid.ColumnSpan="3"
+                    Height="40"
+                    Padding="10"
+                    BorderThickness="0,0,0,1"
+                    BorderBrush="#d8d8d8"
+                    >
+                    
+                    <TextBlock
+                        Text="{Binding PopupTitle}"
+                        VerticalAlignment="Center"
+                        />
+                    
+                </Border>
+                
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Command="{Binding PopupCloseCommand}"
+                    Width="20"
+                    Height="20"
+                    Margin="10"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    >
+                    
+                    <Image
+                        Source="resm:Tel.Egram.Gui.Icons.x.png"
+                        Width="16"
+                        Height="16"
+                        Opacity="0.66"
+                        />
+                    
+                </Button>
+                
+                <Carousel
+                    Grid.Row="1"
+                    Grid.ColumnSpan="3"
+                    MinWidth="380"
+                    MinHeight="20"
+                    Margin="10"
+                    SelectedIndex="{Binding PopupIndex}"
+                    >
+                    
+                    <Panel/>
+                    
+                    <popup:ProxyPopupControl />
+                    
+                </Carousel>
+                
+                <Border
+                    Grid.Row="2"
+                    Grid.ColumnSpan="3"
+                    Height="40"
+                    Padding="6,0"
+                    BorderThickness="0,1,0,0"
+                    BorderBrush="#d8d8d8"
+                    >
+                    
+                    <Button
+                        Classes="Action"
+                        Command="{Binding PopupOkCommand}"
+                        HorizontalAlignment="Left">
+                        <TextBlock Text="{Binding PopupOkText}" />
+                    </Button>
+                    
+                </Border>
+                
+            </Grid>
+            
+        </Border>
+        
+    </Grid>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="Button.Action">
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Padding" Value="12,0,12,0"/>
+            <Setter Property="Background" Value="#5195e1" />
+            <Setter Property="Foreground" Value="#ffffff" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        
+        <Style Selector="Button.Action /template/ ContentPresenter">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        
+    </UserControl.Styles>
+    
+</UserControl>

@@ -57,16 +57,16 @@
         <Style Selector="TextBox">
             <Setter Property="BorderThickness" Value="0,1,0,0" />
             <Setter Property="BorderBrush" Value="#d8d8d8" />
-            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="Padding" Value="8,8" />
             <Setter Property="AcceptsReturn" Value="True" />
         </Style>
         
         <Style Selector="Grid.ButtonContainer">
-            <Setter Property="Margin" Value="10,0,10,10" />
+            <Setter Property="Margin" Value="6,0,6,6" />
         </Style>
         
         <Style Selector="Button.Send">
-            <Setter Property="Height" Value="28"/>
+            <Setter Property="Height" Value="26"/>
             <Setter Property="Padding" Value="12,0,12,0"/>
             <Setter Property="Margin" Value="0,0,16,0" />
             <Setter Property="Background" Value="#5195e1" />

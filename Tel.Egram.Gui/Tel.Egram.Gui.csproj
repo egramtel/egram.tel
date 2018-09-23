@@ -26,5 +26,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Fonts\Roboto" />
+    <Folder Include="Popups" />
   </ItemGroup>
 </Project>

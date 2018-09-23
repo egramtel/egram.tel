@@ -12,14 +12,26 @@
     Background="#ffffff"
     >
     
-    <Carousel SelectedIndex="{Binding PageIndex}">
+    <Panel>
+    
+        <Carousel
+            SelectedIndex="{Binding PageIndex}">
         
-        <gui:LoadingPage DataContext="{Binding LoadingContext}" />
+            <gui:LoadingPage
+                DataContext="{Binding LoadingContext}" />
         
-        <gui:AuthenticationPage DataContext="{Binding AuthenticationContext}" />
+            <gui:AuthenticationPage
+                DataContext="{Binding AuthenticationContext}" />
         
-        <gui:WorkspacePage DataContext="{Binding WorkspaceContext}" />
+            <gui:WorkspacePage
+                DataContext="{Binding WorkspaceContext}" />
         
-    </Carousel>
+        </Carousel>
+        
+        <gui:PopupControl
+            IsVisible="{Binding IsPopupVisible}"
+            DataContext="{Binding PopupContext}" />
+        
+    </Panel>
     
 </Window>
