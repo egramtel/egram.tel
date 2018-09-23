@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Authentication", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Components.Popup", "Tel.Egram.Components.Popup\Tel.Egram.Components.Popup.csproj", "{18BA8357-ED41-4E2A-A30C-B786177E1559}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Components.Settings", "Tel.Egram.Components.Settings\Tel.Egram.Components.Settings.csproj", "{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,10 @@ Global
 		{18BA8357-ED41-4E2A-A30C-B786177E1559}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18BA8357-ED41-4E2A-A30C-B786177E1559}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18BA8357-ED41-4E2A-A30C-B786177E1559}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -160,6 +166,7 @@ Global
 		{1F1FCFB7-29B1-4F82-8DAF-E3C5574B7381} = {800BCC36-C57E-41FA-A5F7-21EB841913CE}
 		{5B6A93BB-F649-4FF8-A316-55E81C43B506} = {800BCC36-C57E-41FA-A5F7-21EB841913CE}
 		{18BA8357-ED41-4E2A-A30C-B786177E1559} = {023AD020-281E-4DD4-AB74-99D9235C467E}
+		{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD} = {023AD020-281E-4DD4-AB74-99D9235C467E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D35C07F-9F13-4E04-A5E0-36C92839CCD3}

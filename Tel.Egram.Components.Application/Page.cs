@@ -2,8 +2,8 @@ namespace Tel.Egram.Components.Application
 {
     public enum Page
     {
-        Initial,
-        Authentication,
-        Workspace
+        Initial = 0,
+        Authentication = 1,
+        Workspace = 2
     }
 }

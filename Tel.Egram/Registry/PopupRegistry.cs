@@ -10,6 +10,8 @@ namespace Tel.Egram.Registry
         {
             services.AddScoped<IApplicationPopupController, ApplicationPopupController>();
             services.AddScoped<IPopupController>(p => p.GetService<IApplicationPopupController>());
+
+            services.AddTransient<HiddenPopupContext>();
         }
     }
 }

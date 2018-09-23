@@ -1,7 +1,7 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:gui="clr-namespace:Tel.Egram.Gui"
-    xmlns:popup="clr-namespace:Tel.Egram.Gui.Popups">
+    xmlns:settings="clr-namespace:Tel.Egram.Gui.Settings">
     
     <Grid
         RowDefinitions="auto,*"
@@ -24,7 +24,7 @@
             >
             
             <Grid
-                RowDefinitions="auto,auto,auto"
+                RowDefinitions="auto,auto"
                 ColumnDefinitions="auto,*,auto"
                 >
                 
@@ -75,27 +75,9 @@
                     
                     <Panel/>
                     
-                    <popup:ProxyPopupControl />
+                    <settings:ProxyPopupControl />
                     
                 </Carousel>
-                
-                <Border
-                    Grid.Row="2"
-                    Grid.ColumnSpan="3"
-                    Height="40"
-                    Padding="6,0"
-                    BorderThickness="0,1,0,0"
-                    BorderBrush="#d8d8d8"
-                    >
-                    
-                    <Button
-                        Classes="Action"
-                        Command="{Binding PopupOkCommand}"
-                        HorizontalAlignment="Left">
-                        <TextBlock Text="{Binding PopupOkText}" />
-                    </Button>
-                    
-                </Border>
                 
             </Grid>
             
@@ -105,17 +87,6 @@
     
     <UserControl.Styles>
         
-        <Style Selector="Button.Action">
-            <Setter Property="Height" Value="26"/>
-            <Setter Property="Padding" Value="12,0,12,0"/>
-            <Setter Property="Background" Value="#5195e1" />
-            <Setter Property="Foreground" Value="#ffffff" />
-            <Setter Property="BorderThickness" Value="0" />
-        </Style>
-        
-        <Style Selector="Button.Action /template/ ContentPresenter">
-            <Setter Property="CornerRadius" Value="4" />
-        </Style>
         
     </UserControl.Styles>
     

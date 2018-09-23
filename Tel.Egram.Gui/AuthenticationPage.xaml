@@ -15,6 +15,7 @@
         
         <Button
             Classes="Link"
+            Command="{Binding SetProxyCommand}"
             Grid.Row="0"
             Grid.Column="1"
             >
@@ -151,7 +152,7 @@
         
         <Style Selector="Button.Action">
             <Setter Property="Width" Value="200" />
-            <Setter Property="Height" Value="28"/>
+            <Setter Property="Height" Value="26"/>
             <Setter Property="Margin" Value="0,8,0,16" />
             <Setter Property="Padding" Value="12,0,12,0"/>
             <Setter Property="Background" Value="#5195e1" />

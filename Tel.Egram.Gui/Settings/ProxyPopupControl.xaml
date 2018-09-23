@@ -1,0 +1,153 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:gui="clr-namespace:Tel.Egram.Gui">
+    
+    <Grid
+        RowDefinitions="auto,auto,auto,auto,auto,auto,auto">
+
+        <CheckBox
+            Grid.Row="0"
+            >
+            <TextBlock Text="Use proxy" />
+        </CheckBox>
+        
+        <ListBox
+            Grid.Row="1"
+            />
+        
+        <Grid
+            ColumnDefinitions="auto,auto,auto,*"
+            Grid.Row="2"
+            >
+            
+            <Button
+                Grid.Column="0"
+                >
+                <!-- <TextBlock Text="+" /> -->
+                <Image Source="resm:Tel.Egram.Gui.Icons.plus.png" />
+            </Button>
+            
+            <Button
+                Grid.Column="1"
+                >
+                <!-- <TextBlock Text="-" /> -->
+                <Image Source="resm:Tel.Egram.Gui.Icons.minus.png" />
+            </Button>
+            
+            <Button
+                Grid.Column="2"
+                >
+                <TextBlock Text="Save" />
+                <!-- <Image Source="resm:Tel.Egram.Gui.Icons.check.png" /> -->
+            </Button>
+            
+        </Grid>
+        
+        <Grid
+            ColumnDefinitions="*,*,*"
+            Grid.Row="3"
+            >
+            
+            <RadioButton
+                Grid.Column="0"
+                >
+                <TextBlock Text="Socks5" />
+            </RadioButton>
+            
+            <RadioButton
+                Grid.Column="1"
+                >
+                <TextBlock Text="HTTP" />
+            </RadioButton>
+            
+            <RadioButton
+                Grid.Column="2"
+                >
+                <TextBlock Text="MTProto" />
+            </RadioButton>
+            
+        </Grid>
+        
+        <Grid
+            ColumnDefinitions="3*,8,1*"
+            Grid.Row="4"
+            >
+            
+            <TextBox
+                Grid.Column="0"
+                Watermark="Server"
+                />
+            
+            <TextBox
+                Grid.Column="2"
+                Watermark="Port"
+                />
+            
+        </Grid>
+        
+        <TextBox
+            Watermark="Username (optional)"
+            Grid.Row="5"
+            />
+        
+        <TextBox
+            Watermark="Password (optional)"
+            Grid.Row="6"
+            />
+        
+    </Grid>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="ListBox">
+            <Setter Property="Height" Value="100" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#727985" />
+        </Style>
+        
+        <Style Selector="Button">
+            <Setter Property="MinWidth" Value="26" />
+            <Setter Property="Height" Value="26" />
+            <Setter Property="Margin" Value="0,8,8,0" />
+            <Setter Property="Background" Value="#5195e1" />
+            <Setter Property="Foreground" Value="#ffffff" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        
+        <Style Selector="Button /template/ ContentPresenter">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        
+        <Style Selector="Button Image">
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+        </Style>
+        
+        <Style Selector="Button TextBlock">
+            <Setter Property="Margin" Value="10,0" />
+        </Style>
+        
+        <Style Selector="RadioButton">
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Margin" Value="0,16,0,0" />
+        </Style>
+        
+        <Style Selector="CheckBox">
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Margin" Value="0,0,0,16" />
+        </Style>
+        
+        <Style Selector="TextBox">
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Margin" Value="0,8,0,0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#727985" />
+        </Style>
+        
+        <Style Selector="TextBox /template/ Border">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        
+    </UserControl.Styles>
+    
+</UserControl>

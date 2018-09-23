@@ -7,6 +7,9 @@ using PropertyChanged;
 using ReactiveUI;
 using Tel.Egram.Authentication;
 using TdLib;
+using Tel.Egram.Components.Popup;
+using Tel.Egram.Components.Settings.Connection;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Authentication
 {
@@ -18,6 +21,7 @@ namespace Tel.Egram.Components.Authentication
         public ReactiveCommand<Unit, Unit> CheckPasswordCommand { get; }
         public ReactiveCommand<Unit, Unit> CheckCodeCommand { get; }
         public ReactiveCommand<Unit, Unit> SendCodeCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetProxyCommand { get; }
         
         public int PasswordIndex { get; set; }
         public int ConfirmIndex { get; set; }
@@ -28,10 +32,20 @@ namespace Tel.Egram.Components.Authentication
         public string LastName { get; set; }
         public string Password { get; set; }
 
-        public AuthenticationContext(IAuthenticator authenticator)
+        public AuthenticationContext(
+            IFactory<ProxyPopupContext> proxyPopupContextFactory,
+            IAuthenticator authenticator,
+            IPopupController popupController
+            )
         {
             _contextDisposable = new CompositeDisposable();
 
+            SetProxyCommand = ReactiveCommand.Create(() =>
+            {
+                var popupContext = proxyPopupContextFactory.Create();
+                popupController.Show(popupContext);
+            });
+            
             var canSendCode = this
                 .WhenAnyValue(x => x.PhoneNumber)
                 .Select(phone => !string.IsNullOrWhiteSpace(phone));

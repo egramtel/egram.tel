@@ -23,6 +23,7 @@ namespace Tel.Egram
             services.AddUtils();
             services.AddApplication();
             services.AddPopup();
+            services.AddSettings();
             services.AddAuthentication();
             services.AddWorkspace();
             services.AddNavigation();

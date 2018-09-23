@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Tel.Egram.Gui.Popups
+namespace Tel.Egram.Gui.Settings
 {
     public class ProxyPopupControl : UserControl
     {

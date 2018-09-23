@@ -10,7 +10,7 @@ namespace Tel.Egram.Components.Popup
     {
         public string PopupTitle { get; set; }
 
-        public string PopupOkText { get; set; } = "OK";
+        public string PopupOkText { get; set; }
         
         public bool IsPopupVisible { get; set; }
         
@@ -25,6 +25,8 @@ namespace Tel.Egram.Components.Popup
             IPopupController popupController
             )
         {
+            PopupTitle = "";
+            PopupOkText = "OK";
             IsPopupVisible = true;
             PopupIndex = (int)popupKind;
             

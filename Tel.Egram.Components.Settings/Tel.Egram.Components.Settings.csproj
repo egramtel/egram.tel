@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
@@ -11,10 +11,6 @@
     <PackageReference Include="System.Reactive" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Tel.Egram.Authentication\Tel.Egram.Authentication.csproj" />
     <ProjectReference Include="..\Tel.Egram.Components.Popup\Tel.Egram.Components.Popup.csproj" />
-    <ProjectReference Include="..\Tel.Egram.Components.Settings\Tel.Egram.Components.Settings.csproj" />
-    <ProjectReference Include="..\Tel.Egram.TdLib\Tel.Egram.TdLib.csproj" />
-    <ProjectReference Include="..\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
   </ItemGroup>
 </Project>
