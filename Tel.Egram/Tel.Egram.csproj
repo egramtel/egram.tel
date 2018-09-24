@@ -9,6 +9,7 @@
     <ProjectReference Include="..\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
     <ProjectReference Include="..\Tel.Egram.Gui\Tel.Egram.Gui.csproj" />
     <ProjectReference Include="..\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Settings\Tel.Egram.Settings.csproj" />
     <ProjectReference Include="..\Tel.Egram.TdLib\Tel.Egram.TdLib.csproj" />
   </ItemGroup>
   <ItemGroup>

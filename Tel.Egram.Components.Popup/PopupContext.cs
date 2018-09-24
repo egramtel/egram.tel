@@ -9,14 +9,10 @@ namespace Tel.Egram.Components.Popup
     public abstract class PopupContext : IDisposable
     {
         public string PopupTitle { get; set; }
-
-        public string PopupOkText { get; set; }
         
         public bool IsPopupVisible { get; set; }
         
         public int PopupIndex { get; set; }
-        
-        public ReactiveCommand<Unit, Unit> PopupOkCommand { get; }
         
         public ReactiveCommand<Unit, Unit> PopupCloseCommand { get; }
 
@@ -26,11 +22,9 @@ namespace Tel.Egram.Components.Popup
             )
         {
             PopupTitle = "";
-            PopupOkText = "OK";
             IsPopupVisible = true;
             PopupIndex = (int)popupKind;
             
-            PopupOkCommand = ReactiveCommand.Create(popupController.Hide);
             PopupCloseCommand = ReactiveCommand.Create(popupController.Hide);
         }
 

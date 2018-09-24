@@ -31,7 +31,7 @@
                 <Border
                     Grid.Row="0"
                     Grid.ColumnSpan="3"
-                    Height="40"
+                    Height="36"
                     Padding="10"
                     BorderThickness="0,0,0,1"
                     BorderBrush="#d8d8d8"
@@ -39,6 +39,8 @@
                     
                     <TextBlock
                         Text="{Binding PopupTitle}"
+                        Foreground="#444444"
+                        FontWeight="Medium"
                         VerticalAlignment="Center"
                         />
                     
@@ -48,8 +50,8 @@
                     Grid.Row="0"
                     Grid.Column="2"
                     Command="{Binding PopupCloseCommand}"
-                    Width="20"
-                    Height="20"
+                    Width="16"
+                    Height="16"
                     Margin="10"
                     Background="Transparent"
                     BorderThickness="0"

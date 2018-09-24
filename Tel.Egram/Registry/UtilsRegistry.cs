@@ -9,6 +9,7 @@ using Tel.Egram.Feeds;
 using Tel.Egram.Graphics;
 using Tel.Egram.Messages;
 using Tel.Egram.Persistance;
+using Tel.Egram.Settings;
 using Tel.Egram.TdLib;
 using Tel.Egram.Users;
 using Tel.Egram.Utils;
@@ -38,6 +39,9 @@ namespace Tel.Egram.Registry
             services.AddScoped<IFileLoader, FileLoader>();
             services.AddScoped<IDatabaseContextFactory, DatabaseContextFactory>();
             services.AddScoped<IKeyValueStorage, KeyValueStorage>();
+            
+            // settings
+            services.AddScoped<IProxyManager, ProxyManager>();
 
             // graphics
             services.AddScoped<IColorMapper, ColorMapper>();

@@ -6,21 +6,47 @@
         RowDefinitions="auto,auto,auto,auto,auto,auto,auto">
 
         <CheckBox
+            IsChecked="{Binding IsProxyEnabled, Mode=TwoWay}"
             Grid.Row="0"
             >
-            <TextBlock Text="Use proxy" />
+            <TextBlock Text="Enable proxy" />
         </CheckBox>
         
         <ListBox
+            Items="{Binding Proxies}"
+            SelectedItem="{Binding SelectedProxy}"
             Grid.Row="1"
-            />
+            >
+            
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    
+                    <Grid ColumnDefinitions="auto,*,auto">
+                        <CheckBox
+                            Grid.Column="0"
+                            />
+                        <TextBlock
+                            Text="{Binding Server}"
+                            Grid.Column="1"
+                            />
+                        <TextBlock
+                            Text="{Binding Port}"
+                            Grid.Column="2"
+                            />
+                    </Grid>
+                    
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            
+        </ListBox>
         
         <Grid
-            ColumnDefinitions="auto,auto,auto,*"
+            ColumnDefinitions="auto,auto,8,auto,*"
             Grid.Row="2"
             >
             
             <Button
+                Command="{Binding AddProxyCommand}"
                 Grid.Column="0"
                 >
                 <!-- <TextBlock Text="+" /> -->
@@ -28,6 +54,7 @@
             </Button>
             
             <Button
+                Command="{Binding RemoveProxyCommand}"
                 Grid.Column="1"
                 >
                 <!-- <TextBlock Text="-" /> -->
@@ -35,7 +62,8 @@
             </Button>
             
             <Button
-                Grid.Column="2"
+                Command="{Binding SaveProxyCommand}"
+                Grid.Column="3"
                 >
                 <TextBlock Text="Save" />
                 <!-- <Image Source="resm:Tel.Egram.Gui.Icons.check.png" /> -->
@@ -49,18 +77,21 @@
             >
             
             <RadioButton
+                IsChecked="{Binding SelectedProxy.IsSocks5, Mode=TwoWay}"
                 Grid.Column="0"
                 >
                 <TextBlock Text="Socks5" />
             </RadioButton>
             
             <RadioButton
+                IsChecked="{Binding SelectedProxy.IsHttp, Mode=TwoWay}"
                 Grid.Column="1"
                 >
                 <TextBlock Text="HTTP" />
             </RadioButton>
             
             <RadioButton
+                IsChecked="{Binding SelectedProxy.IsMtProto, Mode=TwoWay}"
                 Grid.Column="2"
                 >
                 <TextBlock Text="MTProto" />
@@ -75,23 +106,36 @@
             
             <TextBox
                 Grid.Column="0"
+                Text="{Binding SelectedProxy.Server, Mode=TwoWay}"
                 Watermark="Server"
                 />
             
             <TextBox
                 Grid.Column="2"
+                Text="{Binding SelectedProxy.Port, Mode=TwoWay}"
                 Watermark="Port"
                 />
             
         </Grid>
         
         <TextBox
-            Watermark="Username (optional)"
+            IsVisible="{Binding SelectedProxy.IsSecretInputVisible}"
+            Watermark="Secret"
+            Text="{Binding SelectedProxy.Secret, Mode=TwoWay}"
             Grid.Row="5"
             />
         
         <TextBox
+            IsVisible="{Binding SelectedProxy.IsUsernameInputVisible}"
+            Watermark="Username (optional)"
+            Text="{Binding SelectedProxy.Username, Mode=TwoWay}"
+            Grid.Row="5"
+            />
+        
+        <TextBox
+            IsVisible="{Binding SelectedProxy.IsPasswordInputVisible}"
             Watermark="Password (optional)"
+            Text="{Binding SelectedProxy.Password, Mode=TwoWay}"
             Grid.Row="6"
             />
         
@@ -103,6 +147,11 @@
             <Setter Property="Height" Value="100" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="BorderBrush" Value="#727985" />
+        </Style>
+        
+        <Style Selector="ListBox CheckBox">
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Margin" Value="0" />
         </Style>
         
         <Style Selector="Button">
@@ -134,7 +183,7 @@
         
         <Style Selector="CheckBox">
             <Setter Property="Height" Value="24" />
-            <Setter Property="Margin" Value="0,0,0,16" />
+            <Setter Property="Margin" Value="0,0,0,8" />
         </Style>
         
         <Style Selector="TextBox">

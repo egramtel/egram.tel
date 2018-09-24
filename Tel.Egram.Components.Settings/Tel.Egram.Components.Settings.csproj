@@ -12,5 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tel.Egram.Components.Popup\Tel.Egram.Components.Popup.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Settings\Tel.Egram.Settings.csproj" />
   </ItemGroup>
 </Project>
