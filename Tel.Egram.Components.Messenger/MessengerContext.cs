@@ -9,13 +9,13 @@ namespace Tel.Egram.Components.Messenger
     [AddINotifyPropertyChangedInterface]
     public abstract class MessengerContext : IDisposable
     {   
-        protected CompositeDisposable _contextDisposable = new CompositeDisposable();
+        protected readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
+        
+        public ChatInfoModel ChatInfo { get; set; }
         
         public ReactiveList<MessageModel> Messages { get; set; } = new ReactiveList<MessageModel>();
         
         public MessageEditorContext MessageEditorContext { get; set; }
-
-        public bool IsMessageEditorVisible { get; set; }
 
         public virtual void Dispose()
         {

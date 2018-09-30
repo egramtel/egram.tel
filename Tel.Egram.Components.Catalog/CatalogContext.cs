@@ -84,32 +84,24 @@ namespace Tel.Egram.Components.Catalog
             switch (entry)
             {
                 case ChatEntryModel chatEntry:
-                    return _avatarLoader.LoadBitmap(chatEntry.Chat.ChatData, AvatarSize.Small)
+                    return _avatarLoader.LoadAvatar(chatEntry.Chat.ChatData, AvatarSize.Small)
                         .SubscribeOn(TaskPoolScheduler.Default)
-                        .ObserveOn(AvaloniaScheduler.Instance)
-                        .Subscribe(bitmap =>
+                        .ObserveOn(RxApp.MainThreadScheduler)
+                        .Subscribe(avatar =>
                         {
-                            var color = Color.Parse("#" + _colorMapper[chatEntry.Chat.ChatData.Id]);
-                            chatEntry.ColorBrush = new SolidColorBrush(color);
-                            
-                            chatEntry.Avatar = bitmap;
-                            chatEntry.IsFallbackAvatar = chatEntry.Avatar == null;
+                            chatEntry.Avatar = avatar;
                         });
                 
                 case AggregateEntryModel aggregateEntry:
-                    return _avatarLoader.LoadBitmap(new TdApi.Chat
+                    return _avatarLoader.LoadAvatar(new TdApi.Chat
                         {
                             Id = aggregateEntry.Aggregate.Id
                         }, AvatarSize.Small)
                         .SubscribeOn(TaskPoolScheduler.Default)
-                        .ObserveOn(AvaloniaScheduler.Instance)
-                        .Subscribe(bitmap =>
+                        .ObserveOn(RxApp.MainThreadScheduler)
+                        .Subscribe(avatar =>
                         {
-                            var color = Color.Parse("#" + _colorMapper[aggregateEntry.Aggregate.Id]);
-                            aggregateEntry.ColorBrush = new SolidColorBrush(color);
-                            
-                            aggregateEntry.Avatar = bitmap;
-                            aggregateEntry.IsFallbackAvatar = aggregateEntry.Avatar == null;
+                            aggregateEntry.Avatar = avatar;
                         });
             }
             

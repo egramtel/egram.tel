@@ -28,14 +28,14 @@
                 Classes="Action"
                 Grid.Column="1"
                 >
-                <Image Source="resm:Tel.Egram.Gui.Icons.image.png" />
+                <!-- <Image Source="resm:Tel.Egram.Gui.Icons.image.png" /> -->
             </Button>
             
             <Button
                 Classes="Action"
                 Grid.Column="2"
                 >
-                <Image Source="resm:Tel.Egram.Gui.Icons.file.png" />
+                <!-- <Image Source="resm:Tel.Egram.Gui.Icons.file.png" /> -->
             </Button>
             
             <Panel
@@ -69,7 +69,7 @@
             <Setter Property="Height" Value="26"/>
             <Setter Property="Padding" Value="12,0,12,0"/>
             <Setter Property="Margin" Value="0,0,16,0" />
-            <Setter Property="Background" Value="#5195e1" />
+            <Setter Property="Background" Value="#17a1e6" />
             <Setter Property="Foreground" Value="#ffffff" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>

@@ -6,7 +6,7 @@
         ColumnDefinitions="*"
         RowDefinitions="48,*,48"
         Classes="NavigationContainer"
-        Background="#2b313b"
+        Background="#1b2333"
         >
         
         <Button
@@ -15,7 +15,7 @@
             >
             
             <Image
-                Source="{Binding ProfilePhoto}"
+                Source="{Binding Avatar.Bitmap}"
                 Margin="0,8,0,0"
                 Width="32"
                 Height="32"
@@ -45,7 +45,7 @@
                 <Border>
                     <Panel>
                         <Ellipse />
-                        <Image Source="resm:Tel.Egram.Gui.Icons.home.png" />
+                        <Image Source="resm:Tel.Egram.Gui.Icons.Light.Home32.png" />
                     </Panel>
                 </Border>
             </TabStripItem>
@@ -56,7 +56,7 @@
                 <Border>
                     <Panel>
                         <Ellipse />
-                        <Image Source="resm:Tel.Egram.Gui.Icons.head.png" />
+                        <Image Source="resm:Tel.Egram.Gui.Icons.Light.Person32.png" />
                     </Panel>
                 </Border>
             </TabStripItem>
@@ -67,7 +67,7 @@
                 <Border>
                     <Panel>
                         <Ellipse />
-                        <Image Source="resm:Tel.Egram.Gui.Icons.grid.png" />
+                        <Image Source="resm:Tel.Egram.Gui.Icons.Light.Group32.png" />
                     </Panel>
                 </Border>
             </TabStripItem>
@@ -78,7 +78,7 @@
                 <Border>
                     <Panel>
                         <Ellipse />
-                        <Image Source="resm:Tel.Egram.Gui.Icons.radio.png" />
+                        <Image Source="resm:Tel.Egram.Gui.Icons.Light.Channel32.png" />
                     </Panel>
                 </Border>
             </TabStripItem>
@@ -89,7 +89,7 @@
                 <Border>
                     <Panel>
                         <Ellipse />
-                        <Image Source="resm:Tel.Egram.Gui.Icons.cpu.png" />
+                        <Image Source="resm:Tel.Egram.Gui.Icons.Light.Bot32.png" />
                     </Panel>
                 </Border>
             </TabStripItem>
@@ -102,7 +102,7 @@
             >
             <Panel>
                 <Ellipse />
-                <Image Source="resm:Tel.Egram.Gui.Icons.settings.png" />
+                <Image Source="resm:Tel.Egram.Gui.Icons.Light.Settings32.png" />
             </Panel>
         </Button>
         
@@ -126,28 +126,28 @@
         </Style>
         
         <Style Selector="TabStripItem.NavigationTab:selected > Border">
-            <Setter Property="BorderBrush" Value="#5195e1" />
+            <Setter Property="BorderBrush" Value="#17a1e6" />
         </Style>
         
         <Style Selector="TabStripItem.NavigationTab Image">
-            <Setter Property="Width" Value="12" />
-            <Setter Property="Height" Value="12" />
-            <Setter Property="Opacity" Value="0.8" />
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+            <Setter Property="Opacity" Value="0.5" />
         </Style>
         
         <Style Selector="TabStripItem.NavigationTab Ellipse">
             <Setter Property="Width" Value="22" />
             <Setter Property="Height" Value="22" />
-            <Setter Property="Fill" Value="#ffffff" />
-            <Setter Property="Opacity" Value="0.1" />
+            <Setter Property="Fill" Value="#435270" />
+            <Setter Property="Opacity" Value="0.33" />
         </Style>
         
         <Style Selector="TabStripItem.NavigationTab:selected Image">
-            <Setter Property="Opacity" Value="1.0" />
+            <Setter Property="Opacity" Value="0.8" />
         </Style>
         
         <Style Selector="TabStripItem.NavigationTab:selected Ellipse">
-            <Setter Property="Opacity" Value="0.2" />
+            <Setter Property="Opacity" Value="1.0" />
         </Style>
         
         <Style Selector="Button.Profile">
@@ -178,16 +178,16 @@
         </Style>
         
         <Style Selector="Button.Settings Image">
-            <Setter Property="Width" Value="12" />
-            <Setter Property="Height" Value="12" />
-            <Setter Property="Opacity" Value="0.7" />
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+            <Setter Property="Opacity" Value="0.5" />
         </Style>
         
         <Style Selector="Button.Settings Ellipse">
             <Setter Property="Width" Value="22" />
             <Setter Property="Height" Value="22" />
-            <Setter Property="Fill" Value="#f3f3f3" />
-            <Setter Property="Opacity" Value="0.2" />
+            <Setter Property="Fill" Value="#435270" />
+            <Setter Property="Opacity" Value="0.33" />
         </Style>
         
     </UserControl.Styles>

@@ -5,10 +5,12 @@
     
     <Style Selector="TextBlock">
         <Setter Property="FontFamily" Value="resm:Tel.Egram.Gui.Fonts?assembly=Tel.Egram.Gui#Roboto" />
+        <Setter Property="FontSize" Value="12" />
     </Style>
     
     <Style Selector="TextBox">
         <Setter Property="FontFamily" Value="resm:Tel.Egram.Gui.Fonts?assembly=Tel.Egram.Gui#Roboto" />
+        <Setter Property="FontSize" Value="12" />
     </Style>
     
 </Styles>

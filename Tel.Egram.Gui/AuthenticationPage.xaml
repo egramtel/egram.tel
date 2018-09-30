@@ -11,7 +11,7 @@
         <Border
             Grid.Column="1"
             Grid.RowSpan="6"
-            Background="#2b313b" />
+            Background="#242e44" />
         
         <Button
             Classes="Link"
@@ -142,8 +142,8 @@
             <Setter Property="Height" Value="28" />
             <Setter Property="Margin" Value="0,8,0,0" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Background" Value="#313742" />
-            <Setter Property="BorderBrush" Value="#5c626b" />
+            <Setter Property="Background" Value="#1b2333" />
+            <Setter Property="BorderBrush" Value="#3a455a" />
         </Style>
         
         <Style Selector="TextBox /template/ Border">
@@ -155,7 +155,7 @@
             <Setter Property="Height" Value="26"/>
             <Setter Property="Margin" Value="0,8,0,16" />
             <Setter Property="Padding" Value="12,0,12,0"/>
-            <Setter Property="Background" Value="#5195e1" />
+            <Setter Property="Background" Value="#17a1e6" />
             <Setter Property="Foreground" Value="#ffffff" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>

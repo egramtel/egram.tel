@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Caching.Memory;
 using SixLabors.ImageSharp;
@@ -19,6 +21,8 @@ namespace Tel.Egram.Graphics
         private readonly IAvatarCache _cache;
         private readonly IFileLoader _fileLoader;
         private readonly IColorMapper _colorMapper;
+
+        private readonly ConcurrentDictionary<long, SolidColorBrush> _brushCache;
         private readonly object _locker;
 
         public AvatarLoader(
@@ -31,17 +35,97 @@ namespace Tel.Egram.Graphics
             _fileLoader = fileLoader;
             _cache = avatarCache;
             _colorMapper = colorMapper;
+            
+            _brushCache = new ConcurrentDictionary<long, SolidColorBrush>();
             _locker = new object();
         }
 
-        public IBitmap GetBitmap(TdApi.User user, AvatarSize size)
+        public Avatar GetAvatar(TdApi.User user, AvatarSize size)
         {
-            return GetBitmap(user.ProfilePhoto?.Small, user.Id, size);
+            return new Avatar
+            {
+                Bitmap = GetBitmap(user.ProfilePhoto?.Small, user.Id, size),
+                BrushFactory = GetBrushFactory(user),
+                Size = size,
+                Label = GetLabel(user)
+            };
         }
 
-        public IBitmap GetBitmap(TdApi.Chat chat, AvatarSize size)
+        public Avatar GetAvatar(TdApi.Chat chat, AvatarSize size)
         {
-            return GetBitmap(chat.Photo?.Small, chat.Id, size);
+            return new Avatar
+            {
+                Bitmap = GetBitmap(chat.Photo?.Small, chat.Id, size),
+                BrushFactory = GetBrushFactory(chat),
+                Size = size,
+                Label = GetLabel(chat)
+            };
+        }
+
+        public IObservable<Avatar> LoadAvatar(TdApi.User user, AvatarSize size)
+        {
+            return LoadBitmap(user.ProfilePhoto?.Small, user.Id, size)
+                .Select(bitmap => new Avatar
+                {
+                    Bitmap = bitmap,
+                    BrushFactory = GetBrushFactory(user),
+                    Size = size,
+                    Label = GetLabel(user)
+                });
+        }
+
+        public IObservable<Avatar> LoadAvatar(TdApi.Chat chat, AvatarSize size)
+        {
+            return LoadBitmap(chat.Photo?.Small, chat.Id, size)
+                .Select(bitmap => new Avatar
+                {
+                    Bitmap = bitmap,
+                    BrushFactory = GetBrushFactory(chat),
+                    Size = size,
+                    Label = GetLabel(chat)
+                });
+        }
+
+        private string GetLabel(TdApi.Chat chat)
+        {
+            var title = chat.Title;
+            return string.IsNullOrWhiteSpace(title) ? null : title.Substring(0, 1).ToUpper();
+        }
+
+        private string GetLabel(TdApi.User user)
+        {
+            var name = user.FirstName + " " + user.LastName;
+            return string.IsNullOrWhiteSpace(name) ? null : name.Substring(0, 1).ToUpper();
+        }
+
+        private Func<IBrush> GetBrushFactory(TdApi.User user)
+        {
+            return () =>
+            {
+                if (_brushCache.TryGetValue(user.Id, out var brush))
+                {
+                    return brush;
+                }
+                
+                brush = new SolidColorBrush(Color.Parse("#" + _colorMapper[user.Id]));
+                _brushCache.TryAdd(user.Id, brush);
+                return brush;
+            };
+        }
+
+        private Func<IBrush> GetBrushFactory(TdApi.Chat chat)
+        {
+            return () =>
+            {
+                if (_brushCache.TryGetValue(chat.Id, out var brush))
+                {
+                    return brush;
+                }
+                
+                brush = new SolidColorBrush(Color.Parse("#" + _colorMapper[chat.Id]));
+                _brushCache.TryAdd(chat.Id, brush);
+                return brush;
+            };
         }
 
         private IBitmap GetBitmap(TdApi.File file, long id, AvatarSize size)
@@ -54,16 +138,6 @@ namespace Tel.Egram.Graphics
             }
 
             return null;
-        }
-
-        public IObservable<IBitmap> LoadBitmap(TdApi.User user, AvatarSize size)
-        {
-            return LoadBitmap(user.ProfilePhoto?.Small, user.Id, size);
-        }
-
-        public IObservable<IBitmap> LoadBitmap(TdApi.Chat chat, AvatarSize size)
-        {
-            return LoadBitmap(chat.Photo?.Small, chat.Id, size);
         }
 
         private IObservable<IBitmap> LoadBitmap(TdApi.File file, long id, AvatarSize size)

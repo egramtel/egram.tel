@@ -26,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Fonts\Roboto" />
+    <Folder Include="Icons\light\24x24" />
     <Folder Include="Settings" />
   </ItemGroup>
 </Project>

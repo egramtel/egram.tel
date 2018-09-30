@@ -10,7 +10,6 @@ namespace Tel.Egram.Components.Catalog
         {
             // TODO: i18n
             var title = "All Channels";
-            var init = title.Substring(0, 1).ToUpper();
             
             return new AggregateEntryModel
             {
@@ -18,8 +17,7 @@ namespace Tel.Egram.Components.Catalog
                 {
                     Id = 0
                 },
-                Title = title,
-                Init = init
+                Title = title
             };
         }
     }

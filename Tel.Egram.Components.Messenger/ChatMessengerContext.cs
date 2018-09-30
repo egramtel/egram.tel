@@ -1,32 +1,55 @@
-﻿using TdLib;
+﻿using System;
+using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using Avalonia.Media;
+using ReactiveUI;
+using TdLib;
 using Tel.Egram.Feeds;
+using Tel.Egram.Graphics;
 
 namespace Tel.Egram.Components.Messenger
 {
     public class ChatMessengerContext : MessengerContext
     {
-        private readonly IChatService _chatService;
-        private readonly Chat _chat;
-
         public ChatMessengerContext(
+            IAvatarLoader avatarLoader,
+            IColorMapper colorMapper,
             IChatService chatService,
             Chat chat
             )
         {
-            _chatService = chatService;
-            _chat = chat;
-
-            IsMessageEditorVisible = !IsChannel();
+            LoadChatInfo(chat, avatarLoader, colorMapper)
+                .DisposeWith(_contextDisposable);
+            
+            LoadMessageEditor(chat);
         }
 
-        private bool IsChannel()
+        private IDisposable LoadChatInfo(Chat chat, IAvatarLoader avatarLoader, IColorMapper colorMapper)
         {
-            if (_chat.ChatData.Type is TdApi.ChatType.ChatTypeSupergroup supergroup)
-            {
-                return supergroup.IsChannel;
-            }
+            var chatData = chat.ChatData;
 
-            return false;
+            ChatInfo = new ChatInfoModel
+            {
+                Title = chatData.Title,
+                Label = "test"
+            };
+
+            return avatarLoader.LoadAvatar(chatData, AvatarSize.Big)
+                .SubscribeOn(TaskPoolScheduler.Default)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(avatar =>
+                {
+                    ChatInfo.Avatar = avatar;
+                });
+        }
+
+        private void LoadMessageEditor(Chat chat)
+        {
+            if (chat.ChatData.Type is TdApi.ChatType.ChatTypeSupergroup supergroup)
+            {
+                //IsMessageEditorVisible = supergroup.IsChannel;
+            }
         }
     }
 }
