@@ -58,7 +58,7 @@
                     >
                     
                     <Image
-                        Source="resm:Tel.Egram.Gui.Icons.x.png"
+                        Source="resm:Tel.Egram.Gui.Icons.Dark.X32.png"
                         Width="16"
                         Height="16"
                         Opacity="0.66"

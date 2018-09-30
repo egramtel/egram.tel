@@ -50,7 +50,7 @@
                 Grid.Column="0"
                 >
                 <!-- <TextBlock Text="+" /> -->
-                <Image Source="resm:Tel.Egram.Gui.Icons.plus.png" />
+                <Image Source="resm:Tel.Egram.Gui.Icons.Light.Plus32.png" />
             </Button>
             
             <Button
@@ -58,7 +58,7 @@
                 Grid.Column="1"
                 >
                 <!-- <TextBlock Text="-" /> -->
-                <Image Source="resm:Tel.Egram.Gui.Icons.minus.png" />
+                <Image Source="resm:Tel.Egram.Gui.Icons.Light.Minus32.png" />
             </Button>
             
             <Button

@@ -18,7 +18,7 @@
             
             <Panel>
                 <Ellipse />
-                <Image Source="resm:Tel.Egram.Gui.Icons.more.png" />
+                <Image Source="resm:Tel.Egram.Gui.Icons.Light.More32.png" />
             </Panel>
             
         </Button>

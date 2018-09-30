@@ -45,7 +45,7 @@
                 Classes="Action"
                 Grid.Column="4"
                 >
-                <Image Source="resm:Tel.Egram.Gui.Icons.mic.png" />
+                <Image Source="resm:Tel.Egram.Gui.Icons.Dark.Mic32.png" />
             </Button>
             
         </Grid>
