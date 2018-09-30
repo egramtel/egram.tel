@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.6.2-build6191-beta" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.6.2-build6191-beta" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
+    <PackageReference Include="PropertyChanged.Fody" Version="2.5.9" />
+    <PackageReference Include="ReactiveUI" Version="8.7.1" />
+    <PackageReference Include="System.Reactive" Version="4.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\components\Tel.Egram.Components.Catalog\Tel.Egram.Components.Catalog.csproj" />
+    <ProjectReference Include="..\..\components\Tel.Egram.Components.Messenger\Tel.Egram.Components.Messenger.csproj" />
+    <ProjectReference Include="..\..\services\Tel.Egram.Feeds\Tel.Egram.Feeds.csproj" />
+    <ProjectReference Include="..\..\services\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
+  </ItemGroup>
+</Project>
