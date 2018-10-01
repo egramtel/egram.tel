@@ -1,0 +1,16 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+pool:
+  vmImage: 'macOS-10.13'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
+- script: dotnet publish -c $(buildConfiguration) -r osx-x64 -o $(Build.ArtifactStagingDirectory) --version-suffix $(Build.BuildNumber)
+  displayName: 'dotnet publish $(buildConfiguration)'

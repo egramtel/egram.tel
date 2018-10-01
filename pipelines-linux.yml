@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 pool:
-  vmImage: 'Ubuntu 16.04'
+  vmImage: 'Ubuntu-16.04'
 
 variables:
   buildConfiguration: 'Release'
@@ -12,3 +12,5 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+- script: dotnet publish -c $(buildConfiguration) -r linux-x64 -o $(Build.ArtifactStagingDirectory) --version-suffix $(Build.BuildNumber)
+  displayName: 'dotnet publish $(buildConfiguration)'
