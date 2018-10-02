@@ -58,10 +58,7 @@ namespace Tel.Egram.Components.Catalog
                     list.Add(chat);
                     return list;
                 })
-                .Select(list => list.OrderBy(model => !model.Chat.ChatData.IsPinned)
-                    .ThenByDescending(model => model.Chat.ChatData.LastMessage.Date)
-                    .Cast<EntryModel>()
-                    .ToList());
+                .Select(list => list.Cast<EntryModel>().ToList());
         }
     }
 }
