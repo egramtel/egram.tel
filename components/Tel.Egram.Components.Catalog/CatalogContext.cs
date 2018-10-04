@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Avalonia.Media;
 using Avalonia.Threading;
+using DynamicData;
+using DynamicData.Binding;
 using PropertyChanged;
 using ReactiveUI;
 using TdLib;
 using Tel.Egram.Graphics;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Catalog
 {
@@ -16,75 +21,107 @@ namespace Tel.Egram.Components.Catalog
     public class CatalogContext : IDisposable
     {
         private readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
-        private readonly IAvatarLoader _avatarLoader;
-        private readonly IEntryLoader _entryLoader;
-        private readonly IColorMapper _colorMapper;
-        private readonly CatalogKind _kind;
         
-        public ReactiveList<EntryModel> Entries { get; set; } = new ReactiveList<EntryModel>();
-        public int SelectedEntryIndex { get; set; } = -1;
+        public EntryModel SelectedEntry { get; set; }
+        
+        public ObservableCollectionExtended<EntryModel> Entries { get; }
+            = new ObservableCollectionExtended<EntryModel>();
 
         public CatalogContext(
+            IFactory<ICatalogProvider> catalogProviderFactory,
             IAvatarLoader avatarLoader,
-            IEntryLoader entryLoader,
-            IColorMapper colorMapper,
             CatalogKind kind)
         {
-            _entryLoader = entryLoader;
-            _avatarLoader = avatarLoader;
-            _colorMapper = colorMapper;
-            _kind = kind;
-
-            IObservable<IList<EntryModel>> entryLoaderObservable;
+            var catalogService = catalogProviderFactory.Create();
             
-            switch (_kind)
+            BindCatalog(catalogService, kind).DisposeWith(_contextDisposable);
+            BindAvatarLoader(avatarLoader).DisposeWith(_contextDisposable);
+        }
+
+        private IDisposable BindCatalog(ICatalogProvider catalogProvider, CatalogKind kind)
+        {
+            IObservable<IChangeSet<EntryModel, long>> changes;
+            
+            switch (kind)
             {
                 case CatalogKind.Bots:
-                    entryLoaderObservable = _entryLoader.LoadBotEntries();
+                    changes = catalogProvider.Chats.Connect()
+                        .Filter(catalogProvider.BotFilter);
                     break;
                 
                 case CatalogKind.Channels:
-                    entryLoaderObservable = _entryLoader.LoadChannelEntries();
+                    changes = catalogProvider.Chats.Connect()
+                        .Filter(catalogProvider.ChannelFilter);
                     break;
                 
                 case CatalogKind.Groups:
-                    entryLoaderObservable = _entryLoader.LoadGroupEntries();
+                    changes = catalogProvider.Chats.Connect()
+                        .Filter(catalogProvider.GroupFilter);
                     break;
                 
                 case CatalogKind.Direct:
-                    entryLoaderObservable = _entryLoader.LoadDirectEntries();
+                    changes = catalogProvider.Chats.Connect()
+                        .Filter(catalogProvider.DirectFilter);
                     break;
                 
                 case CatalogKind.Home:
                 default:
-                    entryLoaderObservable = _entryLoader.LoadHomeEntries();
+                    changes = catalogProvider.Chats.Connect();
                     break;
             }
-
-            entryLoaderObservable
+            
+            return changes
+                .Sort(GetSorting())
                 .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(AvaloniaScheduler.Instance)
-                .Subscribe(HandleEntriesLoaded)
-                .DisposeWith(_contextDisposable);
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(Entries)
+                .Subscribe();
         }
 
-        private void HandleEntriesLoaded(IList<EntryModel> entries)
+        private IDisposable BindAvatarLoader(IAvatarLoader avatarLoader)
         {
-            foreach (var entry in entries)
-            {
-                LoadAvatar(entry).DisposeWith(_contextDisposable);
-            }
-
-            Entries = new ReactiveList<EntryModel>(entries);
-            SelectedEntryIndex = 0;
+            return Entries.ObserveCollectionChanges()
+                .SubscribeOn(TaskPoolScheduler.Default)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Select(e => e.EventArgs)
+                .Subscribe(args =>
+                {
+                    var entries = Entries;
+                    
+                    switch (args.Action)
+                    {
+                        case NotifyCollectionChangedAction.Reset:
+                            foreach (var entry in entries)
+                            {
+                                if (entry.Avatar is null)
+                                {
+                                    LoadAvatar(avatarLoader, entry)
+                                        .DisposeWith(_contextDisposable);
+                                }
+                            }
+                            break;
+                        
+                        case NotifyCollectionChangedAction.Add:
+                        case NotifyCollectionChangedAction.Replace:
+                            foreach (var item in args.NewItems)
+                            {
+                                if (item is EntryModel entry && entry.Avatar is null)
+                                {
+                                    LoadAvatar(avatarLoader, entry)
+                                        .DisposeWith(_contextDisposable);
+                                }
+                            }
+                            break;
+                    }
+                });
         }
 
-        private IDisposable LoadAvatar(EntryModel entry)
+        private IDisposable LoadAvatar(IAvatarLoader avatarLoader, EntryModel entry)
         {
             switch (entry)
             {
                 case ChatEntryModel chatEntry:
-                    return _avatarLoader.LoadAvatar(chatEntry.Chat.ChatData, AvatarSize.Small)
+                    return avatarLoader.LoadAvatar(chatEntry.Chat.ChatData, AvatarSize.Small)
                         .SubscribeOn(TaskPoolScheduler.Default)
                         .ObserveOn(RxApp.MainThreadScheduler)
                         .Subscribe(avatar =>
@@ -93,7 +130,7 @@ namespace Tel.Egram.Components.Catalog
                         });
                 
                 case AggregateEntryModel aggregateEntry:
-                    return _avatarLoader.LoadAvatar(new TdApi.Chat
+                    return avatarLoader.LoadAvatar(new TdApi.Chat
                         {
                             Id = aggregateEntry.Aggregate.Id
                         }, AvatarSize.Small)
@@ -106,6 +143,11 @@ namespace Tel.Egram.Components.Catalog
             }
             
             return Disposable.Empty;
+        }
+
+        private IComparer<EntryModel> GetSorting()
+        {
+            return SortExpressionComparer<EntryModel>.Ascending(p => p.Order);
         }
 
         public void Dispose()

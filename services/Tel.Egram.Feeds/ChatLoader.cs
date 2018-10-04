@@ -16,7 +16,7 @@ namespace Tel.Egram.Feeds
             _agent = agent;
         }
 
-        public IObservable<Chat> LoadAllChats()
+        public IObservable<Chat> LoadChats()
         {
             return GetAllChats(new List<TdApi.Chat>())
                 .SelectMany(chat =>
@@ -40,7 +40,7 @@ namespace Tel.Egram.Feeds
 
         public IObservable<Chat> LoadChannels()
         {
-            return LoadAllChats().Where(chat =>
+            return LoadChats().Where(chat =>
             {
                 if (chat.ChatData.Type is TdApi.ChatType.ChatTypeSupergroup supergroupType)
                 {
@@ -52,7 +52,7 @@ namespace Tel.Egram.Feeds
 
         public IObservable<Chat> LoadDirects()
         {
-            return LoadAllChats().Where(chat =>
+            return LoadChats().Where(chat =>
             {
                 if (chat.ChatData.Type is TdApi.ChatType.ChatTypePrivate)
                 {
@@ -65,7 +65,7 @@ namespace Tel.Egram.Feeds
 
         public IObservable<Chat> LoadGroups()
         {
-            return LoadAllChats().Where(chat =>
+            return LoadChats().Where(chat =>
             {
                 if (chat.ChatData.Type is TdApi.ChatType.ChatTypeSupergroup supergroupType)
                 {
@@ -78,7 +78,7 @@ namespace Tel.Egram.Feeds
 
         public IObservable<Chat> LoadBots()
         {
-            return LoadAllChats().Where(chat =>
+            return LoadChats().Where(chat =>
             {
                 if (chat.ChatData.Type is TdApi.ChatType.ChatTypePrivate)
                 {

@@ -7,7 +7,7 @@ namespace Tel.Egram.Registry
     {
         public static void AddCatalog(this IServiceCollection services)
         {
-            services.AddTransient<IEntryLoader, EntryLoader>();
+            services.AddScoped<ICatalogProvider, CatalogProvider>();
             services.AddTransient<CatalogContext>();
         }
     }

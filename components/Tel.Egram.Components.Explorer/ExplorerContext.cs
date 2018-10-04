@@ -26,22 +26,15 @@ namespace Tel.Egram.Components.Explorer
             var catalogKind = (CatalogKind) explorerKind;
             
             CatalogContext = catalogContextFactory.Create(catalogKind);
-            CatalogContext.WhenAnyValue(context => context.SelectedEntryIndex)
+            CatalogContext.WhenAnyValue(context => context.SelectedEntry)
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(AvaloniaScheduler.Instance)
                 .Subscribe(HandleSelectedEntry)
                 .DisposeWith(_contextDisposable);
         }
 
-        private void HandleSelectedEntry(int index)
+        private void HandleSelectedEntry(EntryModel entry)
         {
-            if (CatalogContext.Entries == null || CatalogContext.Entries.Count == 0)
-            {
-                return;
-            }
-            
-            var entry = CatalogContext.Entries[index];
-
             switch (entry)
             {
                 case AggregateEntryModel aggregateEntry:

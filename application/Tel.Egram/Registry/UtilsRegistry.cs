@@ -58,6 +58,7 @@ namespace Tel.Egram.Registry
             
             // feeds
             services.AddScoped<IChatLoader, ChatLoader>();
+            services.AddScoped<IChatUpdater, ChatUpdater>();
             services.AddScoped<IFeedLoader, FeedLoader>();
             services.AddScoped<IMessageLoader, MessageLoader>();
             

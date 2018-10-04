@@ -4,7 +4,7 @@
     
     <ListBox
         Items="{Binding Entries}"
-        SelectedIndex="{Binding SelectedEntryIndex, Mode=TwoWay}"
+        SelectedItem="{Binding SelectedEntry, Mode=TwoWay}"
         BorderThickness="0"
         ScrollViewer.VerticalScrollBarVisibility="Hidden"
         ScrollViewer.HorizontalScrollBarVisibility="Disabled"

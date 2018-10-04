@@ -12,6 +12,7 @@ namespace Tel.Egram.Components.Catalog
             
             return new ChatEntryModel
             {
+                Id = chat.ChatData.Id,
                 Chat = chat,
                 Title = title
             };
