@@ -4,14 +4,14 @@ namespace Tel.Egram.Components.Catalog
 {
     public static class CatalogFilter
     {
-        public static bool All(EntryModelProxy modelProxy)
+        public static bool All(EntryModel model)
         {
             return true;
         }
         
-        public static bool BotFilter(EntryModelProxy modelProxy)
+        public static bool BotFilter(EntryModel model)
         {
-            if (modelProxy.EntryModel is ChatEntryModel chatEntryModel)
+            if (model is ChatEntryModel chatEntryModel)
             {
                 var chat = chatEntryModel.Chat;
             
@@ -24,9 +24,9 @@ namespace Tel.Egram.Components.Catalog
             return false;
         }
 
-        public static bool DirectFilter(EntryModelProxy modelProxy)
+        public static bool DirectFilter(EntryModel model)
         {
-            if (modelProxy.EntryModel is ChatEntryModel chatEntryModel)
+            if (model is ChatEntryModel chatEntryModel)
             {
                 var chat = chatEntryModel.Chat;
 
@@ -39,9 +39,9 @@ namespace Tel.Egram.Components.Catalog
             return false;
         }
 
-        public static bool GroupFilter(EntryModelProxy modelProxy)
+        public static bool GroupFilter(EntryModel model)
         {
-            if (modelProxy.EntryModel is ChatEntryModel chatEntryModel)
+            if (model is ChatEntryModel chatEntryModel)
             {
                 var chat = chatEntryModel.Chat;
 
@@ -55,9 +55,9 @@ namespace Tel.Egram.Components.Catalog
             return false;
         }
 
-        public static bool ChannelFilter(EntryModelProxy modelProxy)
+        public static bool ChannelFilter(EntryModel model)
         {
-            if (modelProxy.EntryModel is ChatEntryModel chatEntryModel)
+            if (model is ChatEntryModel chatEntryModel)
             {
                 var chat = chatEntryModel.Chat;
 

@@ -33,8 +33,8 @@ namespace Tel.Egram.Components.Catalog
                 .DisposeWith(_serviceDisposable);
             BindOrderUpdates(chatLoader, chatUpdater, avatarLoader)
                 .DisposeWith(_serviceDisposable);
-//            BindEntryUpdates(chatLoader, chatUpdater, avatarLoader)
-//                .DisposeWith(_serviceDisposable);
+            BindEntryUpdates(chatLoader, chatUpdater, avatarLoader)
+                .DisposeWith(_serviceDisposable);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Tel.Egram.Components.Catalog
                         Avatar = avatar
                     }))
                 .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(TaskPoolScheduler.Default)
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(item =>
                 {
                     var entry = item.Entry;
@@ -85,8 +85,7 @@ namespace Tel.Egram.Components.Catalog
             return chatUpdater.GetOrderUpdates()
                 .Buffer(TimeSpan.FromSeconds(1))
                 .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(TaskPoolScheduler.Default)
-                .Synchronize(_chats)
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(changes =>
                 {
                     if (changes.Count > 0)
@@ -108,26 +107,23 @@ namespace Tel.Egram.Components.Catalog
             return chatUpdater.GetChatUpdates()
                 .Buffer(TimeSpan.FromSeconds(1))
                 .SelectMany(chats => chats)
-                .Select(chat =>
-                {
-                    var entry = GetChatEntryModel(chat);
-                    UpdateChatEntryModel(entry, chat);
-                    return entry;
-                })
-                .SelectMany(entry => LoadAvatar(avatarLoader, entry)
+                .Select(chat => new
+                    {
+                        Chat = chat,
+                        Entry = GetChatEntryModel(chat)
+                    })
+                .SelectMany(item => LoadAvatar(avatarLoader, item.Entry)
                     .Select(avatar => new
                     {
-                        Entry = entry,
+                        Chat = item.Chat,
+                        Entry = item.Entry,
                         Avatar = avatar
                     }))
                 .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(TaskPoolScheduler.Default)
-                .Synchronize(_chats)
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(item =>
                 {
-                    var entry = item.Entry;
-                    var avatar = item.Avatar;
-                    entry.Avatar = avatar;
+                    UpdateChatEntryModel(item.Entry, item.Chat, item.Avatar);
                 });
         }
 
@@ -168,14 +164,14 @@ namespace Tel.Egram.Components.Catalog
             return entry;
         }
 
-        private void UpdateChatEntryModel(ChatEntryModel entry, Chat chat)
+        private void UpdateChatEntryModel(ChatEntryModel entry, Chat chat, Avatar avatar = null)
         {
             var chatData = chat.ChatData;
             
             entry.Chat = chat;
             entry.Id = chatData.Id;
             entry.Title = chatData.Title;
-            entry.Avatar = null;
+            entry.Avatar = avatar;
             entry.HasUnread = chatData.UnreadCount > 0;
             entry.UnreadCount = chatData.UnreadCount.ToString();
         }

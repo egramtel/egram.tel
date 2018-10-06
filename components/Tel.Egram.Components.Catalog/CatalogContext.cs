@@ -23,10 +23,10 @@ namespace Tel.Egram.Components.Catalog
     {
         private readonly CompositeDisposable _contextDisposable = new CompositeDisposable();
         
-        public EntryModelProxy SelectedEntry { get; set; }
+        public EntryModel SelectedEntry { get; set; }
         
-        public ObservableCollectionExtended<EntryModelProxy> Entries { get; }
-            = new ObservableCollectionExtended<EntryModelProxy>();
+        public ObservableCollectionExtended<EntryModel> Entries { get; }
+            = new ObservableCollectionExtended<EntryModel>();
 
         public CatalogContext(
             IFactory<ICatalogProvider> catalogProviderFactory,
@@ -39,17 +39,15 @@ namespace Tel.Egram.Components.Catalog
         private IDisposable BindCatalog(ICatalogProvider catalogProvider, CatalogKind kind)
         {
             return catalogProvider.Chats.Connect()
-                .Transform(entry => new EntryModelProxy(entry))
                 .Filter(GetFilter(kind))
                 .Sort(GetSorting())
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(Entries)
-                .DisposeMany()
                 .Subscribe();
         }
 
-        private Func<EntryModelProxy, bool> GetFilter(CatalogKind kind)
+        private Func<EntryModel, bool> GetFilter(CatalogKind kind)
         {
             switch (kind)
             {
@@ -71,9 +69,9 @@ namespace Tel.Egram.Components.Catalog
             }
         }
 
-        private IComparer<EntryModelProxy> GetSorting()
+        private IComparer<EntryModel> GetSorting()
         {
-            return SortExpressionComparer<EntryModelProxy>.Ascending(p => p.Order);
+            return SortExpressionComparer<EntryModel>.Ascending(p => p.Order);
         }
 
         public void Dispose()
