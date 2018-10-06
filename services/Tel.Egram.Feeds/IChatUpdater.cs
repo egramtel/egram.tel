@@ -5,6 +5,8 @@ namespace Tel.Egram.Feeds
 {
     public interface IChatUpdater
     {
-        IObservable<Unit> GetOrderChanges();
+        IObservable<Unit> GetOrderUpdates();
+
+        IObservable<Chat> GetChatUpdates();
     }
 }

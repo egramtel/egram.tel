@@ -37,6 +37,10 @@ namespace Tel.Egram.Components.Explorer
         {
             switch (entry)
             {
+                case EntryModelProxy modelProxy:
+                    HandleSelectedEntry(modelProxy.EntryModel);
+                    break;
+                
                 case AggregateEntryModel aggregateEntry:
                     Target = aggregateEntry.Aggregate;
                     break;

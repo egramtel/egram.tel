@@ -15,5 +15,9 @@ namespace Tel.Egram.Components.Catalog
         public string Title { get; set; }
         
         public Avatar Avatar { get; set; }
+
+        public bool HasUnread { get; set; }
+
+        public string UnreadCount { get; set; }
     }
 }

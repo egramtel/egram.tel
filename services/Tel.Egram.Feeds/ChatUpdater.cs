@@ -15,8 +15,10 @@ namespace Tel.Egram.Feeds
             _agent = agent;
         }
 
-        public IObservable<Unit> GetOrderChanges()
+        public IObservable<Unit> GetOrderUpdates()
         {
+            var newUpdates = _agent.Updates.OfType<TdApi.Update.UpdateNewChat>()
+                .Select(_ => Unit.Default);
             var orderUpdates = _agent.Updates.OfType<TdApi.Update.UpdateChatOrder>()
                 .Select(_ => Unit.Default);
             var messageUpdates = _agent.Updates.OfType<TdApi.Update.UpdateChatLastMessage>()
@@ -26,10 +28,61 @@ namespace Tel.Egram.Feeds
             var draftUpdates = _agent.Updates.OfType<TdApi.Update.UpdateChatDraftMessage>()
                 .Select(_ => Unit.Default);
 
-            return orderUpdates
+            return newUpdates
+                .Merge(orderUpdates)
                 .Merge(messageUpdates)
                 .Merge(pinnedUpdates)
                 .Merge(draftUpdates);
+        }
+
+        public IObservable<Chat> GetChatUpdates()
+        {
+            var titleUpdates = _agent.Updates.OfType<TdApi.Update.UpdateChatTitle>()
+                .SelectMany(u => GetChat(u.ChatId));
+            var photoUpdates = _agent.Updates.OfType<TdApi.Update.UpdateChatPhoto>()
+                .SelectMany(u => GetChat(u.ChatId));
+            var inboxUpdates = _agent.Updates.OfType<TdApi.Update.UpdateChatReadInbox>()
+                .SelectMany(u => GetChat(u.ChatId));
+            var messageUpdates = _agent.Updates.OfType<TdApi.Update.UpdateChatLastMessage>()
+                .SelectMany(u => GetChat(u.ChatId));
+                
+            return titleUpdates
+                .Merge(photoUpdates)
+                .Merge(inboxUpdates)
+                .Merge(messageUpdates);
+        }
+
+        private IObservable<Chat> GetChat(long chatId)
+        {
+            return _agent.Execute(new TdApi.GetChat
+                {
+                    ChatId = chatId
+                })
+                .SelectMany(chat =>
+                {
+                    if (chat.Type is TdApi.ChatType.ChatTypePrivate type)
+                    {
+                        return GetUser(type.UserId)
+                            .Select(user => new Chat
+                            {
+                                ChatData = chat,
+                                User = user
+                            });
+                    }
+                    
+                    return Observable.Return(new Chat
+                    {
+                        ChatData = chat
+                    });
+                });
+        }
+
+        private IObservable<TdApi.User> GetUser(int id)
+        {
+            return _agent.Execute(new TdApi.GetUser
+            {
+                UserId = id
+            });
         }
     }
 }

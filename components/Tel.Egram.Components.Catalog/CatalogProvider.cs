@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -7,6 +8,7 @@ using DynamicData;
 using ReactiveUI;
 using TdLib;
 using Tel.Egram.Feeds;
+using Tel.Egram.Graphics;
 
 namespace Tel.Egram.Components.Catalog
 {
@@ -20,77 +22,25 @@ namespace Tel.Egram.Components.Catalog
 
         public CatalogProvider(
             IChatLoader chatLoader,
-            IChatUpdater chatUpdater
+            IChatUpdater chatUpdater,
+            IAvatarLoader avatarLoader
             )
         {
             _entryStore = new Dictionary<long, ChatEntryModel>();
             _chats = new SourceCache<EntryModel, long>(m => m.Id);
             
-            LoadChats(chatLoader).DisposeWith(_serviceDisposable);
-            BindOrderUpdates(chatLoader, chatUpdater).DisposeWith(_serviceDisposable);
+            LoadChats(chatLoader, avatarLoader)
+                .DisposeWith(_serviceDisposable);
+            BindOrderUpdates(chatLoader, chatUpdater, avatarLoader)
+                .DisposeWith(_serviceDisposable);
+//            BindEntryUpdates(chatLoader, chatUpdater, avatarLoader)
+//                .DisposeWith(_serviceDisposable);
         }
 
-        public bool BotFilter(EntryModel model)
-        {
-            if (model is ChatEntryModel chatEntryModel)
-            {
-                var chat = chatEntryModel.Chat;
-            
-                if (chat.ChatData.Type is TdApi.ChatType.ChatTypePrivate)
-                {
-                    return chat.User != null &&
-                           chat.User.Type is TdApi.UserType.UserTypeBot;
-                }
-            }
-            return false;
-        }
-
-        public bool DirectFilter(EntryModel model)
-        {
-            if (model is ChatEntryModel chatEntryModel)
-            {
-                var chat = chatEntryModel.Chat;
-
-                if (chat.ChatData.Type is TdApi.ChatType.ChatTypePrivate)
-                {
-                    return chat.User != null &&
-                           chat.User.Type is TdApi.UserType.UserTypeRegular;
-                }
-            }
-            return false;
-        }
-
-        public bool GroupFilter(EntryModel model)
-        {
-            if (model is ChatEntryModel chatEntryModel)
-            {
-                var chat = chatEntryModel.Chat;
-
-                if (chat.ChatData.Type is TdApi.ChatType.ChatTypeSupergroup supergroupType)
-                {
-                    return !supergroupType.IsChannel;
-                }
-
-                return chat.ChatData.Type is TdApi.ChatType.ChatTypeBasicGroup;
-            }
-            return false;
-        }
-
-        public bool ChannelFilter(EntryModel model)
-        {
-            if (model is ChatEntryModel chatEntryModel)
-            {
-                var chat = chatEntryModel.Chat;
-
-                if (chat.ChatData.Type is TdApi.ChatType.ChatTypeSupergroup supergroupType)
-                {
-                    return supergroupType.IsChannel;
-                }
-            }
-            return false;
-        }
-
-        private IDisposable LoadChats(IChatLoader chatLoader)
+        /// <summary>
+        /// Load chats into observable cache
+        /// </summary>
+        private IDisposable LoadChats(IChatLoader chatLoader, IAvatarLoader avatarLoader)
         {
             return chatLoader.LoadChats()
                 .Select(GetChatEntryModel)
@@ -100,37 +50,134 @@ namespace Tel.Egram.Components.Catalog
                     list.Add(model);
                     return list;
                 })
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .Subscribe(models =>
+                .Synchronize(_chats)
+                .Do(entries =>
                 {
-                    _chats.EditDiff(models, (m1, m2) => m1.Id == m2.Id);
+                    _chats.EditDiff(entries, (m1, m2) => m1.Id == m2.Id);
                     _chats.Refresh();
+                })
+                .SelectMany(entries => entries)
+                .SelectMany(entry => LoadAvatar(avatarLoader, entry)
+                    .Select(avatar => new
+                    {
+                        Entry = entry,
+                        Avatar = avatar
+                    }))
+                .SubscribeOn(TaskPoolScheduler.Default)
+                .ObserveOn(TaskPoolScheduler.Default)
+                .Subscribe(item =>
+                {
+                    var entry = item.Entry;
+                    var avatar = item.Avatar;
+                    entry.Avatar = avatar;
                 });
         }
 
-        private IDisposable BindOrderUpdates(IChatLoader chatLoader, IChatUpdater chatUpdater)
+        /// <summary>
+        /// Subscribe to updates that involve order change
+        /// </summary>
+        private IDisposable BindOrderUpdates(
+            IChatLoader chatLoader,
+            IChatUpdater chatUpdater,
+            IAvatarLoader avatarLoader
+            )
         {
-            return chatUpdater.GetOrderChanges()
+            return chatUpdater.GetOrderUpdates()
                 .Buffer(TimeSpan.FromSeconds(1))
                 .SubscribeOn(TaskPoolScheduler.Default)
+                .ObserveOn(TaskPoolScheduler.Default)
+                .Synchronize(_chats)
                 .Subscribe(changes =>
                 {
                     if (changes.Count > 0)
                     {
-                        LoadChats(chatLoader).DisposeWith(_serviceDisposable);
+                        LoadChats(chatLoader, avatarLoader).DisposeWith(_serviceDisposable);
                     }
                 });
         }
 
+        /// <summary>
+        /// Subscribe to updates for individual entries
+        /// </summary>
+        private IDisposable BindEntryUpdates(
+            IChatLoader chatLoader,
+            IChatUpdater chatUpdater,
+            IAvatarLoader avatarLoader
+            )
+        {
+            return chatUpdater.GetChatUpdates()
+                .Buffer(TimeSpan.FromSeconds(1))
+                .SelectMany(chats => chats)
+                .Select(chat =>
+                {
+                    var entry = GetChatEntryModel(chat);
+                    UpdateChatEntryModel(entry, chat);
+                    return entry;
+                })
+                .SelectMany(entry => LoadAvatar(avatarLoader, entry)
+                    .Select(avatar => new
+                    {
+                        Entry = entry,
+                        Avatar = avatar
+                    }))
+                .SubscribeOn(TaskPoolScheduler.Default)
+                .ObserveOn(TaskPoolScheduler.Default)
+                .Synchronize(_chats)
+                .Subscribe(item =>
+                {
+                    var entry = item.Entry;
+                    var avatar = item.Avatar;
+                    entry.Avatar = avatar;
+                });
+        }
+
+        private IObservable<Avatar> LoadAvatar(IAvatarLoader avatarLoader, EntryModel entry)
+        {
+            if (entry.Avatar != null)
+            {
+                return Observable.Return(entry.Avatar);
+            }
+            
+            switch (entry)
+            {
+                case ChatEntryModel chatEntry:
+                    return avatarLoader.LoadAvatar(chatEntry.Chat.ChatData, AvatarSize.Small);
+                
+                case AggregateEntryModel aggregateEntry:
+                    return avatarLoader.LoadAvatar(new TdApi.Chat
+                        {
+                            Id = aggregateEntry.Aggregate.Id
+                        }, AvatarSize.Small);
+            }
+            
+            return Observable.Return<Avatar>(null);
+        }
+
         private ChatEntryModel GetChatEntryModel(Chat chat)
         {
-            if (!_entryStore.TryGetValue(chat.ChatData.Id, out var entry))
+            var chatData = chat.ChatData;
+            
+            if (!_entryStore.TryGetValue(chatData.Id, out var entry))
             {
-                entry = ChatEntryModel.FromChat(chat);
-                _entryStore.Add(chat.ChatData.Id, entry);
+                entry = new ChatEntryModel();
+                UpdateChatEntryModel(entry, chat);
+                
+                _entryStore.Add(chatData.Id, entry);
             }
 
             return entry;
+        }
+
+        private void UpdateChatEntryModel(ChatEntryModel entry, Chat chat)
+        {
+            var chatData = chat.ChatData;
+            
+            entry.Chat = chat;
+            entry.Id = chatData.Id;
+            entry.Title = chatData.Title;
+            entry.Avatar = null;
+            entry.HasUnread = chatData.UnreadCount > 0;
+            entry.UnreadCount = chatData.UnreadCount.ToString();
         }
     }
 }

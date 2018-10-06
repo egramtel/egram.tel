@@ -15,17 +15,16 @@
             <DataTemplate>
                 
                 <Grid
-                    ColumnDefinitions="auto,*"
+                    ColumnDefinitions="auto,*,auto"
                     >
                     
                     <Border
-                        Grid.ColumnSpan="2"
+                        Grid.ColumnSpan="3"
                         />
         
                     <Panel
                         DataContext="{Binding Avatar}"
                         Classes="Icon"
-                        Grid.Row="0"
                         Grid.Column="0">
             
                         <Ellipse
@@ -58,7 +57,6 @@
         
                     <Panel
                         Classes="Title"
-                        Grid.Row="0"
                         Grid.Column="1"
                         Height="22"
                         VerticalAlignment="Center">
@@ -68,6 +66,25 @@
                             TextWrapping="Wrap"
                             VerticalAlignment="Center" />
             
+                    </Panel>
+                    
+                    <Panel
+                        Classes="Indicator"
+                        Grid.Column="2"
+                        Height="22"
+                        VerticalAlignment="Center"
+                        >
+                        
+                        <Border
+                            IsVisible="{Binding HasUnread}">
+                            
+                            <TextBlock
+                                Text="{Binding UnreadCount}"
+                                VerticalAlignment="Center" 
+                                />
+                            
+                        </Border>
+                        
                     </Panel>
         
                 </Grid>
@@ -101,24 +118,39 @@
             <Setter Property="Margin" Value="6,2,0,2"/>
         </Style>
         
-        <Style Selector="ListBoxItem Grid Border">
+        <Style Selector="ListBoxItem Grid > Border">
             <Setter Property="CornerRadius" Value="14,0,0,14" />
         </Style>
         
-        <Style Selector="ListBoxItem:selected Grid Border">
+        <Style Selector="ListBoxItem:selected Grid > Border">
             <Setter Property="Background" Value="#435270" />
         </Style>
         
         <Style Selector="ListBoxItem Panel">
-            <Setter Property="Margin" Value="4,3"/>
+            <Setter Property="Margin" Value="4,3,8,3"/>
         </Style>
         
-        <Style Selector="ListBoxItem Panel.Title TextBlock">
+        <Style Selector="ListBoxItem TextBlock">
             <Setter Property="Foreground" Value="#92a3b3"/>
         </Style>
         
-        <Style Selector="ListBoxItem:selected Panel.Title TextBlock">
+        <Style Selector="ListBoxItem:selected TextBlock">
             <Setter Property="Foreground" Value="#ffffff"/>
+        </Style>
+        
+        <Style Selector="ListBoxItem Panel.Indicator > Border">
+            <Setter Property="Margin" Value="0,2" />
+            <Setter Property="Padding" Value="6,0" />
+            <Setter Property="Background" Value="#435270" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        
+        <Style Selector="ListBoxItem Panel.Indicator > Border > TextBlock">
+            <Setter Property="FontSize" Value="11" />
+        </Style>
+        
+        <Style Selector="ListBoxItem:selected Panel.Indicator > Border">
+            <Setter Property="Background" Value="#242e44" />
         </Style>
         
     </UserControl.Styles>
