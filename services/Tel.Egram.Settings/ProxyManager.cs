@@ -2,16 +2,16 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using TdLib;
-using Tel.Egram.TdLib;
+using Tel.Egram.Utils.TdLib;
 
 namespace Tel.Egram.Settings
 {
     public class ProxyManager : IProxyManager
     {
-        private readonly TdAgent _agent;
+        private readonly IAgent _agent;
 
         public ProxyManager(
-            TdAgent agent
+            IAgent agent
             )
         {
             _agent = agent;

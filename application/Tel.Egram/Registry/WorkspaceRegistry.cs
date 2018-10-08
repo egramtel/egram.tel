@@ -7,6 +7,9 @@ namespace Tel.Egram.Registry
     {
         public static void AddWorkspace(this IServiceCollection services)
         {
+            services.AddTransient<NavigationContext>();
+            
+            services.AddTransient<ContentMessengerContext>();
             services.AddTransient<WorkspaceContext>();
         }
     }

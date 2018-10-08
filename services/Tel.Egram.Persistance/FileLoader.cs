@@ -4,17 +4,17 @@ using System.IO;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using TdLib;
-using Tel.Egram.TdLib;
+using Tel.Egram.Utils.TdLib;
 
 namespace Tel.Egram.Persistance
 {
     public class FileLoader : IFileLoader, IDisposable
     {
-        private readonly TdAgent _agent;
+        private readonly IAgent _agent;
         private readonly ConcurrentDictionary<int, Subject<TdApi.File>> _files;
         private readonly IDisposable _updatesSubscription;
 
-        public FileLoader(TdAgent agent)
+        public FileLoader(IAgent agent)
         {
             _agent = agent;
             _files = new ConcurrentDictionary<int, Subject<TdApi.File>>();

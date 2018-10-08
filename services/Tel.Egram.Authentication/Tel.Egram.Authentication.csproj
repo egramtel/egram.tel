@@ -4,7 +4,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\services\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj" />
-    <ProjectReference Include="..\..\services\Tel.Egram.TdLib\Tel.Egram.TdLib.csproj" />
     <ProjectReference Include="..\..\services\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
   </ItemGroup>
   <ItemGroup>

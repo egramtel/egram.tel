@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\services\Tel.Egram.TdLib\Tel.Egram.TdLib.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />

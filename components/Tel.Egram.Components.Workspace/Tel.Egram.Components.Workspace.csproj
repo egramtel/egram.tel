@@ -3,11 +3,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\components\Tel.Egram.Components.Content\Tel.Egram.Components.Content.csproj" />
-    <ProjectReference Include="..\..\components\Tel.Egram.Components.Explorer\Tel.Egram.Components.Explorer.csproj" />
-    <ProjectReference Include="..\..\components\Tel.Egram.Components.Navigation\Tel.Egram.Components.Navigation.csproj" />
     <ProjectReference Include="..\..\services\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
     <ProjectReference Include="..\..\services\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Components.Messenger\Tel.Egram.Components.Messenger.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.6.2-build6191-beta" />

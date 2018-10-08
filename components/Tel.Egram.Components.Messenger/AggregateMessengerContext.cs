@@ -1,4 +1,4 @@
-﻿using Tel.Egram.Feeds;
+﻿using Tel.Egram.Messaging.Chats;
 
 namespace Tel.Egram.Components.Messenger
 {

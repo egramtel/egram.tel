@@ -15,7 +15,6 @@
     <ProjectReference Include="..\..\services\Tel.Egram.Authentication\Tel.Egram.Authentication.csproj" />
     <ProjectReference Include="..\..\components\Tel.Egram.Components.Popup\Tel.Egram.Components.Popup.csproj" />
     <ProjectReference Include="..\..\components\Tel.Egram.Components.Settings\Tel.Egram.Components.Settings.csproj" />
-    <ProjectReference Include="..\..\services\Tel.Egram.TdLib\Tel.Egram.TdLib.csproj" />
     <ProjectReference Include="..\..\services\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
   </ItemGroup>
 </Project>

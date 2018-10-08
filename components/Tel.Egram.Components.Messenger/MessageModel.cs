@@ -3,7 +3,7 @@ using Avalonia.Media.Imaging;
 using PropertyChanged;
 using TdLib;
 using Tel.Egram.Graphics;
-using Tel.Egram.Messages;
+using Tel.Egram.Messaging.Messages;
 
 namespace Tel.Egram.Components.Messenger
 {

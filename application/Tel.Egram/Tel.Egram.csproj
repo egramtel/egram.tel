@@ -5,12 +5,10 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\components\Tel.Egram.Components.Application\Tel.Egram.Components.Application.csproj" />
-    <ProjectReference Include="..\..\components\Tel.Egram.Components.Navigation\Tel.Egram.Components.Navigation.csproj" />
     <ProjectReference Include="..\..\services\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
     <ProjectReference Include="..\..\application\Tel.Egram.Gui\Tel.Egram.Gui.csproj" />
     <ProjectReference Include="..\..\services\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj" />
     <ProjectReference Include="..\..\services\Tel.Egram.Settings\Tel.Egram.Settings.csproj" />
-    <ProjectReference Include="..\..\services\Tel.Egram.TdLib\Tel.Egram.TdLib.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.6.2-build6191-beta" />

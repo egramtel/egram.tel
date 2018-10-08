@@ -3,17 +3,17 @@ using System.Reactive;
 using System.Reactive.Linq;
 using TdLib;
 using Tel.Egram.Persistance;
-using Tel.Egram.TdLib;
+using Tel.Egram.Utils.TdLib;
 
 namespace Tel.Egram.Authentication
 {
     public class Authenticator : IAuthenticator
     {
-        private readonly TdAgent _agent;
+        private readonly IAgent _agent;
         private readonly IStorage _storage;
 
         public Authenticator(
-            TdAgent agent,
+            IAgent agent,
             IStorage storage
             )
         {

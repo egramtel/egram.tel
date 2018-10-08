@@ -5,10 +5,8 @@ using System.Reactive.Linq;
 using Avalonia.Threading;
 using PropertyChanged;
 using ReactiveUI;
-using Tel.Egram.Components.Content;
-using Tel.Egram.Components.Explorer;
-using Tel.Egram.Components.Navigation;
-using Tel.Egram.Feeds;
+using Tel.Egram.Components.Messenger.Catalog;
+using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Workspace

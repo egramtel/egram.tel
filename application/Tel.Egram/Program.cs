@@ -21,16 +21,13 @@ namespace Tel.Egram
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddUtils();
+            services.AddServices();
             services.AddApplication();
             services.AddPopup();
-            services.AddSettings();
             services.AddAuthentication();
             services.AddWorkspace();
-            services.AddNavigation();
-            services.AddExplorer();
-            services.AddContent();
+            services.AddSettings();
             services.AddMessenger();
-            services.AddCatalog();
         }
 
         private static void Run(IServiceProvider provider)

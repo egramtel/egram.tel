@@ -2,7 +2,6 @@
 using System.Reactive.Disposables;
 using PropertyChanged;
 using ReactiveUI;
-using Tel.Egram.Components.MessageEditor;
 
 namespace Tel.Egram.Components.Messenger
 {

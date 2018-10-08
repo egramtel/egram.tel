@@ -5,8 +5,8 @@ using System.Reactive.Linq;
 using Avalonia.Media;
 using ReactiveUI;
 using TdLib;
-using Tel.Egram.Feeds;
 using Tel.Egram.Graphics;
+using Tel.Egram.Messaging.Chats;
 
 namespace Tel.Egram.Components.Messenger
 {
