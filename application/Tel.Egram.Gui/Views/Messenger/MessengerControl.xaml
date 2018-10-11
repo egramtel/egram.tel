@@ -1,0 +1,31 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:messenger="clr-namespace:Tel.Egram.Gui.Views.Messenger">
+    
+    <Grid
+        ColumnDefinitions="auto,*"
+        RowDefinitions="auto,*,auto">
+        
+        <messenger:CatalogControl
+            DataContext="{Binding CatalogModel}"
+            Grid.Column="0"
+            Grid.RowSpan="3" />
+        
+        <messenger:InformerControl
+            DataContext="{Binding InformerModel}"
+            Grid.Column="1"
+            Grid.Row="0" />
+        
+        <messenger:ExplorerControl
+            DataContext="{Binding ExplorerModel}"
+            Grid.Column="1"
+            Grid.Row="1" />
+        
+        <messenger:EditorControl
+            DataContext="{Binding EditorModel}"
+            Grid.Column="1"
+            Grid.Row="2" />
+        
+    </Grid>
+    
+</UserControl>

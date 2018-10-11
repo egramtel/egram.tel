@@ -1,0 +1,11 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui">
+
+    <ListBox
+        Grid.Row="1"
+        Items="{Binding Messages}"
+        BorderThickness="0">
+            
+    </ListBox>
+
+</UserControl>

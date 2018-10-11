@@ -1,10 +1,9 @@
 ﻿using System;
-using Avalonia;
 using Avalonia.Markup.Xaml;
 
 namespace Tel.Egram.Gui
 {
-    public class MainApplication : Application
+    public class MainApplication : Avalonia.Application
     {
         private readonly Initializer _initializer;
 

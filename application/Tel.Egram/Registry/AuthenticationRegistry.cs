@@ -7,7 +7,7 @@ namespace Tel.Egram.Registry
     {
         public static void AddAuthentication(this IServiceCollection services)
         {
-            services.AddTransient<AuthenticationContext>();
+            services.AddTransient<AuthenticationModel>();
         }
     }
 }

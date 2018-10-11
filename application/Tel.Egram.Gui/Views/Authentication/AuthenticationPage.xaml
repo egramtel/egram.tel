@@ -1,0 +1,168 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui">
+    
+    <Grid
+        Classes="AuthenticationPage"
+        ColumnDefinitions="*,*"
+        RowDefinitions="auto,auto,auto,auto,auto,*"
+        >
+        
+        <Border
+            Grid.Column="1"
+            Grid.RowSpan="6"
+            Background="#242e44" />
+        
+        <Button
+            Classes="Link"
+            Command="{Binding SetProxyCommand}"
+            Grid.Row="0"
+            Grid.Column="1"
+            >
+            <TextBlock
+                Text="Configure proxy"
+                />
+        </Button>
+        
+        <TextBox
+            Grid.Row="1"
+            Grid.Column="1"
+            Text="{Binding PhoneNumber, Mode=TwoWay}"
+            Watermark="Phone" />
+        
+        <Button
+            Classes="Action"
+            Grid.Row="2"
+            Grid.Column="1"
+            Command="{Binding SendCodeCommand}"
+            >
+            <TextBlock Text="Send code" />
+        </Button>
+        
+        <Carousel
+            Grid.Row="3"
+            Grid.Column="1"
+            SelectedIndex="{Binding ConfirmIndex}"
+            >
+            
+            <Carousel.PageTransition>
+                <PageSlide Duration="00:00:01.300" Orientation="Vertical" />
+            </Carousel.PageTransition>
+            
+            <Panel Height="300" Width="260" />
+            
+            <Grid
+                ColumnDefinitions="*"
+                RowDefinitions="auto,auto,auto,auto"
+                >
+                
+                <TextBox
+                    Grid.Row="0"
+                    Text="{Binding ConfirmCode, Mode=TwoWay}"
+                    Watermark="Confirmation code" />
+                
+                <TextBox
+                    Grid.Row="1"
+                    Text="{Binding FirstName, Mode=TwoWay}"
+                    Watermark="First name" />
+                
+                <TextBox
+                    Grid.Row="2"
+                    Text="{Binding LastName, Mode=TwoWay}"
+                    Watermark="Last name (optional)" />
+                
+                <Button
+                    Classes="Action"
+                    Grid.Row="3"
+                    Command="{Binding CheckCodeCommand}"
+                    >
+                    <TextBlock Text="Sign up" />
+                </Button>
+                
+            </Grid>
+            
+        </Carousel>
+        
+        <Carousel
+            Grid.Row="4"
+            Grid.Column="1"
+            SelectedIndex="{Binding PasswordIndex}"
+            >
+            
+            <Carousel.PageTransition>
+                <PageSlide Duration="00:00:00.300" Orientation="Vertical" />
+            </Carousel.PageTransition>
+                    
+            <Panel Height="300" Width="260" />
+                    
+            <Grid
+                ColumnDefinitions="*"
+                RowDefinitions="auto,auto"
+                >
+                        
+                <TextBox
+                    Grid.Row="0"
+                    Text="{Binding Password, Mode=TwoWay}"
+                    Watermark="Password" />
+                        
+                <Button
+                    Classes="Action"
+                    Grid.Row="1"
+                    Command="{Binding CheckPasswordCommand}"
+                    >
+                    <TextBlock Text="Log in" />
+                </Button>
+                        
+            </Grid>
+                    
+        </Carousel>
+        
+        <Rectangle
+            Grid.Row="5"
+            Grid.Column="1"
+            />
+        
+    </Grid>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="Button.Link">
+            <Setter Property="Width" Value="200" />
+            <Setter Property="Margin" Value="0,16,0,8" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        
+        <Style Selector="Button.Link TextBlock">
+            <Setter Property="Foreground" Value="#5195e1" />
+        </Style>
+        
+        <Style Selector="TextBox">
+            <Setter Property="Width" Value="200" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Margin" Value="0,8,0,0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Background" Value="#1b2333" />
+            <Setter Property="BorderBrush" Value="#3a455a" />
+        </Style>
+        
+        <Style Selector="TextBox /template/ Border">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        
+        <Style Selector="Button.Action">
+            <Setter Property="Width" Value="200" />
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Margin" Value="0,8,0,16" />
+            <Setter Property="Padding" Value="12,0,12,0"/>
+            <Setter Property="Background" Value="#17a1e6" />
+            <Setter Property="Foreground" Value="#ffffff" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        
+        <Style Selector="Button.Action /template/ ContentPresenter">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        
+    </UserControl.Styles>
+    
+</UserControl>

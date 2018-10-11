@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TdLib;
 using Tel.Egram.Components.Application;
 using Tel.Egram.Gui;
+using Tel.Egram.Gui.Views.Application;
 using Tel.Egram.Persistance;
 
 namespace Tel.Egram.Registry
@@ -14,7 +15,7 @@ namespace Tel.Egram.Registry
         public static void AddApplication(this IServiceCollection services)
         {
             services.AddScoped<MainApplication>();
-            services.AddScoped<ApplicationContext>();
+            services.AddScoped<ApplicationModel>();
             
             services.AddScoped(provider => new MainApplication.Initializer(() =>
             {

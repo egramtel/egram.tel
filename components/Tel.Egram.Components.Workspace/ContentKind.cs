@@ -1,7 +1,12 @@
-﻿namespace Tel.Egram.Components.Workspace
+namespace Tel.Egram.Components.Workspace
 {
     public enum ContentKind
     {
-        Chat
+        Home,
+        Directs,
+        Groups,
+        Channels,
+        Bots,
+        Settings
     }
 }

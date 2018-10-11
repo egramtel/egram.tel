@@ -3,6 +3,7 @@ using Avalonia;
 using Microsoft.Extensions.DependencyInjection;
 using Tel.Egram.Components.Application;
 using Tel.Egram.Gui;
+using Tel.Egram.Gui.Views.Application;
 using Tel.Egram.Registry;
 
 namespace Tel.Egram
@@ -34,7 +35,7 @@ namespace Tel.Egram
         {
             using (var scope = provider.CreateScope())
             {
-                var context = scope.ServiceProvider.GetService<ApplicationContext>();
+                var context = scope.ServiceProvider.GetService<ApplicationModel>();
                 var app = scope.ServiceProvider.GetService<MainApplication>();
                 
                 AppBuilder

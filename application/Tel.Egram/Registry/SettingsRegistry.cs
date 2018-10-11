@@ -8,8 +8,8 @@ namespace Tel.Egram.Registry
     {
         public static void AddSettings(this IServiceCollection services)
         {
-            services.AddTransient<SettingsContext>();
-            services.AddTransient<ProxyPopupContext>();
+            services.AddTransient<SettingsModel>();
+            services.AddTransient<ProxyPopupModel>();
         }
     }
 }

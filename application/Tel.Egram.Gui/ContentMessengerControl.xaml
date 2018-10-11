@@ -1,8 +1,0 @@
-﻿<UserControl
-    xmlns="https://github.com/avaloniaui"
-    xmlns:gui="clr-namespace:Tel.Egram.Gui">
-    
-    <gui:MessengerControl
-        DataContext="{Binding MessengerContext}" />
-        
-</UserControl>

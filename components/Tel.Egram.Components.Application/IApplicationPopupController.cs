@@ -5,6 +5,6 @@ namespace Tel.Egram.Components.Application
 {
     public interface IApplicationPopupController : IPopupController
     {
-        event EventHandler<PopupContext> ContextChanged;
+        event EventHandler<PopupModel> ContextChanged;
     }
 }

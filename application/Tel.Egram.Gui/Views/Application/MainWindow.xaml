@@ -1,0 +1,39 @@
+﻿<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:application="clr-namespace:Tel.Egram.Gui.Views.Application"
+    xmlns:authentication="clr-namespace:Tel.Egram.Gui.Views.Authentication"
+    xmlns:workspace="clr-namespace:Tel.Egram.Gui.Views.Workspace"
+    Width="800"
+    Height="600"
+    MinWidth="800"
+    MinHeight="600"
+    MaxWidth="800"
+    MaxHeight="600"
+    Title="{Binding WindowTitle}"
+    Background="#ffffff"
+    >
+    
+    <Panel>
+    
+        <Carousel
+            SelectedIndex="{Binding PageIndex}">
+        
+            <application:StartupPage
+                DataContext="{Binding StartupModel}" />
+        
+            <authentication:AuthenticationPage
+                DataContext="{Binding AuthenticationModel}" />
+        
+            <workspace:WorkspacePage
+                DataContext="{Binding WorkspaceModel}" />
+        
+        </Carousel>
+        
+        <application:PopupControl
+            IsVisible="{Binding IsPopupVisible}"
+            DataContext="{Binding PopupModel}" />
+        
+    </Panel>
+    
+</Window>

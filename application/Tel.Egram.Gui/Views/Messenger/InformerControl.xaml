@@ -1,0 +1,77 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui">
+    
+    <Grid
+        Classes="ChatInfo"
+        ColumnDefinitions="auto,*"
+        RowDefinitions="*,*">
+            
+        <Border
+            Grid.ColumnSpan="2"
+            Grid.RowSpan="2" />
+            
+        <Panel
+            DataContext="{Binding Avatar}"
+            Classes="Avatar"
+            Grid.Column="0"
+            Grid.RowSpan="2">
+            
+            <Ellipse
+                IsVisible="{Binding IsFallback}"
+                Fill="{Binding Brush}"
+                Width="32"
+                Height="32" />
+            
+            <TextBlock
+                IsVisible="{Binding IsFallback}"
+                Text="{Binding Label}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Foreground="#ffffff" />
+            
+            <Image
+                Source="{Binding Bitmap}"
+                Width="32"
+                Height="32" >
+                
+                <Image.Clip>
+                    <EllipseGeometry Rect="0,0,32,32" />
+                </Image.Clip>
+                
+            </Image>
+            
+        </Panel>
+            
+        <TextBlock
+            Grid.Column="1"
+            Grid.Row="0"
+            VerticalAlignment="Bottom"
+            Text="{Binding Title}"
+            FontWeight="Medium"
+            Foreground="#555555"
+            FontSize="12" />
+            
+        <TextBlock
+            Grid.Column="1"
+            Grid.Row="1"
+            VerticalAlignment="Top"
+            Text="{Binding Label}"
+            Foreground="#7d8fa0"
+            FontSize="11" />
+            
+    </Grid>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="Border">
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderBrush" Value="#d8d8d8" />
+        </Style>
+        
+        <Style Selector="Image">
+            <Setter Property="Margin" Value="8" />
+        </Style>
+        
+    </UserControl.Styles>
+        
+</UserControl>

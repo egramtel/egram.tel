@@ -1,0 +1,71 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui">
+    
+    <Grid
+        RowDefinitions="auto,auto"
+        ColumnDefinitions="auto,*"
+        >
+        
+        <Panel
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="8">
+            
+            <Ellipse
+                IsVisible="{Binding IsFallbackAuthorAvatar}"
+                Fill="{Binding AuthorColor}"
+                Width="24"
+                Height="24" />
+            
+            <TextBlock
+                IsVisible="{Binding IsFallbackAuthorAvatar}"
+                Text="{Binding AuthorInit}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Foreground="#ffffff"
+                />
+            
+            <Image
+                Source="{Binding AuthorAvatar}"
+                Width="24"
+                Height="24"
+                >
+                
+                <Image.Clip>
+                    <EllipseGeometry Rect="0,0,24,24" />
+                </Image.Clip>
+                
+            </Image>
+            
+        </Panel>
+        
+        <Border
+            Grid.Row="0"
+            Grid.Column="1"
+            Height="24"
+            Margin="0,8"
+            VerticalAlignment="Center">
+            
+            <TextBlock
+                Text="{Binding AuthorName}"
+                Foreground="{Binding AuthorColor}"
+                TextWrapping="Wrap"
+                VerticalAlignment="Center" />
+            
+        </Border>
+        
+        <Border
+            Grid.Row="1"
+            Grid.Column="1"
+            Grid.ColumnSpan="2">
+            
+            <TextBlock
+                Text="{Binding Text}"
+                TextWrapping="Wrap"
+                VerticalAlignment="Center" />
+            
+        </Border>
+        
+    </Grid>
+        
+</UserControl>

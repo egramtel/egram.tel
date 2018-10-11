@@ -4,6 +4,6 @@ namespace Tel.Egram.Components.Popup
     {
         void Hide();
 
-        void Show(PopupContext popupContext);
+        void Show(PopupModel popupModel);
     }
 }
