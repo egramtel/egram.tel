@@ -18,6 +18,7 @@
         
         <messenger:ExplorerControl
             DataContext="{Binding ExplorerModel}"
+            VisibleIndexes="{Binding VisibleIndexes, Mode=TwoWay}"
             Grid.Column="1"
             Grid.Row="1" />
         

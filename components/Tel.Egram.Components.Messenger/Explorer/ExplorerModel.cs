@@ -18,6 +18,8 @@ namespace Tel.Egram.Components.Messenger.Explorer
 
         public ObservableCollectionExtended<ItemModel> Items { get; set; }
         
+        public Tuple<int, int> VisibleIndexes { get; set; }
+        
         public ExplorerModel(
             IFactory<Target, ExplorerProvider> explorerProviderFactory,
             IExplorerTrigger explorerTrigger,
@@ -28,6 +30,9 @@ namespace Tel.Egram.Components.Messenger.Explorer
             BindMessages(explorerProvider).DisposeWith(_modelDisposable);
 
             BindTriggers(explorerTrigger).DisposeWith(_modelDisposable);
+
+            this.WhenAnyValue(m => m.VisibleIndexes)
+                .Subscribe(tuple => Console.WriteLine(tuple));
         }
 
         private IDisposable BindMessages(ExplorerProvider explorerProvider)

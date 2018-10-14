@@ -16,7 +16,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
 
         public IDisposable Trigger(ExplorerSignal signal)
         {
-            return Observable.Timer(TimeSpan.FromMilliseconds(500))
+            return Observable.Timer(TimeSpan.FromMilliseconds(100))
                 .Subscribe(_ =>
                 {
                     _subject.OnNext(signal);

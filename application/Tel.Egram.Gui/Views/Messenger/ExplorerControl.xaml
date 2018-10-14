@@ -3,6 +3,7 @@
     xmlns:messages="clr-namespace:Tel.Egram.Gui.Views.Messenger.Messages">
 
     <ListBox
+        Name="ItemList"
         Grid.Row="1"
         Items="{Binding Items}"
         VirtualizationMode="None"
