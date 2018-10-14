@@ -1,11 +1,11 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Tel.Egram.Gui.Views.Messenger
+namespace Tel.Egram.Gui.Views.Messenger.Messages
 {
-    public class MessageControl : UserControl
+    public class TextMessageControl : UserControl
     {
-        public MessageControl()
+        public TextMessageControl()
         {
             AvaloniaXamlLoader.Load(this);
         }

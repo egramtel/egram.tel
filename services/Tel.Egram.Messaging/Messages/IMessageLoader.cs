@@ -5,8 +5,9 @@ namespace Tel.Egram.Messaging.Messages
 {
     public interface IMessageLoader
     {
-        IObservable<Message> LoadMessages(AggregateFeed aggregateFeed, AggregateLoading state);
+        IObservable<Message> LoadMessages(Aggregate aggregate, AggregateLoadingState state);
         
-        IObservable<Message> LoadMessages(ChatFeed chatFeed, ChatLoading state);
+        IObservable<Message> LoadNextMessages(Chat chat, long fromMessageId, int limit);
+        IObservable<Message> LoadPrevMessages(Chat chat, long fromMessageId, int limit);
     }
 }

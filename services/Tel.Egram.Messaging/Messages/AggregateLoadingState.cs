@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using TdLib;
 
-namespace Tel.Egram.Messaging.Chats
+namespace Tel.Egram.Messaging.Messages
 {
-    public class AggregateLoading
+    public class AggregateLoadingState
     {
         private readonly Dictionary<long, long> _lastMessages;
         private readonly Dictionary<long, Stack<TdApi.Message>> _stackedMessages;
 
-        public AggregateLoading()
+        public AggregateLoadingState()
         {
             _lastMessages = new Dictionary<long, long>();
             _stackedMessages = new Dictionary<long, Stack<TdApi.Message>>();

@@ -28,5 +28,6 @@
     <Folder Include="Fonts\Roboto" />
     <Folder Include="Icons\Light" />
     <Folder Include="Icons\Dark" />
+    <Folder Include="Views\Messenger\Messages" />
   </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@ using Tel.Egram.Messaging.Chats;
 
 namespace Tel.Egram.Components.Messenger.Catalog
 {
-    public class CatalogProvider : ICatalogProvider
+    public class CatalogProvider : ICatalogProvider, IDisposable
     {
         private readonly CompositeDisposable _serviceDisposable = new CompositeDisposable();
 
@@ -173,6 +173,11 @@ namespace Tel.Egram.Components.Messenger.Catalog
             entry.Avatar = avatar;
             entry.HasUnread = chatData.UnreadCount > 0;
             entry.UnreadCount = chatData.UnreadCount.ToString();
+        }
+
+        public void Dispose()
+        {
+            _serviceDisposable.Dispose();
         }
     }
 }

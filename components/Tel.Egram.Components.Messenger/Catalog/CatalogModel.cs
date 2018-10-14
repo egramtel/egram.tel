@@ -32,8 +32,8 @@ namespace Tel.Egram.Components.Messenger.Catalog
             _filterController = new Subject<Func<EntryModel, bool>>();
             _sortingController = new Subject<IComparer<EntryModel>>();
             
-            var catalogService = catalogProviderFactory.Create();
-            BindCatalog(catalogService, kind).DisposeWith(_modelDisposable);
+            var catalogProvider = catalogProviderFactory.Create();
+            BindCatalog(catalogProvider, kind).DisposeWith(_modelDisposable);
 
             BindSearch(kind).DisposeWith(_modelDisposable);
         }

@@ -16,7 +16,7 @@ namespace Tel.Egram.Messaging.Chats
             _agent = agent;
         }
         
-        public IObservable<AggregateFeed> LoadAggregate()
+        public IObservable<Aggregate> LoadAggregate()
         {
             return GetAllChats(new List<TdApi.Chat>())
                 .Where(chat =>
@@ -24,22 +24,28 @@ namespace Tel.Egram.Messaging.Chats
                     var type = chat.Type as TdApi.ChatType.ChatTypeSupergroup;
                     return !(type is null) && type.IsChannel;
                 })
-                .Select(chat => new ChatFeed(chat))
-                .Aggregate(new List<ChatFeed>(), (list, feed) =>
+                .Select(chat => new Chat
+                {
+                    ChatData = chat
+                })
+                .Aggregate(new List<Chat>(), (list, feed) =>
                 {
                     list.Add(feed);
                     return list;
                 })
-                .Select(list => new AggregateFeed(list));
+                .Select(list => new Aggregate(list));
         }
 
-        public IObservable<ChatFeed> LoadChat(long chatId)
+        public IObservable<Chat> LoadChat(long chatId)
         {
             return _agent.Execute(new TdApi.GetChat
                 {
                     ChatId = chatId
                 })
-                .Select(chat => new ChatFeed(chat));
+                .Select(chat => new Chat
+                {
+                    ChatData = chat
+                });
         }
 
         private IObservable<TdApi.Chat> GetAllChats(

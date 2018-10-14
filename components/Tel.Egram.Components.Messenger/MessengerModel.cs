@@ -52,11 +52,13 @@ namespace Tel.Egram.Components.Messenger
         {
             var chatSubscription = SubscribeToSelectedChat(chat =>
             {
+                InformerModel?.Dispose();
                 InformerModel = informerModelFactory.Create(chat);
             });
             
             var aggregateSubscription = SubscribeToSelectedAggregate(aggregate =>
             {
+                InformerModel?.Dispose();
                 InformerModel = informerModelFactory.Create(aggregate);
             });
             
@@ -71,11 +73,13 @@ namespace Tel.Egram.Components.Messenger
         {
             var chatSubscription = SubscribeToSelectedChat(chat =>
             {
+                ExplorerModel?.Dispose();
                 ExplorerModel = explorerModelFactory.Create(chat);
             });
             
             var aggregateSubscription = SubscribeToSelectedAggregate(aggregate =>
             {
+                ExplorerModel?.Dispose();
                 ExplorerModel = explorerModelFactory.Create(aggregate);
             });
             
@@ -90,11 +94,13 @@ namespace Tel.Egram.Components.Messenger
         {
             var chatSubscription = SubscribeToSelectedChat(chat =>
             {
+                EditorModel?.Dispose();
                 EditorModel = editorModelFactory.Create(chat);
             });
             
             var aggregateSubscription = SubscribeToSelectedAggregate(aggregate =>
             {
+                EditorModel?.Dispose();
                 EditorModel = editorModelFactory.Create(aggregate);
             });
             

@@ -23,8 +23,19 @@ namespace Tel.Egram.Registry
                 db.Database.Migrate();
                 
                 var hub = provider.GetService<Hub>();
-                Task.Run(() => hub.Start());
+                var task = Task.Factory.StartNew(
+                    () => hub.Start(),
+                    TaskCreationOptions.LongRunning);
 
+                task.ContinueWith(t =>
+                {
+                    var exception = t.Exception;
+                    if (exception != null)
+                    {
+                        // TODO: handle exception and shutdown
+                    }
+                });
+                
                 return Disposable.Create(() =>
                 {
                     hub.Stop();

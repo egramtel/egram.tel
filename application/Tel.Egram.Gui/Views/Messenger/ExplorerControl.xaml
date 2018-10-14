@@ -1,11 +1,31 @@
 ﻿<UserControl
-    xmlns="https://github.com/avaloniaui">
+    xmlns="https://github.com/avaloniaui"
+    xmlns:messages="clr-namespace:Tel.Egram.Gui.Views.Messenger.Messages">
 
     <ListBox
         Grid.Row="1"
-        Items="{Binding Messages}"
-        BorderThickness="0">
-            
+        Items="{Binding Items}"
+        VirtualizationMode="None"
+        BorderThickness="0"
+        ScrollViewer.VerticalScrollBarVisibility="Visible"
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+        
+                <Panel>
+                    <Carousel
+                        SelectedIndex="{Binding Type}">
+                        
+                        <messages:UnsupportedMessageControl />
+                        <messages:TextMessageControl />
+                        
+                    </Carousel>
+                </Panel>
+                
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+        
     </ListBox>
 
 </UserControl>

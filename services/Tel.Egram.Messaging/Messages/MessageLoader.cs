@@ -19,18 +19,29 @@ namespace Tel.Egram.Messaging.Messages
         }
 
         public IObservable<Message> LoadMessages(
-            AggregateFeed aggregateFeed,
-            AggregateLoading state)
+            Aggregate feed,
+            AggregateLoadingState state)
         {
-            return LoadAggregateMessages(aggregateFeed, state)
+            return LoadAggregateMessages(feed, state)
                 .SelectMany(MapToMessage);
         }
 
-        public IObservable<Message> LoadMessages(
-            ChatFeed chatFeed,
-            ChatLoading state)
+        public IObservable<Message> LoadPrevMessages(
+            Chat feed,
+            long fromMessageId,
+            int limit)
         {
-            return LoadChannelMessages(chatFeed, state)
+            return GetMessages(feed.ChatData, fromMessageId, limit, 0)
+                .SelectMany(MapToMessage);
+        }
+
+        public IObservable<Message> LoadNextMessages(
+            Chat feed,
+            long fromMessageId,
+            int limit)
+        {   
+            return GetMessages(feed.ChatData, fromMessageId, limit, -limit)
+                .Where(m => m.Id != fromMessageId)
                 .SelectMany(MapToMessage);
         }
 
@@ -42,29 +53,29 @@ namespace Tel.Egram.Messaging.Messages
                 })
                 .Select(chat => new Message
                 {
-                    Msg = msg,
+                    MessageData = msg,
                     Chat = chat
                 });
         }
 
         private IObservable<TdApi.Message> LoadAggregateMessages(
-            AggregateFeed aggregateFeed,
-            AggregateLoading state)
+            Aggregate aggregate,
+            AggregateLoadingState state)
         {
             var actualLimit = _limit;
             
-            var list = aggregateFeed.Feeds.Select(f =>
+            var list = aggregate.Chats.Select(f =>
             {
-                var stackedCount = state.CountStackedMessages(f.Chat.Id);
+                var stackedCount = state.CountStackedMessages(f.ChatData.Id);
                 
                 return Enumerable.Range(0, stackedCount)
-                    .Select(_ => state.PopMessageFromStack(f.Chat.Id)) // get stacked messages for this chat
+                    .Select(_ => state.PopMessageFromStack(f.ChatData.Id)) // get stacked messages for this chat
                     .ToObservable()
                     .Concat(stackedCount < _limit
-                        ? LoadChannelMessages(f, new ChatLoading // load messages from the server
+                        ? LoadChannelMessages(f, new ChatLoadingState // load messages from the server
                             {
-                                LastMessageId = state.GetLastMessageId(f.Chat.Id)
-                            })
+                                LastMessageId = state.GetLastMessageId(f.ChatData.Id)
+                            }, _limit, 0)
                         : Observable.Empty<TdApi.Message>())
                     .Aggregate(new List<TdApi.Message>(), (l, m) =>
                     {
@@ -118,40 +129,53 @@ namespace Tel.Egram.Messaging.Messages
         }
 
         private IObservable<TdApi.Message> LoadChannelMessages(
-            ChatFeed chatFeed,
-            ChatLoading state)
+            Chat chat,
+            ChatLoadingState state,
+            int limit,
+            int offset)
         {
             // get messages for corresponding chat
-            return GetMessages(chatFeed.Chat, state.LastMessageId)
-                .Do(message => { state.LastMessageId = message.Id; })
-                .Aggregate(new List<TdApi.Message>(), (list, message) =>
+            return GetMessages(chat.ChatData, state.LastMessageId, limit, offset)
+                .Do(message =>
                 {
-                    list.Add(message);
-                    return list;
-                })
-                .SelectMany(list =>
-                {
-                    if (list.Count < _limit)
+                    if (state.LastMessageId < message.Id)
                     {
-                        // make one more query to avoid results with small number of messages
-                        var additional = GetMessages(chatFeed.Chat, state.LastMessageId)
-                            .Do(message => { state.LastMessageId = message.Id; });
-                        
-                        return list.ToObservable().Concat(additional);
+                        state.LastMessageId = message.Id;
                     }
-
-                    return list.ToObservable();
                 });
+//                .Aggregate(new List<TdApi.Message>(), (list, message) =>
+//                {
+//                    list.Add(message);
+//                    return list;
+//                })
+//                .SelectMany(list => list);
+//                .SelectMany(list =>
+//                {
+//                    if (list.Count < _limit)
+//                    {
+//                        // make one more query to avoid results with small number of messages
+//                        var additional = GetMessages(chat.Chat, state.LastMessageId)
+//                            .Do(message => { state.LastMessageId = message.Id; });
+//                        
+//                        return list.ToObservable().Concat(additional);
+//                    }
+//
+//                    return list.ToObservable();
+//                });
         }
 
-        private IObservable<TdApi.Message> GetMessages(TdApi.Chat chat, long fromMessageId)
-        {
+        private IObservable<TdApi.Message> GetMessages(
+            TdApi.Chat chat,
+            long fromMessageId,
+            int limit,
+            int offset)
+        {   
             return _agent.Execute(new TdApi.GetChatHistory
                 {
                     ChatId = chat.Id,
                     FromMessageId = fromMessageId,
-                    Limit = _limit,
-                    Offset = 0,
+                    Limit = limit,
+                    Offset = offset,
                     OnlyLocal = false
                 })
                 .SelectMany(history => history.Messages_);

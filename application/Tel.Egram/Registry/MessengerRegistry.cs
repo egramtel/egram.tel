@@ -9,6 +9,9 @@ namespace Tel.Egram.Registry
     {
         public static void AddMessenger(this IServiceCollection services)
         {
+            services.AddScoped<IMessageModelFactory, MessageModelFactory>();
+            services.AddScoped<IExplorerTrigger, ExplorerTrigger>();
+            services.AddTransient<IExplorerProvider, ExplorerProvider>();
             services.AddTransient<ExplorerModel>();
             
             services.AddScoped<ICatalogProvider, CatalogProvider>();
