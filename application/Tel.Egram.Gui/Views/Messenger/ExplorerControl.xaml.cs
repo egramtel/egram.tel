@@ -20,8 +20,7 @@ namespace Tel.Egram.Gui.Views.Messenger
                 (o, v) => o.VisibleIndexes = v);
         
         private readonly ListBox _listBox;
-        private readonly ScrollViewer _scrollViewer;
-        private IDisposable _offsetSubscription;
+        private IDisposable _scrollSubscription;
 
         public ExplorerControl()
         {
@@ -46,7 +45,7 @@ namespace Tel.Egram.Gui.Views.Messenger
             var viewportChanges = _listBox.WhenAnyValue(lb => lb.Scroll.Viewport)
                 .Select(_ => Unit.Default);
             
-            _offsetSubscription = offsetChanges
+            _scrollSubscription = offsetChanges
                 .Merge(extentChanges)
                 .Merge(viewportChanges)
                 .Subscribe(_ =>
@@ -102,7 +101,7 @@ namespace Tel.Egram.Gui.Views.Messenger
 
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
         {
-            _offsetSubscription.Dispose();
+            _scrollSubscription.Dispose();
             
             base.OnDetachedFromVisualTree(e);
         }

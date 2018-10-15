@@ -1,5 +1,6 @@
 ﻿using System;
 using Avalonia;
+using Avalonia.Platform;
 using Microsoft.Extensions.DependencyInjection;
 using Tel.Egram.Components.Application;
 using Tel.Egram.Gui;
@@ -38,11 +39,20 @@ namespace Tel.Egram
                 var context = scope.ServiceProvider.GetService<ApplicationModel>();
                 var app = scope.ServiceProvider.GetService<MainApplication>();
                 
-                AppBuilder
-                    .Configure(app)
-                    .UsePlatformDetect()
-                    .UseReactiveUI()
-                    .Start<MainWindow>(() => context);
+                var builder = AppBuilder.Configure(app);
+                var os = builder.RuntimePlatform.GetRuntimeInfo().OperatingSystem;
+                
+                if (os == OperatingSystemType.OSX)
+                {
+                    builder.UseAvaloniaNative().UseSkia();
+                }
+                else
+                {
+                    builder.UsePlatformDetect();
+                }
+
+                builder.UseReactiveUI();
+                builder.Start<MainWindow>(() => context);
             }
         }
     }

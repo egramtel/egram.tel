@@ -9,12 +9,12 @@
     <ProjectReference Include="..\Tel.Egram.Components.Settings\Tel.Egram.Components.Settings.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.6.2-build6191-beta" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.6.2-build6191-beta" />
+    <PackageReference Include="Avalonia" Version="0.6.2-build6379-beta" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.6.2-build6379-beta" />
     <PackageReference Include="DynamicData" Version="6.5.1.2479" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="2.5.9" />
-    <PackageReference Include="ReactiveUI" Version="8.7.1" />
+    <PackageReference Include="ReactiveUI" Version="9.0.1" />
     <PackageReference Include="System.Reactive" Version="4.0.0" />
   </ItemGroup>
 </Project>

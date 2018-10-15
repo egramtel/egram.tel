@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -25,7 +26,7 @@ namespace Tel.Egram.Components.Settings.Connection
         
         public ProxyModel SelectedProxy { get; set; }
         
-        public ReactiveList<ProxyModel> Proxies { get; set; }
+        public List<ProxyModel> Proxies { get; set; }
         
         public ProxyPopupModel(
             IPopupController popupController,
@@ -79,7 +80,7 @@ namespace Tel.Egram.Components.Settings.Connection
                 .Subscribe(proxies =>
                 {
                     var models = proxies.Select(ProxyModel.FromProxy);
-                    Proxies = new ReactiveList<ProxyModel>(models);
+                    Proxies = new List<ProxyModel>(models);
                 })
                 .DisposeWith(_modelDisposable);
         }
