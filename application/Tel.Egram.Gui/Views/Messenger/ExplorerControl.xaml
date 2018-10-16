@@ -3,6 +3,7 @@
     xmlns:messages="clr-namespace:Tel.Egram.Gui.Views.Messenger.Messages">
 
     <ListBox
+        Width="516"
         Name="ItemList"
         Grid.Row="1"
         Items="{Binding Items}"
@@ -11,7 +12,14 @@
         ScrollViewer.VerticalScrollBarVisibility="Visible"
         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel VerticalAlignment="Bottom" />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        
         <ListBox.ItemTemplate>
+            
             <DataTemplate>
         
                 <Panel>
@@ -25,8 +33,34 @@
                 </Panel>
                 
             </DataTemplate>
+            
         </ListBox.ItemTemplate>
         
     </ListBox>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="ListBox">
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        
+        <Style Selector="ListBoxItem">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0,4" />
+        </Style>
+        
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#444444" />
+        </Style>
+        
+    </UserControl.Styles>
 
 </UserControl>

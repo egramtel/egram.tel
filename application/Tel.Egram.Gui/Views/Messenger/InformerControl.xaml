@@ -2,6 +2,7 @@
     xmlns="https://github.com/avaloniaui">
     
     <Grid
+        Width="516"
         Classes="ChatInfo"
         ColumnDefinitions="auto,*"
         RowDefinitions="*,*">

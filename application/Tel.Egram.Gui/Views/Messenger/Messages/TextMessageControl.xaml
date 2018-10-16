@@ -11,6 +11,8 @@
             Classes="Avatar"
             Grid.Row="0"
             Grid.Column="0"
+            Grid.RowSpan="2"
+            VerticalAlignment="Top"
             Margin="8">
             
             <Ellipse
@@ -48,6 +50,7 @@
             
             <TextBlock
                 Text="{Binding AuthorName}"
+                FontWeight="Medium"
                 TextWrapping="Wrap"
                 VerticalAlignment="Center" />
             

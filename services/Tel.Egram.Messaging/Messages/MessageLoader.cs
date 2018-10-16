@@ -55,6 +55,24 @@ namespace Tel.Egram.Messaging.Messages
                 {
                     MessageData = msg,
                     Chat = chat
+                })
+                .SelectMany(message =>
+                {
+                    if (message.MessageData.SenderUserId != 0)
+                    {
+                        return _agent.Execute(new TdApi.GetUser
+                            {
+                                UserId = message.MessageData.SenderUserId
+                            })
+                            .Select(user => new Message
+                            {
+                                MessageData = message.MessageData,
+                                Chat = message.Chat,
+                                User = user
+                            });
+                    }
+
+                    return Observable.Return(message);
                 });
         }
 
