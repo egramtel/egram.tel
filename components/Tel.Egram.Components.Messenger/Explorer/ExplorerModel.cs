@@ -6,7 +6,6 @@ using DynamicData;
 using DynamicData.Binding;
 using PropertyChanged;
 using ReactiveUI;
-using Tel.Egram.Components.Messenger.Explorer.Triggers;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Utils;
 
@@ -17,58 +16,84 @@ namespace Tel.Egram.Components.Messenger.Explorer
     {
         private readonly CompositeDisposable _modelDisposable = new CompositeDisposable();
 
+        private SourceList<ItemModel> _items;
         public ObservableCollectionExtended<ItemModel> Items { get; set; }
         
         public Tuple<int, int> VisibleIndexes { get; set; }
         
         public ExplorerModel(
-            IFactory<Target, ExplorerProvider> explorerProviderFactory,
-            IExplorerTrigger explorerTrigger,
+            IMessageManager messageManager,
+            IAvatarManager avatarManager,
             Target target
             )
         {
-            var explorerProvider = explorerProviderFactory.Create(target);
-            BindMessages(explorerProvider).DisposeWith(_modelDisposable);
-
-            BindLoading(explorerTrigger).DisposeWith(_modelDisposable);
-
-            BindVisibility(explorerTrigger).DisposeWith(_modelDisposable);
+            var visibleRangeChanges = this.WhenAnyValue(m => m.VisibleIndexes)
+                .Select(tuple => new Range(tuple?.Item1 ?? 0, tuple?.Item2 ?? 0))
+                .SubscribeOn(TaskPoolScheduler.Default);
+            
+            BindMessages(target, messageManager, visibleRangeChanges)
+                .DisposeWith(_modelDisposable);
+            
+            BindAvatars(avatarManager, visibleRangeChanges)
+                .DisposeWith(_modelDisposable);
         }
 
-        private IDisposable BindMessages(ExplorerProvider explorerProvider)
+        private IDisposable BindMessages(
+            Target target,
+            IMessageManager messageManager,
+            IObservable<Range> visibleRangeChanges)
         {
+            _items = new SourceList<ItemModel>();
             Items = new ObservableCollectionExtended<ItemModel>();
             
-            var itemsSubscription = explorerProvider.Items.Connect()
+            var itemsSubscription = _items.Connect()
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(Items)
                 .Subscribe();
             
+            var loadingSubscription = visibleRangeChanges
+                .Subscribe(range =>
+                {
+                    //Console.WriteLine(range);
+                    
+                    if (range.From == 0)
+                    {
+                        messageManager.LoadPrevMessages(target, _items)
+                            .DisposeWith(_modelDisposable);
+                    }
+                    else if (range.To == _items.Count - 1)
+                    {
+                        messageManager.LoadNextMessages(target, _items)
+                            .DisposeWith(_modelDisposable);
+                    }
+                });
+            
             return Disposable.Create(() =>
             {
+                loadingSubscription.Dispose();
                 itemsSubscription.Dispose();
-                explorerProvider.Dispose();
             });
         }
 
-        private IDisposable BindLoading(IExplorerTrigger explorerTrigger)
+        private IDisposable BindAvatars(
+            IAvatarManager avatarManager,
+            IObservable<Range> visibleRangeChanges)
         {
-            explorerTrigger.LoadMessages(LoadDirection.Prev);
-            return Disposable.Empty;
-        }
-
-        private IDisposable BindVisibility(IExplorerTrigger explorerTrigger)
-        {
-            return this.WhenAnyValue(m => m.VisibleIndexes)
-                .ObserveOn(TaskPoolScheduler.Default)
-                .Subscribe(tuple =>
-                {
-                    if (tuple != null)
-                    {
-                        explorerTrigger.NotifyVisibleRange(
-                            new Range(tuple.Item1, tuple.Item2));
-                    }
+            var prevRange = new Range(0, 0);
+            
+            return visibleRangeChanges
+                .Subscribe(range =>
+                {   
+                    Console.WriteLine(range);
+                    
+                    avatarManager.ReleaseAvatars(_items, prevRange, range)
+                        .DisposeWith(_modelDisposable);
+                    
+                    avatarManager.LoadAvatars(_items, prevRange, range)
+                        .DisposeWith(_modelDisposable);
+                    
+                    prevRange = range;
                 });
         }
 

@@ -20,23 +20,25 @@ namespace Tel.Egram.Components.Messenger.Explorer
             _avatarLoader = avatarLoader;
         }
 
-
         public IDisposable ReleaseAvatars(SourceList<ItemModel> items, Range prevRange, Range range)
         {
-            // release prev avatar bitmaps
-            for (int i = prevRange.From; i <= prevRange.To; i++)
+            items.Edit(list =>
             {
-                int index = i;
-                        
-                // do not release items within current range
-                if (index >= range.From && index <= range.To)
-                {
-                    continue;
-                }
+                // release prev avatar bitmaps
+                for (int i = prevRange.From; i <= prevRange.To; i++)
+                {           
+                    // do not release items within current range
+                    if (i >= range.From && i <= range.To)
+                    {
+                        continue;
+                    }
 
-                items.Edit(list =>
-                {
-                    var item = list[index];
+                    if (i >= list.Count)
+                    {
+                        break;
+                    }
+                    
+                    var item = list[i];
                     if (item is MessageModel messageModel)
                     {
                         var user = messageModel.Message.User;
@@ -46,8 +48,8 @@ namespace Tel.Egram.Components.Messenger.Explorer
                             ? _avatarLoader.GetAvatar(chat, AvatarSize.Big)
                             : _avatarLoader.GetAvatar(user, AvatarSize.Big);
                     }
-                });
-            }
+                }
+            });
             
             return Disposable.Empty;
         }
@@ -55,27 +57,30 @@ namespace Tel.Egram.Components.Messenger.Explorer
         public IDisposable LoadAvatars(SourceList<ItemModel> items, Range prevRange, Range range)
         {
             var disposable = new CompositeDisposable();
-            
-            // load avatar bitmaps for new range
-            for (int i = range.From; i <= range.To; i++)
+
+            items.Edit(list =>
             {
-                int index = i;
-                
-                items.Edit(list =>
+                // load avatar bitmaps for new range
+                for (int i = range.From; i <= range.To; i++)
                 {
-                    var item = list[index];
+                    if (i >= list.Count)
+                    {
+                        break;
+                    }
+                    
+                    var item = list[i];
                     if (item is MessageModel messageModel)
                     {
                         var user = messageModel.Message.User;
                         var chat = messageModel.Message.Chat;
-                        
+
                         if (messageModel.Avatar?.Bitmap == null)
                         {
                             messageModel.Avatar = user == null
                                 ? _avatarLoader.GetAvatar(chat, AvatarSize.Big)
                                 : _avatarLoader.GetAvatar(user, AvatarSize.Big);
                         }
-                        
+
                         if (messageModel.Avatar?.Bitmap == null)
                         {
                             if (user == null)
@@ -83,10 +88,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                                 _avatarLoader.LoadAvatar(chat, AvatarSize.Big)
                                     .ObserveOn(TaskPoolScheduler.Default)
                                     .SubscribeOn(RxApp.MainThreadScheduler)
-                                    .Subscribe(avatar =>
-                                    {
-                                        messageModel.Avatar = avatar; 
-                                    })
+                                    .Subscribe(avatar => { messageModel.Avatar = avatar; })
                                     .DisposeWith(disposable);
                             }
                             else
@@ -94,16 +96,13 @@ namespace Tel.Egram.Components.Messenger.Explorer
                                 _avatarLoader.LoadAvatar(user, AvatarSize.Big)
                                     .ObserveOn(TaskPoolScheduler.Default)
                                     .SubscribeOn(RxApp.MainThreadScheduler)
-                                    .Subscribe(avatar =>
-                                    {
-                                        messageModel.Avatar = avatar; 
-                                    })
+                                    .Subscribe(avatar => { messageModel.Avatar = avatar; })
                                     .DisposeWith(disposable);
                             }
                         }
                     }
-                });
-            }
+                }
+            });
 
             return disposable;
         }

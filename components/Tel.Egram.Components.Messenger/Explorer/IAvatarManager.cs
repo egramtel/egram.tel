@@ -1,6 +1,5 @@
 using System;
 using DynamicData;
-using Tel.Egram.Components.Messenger.Explorer.Triggers;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Explorer
