@@ -2,6 +2,7 @@
 using Tel.Egram.Components.Messenger;
 using Tel.Egram.Components.Messenger.Catalog;
 using Tel.Egram.Components.Messenger.Explorer;
+using Tel.Egram.Components.Messenger.Explorer.Triggers;
 
 namespace Tel.Egram.Registry
 {

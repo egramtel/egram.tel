@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
 using ReactiveUI;
 using Tel.Egram.Components.Messenger.Explorer.Messages;
+using Tel.Egram.Components.Messenger.Explorer.Triggers;
+using Tel.Egram.Graphics;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
 
@@ -23,18 +26,124 @@ namespace Tel.Egram.Components.Messenger.Explorer
             Target target,
             IExplorerTrigger trigger,
             IMessageLoader messageLoader,
-            IMessageModelFactory messageModelFactory
+            IMessageModelFactory messageModelFactory,
+            IAvatarLoader avatarLoader
             )
         {
             _items = new SourceList<ItemModel>();
+
+            var loadRequests = Observable.FromEventPattern<MessageLoadRequestedArgs>(
+                h => trigger.MessageLoadRequested += h,
+                h => trigger.MessageLoadRequested -= h)
+                .Select(args => args.EventArgs);
             
-            BindLoading(target, trigger, messageLoader, messageModelFactory)
+            BindLoading(loadRequests, target, messageLoader, messageModelFactory)
+                .DisposeWith(_serviceDisposable);
+
+            var visibleRangeChanges = Observable.FromEventPattern<VisibleRangeNotifiedArgs>(
+                h => trigger.VisibleRangeNotified += h,
+                h => trigger.VisibleRangeNotified -= h)
+                .Select(args => args.EventArgs);
+            
+            BindAvatarLoading(visibleRangeChanges, avatarLoader)
+                .DisposeWith(_serviceDisposable);
+
+            BindMediaLoading(visibleRangeChanges)
                 .DisposeWith(_serviceDisposable);
         }
 
+        private IDisposable BindAvatarLoading(
+            IObservable<VisibleRangeNotifiedArgs> visibleRangeChanges,
+            IAvatarLoader avatarLoader)
+        {
+            var prevRange = new VisibleRangeNotifiedArgs(0, 0);
+            
+            return visibleRangeChanges
+                .Throttle(TimeSpan.FromMilliseconds(200))
+                .ObserveOn(TaskPoolScheduler.Default)
+                .SubscribeOn(RxApp.MainThreadScheduler)
+                .Subscribe(range =>
+                {
+                    // release prev avatar bitmaps
+                    for (int i = prevRange.From; i <= prevRange.To; i++)
+                    {
+                        int index = i;
+                        
+                        // do not release items within current range
+                        if (index >= range.From && index <= range.To)
+                        {
+                            continue;
+                        }
+
+                        _items.Edit(list =>
+                        {
+                            var item = list[index];
+                            if (item is MessageModel messageModel)
+                            {
+                                messageModel.Avatar.Bitmap = null;
+                            }
+                        });
+                    }
+                    
+                    // load avatar bitmaps for new range
+                    for (int i = range.From; i <= range.To; i++)
+                    {
+                        int index = i;
+                        
+                        _items.Edit(list =>
+                        {
+                            var item = list[index];
+                            if (item is MessageModel messageModel)
+                            {
+                                var user = messageModel.Message.User;
+                                var chat = messageModel.Message.Chat;
+                                
+                                if (messageModel.Avatar?.Bitmap == null)
+                                {
+                                    messageModel.Avatar = user == null
+                                        ? avatarLoader.GetAvatar(chat, AvatarSize.Big)
+                                        : avatarLoader.GetAvatar(user, AvatarSize.Big);
+                                }
+                                
+                                if (messageModel.Avatar?.Bitmap == null)
+                                {
+                                    if (user == null)
+                                    {
+                                        avatarLoader.LoadAvatar(chat, AvatarSize.Big)
+                                            .ObserveOn(TaskPoolScheduler.Default)
+                                            .ObserveOn(RxApp.MainThreadScheduler)
+                                            .Subscribe(avatar =>
+                                            {
+                                                messageModel.Avatar = avatar; 
+                                            });
+                                    }
+                                    else
+                                    {
+                                        avatarLoader.LoadAvatar(user, AvatarSize.Big)
+                                            .ObserveOn(TaskPoolScheduler.Default)
+                                            .ObserveOn(RxApp.MainThreadScheduler)
+                                            .Subscribe(avatar =>
+                                            {
+                                                messageModel.Avatar = avatar; 
+                                            });
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    prevRange = range;
+                });
+        }
+
+        private IDisposable BindMediaLoading(IObservable<VisibleRangeNotifiedArgs> visibleRangeChanges)
+        {
+            return Disposable.Empty; // TODO:
+        }
+
         private IDisposable BindLoading(
+            IObservable<MessageLoadRequestedArgs> loadRequests,
             Target target,
-            IExplorerTrigger trigger,
             IMessageLoader messageLoader,
             IMessageModelFactory messageModelFactory)
         {
@@ -42,15 +151,15 @@ namespace Tel.Egram.Components.Messenger.Explorer
             {
                 case Chat chat:
                     return BindChatLoading(
+                        loadRequests,
                         chat,
-                        trigger,
                         messageLoader,
                         messageModelFactory);
                 
                 case Aggregate aggregate:
                     return BindAggregateLoading(
+                        loadRequests,
                         aggregate,
-                        trigger, 
                         messageLoader,
                         messageModelFactory);
             }
@@ -59,17 +168,16 @@ namespace Tel.Egram.Components.Messenger.Explorer
         }
 
         private IDisposable BindChatLoading(
+            IObservable<MessageLoadRequestedArgs> loadRequests,
             Chat chat,
-            IExplorerTrigger trigger,
-            IMessageLoader messageLoader, 
+            IMessageLoader messageLoader,
             IMessageModelFactory messageModelFactory)
         {
-            return trigger
+            return loadRequests
                 .ObserveOn(TaskPoolScheduler.Default)
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .SelectMany(kind =>
+                .SelectMany(signal =>
                 {
-                    var messages = kind is ExplorerSignal.LoadNext
+                    var messages = signal.Direction == LoadDirection.Next
                         ? LoadNextMessages(chat, messageLoader) 
                         : LoadPrevMessages(chat, messageLoader);
 
@@ -80,25 +188,25 @@ namespace Tel.Egram.Components.Messenger.Explorer
                         })
                         .Select(list => new
                         {
-                            Kind = kind,
+                            Direction = signal.Direction,
                             Messages = list
                         });
                 })
                 .Subscribe(data =>
                 {
-                    var kind = data.Kind;
+                    var direction = data.Direction;
                     var models = data.Messages
                         .Select(messageModelFactory.CreateMessage)
                         .Reverse()
                         .ToList();
                     
-                    switch (kind)
+                    switch (direction)
                     {
-                        case ExplorerSignal.LoadPrev _:
+                        case LoadDirection.Prev:
                             _items.InsertRange(models, 0);
                             break;
                         
-                        case ExplorerSignal.LoadNext _:
+                        case LoadDirection.Next:
                             _items.AddRange(models);
                             break;
                     }
@@ -106,9 +214,9 @@ namespace Tel.Egram.Components.Messenger.Explorer
         }
 
         private IDisposable BindAggregateLoading(
+            IObservable<MessageLoadRequestedArgs> loadRequests,
             Aggregate aggregate,
-            IExplorerTrigger trigger,
-            IMessageLoader messageLoader, 
+            IMessageLoader messageLoader,
             IMessageModelFactory messageModelFactory)
         {
             throw new NotImplementedException();

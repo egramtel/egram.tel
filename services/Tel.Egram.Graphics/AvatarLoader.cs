@@ -40,22 +40,22 @@ namespace Tel.Egram.Graphics
             _locker = new object();
         }
 
-        public Avatar GetAvatar(TdApi.User user, AvatarSize size)
+        public Avatar GetAvatar(TdApi.User user, AvatarSize size, bool forceFallback = false)
         {
             return new Avatar
             {
-                Bitmap = GetBitmap(user.ProfilePhoto?.Small, user.Id, size),
+                Bitmap = forceFallback ? null : GetBitmap(user.ProfilePhoto?.Small, user.Id, size),
                 BrushFactory = GetBrushFactory(user),
                 Size = size,
                 Label = GetLabel(user)
             };
         }
 
-        public Avatar GetAvatar(TdApi.Chat chat, AvatarSize size)
+        public Avatar GetAvatar(TdApi.Chat chat, AvatarSize size, bool forceFallback = false)
         {
             return new Avatar
             {
-                Bitmap = GetBitmap(chat.Photo?.Small, chat.Id, size),
+                Bitmap = forceFallback ? null : GetBitmap(chat.Photo?.Small, chat.Id, size),
                 BrushFactory = GetBrushFactory(chat),
                 Size = size,
                 Label = GetLabel(chat)
@@ -94,8 +94,22 @@ namespace Tel.Egram.Graphics
 
         private string GetLabel(TdApi.User user)
         {
-            var name = user.FirstName + " " + user.LastName;
-            return string.IsNullOrWhiteSpace(name) ? null : name.Substring(0, 1).ToUpper();
+            if (!string.IsNullOrWhiteSpace(user.FirstName) && !string.IsNullOrWhiteSpace(user.LastName))
+            {
+                return new string(new []{ user.FirstName[0], user.LastName[0] });
+            }
+
+            if (!string.IsNullOrWhiteSpace(user.FirstName))
+            {
+                return new string(user.FirstName[0], 1);
+            }
+            
+            if (!string.IsNullOrWhiteSpace(user.LastName))
+            {
+                return new string(user.LastName[0], 1);
+            }
+
+            return null;
         }
 
         private Func<IBrush> GetBrushFactory(TdApi.User user)

@@ -36,8 +36,8 @@ namespace Tel.Egram.Components.Messenger.Explorer
             var chat = message.Chat;
 
             var avatar = (user == null)
-                ? _avatarLoader.GetAvatar(chat, AvatarSize.Big)
-                : _avatarLoader.GetAvatar(user, AvatarSize.Big);
+                ? _avatarLoader.GetAvatar(chat, AvatarSize.Big, true)
+                : _avatarLoader.GetAvatar(user, AvatarSize.Big, true);
 
             var authorName = (user == null)
                 ? chat.Title

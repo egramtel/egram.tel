@@ -6,6 +6,7 @@ using DynamicData;
 using DynamicData.Binding;
 using PropertyChanged;
 using ReactiveUI;
+using Tel.Egram.Components.Messenger.Explorer.Triggers;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Utils;
 
@@ -29,10 +30,9 @@ namespace Tel.Egram.Components.Messenger.Explorer
             var explorerProvider = explorerProviderFactory.Create(target);
             BindMessages(explorerProvider).DisposeWith(_modelDisposable);
 
-            BindTriggers(explorerTrigger).DisposeWith(_modelDisposable);
+            BindLoading(explorerTrigger).DisposeWith(_modelDisposable);
 
-            this.WhenAnyValue(m => m.VisibleIndexes)
-                .Subscribe(tuple => Console.WriteLine(tuple));
+            BindVisibility(explorerTrigger).DisposeWith(_modelDisposable);
         }
 
         private IDisposable BindMessages(ExplorerProvider explorerProvider)
@@ -52,9 +52,23 @@ namespace Tel.Egram.Components.Messenger.Explorer
             });
         }
 
-        private IDisposable BindTriggers(IExplorerTrigger explorerTrigger)
+        private IDisposable BindLoading(IExplorerTrigger explorerTrigger)
         {
-            return explorerTrigger.Trigger(new ExplorerSignal.LoadPrev());
+            explorerTrigger.LoadMessages(LoadDirection.Prev);
+            return Disposable.Empty;
+        }
+
+        private IDisposable BindVisibility(IExplorerTrigger explorerTrigger)
+        {
+            return this.WhenAnyValue(m => m.VisibleIndexes)
+                .ObserveOn(TaskPoolScheduler.Default)
+                .Subscribe(tuple =>
+                {
+                    if (tuple != null)
+                    {
+                        explorerTrigger.NotifyVisibleRange(tuple.Item1, tuple.Item2);
+                    }
+                });
         }
 
         public void Dispose()
