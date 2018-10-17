@@ -1,4 +1,5 @@
 using System;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Explorer.Triggers
 {
@@ -18,9 +19,9 @@ namespace Tel.Egram.Components.Messenger.Explorer.Triggers
             MessageLoadRequested?.Invoke(this, new MessageLoadRequestedArgs(direction));
         }
 
-        public void NotifyVisibleRange(int from, int to)
+        public void NotifyVisibleRange(Range range)
         {
-            VisibleRangeNotified?.Invoke(this, new VisibleRangeNotifiedArgs(from, to));
+            VisibleRangeNotified?.Invoke(this, new VisibleRangeNotifiedArgs(range));
         }
     }
 }

@@ -1,14 +1,14 @@
+using Tel.Egram.Utils;
+
 namespace Tel.Egram.Components.Messenger.Explorer.Triggers
 {
     public class VisibleRangeNotifiedArgs
     {
-        public int From { get; }
-        public int To { get; }
+        public Range Range { get; }
             
-        public VisibleRangeNotifiedArgs(int from, int to)
+        public VisibleRangeNotifiedArgs(Range range)
         {
-            From = from;
-            To = to;
+            Range = range;
         }
     }
 }

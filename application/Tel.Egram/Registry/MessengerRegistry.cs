@@ -10,7 +10,8 @@ namespace Tel.Egram.Registry
     {
         public static void AddMessenger(this IServiceCollection services)
         {
-            services.AddScoped<IMessageModelFactory, MessageModelFactory>();
+            services.AddTransient<IAvatarManager, AvatarManager>();
+            services.AddTransient<IMessageModelFactory, MessageModelFactory>();
             services.AddScoped<IExplorerTrigger, ExplorerTrigger>();
             services.AddTransient<IExplorerProvider, ExplorerProvider>();
             services.AddTransient<ExplorerModel>();

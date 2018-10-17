@@ -7,15 +7,6 @@ namespace Tel.Egram.Components.Messenger.Explorer
 {
     public class MessageModelFactory : IMessageModelFactory
     {
-        private readonly IAvatarLoader _avatarLoader;
-
-        public MessageModelFactory(
-            IAvatarLoader avatarLoader
-            )
-        {
-            _avatarLoader = avatarLoader;
-        }
-        
         public MessageModel CreateMessage(Message message)
         {
             var messageData = message.MessageData;
@@ -35,10 +26,6 @@ namespace Tel.Egram.Components.Messenger.Explorer
             var user = message.User;
             var chat = message.Chat;
 
-            var avatar = (user == null)
-                ? _avatarLoader.GetAvatar(chat, AvatarSize.Big, true)
-                : _avatarLoader.GetAvatar(user, AvatarSize.Big, true);
-
             var authorName = (user == null)
                 ? chat.Title
                 : $"{user.FirstName} {user.LastName}";
@@ -48,7 +35,6 @@ namespace Tel.Egram.Components.Messenger.Explorer
             return new TextMessageModel
             {
                 AuthorName = authorName,
-                Avatar = avatar,
                 Message = message,
                 Text = text
             };

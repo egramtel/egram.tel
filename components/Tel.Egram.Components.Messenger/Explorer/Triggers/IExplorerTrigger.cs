@@ -1,4 +1,5 @@
 using System;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Explorer.Triggers
 {
@@ -10,6 +11,6 @@ namespace Tel.Egram.Components.Messenger.Explorer.Triggers
 
         void LoadMessages(LoadDirection direction);
 
-        void NotifyVisibleRange(int from, int to);
+        void NotifyVisibleRange(Range range);
     }
 }

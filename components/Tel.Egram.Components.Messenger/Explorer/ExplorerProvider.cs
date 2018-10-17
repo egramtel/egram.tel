@@ -9,9 +9,9 @@ using DynamicData;
 using ReactiveUI;
 using Tel.Egram.Components.Messenger.Explorer.Messages;
 using Tel.Egram.Components.Messenger.Explorer.Triggers;
-using Tel.Egram.Graphics;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Explorer
 {
@@ -27,7 +27,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
             IExplorerTrigger trigger,
             IMessageLoader messageLoader,
             IMessageModelFactory messageModelFactory,
-            IAvatarLoader avatarLoader
+            IAvatarManager avatarManager
             )
         {
             _items = new SourceList<ItemModel>();
@@ -45,7 +45,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 h => trigger.VisibleRangeNotified -= h)
                 .Select(args => args.EventArgs);
             
-            BindAvatarLoading(visibleRangeChanges, avatarLoader)
+            BindAvatarLoading(visibleRangeChanges, avatarManager)
                 .DisposeWith(_serviceDisposable);
 
             BindMediaLoading(visibleRangeChanges)
@@ -54,89 +54,29 @@ namespace Tel.Egram.Components.Messenger.Explorer
 
         private IDisposable BindAvatarLoading(
             IObservable<VisibleRangeNotifiedArgs> visibleRangeChanges,
-            IAvatarLoader avatarLoader)
+            IAvatarManager avatarManager)
         {
-            var prevRange = new VisibleRangeNotifiedArgs(0, 0);
+            var prevRange = new Range(0, 0);
             
             return visibleRangeChanges
-                .Throttle(TimeSpan.FromMilliseconds(200))
                 .ObserveOn(TaskPoolScheduler.Default)
                 .SubscribeOn(RxApp.MainThreadScheduler)
-                .Subscribe(range =>
+                .Subscribe(args =>
                 {
-                    // release prev avatar bitmaps
-                    for (int i = prevRange.From; i <= prevRange.To; i++)
-                    {
-                        int index = i;
-                        
-                        // do not release items within current range
-                        if (index >= range.From && index <= range.To)
-                        {
-                            continue;
-                        }
-
-                        _items.Edit(list =>
-                        {
-                            var item = list[index];
-                            if (item is MessageModel messageModel)
-                            {
-                                messageModel.Avatar.Bitmap = null;
-                            }
-                        });
-                    }
+                    var range = args.Range;
                     
-                    // load avatar bitmaps for new range
-                    for (int i = range.From; i <= range.To; i++)
-                    {
-                        int index = i;
-                        
-                        _items.Edit(list =>
-                        {
-                            var item = list[index];
-                            if (item is MessageModel messageModel)
-                            {
-                                var user = messageModel.Message.User;
-                                var chat = messageModel.Message.Chat;
-                                
-                                if (messageModel.Avatar?.Bitmap == null)
-                                {
-                                    messageModel.Avatar = user == null
-                                        ? avatarLoader.GetAvatar(chat, AvatarSize.Big)
-                                        : avatarLoader.GetAvatar(user, AvatarSize.Big);
-                                }
-                                
-                                if (messageModel.Avatar?.Bitmap == null)
-                                {
-                                    if (user == null)
-                                    {
-                                        avatarLoader.LoadAvatar(chat, AvatarSize.Big)
-                                            .ObserveOn(TaskPoolScheduler.Default)
-                                            .ObserveOn(RxApp.MainThreadScheduler)
-                                            .Subscribe(avatar =>
-                                            {
-                                                messageModel.Avatar = avatar; 
-                                            });
-                                    }
-                                    else
-                                    {
-                                        avatarLoader.LoadAvatar(user, AvatarSize.Big)
-                                            .ObserveOn(TaskPoolScheduler.Default)
-                                            .ObserveOn(RxApp.MainThreadScheduler)
-                                            .Subscribe(avatar =>
-                                            {
-                                                messageModel.Avatar = avatar; 
-                                            });
-                                    }
-                                }
-                            }
-                        });
-                    }
+                    avatarManager.ReleaseAvatars(_items, prevRange, range)
+                        .DisposeWith(_serviceDisposable);
+                    
+                    avatarManager.LoadAvatars(_items, prevRange, range)
+                        .DisposeWith(_serviceDisposable);
                     
                     prevRange = range;
                 });
         }
 
-        private IDisposable BindMediaLoading(IObservable<VisibleRangeNotifiedArgs> visibleRangeChanges)
+        private IDisposable BindMediaLoading(
+            IObservable<VisibleRangeNotifiedArgs> visibleRangeChanges)
         {
             return Disposable.Empty; // TODO:
         }

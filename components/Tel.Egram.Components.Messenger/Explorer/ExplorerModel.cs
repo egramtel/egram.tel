@@ -66,7 +66,8 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 {
                     if (tuple != null)
                     {
-                        explorerTrigger.NotifyVisibleRange(tuple.Item1, tuple.Item2);
+                        explorerTrigger.NotifyVisibleRange(
+                            new Range(tuple.Item1, tuple.Item2));
                     }
                 });
         }
