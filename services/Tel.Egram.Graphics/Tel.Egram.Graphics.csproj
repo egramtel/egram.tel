@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.6.2-build6379-beta" />
+    <PackageReference Include="Avalonia" Version="0.6.2-build6440-beta" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0005" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0005" />
