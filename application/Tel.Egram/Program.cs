@@ -44,7 +44,20 @@ namespace Tel.Egram
                 
                 if (os == OperatingSystemType.OSX)
                 {
-                    builder.UseAvaloniaNative().UseSkia();
+                    builder.UseAvaloniaNative(null, opt=>
+                    {
+                        opt.MacOptions.ShowInDock = true;
+                        opt.UseDeferredRendering = true;
+                        opt.UseGpu = true;
+                    }).UseSkia();
+                }
+                else if (os == OperatingSystemType.Linux)
+                {
+                    builder.UseGtk3(new Avalonia.Gtk3.Gtk3PlatformOptions
+                    {
+                        UseDeferredRendering = true,
+                        UseGpuAcceleration = true
+                    }).UseSkia();
                 }
                 else
                 {
