@@ -23,7 +23,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
             _messageModelFactory = messageModelFactory;
         }
         
-        public IDisposable LoadPrevMessages(
+        public IObservable<Action> LoadPrevMessages(
             Target target, 
             SourceList<ItemModel> items)
         {
@@ -36,7 +36,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                             list.Add(m);
                             return list;
                         })
-                        .Subscribe(messages =>
+                        .Select(messages => new Action(() =>
                         {
                             var models = messages
                                 .Select(_messageModelFactory.CreateMessage)
@@ -44,13 +44,13 @@ namespace Tel.Egram.Components.Messenger.Explorer
                                 .ToList();
                             
                             items.InsertRange(models, 0);
-                        });
+                        }));
             }
             
-            return Disposable.Empty;
+            return Observable.Empty<Action>();
         }
 
-        public IDisposable LoadNextMessages(
+        public IObservable<Action> LoadNextMessages(
             Target target, 
             SourceList<ItemModel> items)
         {
@@ -63,7 +63,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                             list.Add(m);
                             return list;
                         })
-                        .Subscribe(messages =>
+                        .Select(messages => new Action(() =>
                         {
                             var models = messages
                                 .Select(_messageModelFactory.CreateMessage)
@@ -71,10 +71,10 @@ namespace Tel.Egram.Components.Messenger.Explorer
                                 .ToList();
                             
                             items.AddRange(models);
-                        });
+                        }));
             }
             
-            return Disposable.Empty;
+            return Observable.Empty<Action>();
         }
         
         private IObservable<Message> LoadNextMessages(
@@ -92,7 +92,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 }
             }
             
-            return _messageLoader.LoadNextMessages(chat, fromMessageId, 20);
+            return _messageLoader.LoadNextMessages(chat, fromMessageId, 10);
         }
 
         private IObservable<Message> LoadPrevMessages(
@@ -110,7 +110,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 }
             }
             
-            return _messageLoader.LoadPrevMessages(chat, fromMessageId, 20);
+            return _messageLoader.LoadPrevMessages(chat, fromMessageId, 10);
         }
     }
 }

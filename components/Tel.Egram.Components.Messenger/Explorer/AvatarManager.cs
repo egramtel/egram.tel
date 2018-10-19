@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -20,8 +22,10 @@ namespace Tel.Egram.Components.Messenger.Explorer
             _avatarLoader = avatarLoader;
         }
 
-        public IDisposable ReleaseAvatars(SourceList<ItemModel> items, Range prevRange, Range range)
+        public IObservable<Action> ReleaseAvatars(SourceList<ItemModel> items, Range prevRange, Range range)
         {
+            var messageModels = new List<MessageModel>();
+            
             items.Edit(list =>
             {
                 // release prev avatar bitmaps
@@ -41,23 +45,27 @@ namespace Tel.Egram.Components.Messenger.Explorer
                     var item = list[i];
                     if (item is MessageModel messageModel)
                     {
-                        var user = messageModel.Message.User;
-                        var chat = messageModel.Message.Chat;
-                                
-                        messageModel.Avatar = user == null
-                            ? _avatarLoader.GetAvatar(chat, AvatarSize.Big)
-                            : _avatarLoader.GetAvatar(user, AvatarSize.Big);
+                        messageModels.Add(messageModel);
                     }
                 }
             });
             
-            return Disposable.Empty;
+            return messageModels.ToObservable()
+                .Select(messageModel => new Action(() =>
+                    {
+                        var user = messageModel.Message.User;
+                        var chat = messageModel.Message.Chat;
+
+                        messageModel.Avatar = user == null
+                            ? _avatarLoader.GetAvatar(chat, AvatarSize.Big)
+                            : _avatarLoader.GetAvatar(user, AvatarSize.Big);
+                    }));
         }
 
-        public IDisposable LoadAvatars(SourceList<ItemModel> items, Range prevRange, Range range)
+        public IObservable<Action> LoadAvatars(SourceList<ItemModel> items, Range prevRange, Range range)
         {
-            var disposable = new CompositeDisposable();
-
+            var messageModels = new List<MessageModel>();
+            
             items.Edit(list =>
             {
                 // load avatar bitmaps for new range
@@ -71,40 +79,57 @@ namespace Tel.Egram.Components.Messenger.Explorer
                     var item = list[i];
                     if (item is MessageModel messageModel)
                     {
-                        var user = messageModel.Message.User;
-                        var chat = messageModel.Message.Chat;
-
-                        if (messageModel.Avatar?.Bitmap == null)
-                        {
-                            messageModel.Avatar = user == null
-                                ? _avatarLoader.GetAvatar(chat, AvatarSize.Big)
-                                : _avatarLoader.GetAvatar(user, AvatarSize.Big);
-                        }
-
-                        if (messageModel.Avatar?.Bitmap == null)
-                        {
-                            if (user == null)
-                            {
-                                _avatarLoader.LoadAvatar(chat, AvatarSize.Big)
-                                    .ObserveOn(TaskPoolScheduler.Default)
-                                    .SubscribeOn(RxApp.MainThreadScheduler)
-                                    .Subscribe(avatar => { messageModel.Avatar = avatar; })
-                                    .DisposeWith(disposable);
-                            }
-                            else
-                            {
-                                _avatarLoader.LoadAvatar(user, AvatarSize.Big)
-                                    .ObserveOn(TaskPoolScheduler.Default)
-                                    .SubscribeOn(RxApp.MainThreadScheduler)
-                                    .Subscribe(avatar => { messageModel.Avatar = avatar; })
-                                    .DisposeWith(disposable);
-                            }
-                        }
+                        messageModels.Add(messageModel);
                     }
                 }
             });
 
-            return disposable;
+            return messageModels.ToObservable()
+                .SelectMany(messageModel =>
+                {
+                    var user = messageModel.Message.User;
+                    var chat = messageModel.Message.Chat;
+
+                    var observable = Observable.Empty<Action>();
+                    
+                    if (messageModel.Avatar?.Bitmap == null)
+                    {
+                        var avatar = user == null
+                            ? _avatarLoader.GetAvatar(chat, AvatarSize.Big)
+                            : _avatarLoader.GetAvatar(user, AvatarSize.Big);
+                        
+                        observable = observable.Concat(Observable.Return(
+                                new Action(() =>
+                                {
+                                    messageModel.Avatar = avatar;
+                                })
+                            ));
+                    }
+
+                    if (messageModel.Avatar?.Bitmap == null)
+                    {
+                        if (user == null)
+                        {
+                            observable = observable.Concat(_avatarLoader.LoadAvatar(chat, AvatarSize.Big)
+                                    .Select(avatar => new Action(() =>
+                                    {
+                                        messageModel.Avatar = avatar;
+                                    }))
+                                );
+                        }
+                        else
+                        {
+                            observable = observable.Concat(_avatarLoader.LoadAvatar(user, AvatarSize.Big)
+                                    .Select(avatar => new Action(() =>
+                                    {
+                                        messageModel.Avatar = avatar;
+                                    }))
+                                );
+                        }
+                    }
+
+                    return observable;
+                });
         }
     }
 }

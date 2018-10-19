@@ -51,23 +51,31 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(Items)
                 .Subscribe();
+
+            bool loaded = false;
             
             var loadingSubscription = visibleRangeChanges
-                .Subscribe(range =>
+                .SelectMany(range =>
                 {
-                    //Console.WriteLine(range);
-                    
-                    if (range.From == 0)
+                    if (!loaded)
                     {
-                        messageManager.LoadPrevMessages(target, _items)
-                            .DisposeWith(_modelDisposable);
+                        loaded = true;
+                        
+                        if (range.From == 0)
+                        {
+                            return messageManager.LoadPrevMessages(target, _items);
+                        }
+                        else if (range.To == _items.Count - 1)
+                        {
+                            return messageManager.LoadNextMessages(target, _items);
+                        }
                     }
-                    else if (range.To == _items.Count - 1)
-                    {
-                        messageManager.LoadNextMessages(target, _items)
-                            .DisposeWith(_modelDisposable);
-                    }
-                });
+
+                    return Observable.Empty<Action>();
+                })
+                .SubscribeOn(TaskPoolScheduler.Default)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(action => action());
             
             return Disposable.Create(() =>
             {
@@ -83,18 +91,16 @@ namespace Tel.Egram.Components.Messenger.Explorer
             var prevRange = new Range(0, 0);
             
             return visibleRangeChanges
-                .Subscribe(range =>
-                {   
-                    Console.WriteLine(range);
-                    
-                    avatarManager.ReleaseAvatars(_items, prevRange, range)
-                        .DisposeWith(_modelDisposable);
-                    
-                    avatarManager.LoadAvatars(_items, prevRange, range)
-                        .DisposeWith(_modelDisposable);
-                    
-                    prevRange = range;
-                });
+                .SelectMany(range =>
+                {
+                    var releases = avatarManager.ReleaseAvatars(_items, prevRange, range);
+                    var loads = avatarManager.LoadAvatars(_items, prevRange, range);
+
+                    return releases.Concat(loads);
+                })
+                .SubscribeOn(TaskPoolScheduler.Default)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(action => action());
         }
 
         public void Dispose()
