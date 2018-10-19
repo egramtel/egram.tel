@@ -1,6 +1,6 @@
 # [egram.tel](https://egram.tel) - Telegram client
 
-Egram is an unofficial crossplatform Telegram client written in C#, .NET Core and Avalonia.
+Egram is an unofficial crossplatform Telegram client written in C#, .NET Core, <a href="https://github.com/reactiveui/ReactiveUI">ReactiveUI</a> and <a href="https://github.com/AvaloniaUI/Avalonia">Avalonia</a>.
 
 | Platform | Status |
 | -------- | ------ |
