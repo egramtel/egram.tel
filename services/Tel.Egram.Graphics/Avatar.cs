@@ -13,8 +13,6 @@ namespace Tel.Egram.Graphics
         public IBrush Brush => BrushFactory?.Invoke();
         
         public string Label { get; set; }
-        
-        public AvatarSize Size { get; set; }
 
         public bool IsFallback => Bitmap == null;
     }

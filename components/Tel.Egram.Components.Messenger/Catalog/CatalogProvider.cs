@@ -136,13 +136,13 @@ namespace Tel.Egram.Components.Messenger.Catalog
             switch (entry)
             {
                 case ChatEntryModel chatEntry:
-                    return avatarLoader.LoadAvatar(chatEntry.Chat.ChatData, AvatarSize.Small);
+                    return avatarLoader.LoadAvatar(chatEntry.Chat.ChatData);
                 
                 case AggregateEntryModel aggregateEntry:
                     return avatarLoader.LoadAvatar(new TdApi.Chat
                         {
                             Id = aggregateEntry.Aggregate.Id
-                        }, AvatarSize.Small);
+                        });
             }
             
             return Observable.Return<Avatar>(null);

@@ -30,7 +30,7 @@ namespace Tel.Egram.Components.Workspace
         {
             return userLoader
                 .GetMe()
-                .SelectMany(user => avatarLoader.LoadAvatar(user.UserData, AvatarSize.Big))
+                .SelectMany(user => avatarLoader.LoadAvatar(user.UserData))
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(AvaloniaScheduler.Instance)
                 .Subscribe(avatar =>

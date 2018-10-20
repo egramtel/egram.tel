@@ -36,7 +36,7 @@ namespace Tel.Egram.Components.Messenger.Informer
                 case Chat chat:
                     Title = chat.ChatData.Title;
                     Label = chat.ChatData.Title;
-                    return avatarLoader.LoadAvatar(chat.ChatData, AvatarSize.Big)
+                    return avatarLoader.LoadAvatar(chat.ChatData)
                         .SubscribeOn(TaskPoolScheduler.Default)
                         .ObserveOn(RxApp.MainThreadScheduler)
                         .Subscribe(avatar =>

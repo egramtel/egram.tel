@@ -75,11 +75,11 @@ namespace Tel.Egram.Components.Messenger.Explorer
                         }
                     }
 
-                    //return messageLoads;
-
                     var avatarReleases = avatarManager.ReleaseAvatars(_items, prevRange, range);
                     var avatarLoads = avatarManager.LoadAvatars(_items, prevRange, range);
 
+                    prevRange = range;
+                    
                     return messageLoads.Concat(avatarReleases).Concat(avatarLoads);
                 })
                 .Buffer(TimeSpan.FromMilliseconds(100))

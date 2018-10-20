@@ -57,8 +57,8 @@ namespace Tel.Egram.Components.Messenger.Explorer
                         var chat = messageModel.Message.Chat;
 
                         messageModel.Avatar = user == null
-                            ? _avatarLoader.GetAvatar(chat, AvatarSize.Big)
-                            : _avatarLoader.GetAvatar(user, AvatarSize.Big);
+                            ? _avatarLoader.GetAvatar(chat)
+                            : _avatarLoader.GetAvatar(user);
                     }));
         }
 
@@ -95,8 +95,8 @@ namespace Tel.Egram.Components.Messenger.Explorer
                     if (messageModel.Avatar?.Bitmap == null)
                     {
                         var avatar = user == null
-                            ? _avatarLoader.GetAvatar(chat, AvatarSize.Big)
-                            : _avatarLoader.GetAvatar(user, AvatarSize.Big);
+                            ? _avatarLoader.GetAvatar(chat)
+                            : _avatarLoader.GetAvatar(user);
                         
                         observable = observable.Concat(Observable.Return(
                                 new Action(() =>
@@ -110,7 +110,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                     {
                         if (user == null)
                         {
-                            observable = observable.Concat(_avatarLoader.LoadAvatar(chat, AvatarSize.Big)
+                            observable = observable.Concat(_avatarLoader.LoadAvatar(chat)
                                     .Select(avatar => new Action(() =>
                                     {
                                         messageModel.Avatar = avatar;
@@ -119,7 +119,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                         }
                         else
                         {
-                            observable = observable.Concat(_avatarLoader.LoadAvatar(user, AvatarSize.Big)
+                            observable = observable.Concat(_avatarLoader.LoadAvatar(user)
                                     .Select(avatar => new Action(() =>
                                     {
                                         messageModel.Avatar = avatar;

@@ -10,8 +10,6 @@
         
         string CacheDirectory { get; }
         
-        string AvatarDirectory { get; }
-        
         string DatabaseFile { get; }
     }
 }

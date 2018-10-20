@@ -49,7 +49,7 @@ namespace Tel.Egram.Registry
             {
                 var options = Options.Create(new MemoryCacheOptions
                 {
-                    SizeLimit = 64
+                    SizeLimit = 128 // maximum 128 cached bitmaps
                 });
                 return new AvatarCache(new MemoryCache(options));
             });
