@@ -1,5 +1,6 @@
 ﻿using System;
 using Avalonia;
+using Avalonia.Gtk3;
 using Avalonia.Platform;
 using Microsoft.Extensions.DependencyInjection;
 using Tel.Egram.Components.Application;
@@ -44,7 +45,7 @@ namespace Tel.Egram
                 
                 if (os == OperatingSystemType.OSX)
                 {
-                    builder.UseAvaloniaNative(null, opt=>
+                    builder.UseAvaloniaNative(null, opt =>
                     {
                         opt.MacOptions.ShowInDock = true;
                         opt.UseDeferredRendering = true;
@@ -53,7 +54,7 @@ namespace Tel.Egram
                 }
                 else if (os == OperatingSystemType.Linux)
                 {
-                    builder.UseGtk3(new Avalonia.Gtk3.Gtk3PlatformOptions
+                    builder.UseGtk3(new Gtk3PlatformOptions
                     {
                         UseDeferredRendering = true,
                         UseGpuAcceleration = true

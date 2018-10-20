@@ -27,80 +27,76 @@ namespace Tel.Egram.Components.Messenger.Explorer
             Target target
             )
         {
-            var visibleRangeChanges = this.WhenAnyValue(m => m.VisibleIndexes)
-                .Select(tuple => new Range(tuple?.Item1 ?? 0, tuple?.Item2 ?? 0))
-                .SubscribeOn(TaskPoolScheduler.Default);
-            
-            BindMessages(target, messageManager, visibleRangeChanges)
-                .DisposeWith(_modelDisposable);
-            
-            BindAvatars(avatarManager, visibleRangeChanges)
-                .DisposeWith(_modelDisposable);
-        }
-
-        private IDisposable BindMessages(
-            Target target,
-            IMessageManager messageManager,
-            IObservable<Range> visibleRangeChanges)
-        {
             _items = new SourceList<ItemModel>();
             Items = new ObservableCollectionExtended<ItemModel>();
             
-            var itemsSubscription = _items.Connect()
+            _items.Connect()
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(Items)
-                .Subscribe();
+                .Subscribe()
+                .DisposeWith(_modelDisposable);
+            
+            BindRangeChanges(target, messageManager, avatarManager)
+                .DisposeWith(_modelDisposable);
+        }
 
+        private IDisposable BindRangeChanges(
+            Target target,
+            IMessageManager messageManager,
+            IAvatarManager avatarManager)
+        {
+            var visibleRangeChanges = this.WhenAnyValue(m => m.VisibleIndexes)
+                .Select(tuple => new Range(tuple?.Item1 ?? 0, tuple?.Item2 ?? 0))
+                .SubscribeOn(TaskPoolScheduler.Default)
+                .ObserveOn(RxApp.MainThreadScheduler);
+            
+            var prevRange = new Range(0, 0);
             bool loaded = false;
             
-            var loadingSubscription = visibleRangeChanges
+            return visibleRangeChanges
                 .SelectMany(range =>
                 {
+                    var messageLoads = Observable.Empty<Action>();
+                    
                     if (!loaded)
                     {
                         loaded = true;
                         
                         if (range.From == 0)
                         {
-                            return messageManager.LoadPrevMessages(target, _items);
+                            messageLoads = messageLoads.Concat(
+                                messageManager.LoadPrevMessages(target, _items));
                         }
                         else if (range.To == _items.Count - 1)
                         {
-                            return messageManager.LoadNextMessages(target, _items);
+                            messageLoads = messageLoads.Concat(
+                                messageManager.LoadNextMessages(target, _items));
                         }
                     }
 
-                    return Observable.Empty<Action>();
+                    //return messageLoads;
+
+                    var avatarReleases = avatarManager.ReleaseAvatars(_items, prevRange, range);
+                    var avatarLoads = avatarManager.LoadAvatars(_items, prevRange, range);
+
+                    return messageLoads.Concat(avatarReleases).Concat(avatarLoads);
                 })
+                .Buffer(TimeSpan.FromMilliseconds(100))
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(action => action());
-            
-            return Disposable.Create(() =>
-            {
-                loadingSubscription.Dispose();
-                itemsSubscription.Dispose();
-            });
-        }
-
-        private IDisposable BindAvatars(
-            IAvatarManager avatarManager,
-            IObservable<Range> visibleRangeChanges)
-        {
-            var prevRange = new Range(0, 0);
-            
-            return visibleRangeChanges
-                .SelectMany(range =>
-                {
-                    var releases = avatarManager.ReleaseAvatars(_items, prevRange, range);
-                    var loads = avatarManager.LoadAvatars(_items, prevRange, range);
-
-                    return releases.Concat(loads);
-                })
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(action => action());
+                .Subscribe(
+                    actions =>
+                    {
+                        foreach (var action in actions)
+                        {
+                            action();
+                        }
+                    },
+                    error =>
+                    {
+                        Console.WriteLine(error);
+                    });
         }
 
         public void Dispose()
