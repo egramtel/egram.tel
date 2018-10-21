@@ -23,94 +23,90 @@ namespace Tel.Egram.Components.Messenger.Explorer
             _messageModelFactory = messageModelFactory;
         }
         
-        public IObservable<Action> LoadPrevMessages(
+        public IObservable<IList<MessageModel>> LoadPrevMessages(
             Target target, 
-            SourceList<ItemModel> items)
+            Message fromMessage)
         {
             switch (target)
             {
                 case Chat chat:
-                    return LoadPrevMessages(chat, items)
-                        .Aggregate(new List<Message>(), (list, m) =>
+                    return LoadPrevMessages(chat, fromMessage)
+                        .Select(_messageModelFactory.CreateMessage)
+                        .Aggregate(new List<MessageModel>(), (list, m) =>
                         {
                             list.Add(m);
                             return list;
                         })
-                        .Select(messages => new Action(() =>
+                        .Select(list =>
                         {
-                            var models = messages
-                                .Select(_messageModelFactory.CreateMessage)
-                                .Reverse()
-                                .ToList();
-                            
-                            items.InsertRange(models, 0);
-                        }));
+                            list.Reverse();
+                            return list;
+                        });
             }
             
-            return Observable.Empty<Action>();
+            return Observable.Return(new List<MessageModel>());
         }
 
-        public IObservable<Action> LoadNextMessages(
+        public IObservable<IList<MessageModel>> LoadPrevMessages(Target target)
+        {
+            return LoadPrevMessages(target, null);
+        }
+
+        public IObservable<IList<MessageModel>> LoadNextMessages(
             Target target, 
-            SourceList<ItemModel> items)
+            Message fromMessage)
         {
             switch (target)
             {
                 case Chat chat:
-                    return LoadNextMessages(chat, items)
-                        .Aggregate(new List<Message>(), (list, m) =>
+                    return LoadNextMessages(chat, fromMessage)
+                        .Select(_messageModelFactory.CreateMessage)
+                        .Aggregate(new List<MessageModel>(), (list, m) =>
                         {
                             list.Add(m);
                             return list;
                         })
-                        .Select(messages => new Action(() =>
+                        .Select(list =>
                         {
-                            var models = messages
-                                .Select(_messageModelFactory.CreateMessage)
-                                .Reverse()
-                                .ToList();
-                            
-                            items.AddRange(models);
-                        }));
+                            list.Reverse();
+                            return list;
+                        });
             }
             
-            return Observable.Empty<Action>();
+            return Observable.Return(new List<MessageModel>());
         }
-        
+
+        public IObservable<IList<MessageModel>> LoadNextMessages(Target target)
+        {
+            return LoadNextMessages(target, null);
+        }
+
         private IObservable<Message> LoadNextMessages(
             Chat chat,
-            SourceList<ItemModel> items)
+            Message fromMessage = null)
         {
             var fromMessageId = chat.ChatData.LastReadInboxMessageId;
             
-            if (items.Count > 0)
+            if (fromMessage != null)
             {
-                var messageModel = (MessageModel)items.Items.FirstOrDefault(i => i is MessageModel);
-                if (messageModel != null)
-                {
-                    fromMessageId = messageModel.Message.MessageData.Id;
-                }
+                fromMessageId = fromMessage.MessageData.Id;
             }
             
-            return _messageLoader.LoadNextMessages(chat, fromMessageId, 10);
+            return _messageLoader.LoadNextMessages(chat, fromMessageId, 32);
         }
 
         private IObservable<Message> LoadPrevMessages(
             Chat chat,
-            SourceList<ItemModel> items)
+            Message fromMessage = null)
         {
             var fromMessageId = chat.ChatData.LastReadInboxMessageId;
             
-            if (items.Count > 0)
+            if (fromMessage != null)
             {
-                var messageModel = (MessageModel)items.Items.LastOrDefault(i => i is MessageModel);
-                if (messageModel != null)
-                {
-                    fromMessageId = messageModel.Message.MessageData.Id;
-                }
+                fromMessageId = fromMessage.MessageData.Id;
             }
             
-            return _messageLoader.LoadPrevMessages(chat, fromMessageId, 10);
+            return _messageLoader.LoadPrevMessages(chat, fromMessageId, 32);
         }
     }
 }

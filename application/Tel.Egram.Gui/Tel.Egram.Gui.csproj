@@ -30,4 +30,7 @@
     <Folder Include="Icons\Dark" />
     <Folder Include="Views\Messenger\Messages" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\services\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
+  </ItemGroup>
 </Project>

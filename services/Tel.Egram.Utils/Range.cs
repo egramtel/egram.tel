@@ -1,39 +1,42 @@
+using System;
+
 namespace Tel.Egram.Utils
 {
     public struct Range
     {
-        public readonly int From;
-        public readonly int To;
+        public int Index { get; }
+        public int Length { get; }
+        public int LastIndex => Index + Length - 1;
 
-        public Range(int from, int to)
+        public Range(int index, int length)
         {
-            From = from;
-            To = to;
+            Index = index;
+            Length = length;
         }
         
-        public override bool Equals(object obj) 
+        public override bool Equals(object obj)
         {
             return obj is Range range && this == range;
         }
 
-        public override int GetHashCode() 
+        public override int GetHashCode()
         {
-            return From ^ To;
+            return Index ^ Length;
         }
         
-        public static bool operator ==(Range x, Range y) 
+        public static bool operator ==(Range x, Range y)
         {
-            return x.From == y.From && x.To == y.To;
+            return x.Index == y.Index && x.Length == y.Length;
         }
         
-        public static bool operator !=(Range x, Range y) 
+        public static bool operator !=(Range x, Range y)
         {
             return !(x == y);
         }
         
         public override string ToString()
         {
-            return $"({From}, {To})";
+            return Length == 0 ? $"({Length})" : $"({Length}, {Index}-{LastIndex})";
         }
     }
 }

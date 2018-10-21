@@ -1,13 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Reactive;
 using DynamicData;
+using Tel.Egram.Components.Messenger.Explorer.Messages;
+using Tel.Egram.Graphics;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Explorer
 {
     public interface IAvatarManager
     {
-        IObservable<Action> ReleaseAvatars(SourceList<ItemModel> items, Range prevRange, Range range);
-        IObservable<Action> LoadAvatars(SourceList<ItemModel> items, Range prevRange, Range range);
+        IObservable<Avatar> ReleaseAvatars(IList<MessageModel> models);
+        IObservable<Avatar> PreloadAvatars(IList<MessageModel> models);
+        IObservable<Avatar> LoadAvatars(IList<MessageModel> models);
     }
 }

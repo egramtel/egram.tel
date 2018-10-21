@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Binding;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using PropertyChanged;
 using ReactiveUI;
+using Tel.Egram.Components.Messenger.Explorer.Messages;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Utils;
 
@@ -19,7 +23,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
         private SourceList<ItemModel> _items;
         public ObservableCollectionExtended<ItemModel> Items { get; set; }
         
-        public Tuple<int, int> VisibleIndexes { get; set; }
+        public Range VisibleRange { get; set; }
         
         public ExplorerModel(
             IMessageManager messageManager,
@@ -37,58 +41,156 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 .Subscribe()
                 .DisposeWith(_modelDisposable);
             
-            BindRangeChanges(target, messageManager, avatarManager)
+            BindVisibleRangeChanges(target, messageManager, avatarManager)
+                .DisposeWith(_modelDisposable);
+            
+            InitMessageLoading(target, messageManager, avatarManager)
                 .DisposeWith(_modelDisposable);
         }
 
-        private IDisposable BindRangeChanges(
+        private IDisposable InitMessageLoading(
             Target target,
             IMessageManager messageManager,
             IAvatarManager avatarManager)
         {
-            var visibleRangeChanges = this.WhenAnyValue(m => m.VisibleIndexes)
-                .Select(tuple => new Range(tuple?.Item1 ?? 0, tuple?.Item2 ?? 0))
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler);
-            
-            var prevRange = new Range(0, 0);
-            bool loaded = false;
-            
-            return visibleRangeChanges
-                .SelectMany(range =>
-                {
-                    var messageLoads = Observable.Empty<Action>();
-                    
-                    if (!loaded)
+            var messageLoading = messageManager.LoadPrevMessages(target)
+                .Select(models => new {
+                    Action = new Action(() =>
                     {
-                        loaded = true;
-                        
-                        if (range.From == 0)
+                        _items.InsertRange(models, 0);
+                    }),
+                    Models = models
+                });
+
+            var avatarLoading = messageLoading
+                .SelectMany(item =>
+                {
+                    var action = item.Action;
+                    var models = item.Models;
+                    
+                    var messageLoadAction = Observable.Return(action);
+                    
+                    var avatarPreloadAction = avatarManager.PreloadAvatars(models)
+                        .Select((avatar, i) => new Action(() =>
                         {
-                            messageLoads = messageLoads.Concat(
-                                messageManager.LoadPrevMessages(target, _items));
+                            var messageModel = models[i];
+                            messageModel.Avatar = avatar;
+                        }));
+                    
+                    var avatarLoadAction = avatarManager.LoadAvatars(models)
+                        .Select((avatar, i) => new Action(() =>
+                        {
+                            var messageModel = models[i];
+                            messageModel.Avatar = avatar;
+                        }));
+
+                    return messageLoadAction
+                        .Concat(avatarPreloadAction)
+                        .Concat(avatarLoadAction);
+                });
+            
+            return SubscribeToActions(avatarLoading);
+        }
+
+        private IDisposable BindVisibleRangeChanges(
+            Target target,
+            IMessageManager messageManager,
+            IAvatarManager avatarManager)
+        {
+            var prevRange = default(Range);
+            var visibleRangeChanges = this.WhenAnyValue(m => m.VisibleRange)
+                .Select(range => new
+                {
+                    PrevRange = prevRange,
+                    Range = range
+                })
+                .Do(item => prevRange = item.Range)
+                .Do(Console.WriteLine);
+
+            var messageLoading = visibleRangeChanges
+                .SelectMany(item =>
+                {
+                    if (item.Range.Length > 0)
+                    {
+                        if (item.Range.Index == 0
+                            && item.Range.Index != item.PrevRange.Index)
+                        {
+                            var items = _items.Items.OfType<MessageModel>().ToList();
+                            var firstMessage = items.FirstOrDefault();
+                            return messageManager.LoadPrevMessages(target, firstMessage?.Message)
+                                .Select(models => new {
+                                    Action = new Action(() =>
+                                    {
+                                        _items.InsertRange(models, 0);
+                                    }),
+                                    Models = models
+                                });
                         }
-                        else if (range.To == _items.Count - 1)
+                        
+                        if (item.Range.Index + item.Range.Length == _items.Count
+                            && item.Range.LastIndex != item.PrevRange.LastIndex)
                         {
-                            messageLoads = messageLoads.Concat(
-                                messageManager.LoadNextMessages(target, _items));
+                            var items = _items.Items.OfType<MessageModel>().ToList();
+                            var lastMessage = items.LastOrDefault();
+                            return messageManager.LoadNextMessages(target, lastMessage?.Message)
+                                .Select(models => new {
+                                    Action = new Action(() =>
+                                    {
+                                        _items.AddRange(models);
+                                    }),
+                                    Models = models
+                                });
                         }
                     }
 
-                    var avatarReleases = avatarManager.ReleaseAvatars(_items, prevRange, range);
-                    var avatarLoads = avatarManager.LoadAvatars(_items, prevRange, range);
-
-                    prevRange = range;
+                    return Observable.Empty<IList<MessageModel>>()
+                        .Select(models => new
+                        {
+                            Action = new Action(() => { }),
+                            Models = models
+                        });
+                });
+            
+            var avatarLoading = messageLoading
+                .SelectMany(item =>
+                {
+                    var action = item.Action;
+                    var models = item.Models;
                     
-                    return messageLoads.Concat(avatarReleases).Concat(avatarLoads);
-                })
+                    var messageLoadAction = Observable.Return(action);
+                    
+                    var avatarPreloadAction = avatarManager.PreloadAvatars(models)
+                        .Select((avatar, i) => new Action(() =>
+                        {
+                            var messageModel = models[i];
+                            messageModel.Avatar = avatar;
+                        }));
+                    
+                    var avatarLoadAction = avatarManager.LoadAvatars(models)
+                        .Select((avatar, i) => new Action(() =>
+                        {
+                            var messageModel = models[i];
+                            messageModel.Avatar = avatar;
+                        }));
+
+                    return messageLoadAction
+                        .Concat(avatarPreloadAction)
+                        .Concat(avatarLoadAction);
+                });
+
+            return SubscribeToActions(avatarLoading);
+        }
+
+        private IDisposable SubscribeToActions(IObservable<Action> actions)
+        {
+            return actions
                 .Buffer(TimeSpan.FromMilliseconds(100))
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(
-                    actions =>
+                    actionList =>
                     {
-                        foreach (var action in actions)
+                        foreach (var action in actionList)
                         {
                             action();
                         }

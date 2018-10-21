@@ -8,16 +8,17 @@ using Avalonia.Controls;
 using Avalonia.Controls.Generators;
 using Avalonia.Markup.Xaml;
 using ReactiveUI;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram.Gui.Views.Messenger
 {
     public class ExplorerControl : UserControl
     {
-        public static readonly DirectProperty<ExplorerControl, Tuple<int, int>> VisibleIndexesProperty =
-            AvaloniaProperty.RegisterDirect<ExplorerControl, Tuple<int, int>>(
-                nameof(VisibleIndexes),
-                o => o.VisibleIndexes,
-                (o, v) => o.VisibleIndexes = v);
+        public static readonly DirectProperty<ExplorerControl, Range> VisibleIndexesProperty =
+            AvaloniaProperty.RegisterDirect<ExplorerControl, Range>(
+                nameof(VisibleRange),
+                o => o.VisibleRange,
+                (o, v) => o.VisibleRange = v);
         
         private readonly ListBox _listBox;
         private IDisposable _scrollSubscription;
@@ -29,11 +30,11 @@ namespace Tel.Egram.Gui.Views.Messenger
             _listBox = this.FindControl<ListBox>("ItemList");
         }
 
-        private Tuple<int, int> _visibleIndexes;
-        public Tuple<int, int> VisibleIndexes
+        private Range _visibleRange;
+        public Range VisibleRange
         {
-            get { return _visibleIndexes; }
-            set { SetAndRaise(VisibleIndexesProperty, ref _visibleIndexes, value); }
+            get { return _visibleRange; }
+            set { SetAndRaise(VisibleIndexesProperty, ref _visibleRange, value); }
         }
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -45,6 +46,7 @@ namespace Tel.Egram.Gui.Views.Messenger
             var viewportChanges = _listBox.WhenAnyValue(lb => lb.Scroll.Viewport)
                 .Select(_ => Unit.Default);
             
+            // TODO: more efficient algorithm
             _scrollSubscription = offsetChanges
                 .Merge(extentChanges)
                 .Merge(viewportChanges)
@@ -88,11 +90,11 @@ namespace Tel.Egram.Gui.Views.Messenger
 
                     if (from != Int32.MaxValue && to != Int32.MinValue)
                     {
-                        VisibleIndexes = Tuple.Create(from, to);
+                        VisibleRange = new Range(from, to - from + 1);
                     }
                     else
                     {
-                        VisibleIndexes = null;
+                        VisibleRange = default(Range);
                     }
                 });
             

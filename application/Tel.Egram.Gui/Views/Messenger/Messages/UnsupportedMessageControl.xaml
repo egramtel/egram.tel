@@ -1,4 +1,6 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui">
         
+    <Rectangle Height="8" Fill="#eeeeee" />
+    
 </UserControl>

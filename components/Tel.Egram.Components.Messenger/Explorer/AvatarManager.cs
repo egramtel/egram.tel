@@ -22,113 +22,42 @@ namespace Tel.Egram.Components.Messenger.Explorer
             _avatarLoader = avatarLoader;
         }
 
-        public IObservable<Action> ReleaseAvatars(SourceList<ItemModel> items, Range prevRange, Range range)
+        public IObservable<Avatar> ReleaseAvatars(IList<MessageModel> models)
         {
-            var messageModels = new List<MessageModel>();
-            
-            items.Edit(list =>
-            {
-                // release prev avatar bitmaps
-                for (int i = prevRange.From; i <= prevRange.To; i++)
-                {           
-                    // do not release items within current range
-                    if (i >= range.From && i <= range.To)
-                    {
-                        continue;
-                    }
-
-                    if (i >= list.Count)
-                    {
-                        break;
-                    }
-                    
-                    var item = list[i];
-                    if (item is MessageModel messageModel)
-                    {
-                        messageModels.Add(messageModel);
-                    }
-                }
-            });
-            
-            return messageModels.ToObservable()
-                .Select(messageModel => new Action(() =>
-                    {
-                        var user = messageModel.Message.User;
-                        var chat = messageModel.Message.Chat;
-
-                        messageModel.Avatar = user == null
-                            ? _avatarLoader.GetAvatar(chat)
-                            : _avatarLoader.GetAvatar(user);
-                    }));
+            return models.ToObservable()
+                .Select<MessageModel, Avatar>(messageModel => null);
         }
 
-        public IObservable<Action> LoadAvatars(SourceList<ItemModel> items, Range prevRange, Range range)
+        public IObservable<Avatar> PreloadAvatars(IList<MessageModel> models)
         {
-            var messageModels = new List<MessageModel>();
-            
-            items.Edit(list =>
-            {
-                // load avatar bitmaps for new range
-                for (int i = range.From; i <= range.To; i++)
+            return models.ToObservable()
+                .Select(messageModel =>
                 {
-                    if (i >= list.Count)
-                    {
-                        break;
-                    }
-                    
-                    var item = list[i];
-                    if (item is MessageModel messageModel)
-                    {
-                        messageModels.Add(messageModel);
-                    }
-                }
-            });
+                    var user = messageModel.Message.User;
+                    var chat = messageModel.Message.Chat;
 
-            return messageModels.ToObservable()
+                    return user == null
+                        ? _avatarLoader.GetAvatar(chat)
+                        : _avatarLoader.GetAvatar(user);
+                });
+        }
+
+        public IObservable<Avatar> LoadAvatars(IList<MessageModel> models)
+        {
+            return models.ToObservable()
                 .SelectMany(messageModel =>
                 {
                     var user = messageModel.Message.User;
                     var chat = messageModel.Message.Chat;
 
-                    var observable = Observable.Empty<Action>();
-                    
                     if (messageModel.Avatar?.Bitmap == null)
                     {
-                        var avatar = user == null
-                            ? _avatarLoader.GetAvatar(chat)
-                            : _avatarLoader.GetAvatar(user);
-                        
-                        observable = observable.Concat(Observable.Return(
-                                new Action(() =>
-                                {
-                                    messageModel.Avatar = avatar;
-                                })
-                            ));
+                        return user == null
+                            ? _avatarLoader.LoadAvatar(chat)
+                            : _avatarLoader.LoadAvatar(user);
                     }
 
-                    if (messageModel.Avatar?.Bitmap == null)
-                    {
-                        if (user == null)
-                        {
-                            observable = observable.Concat(_avatarLoader.LoadAvatar(chat)
-                                    .Select(avatar => new Action(() =>
-                                    {
-                                        messageModel.Avatar = avatar;
-                                    }))
-                                );
-                        }
-                        else
-                        {
-                            observable = observable.Concat(_avatarLoader.LoadAvatar(user)
-                                    .Select(avatar => new Action(() =>
-                                    {
-                                        messageModel.Avatar = avatar;
-                                    }))
-                                );
-                        }
-                    }
-
-                    return observable;
+                    return Observable.Return<Avatar>(null);
                 });
         }
     }

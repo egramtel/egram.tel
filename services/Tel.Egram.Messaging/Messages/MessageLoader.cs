@@ -193,7 +193,7 @@ namespace Tel.Egram.Messaging.Messages
                     ChatId = chat.Id,
                     FromMessageId = fromMessageId,
                     Limit = limit,
-                    Offset = offset,
+                    Offset = offset >= 0 ? 0 : offset + 2, // limit must be greater than -offset by 2
                     OnlyLocal = false
                 })
                 .SelectMany(history => history.Messages_);
