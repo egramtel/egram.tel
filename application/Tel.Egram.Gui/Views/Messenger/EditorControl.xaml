@@ -9,6 +9,7 @@
         <TextBox
             Grid.Row="0"
             Watermark="Write a message"
+            Text="{Binding Text, Mode=TwoWay}"
             />
         
         <Grid
@@ -20,6 +21,7 @@
             <Button
                 Classes="Send"
                 Grid.Column="0"
+                Command="{Binding SendCommand}"
                 >
                 <TextBlock Text="Send" />
             </Button>

@@ -66,6 +66,7 @@ namespace Tel.Egram.Registry
             
             // messages
             services.AddScoped<IMessageLoader, MessageLoader>();
+            services.AddScoped<IMessageSender, MessageSender>();
             
             // users
             services.AddScoped<IUserLoader, UserLoader>();
