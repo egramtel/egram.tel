@@ -16,12 +16,12 @@ This project aims to be a full featured Telegram client with different approach 
 
 ## Compiling
 
-To compile and run the application, you need to [download and install latest .NET Core SDK](https://www.microsoft.com/net/learn/dotnet/hello-world-tutorial). Then, clone the repository using [Git](https://git-scm.com/), go into `egram.tel/application/Tel.Egram` directory and run `dotnet run` command.
+To compile and run the application, you need to [download and install latest .NET Core SDK](https://www.microsoft.com/net/learn/dotnet/hello-world-tutorial). Clone the repository using [Git](https://git-scm.com/), you can use [Github Desktop](https://desktop.github.com/) if you are on Windows. Then, go into `egram.tel/application/Tel.Egram` directory and run `dotnet run` command.
 
 ```sh
 # Ubuntu 18.04 shell
-# Remember to install .NET Core SDK.
-apt install git
+# Remember to install .NET Core SDK before executing this.
+apt update && apt install -y git
 git clone https://github.com/egramtel/egram.tel
 cd egram.tel/application/Tel.Egram
 dotnet restore
