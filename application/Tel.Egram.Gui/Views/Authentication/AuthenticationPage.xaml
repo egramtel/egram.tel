@@ -27,7 +27,8 @@
             Grid.Row="1"
             Grid.Column="1"
             Text="{Binding PhoneNumber, Mode=TwoWay}"
-            Watermark="Phone" />
+            Watermark="Phone"
+            Foreground = "#ffffff" />
         
         <Button
             Classes="Action"
