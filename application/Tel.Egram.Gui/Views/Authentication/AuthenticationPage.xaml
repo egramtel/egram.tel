@@ -27,8 +27,7 @@
             Grid.Row="1"
             Grid.Column="1"
             Text="{Binding PhoneNumber, Mode=TwoWay}"
-            Watermark="Phone"
-            Foreground = "#ffffff" />
+            Watermark="Phone" />
         
         <Button
             Classes="Action"
@@ -144,6 +143,7 @@
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Background" Value="#1b2333" />
             <Setter Property="BorderBrush" Value="#3a455a" />
+			<Setter Property="Foreground" Value="#ffffff" />
         </Style>
         
         <Style Selector="TextBox /template/ Border">
