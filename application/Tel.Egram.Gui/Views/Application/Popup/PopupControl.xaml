@@ -1,6 +1,7 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
-    xmlns:settings="clr-namespace:Tel.Egram.Gui.Views.Settings">
+    xmlns:settings="clr-namespace:Tel.Egram.Gui.Views.Settings"
+    xmlns:connection="clr-namespace:Tel.Egram.Gui.Views.Settings.Connection">
     
     <Grid
         RowDefinitions="auto,*"
@@ -76,7 +77,7 @@
                     
                     <Panel/>
                     
-                    <settings:ProxyPopupControl />
+                    <connection:ProxyPopupControl />
                     
                 </Carousel>
                 

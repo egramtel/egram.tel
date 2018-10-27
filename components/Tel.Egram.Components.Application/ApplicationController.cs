@@ -8,29 +8,30 @@ using Tel.Egram.Authentication;
 using Tel.Egram.Components.Authentication;
 using Tel.Egram.Components.Workspace;
 using Tel.Egram.Gui.Views.Application;
+using Tel.Egram.Gui.Views.Application.Popup;
+using Tel.Egram.Gui.Views.Application.Startup;
 using Tel.Egram.Gui.Views.Authentication;
 using Tel.Egram.Gui.Views.Workspace;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Application
 {
-    public class ApplicationController
-        : BaseController<MainWindowModel>, IApplicationController
-    {   
-        private readonly IFactory<IAuthenticationController> _authenticationControllerFactory;
-        private IAuthenticationController _authenticationController;
+    public class ApplicationController : BaseController<MainWindowModel>
+    {
+        private readonly IActivator<AuthenticationPageModel> _authenticationActivator;
+        private IController<AuthenticationPageModel> _authenticationController;
         
-        private readonly IFactory<IWorkspaceController> _workspaceControllerFactory;
-        private IWorkspaceController _workspaceController;
+        private readonly IActivator<WorkspacePageModel> _workspaceActivator;
+        private IController<WorkspacePageModel> _workspaceController;
 
         public ApplicationController(
             IAuthenticator authenticator,
             IApplicationPopupController applicationPopupController,
-            IFactory<IAuthenticationController> authenticationControllerFactory,
-            IFactory<IWorkspaceController> workspaceControllerFactory)
+            IActivator<AuthenticationPageModel> authenticationActivator,
+            IActivator<WorkspacePageModel> workspaceActivator)
         {
-            _authenticationControllerFactory = authenticationControllerFactory;
-            _workspaceControllerFactory = workspaceControllerFactory;
+            _authenticationActivator = authenticationActivator;
+            _workspaceActivator = workspaceActivator;
             
             BindAuthenticator(authenticator)
                 .DisposeWith(this);
@@ -113,8 +114,8 @@ namespace Tel.Egram.Components.Application
         {
             if (Model.AuthenticationPageModel == null)
             {
-                _authenticationController = _authenticationControllerFactory.Create();
-                Model.AuthenticationPageModel = _authenticationController.Model;
+                var model = _authenticationActivator.Activate(ref _authenticationController);
+                Model.AuthenticationPageModel = model;
             }
             
             Model.PageIndex = (int) Page.Authentication;
@@ -129,8 +130,8 @@ namespace Tel.Egram.Components.Application
         {
             if (Model.WorkspacePageModel == null)
             {
-                _workspaceController = _workspaceControllerFactory.Create();
-                Model.WorkspacePageModel = _workspaceController.Model;
+                var model = _workspaceActivator.Activate(ref _workspaceController);
+                Model.WorkspacePageModel = model;
             }
             
             Model.PageIndex = (int) Page.Workspace;

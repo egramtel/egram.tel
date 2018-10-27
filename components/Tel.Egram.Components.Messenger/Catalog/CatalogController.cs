@@ -12,8 +12,7 @@ using Tel.Egram.Messaging.Chats;
 
 namespace Tel.Egram.Components.Messenger.Catalog
 {
-    public class CatalogController
-        : BaseController<CatalogControlModel>, ICatalogController
+    public class CatalogController : BaseController<CatalogControlModel>
     {
         private readonly Subject<IComparer<EntryModel>> _sortingController;
         private readonly Subject<Func<EntryModel, bool>> _filterController;

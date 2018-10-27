@@ -9,6 +9,7 @@ using DynamicData.Binding;
 using ReactiveUI;
 using TdLib;
 using Tel.Egram.Gui.Views.Settings;
+using Tel.Egram.Gui.Views.Settings.Connection;
 using Tel.Egram.Settings;
 
 namespace Tel.Egram.Components.Settings.Connection

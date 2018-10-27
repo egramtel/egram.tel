@@ -1,3 +1,4 @@
+using PropertyChanged;
 using Tel.Egram.Gui.Views.Messenger.Catalog;
 using Tel.Egram.Gui.Views.Messenger.Editor;
 using Tel.Egram.Gui.Views.Messenger.Explorer;
@@ -6,6 +7,7 @@ using Tel.Egram.Messaging.Chats;
 
 namespace Tel.Egram.Gui.Views.Messenger
 {
+    [AddINotifyPropertyChangedInterface]
     public class MessengerControlModel
     {
         public CatalogControlModel CatalogControlModel { get; set; }

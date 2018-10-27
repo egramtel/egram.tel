@@ -1,8 +1,10 @@
 using System.Reactive;
+using PropertyChanged;
 using ReactiveUI;
 
-namespace Tel.Egram.Gui.Views.Application
+namespace Tel.Egram.Gui.Views.Application.Popup
 {
+    [AddINotifyPropertyChangedInterface]
     public class PopupControlModel
     {
         public string PopupTitle { get; set; }

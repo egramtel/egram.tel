@@ -1,7 +1,7 @@
 using PropertyChanged;
 using TdLib;
 
-namespace Tel.Egram.Components.Settings.Connection
+namespace Tel.Egram.Gui.Views.Settings.Connection
 {
     [AddINotifyPropertyChangedInterface]
     public class ProxyModel

@@ -15,26 +15,25 @@ using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Workspace
 {
-    public class WorkspaceController
-        : BaseController<WorkspacePageModel>, IWorkspaceController
+    public class WorkspaceController : BaseController<WorkspacePageModel>
     {
-        private readonly IFactory<INavigationController> _navigationControllerFactory;
-        private INavigationController _navigationController;
+        private readonly IActivator<NavigationControlModel> _navigationActivator;
+        private IController<NavigationControlModel> _navigationController;
         
-        private readonly IFactory<Section, IMessengerController> _messengerControllerFactory;
-        private IMessengerController _messengerController;
+        private readonly IActivator<Section, MessengerControlModel> _messengerActivator;
+        private IController<MessengerControlModel> _messengerController;
         
-        private readonly IFactory<ISettingsController> _settingControllerFactory;
-        private ISettingsController _settingsController;
+        private readonly IActivator<SettingsControlModel> _settingsActivator;
+        private IController<SettingsControlModel> _settingsController;
 
         public WorkspaceController(
-            IFactory<INavigationController> navigationControllerFactory,
-            IFactory<Section, IMessengerController> messengerControllerFactory,
-            IFactory<ISettingsController> settingControllerFactory)
+            IActivator<NavigationControlModel> navigationActivator,
+            IActivator<Section, MessengerControlModel> messengerActivator,
+            IActivator<SettingsControlModel> settingsActivator)
         {
-            _navigationControllerFactory = navigationControllerFactory;
-            _messengerControllerFactory = messengerControllerFactory;
-            _settingControllerFactory = settingControllerFactory;
+            _navigationActivator = navigationActivator;
+            _messengerActivator = messengerActivator;
+            _settingsActivator = settingsActivator;
 
             BindNavigation()
                 .DisposeWith(this);
@@ -42,8 +41,8 @@ namespace Tel.Egram.Components.Workspace
 
         private IDisposable BindNavigation()
         {
-            _navigationController = _navigationControllerFactory.Create();
-            Model.NavigationControlModel = _navigationController.Model;
+            var model = _navigationActivator.Activate(ref _navigationController);
+            Model.NavigationControlModel = model;
             
             return Model.NavigationControlModel.WhenAnyValue(m => m.SelectedTabIndex)
                 .Select(index => (ContentKind)index)
@@ -74,22 +73,23 @@ namespace Tel.Egram.Components.Workspace
                 _messengerController = null;
                 Model.MessengerControlModel = null;
                 
-                _settingsController = _settingControllerFactory.Create();
-                Model.SettingsControlModel = _settingsController.Model;
+                var model = _settingsActivator.Activate(ref _settingsController);
+                Model.SettingsControlModel = model;
             }
         }
 
         private void InitMessenger(ContentKind kind)
         {
+            var section = (Section) kind;
+            
             if (Model.MessengerControlModel == null)
             {
                 _settingsController?.Dispose();
                 _settingsController = null;
                 Model.SettingsControlModel = null;
                 
-                var section = (Section) kind;
-                _messengerController = _messengerControllerFactory.Create(section);
-                Model.MessengerControlModel = _messengerController.Model;
+                var model = _messengerActivator.Activate(section, ref _messengerController);
+                Model.MessengerControlModel = model;
             }
         }
 

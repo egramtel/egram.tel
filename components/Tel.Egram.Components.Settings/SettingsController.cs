@@ -1,5 +1,6 @@
 using Tel.Egram.Components.Settings.Connection;
 using Tel.Egram.Gui.Views.Settings;
+using Tel.Egram.Gui.Views.Settings.Connection;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Settings

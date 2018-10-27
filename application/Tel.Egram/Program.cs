@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Gtk3;
 using Avalonia.Platform;
 using Microsoft.Extensions.DependencyInjection;
+using Tel.Egram.Components;
 using Tel.Egram.Components.Application;
 using Tel.Egram.Gui;
 using Tel.Egram.Gui.Views.Application;
@@ -25,6 +26,7 @@ namespace Tel.Egram
         {
             services.AddUtils();
             services.AddServices();
+            services.AddComponents();
             services.AddApplication();
             services.AddPopup();
             services.AddAuthentication();
@@ -38,7 +40,7 @@ namespace Tel.Egram
             using (var scope = provider.CreateScope())
             {
                 var app = scope.ServiceProvider.GetService<MainApplication>();
-                var controller = scope.ServiceProvider.GetService<IApplicationController>();
+                var controller = scope.ServiceProvider.GetService<IController<MainWindowModel>>();
                 
                 var builder = AppBuilder.Configure(app);
                 var os = builder.RuntimePlatform.GetRuntimeInfo().OperatingSystem;

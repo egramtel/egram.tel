@@ -20,6 +20,14 @@ using Tel.Egram.Components.Workspace;
 using Tel.Egram.Components.Workspace.Navigation;
 using Tel.Egram.Graphics;
 using Tel.Egram.Gui;
+using Tel.Egram.Gui.Views.Application;
+using Tel.Egram.Gui.Views.Authentication;
+using Tel.Egram.Gui.Views.Messenger;
+using Tel.Egram.Gui.Views.Messenger.Catalog;
+using Tel.Egram.Gui.Views.Messenger.Editor;
+using Tel.Egram.Gui.Views.Messenger.Explorer;
+using Tel.Egram.Gui.Views.Messenger.Informer;
+using Tel.Egram.Gui.Views.Workspace;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
 using Tel.Egram.Messaging.Users;
@@ -88,10 +96,16 @@ namespace Tel.Egram
             // auth
             services.AddScoped<IAuthenticator, Authenticator>();
         }
+
+        public static void AddComponents(this IServiceCollection services)
+        {
+            services.AddScoped(typeof(IActivator<>), typeof(Activator<>));
+            services.AddScoped(typeof(IActivator<,>), typeof(Activator<,>));
+        }
         
         public static void AddApplication(this IServiceCollection services)
         {
-            services.AddTransient<IApplicationController, ApplicationController>();
+            services.AddTransient<IController<MainWindowModel>, ApplicationController>();
             
             services.AddScoped<MainApplication>();
             
@@ -123,16 +137,16 @@ namespace Tel.Egram
         
         public static void AddAuthentication(this IServiceCollection services)
         {
-            services.AddTransient<IAuthenticationController, AuthenticationController>();
+            services.AddTransient<IController<AuthenticationPageModel>, AuthenticationController>();
         }
         
         public static void AddMessenger(this IServiceCollection services)
         {
-            services.AddTransient<IMessengerController, MessengerController>();
-            services.AddTransient<ICatalogController, CatalogController>();
-            services.AddTransient<IEditorController, EditorController>();
-            services.AddTransient<IExplorerController, ExplorerController>();
-            services.AddTransient<IInformerController, InformerController>();
+            services.AddTransient<IController<MessengerControlModel>, MessengerController>();
+            services.AddTransient<IController<CatalogControlModel>, CatalogController>();
+            services.AddTransient<IController<EditorControlModel>, EditorController>();
+            services.AddTransient<IController<ExplorerControlModel>, ExplorerController>();
+            services.AddTransient<IController<InformerControlModel>, InformerController>();
             
             services.AddTransient<IAvatarManager, AvatarManager>();
             services.AddTransient<IMessageManager, MessageManager>();
@@ -154,8 +168,8 @@ namespace Tel.Egram
         
         public static void AddWorkspace(this IServiceCollection services)
         {
-            services.AddTransient<IWorkspaceController, WorkspaceController>();
-            services.AddTransient<INavigationController, NavigationController>();
+            services.AddTransient<IController<WorkspacePageModel>, WorkspaceController>();
+            services.AddTransient<IController<NavigationControlModel>, NavigationController>();
         }
     }
 }

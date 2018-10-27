@@ -8,8 +8,7 @@ using Tel.Egram.Messaging.Users;
 
 namespace Tel.Egram.Components.Workspace.Navigation
 {
-    public class NavigationController
-        : BaseController<NavigationControlModel>, INavigationController
+    public class NavigationController : BaseController<NavigationControlModel>
     {
         public NavigationController(
             IAvatarLoader avatarLoader,

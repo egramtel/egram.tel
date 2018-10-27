@@ -4,6 +4,8 @@
     xmlns:application="clr-namespace:Tel.Egram.Gui.Views.Application"
     xmlns:authentication="clr-namespace:Tel.Egram.Gui.Views.Authentication"
     xmlns:workspace="clr-namespace:Tel.Egram.Gui.Views.Workspace"
+    xmlns:startup="clr-namespace:Tel.Egram.Gui.Views.Application.Startup"
+    xmlns:popup="clr-namespace:Tel.Egram.Gui.Views.Application.Popup"
     Width="800"
     Height="600"
     MinWidth="800"
@@ -19,7 +21,7 @@
         <Carousel
             SelectedIndex="{Binding PageIndex}">
         
-            <application:StartupPage
+            <startup:StartupPage
                 DataContext="{Binding StartupModel}" />
         
             <authentication:AuthenticationPage
@@ -30,7 +32,7 @@
         
         </Carousel>
         
-        <application:PopupControl
+        <popup:PopupControl
             IsVisible="{Binding IsPopupVisible}"
             DataContext="{Binding PopupModel}" />
         

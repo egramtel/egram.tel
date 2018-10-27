@@ -17,32 +17,31 @@ using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger
 {
-    public class MessengerController
-        : BaseController<MessengerControlModel>, IMessengerController
+    public class MessengerController : BaseController<MessengerControlModel>
     {
-        private readonly IFactory<Section, ICatalogController> _catalogControllerFactory;
-        private ICatalogController _catalogController;
+        private readonly IActivator<Section, CatalogControlModel> _catalogActivator;
+        private IController<CatalogControlModel> _catalogController;
         
-        private readonly IFactory<Target, IInformerController> _informerControllerFactory;
-        private IInformerController _informerController;
+        private readonly IActivator<Target, InformerControlModel> _informerActivator;
+        private IController<InformerControlModel> _informerController;
         
-        private readonly IFactory<Target, IExplorerController> _explorerControllerFactory;
-        private IExplorerController _explorerController;
+        private readonly IActivator<Target, ExplorerControlModel> _explorerActivator;
+        private IController<ExplorerControlModel> _explorerController;
         
-        private readonly IFactory<Target, IEditorController> _editorControllerFactory;
-        private IEditorController _editorController;
+        private readonly IActivator<Target, EditorControlModel> _editorActivator;
+        private IController<EditorControlModel> _editorController;
 
         public MessengerController(
             Section section,
-            IFactory<Section, ICatalogController> catalogControllerFactory,
-            IFactory<Target, IInformerController> informerControllerFactory,
-            IFactory<Target, IExplorerController> explorerControllerFactory,
-            IFactory<Target, IEditorController> editorControllerFactory)
+            IActivator<Section, CatalogControlModel> catalogActivator,
+            IActivator<Target, InformerControlModel> informerActivator,
+            IActivator<Target, ExplorerControlModel> explorerActivator,
+            IActivator<Target, EditorControlModel> editorActivator)
         {
-            _catalogControllerFactory = catalogControllerFactory;
-            _informerControllerFactory = informerControllerFactory;
-            _explorerControllerFactory = explorerControllerFactory;
-            _editorControllerFactory = editorControllerFactory;
+            _catalogActivator = catalogActivator;
+            _informerActivator = informerActivator;
+            _explorerActivator = explorerActivator;
+            _editorActivator = editorActivator;
 
             BindCatalog(section).DisposeWith(this);
             BindInformer().DisposeWith(this);
@@ -53,8 +52,8 @@ namespace Tel.Egram.Components.Messenger
         private IDisposable BindCatalog(Section section)
         {
             _catalogController?.Dispose();
-            _catalogController = _catalogControllerFactory.Create(section);
-            Model.CatalogControlModel = _catalogController.Model;
+            var model = _catalogActivator.Activate(section, ref _catalogController);
+            Model.CatalogControlModel = model;
 
             return Disposable.Empty;
         }
@@ -66,8 +65,8 @@ namespace Tel.Egram.Components.Messenger
             return SubscribeToTarget(target =>
             {
                 _informerController?.Dispose();
-                _informerController = _informerControllerFactory.Create(target);
-                Model.InformerControlModel = _informerController.Model;
+                var model = _informerActivator.Activate(target, ref _informerController);
+                Model.InformerControlModel = model;
             });
         }
 
@@ -78,8 +77,8 @@ namespace Tel.Egram.Components.Messenger
             return SubscribeToTarget(target =>
             {
                 _explorerController?.Dispose();
-                _explorerController = _explorerControllerFactory.Create(target);
-                Model.ExplorerControlModel = _explorerController.Model;
+                var model = _explorerActivator.Activate(target, ref _explorerController);
+                Model.ExplorerControlModel = model;
             });
         }
 
@@ -90,8 +89,8 @@ namespace Tel.Egram.Components.Messenger
             return SubscribeToTarget(target =>
             {
                 _editorController?.Dispose();
-                _editorController = _editorControllerFactory.Create(target);
-                Model.EditorControlModel = _editorController.Model;
+                var model = _editorActivator.Activate(target, ref _editorController);
+                Model.EditorControlModel = model;
             });
         }
 

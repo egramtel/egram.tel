@@ -9,8 +9,7 @@ using Tel.Egram.Messaging.Chats;
 
 namespace Tel.Egram.Components.Messenger.Informer
 {
-    public class InformerController
-        : BaseController<InformerControlModel>, IInformerController
+    public class InformerController : BaseController<InformerControlModel>
     {
         public InformerController(
             Target target,

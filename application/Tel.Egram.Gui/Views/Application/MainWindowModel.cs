@@ -1,4 +1,6 @@
 using PropertyChanged;
+using Tel.Egram.Gui.Views.Application.Popup;
+using Tel.Egram.Gui.Views.Application.Startup;
 using Tel.Egram.Gui.Views.Authentication;
 using Tel.Egram.Gui.Views.Workspace;
 
@@ -18,11 +20,5 @@ namespace Tel.Egram.Gui.Views.Application
         public int PageIndex { get; set; }
         
         public string WindowTitle { get; set; }
-    }
-    
-    public enum PopupKind
-    {
-        Hidden = 0,
-        Proxy = 1
     }
 }

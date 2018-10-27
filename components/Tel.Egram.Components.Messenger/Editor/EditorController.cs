@@ -10,8 +10,7 @@ using Tel.Egram.Messaging.Messages;
 
 namespace Tel.Egram.Components.Messenger.Editor
 {
-    public class EditorController
-        : BaseController<EditorControlModel>, IEditorController
+    public class EditorController : BaseController<EditorControlModel>
     {
         public EditorController(Target target, IMessageSender messageSender)
         {

@@ -3,24 +3,16 @@ using System.Reactive.Disposables;
 
 namespace Tel.Egram.Components
 {
-    public abstract class BaseController : IDisposable
+    public abstract class BaseController<T> : IController<T>
+        where T : class, new()
     {
         internal readonly CompositeDisposable ControllerDisposable = new CompositeDisposable();
         
+        public T Model { get; } = new T();
+
         public virtual void Dispose()
         {
             ControllerDisposable.Dispose();
-        }
-    }
-
-    public abstract class BaseController<T> : BaseController
-        where T : class, new()
-    {
-        public T Model { get; } = new T();
-
-        public override void Dispose()
-        {
-            base.Dispose();
             (Model as IDisposable)?.Dispose();
         }
     }

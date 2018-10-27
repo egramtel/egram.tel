@@ -4,11 +4,13 @@ using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using PropertyChanged;
 using ReactiveUI;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Gui.Views.Messenger.Explorer
 {
+    [DoNotNotify]
     public class ExplorerControl : UserControl
     {
         public static readonly DirectProperty<ExplorerControl, Range> VisibleIndexesProperty =

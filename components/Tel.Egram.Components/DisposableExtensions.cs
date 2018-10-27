@@ -5,7 +5,8 @@ namespace Tel.Egram.Components
 {
     public static class DisposableExtensions
     {
-        public static void DisposeWith(this IDisposable disposable, BaseController controller)
+        public static void DisposeWith<T>(this IDisposable disposable, BaseController<T> controller)
+            where T : class, new()
         {
             disposable.DisposeWith(controller.ControllerDisposable);
         }
