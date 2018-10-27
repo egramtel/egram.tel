@@ -9,13 +9,13 @@ namespace Tel.Egram.Gui.Views.Application
     [AddINotifyPropertyChangedInterface]
     public class MainWindowModel
     {
-        public StartupPageModel StartupPageModel { get; set; }
+        public StartupControlModel StartupModel { get; set; }
         
-        public AuthenticationPageModel AuthenticationPageModel { get; set; }
+        public AuthenticationControlModel AuthenticationModel { get; set; }
         
-        public WorkspacePageModel WorkspacePageModel { get; set; }
+        public WorkspaceControlModel WorkspaceModel { get; set; }
         
-        public PopupControlModel PopupControlModel { get; set; }
+        public PopupControlModel PopupModel { get; set; }
         
         public int PageIndex { get; set; }
         

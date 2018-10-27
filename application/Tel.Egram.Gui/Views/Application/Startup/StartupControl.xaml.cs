@@ -5,9 +5,9 @@ using PropertyChanged;
 namespace Tel.Egram.Gui.Views.Application.Startup
 {
     [DoNotNotify]
-    public class StartupPage : UserControl
+    public class StartupControl : UserControl
     {
-        public StartupPage()
+        public StartupControl()
         {
             AvaloniaXamlLoader.Load(this);
         }

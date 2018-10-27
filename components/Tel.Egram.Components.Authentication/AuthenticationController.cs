@@ -8,7 +8,7 @@ using Tel.Egram.Gui.Views.Authentication;
 
 namespace Tel.Egram.Components.Authentication
 {
-    public class AuthenticationController : BaseController<AuthenticationPageModel>
+    public class AuthenticationController : BaseController<AuthenticationControlModel>
     {
         public AuthenticationController(IAuthenticator authenticator)
         {

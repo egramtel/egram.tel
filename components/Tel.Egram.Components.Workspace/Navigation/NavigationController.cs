@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using Avalonia.Threading;
 using Tel.Egram.Graphics;
 using Tel.Egram.Gui.Views.Workspace;
+using Tel.Egram.Gui.Views.Workspace.Navigation;
 using Tel.Egram.Messaging.Users;
 
 namespace Tel.Egram.Components.Workspace.Navigation

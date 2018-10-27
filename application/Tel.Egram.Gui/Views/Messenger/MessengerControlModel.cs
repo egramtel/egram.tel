@@ -10,22 +10,12 @@ namespace Tel.Egram.Gui.Views.Messenger
     [AddINotifyPropertyChangedInterface]
     public class MessengerControlModel
     {
-        public CatalogControlModel CatalogControlModel { get; set; }
+        public CatalogControlModel CatalogModel { get; set; }
         
-        public InformerControlModel InformerControlModel { get; set; }
+        public InformerControlModel InformerModel { get; set; }
         
-        public ExplorerControlModel ExplorerControlModel { get; set; }
+        public ExplorerControlModel ExplorerModel { get; set; }
         
-        public EditorControlModel EditorControlModel { get; set; }
-        
-        public Section Section { get; set; }
-
-        public static MessengerControlModel FromSection(Section section)
-        {
-            return new MessengerControlModel
-            {
-                Section = section
-            };
-        }
+        public EditorControlModel EditorModel { get; set; }
     }
 }

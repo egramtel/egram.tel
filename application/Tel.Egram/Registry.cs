@@ -28,6 +28,7 @@ using Tel.Egram.Gui.Views.Messenger.Editor;
 using Tel.Egram.Gui.Views.Messenger.Explorer;
 using Tel.Egram.Gui.Views.Messenger.Informer;
 using Tel.Egram.Gui.Views.Workspace;
+using Tel.Egram.Gui.Views.Workspace.Navigation;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
 using Tel.Egram.Messaging.Users;
@@ -137,7 +138,7 @@ namespace Tel.Egram
         
         public static void AddAuthentication(this IServiceCollection services)
         {
-            services.AddTransient<IController<AuthenticationPageModel>, AuthenticationController>();
+            services.AddTransient<IController<AuthenticationControlModel>, AuthenticationController>();
         }
         
         public static void AddMessenger(this IServiceCollection services)
@@ -168,7 +169,7 @@ namespace Tel.Egram
         
         public static void AddWorkspace(this IServiceCollection services)
         {
-            services.AddTransient<IController<WorkspacePageModel>, WorkspaceController>();
+            services.AddTransient<IController<WorkspaceControlModel>, WorkspaceController>();
             services.AddTransient<IController<NavigationControlModel>, NavigationController>();
         }
     }

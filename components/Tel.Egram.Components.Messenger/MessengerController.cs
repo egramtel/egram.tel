@@ -53,50 +53,50 @@ namespace Tel.Egram.Components.Messenger
         {
             _catalogController?.Dispose();
             var model = _catalogActivator.Activate(section, ref _catalogController);
-            Model.CatalogControlModel = model;
+            Model.CatalogModel = model;
 
             return Disposable.Empty;
         }
 
         private IDisposable BindInformer()
         {
-            Model.InformerControlModel = InformerControlModel.Hidden();
+            Model.InformerModel = InformerControlModel.Hidden();
             
             return SubscribeToTarget(target =>
             {
                 _informerController?.Dispose();
                 var model = _informerActivator.Activate(target, ref _informerController);
-                Model.InformerControlModel = model;
+                Model.InformerModel = model;
             });
         }
 
         private IDisposable BindExplorer()
         {
-            Model.ExplorerControlModel = ExplorerControlModel.Hidden();
+            Model.ExplorerModel = ExplorerControlModel.Hidden();
             
             return SubscribeToTarget(target =>
             {
                 _explorerController?.Dispose();
                 var model = _explorerActivator.Activate(target, ref _explorerController);
-                Model.ExplorerControlModel = model;
+                Model.ExplorerModel = model;
             });
         }
 
         private IDisposable BindEditor()
         {
-            Model.EditorControlModel = EditorControlModel.Hidden();
+            Model.EditorModel = EditorControlModel.Hidden();
             
             return SubscribeToTarget(target =>
             {
                 _editorController?.Dispose();
                 var model = _editorActivator.Activate(target, ref _editorController);
-                Model.EditorControlModel = model;
+                Model.EditorModel = model;
             });
         }
 
         private IDisposable SubscribeToTarget(Action<Target> action)
         {
-            return Model.WhenAnyValue(ctx => ctx.CatalogControlModel.SelectedEntry)
+            return Model.WhenAnyValue(ctx => ctx.CatalogModel.SelectedEntry)
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(entry =>

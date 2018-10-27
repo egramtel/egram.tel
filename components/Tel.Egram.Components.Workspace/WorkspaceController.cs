@@ -10,12 +10,13 @@ using Tel.Egram.Components.Workspace.Navigation;
 using Tel.Egram.Gui.Views.Messenger;
 using Tel.Egram.Gui.Views.Settings;
 using Tel.Egram.Gui.Views.Workspace;
+using Tel.Egram.Gui.Views.Workspace.Navigation;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Workspace
 {
-    public class WorkspaceController : BaseController<WorkspacePageModel>
+    public class WorkspaceController : BaseController<WorkspaceControlModel>
     {
         private readonly IActivator<NavigationControlModel> _navigationActivator;
         private IController<NavigationControlModel> _navigationController;
@@ -42,9 +43,9 @@ namespace Tel.Egram.Components.Workspace
         private IDisposable BindNavigation()
         {
             var model = _navigationActivator.Activate(ref _navigationController);
-            Model.NavigationControlModel = model;
+            Model.NavigationModel = model;
             
-            return Model.NavigationControlModel.WhenAnyValue(m => m.SelectedTabIndex)
+            return Model.NavigationModel.WhenAnyValue(m => m.SelectedTabIndex)
                 .Select(index => (ContentKind)index)
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(AvaloniaScheduler.Instance)
@@ -67,14 +68,14 @@ namespace Tel.Egram.Components.Workspace
 
         private void InitSettings()
         {
-            if (Model.SettingsControlModel == null)
+            if (Model.SettingsModel == null)
             {   
                 _messengerController?.Dispose();
                 _messengerController = null;
-                Model.MessengerControlModel = null;
+                Model.MessengerModel = null;
                 
                 var model = _settingsActivator.Activate(ref _settingsController);
-                Model.SettingsControlModel = model;
+                Model.SettingsModel = model;
             }
         }
 
@@ -82,14 +83,14 @@ namespace Tel.Egram.Components.Workspace
         {
             var section = (Section) kind;
             
-            if (Model.MessengerControlModel == null)
+            if (Model.MessengerModel == null)
             {
                 _settingsController?.Dispose();
                 _settingsController = null;
-                Model.SettingsControlModel = null;
+                Model.SettingsModel = null;
                 
                 var model = _messengerActivator.Activate(section, ref _messengerController);
-                Model.MessengerControlModel = model;
+                Model.MessengerModel = model;
             }
         }
 

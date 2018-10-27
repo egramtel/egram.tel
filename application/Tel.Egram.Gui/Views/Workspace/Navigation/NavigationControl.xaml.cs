@@ -2,12 +2,12 @@
 using Avalonia.Markup.Xaml;
 using PropertyChanged;
 
-namespace Tel.Egram.Gui.Views.Authentication
+namespace Tel.Egram.Gui.Views.Workspace.Navigation
 {
     [DoNotNotify]
-    public class AuthenticationPage : UserControl
+    public class NavigationControl : UserControl
     {
-        public AuthenticationPage()
+        public NavigationControl()
         {
             AvaloniaXamlLoader.Load(this);
         }

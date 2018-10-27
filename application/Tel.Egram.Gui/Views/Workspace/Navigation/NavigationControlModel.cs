@@ -1,6 +1,6 @@
 using Tel.Egram.Graphics;
 
-namespace Tel.Egram.Gui.Views.Workspace
+namespace Tel.Egram.Gui.Views.Workspace.Navigation
 {
     public class NavigationControlModel
     {

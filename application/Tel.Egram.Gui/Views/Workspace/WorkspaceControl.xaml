@@ -2,13 +2,14 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:workspace="clr-namespace:Tel.Egram.Gui.Views.Workspace"
     xmlns:settings="clr-namespace:Tel.Egram.Gui.Views.Settings"
-    xmlns:messenger="clr-namespace:Tel.Egram.Gui.Views.Messenger">
+    xmlns:messenger="clr-namespace:Tel.Egram.Gui.Views.Messenger"
+    xmlns:navigation="clr-namespace:Tel.Egram.Gui.Views.Workspace.Navigation">
     
     <Grid
         ColumnDefinitions="64,*"
         RowDefinitions="*">
     
-        <workspace:NavigationControl
+        <navigation:NavigationControl
             DataContext="{Binding NavigationModel}"
             Grid.Column="0" />
         

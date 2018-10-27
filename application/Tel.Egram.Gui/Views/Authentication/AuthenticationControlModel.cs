@@ -5,7 +5,7 @@ using ReactiveUI;
 namespace Tel.Egram.Gui.Views.Authentication
 {
     [AddINotifyPropertyChangedInterface]
-    public class AuthenticationPageModel
+    public class AuthenticationControlModel
     {
         public ReactiveCommand<Unit, Unit> CheckPasswordCommand { get; set; }
         public ReactiveCommand<Unit, Unit> CheckCodeCommand { get; set; }

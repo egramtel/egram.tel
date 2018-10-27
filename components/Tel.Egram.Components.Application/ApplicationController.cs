@@ -18,17 +18,17 @@ namespace Tel.Egram.Components.Application
 {
     public class ApplicationController : BaseController<MainWindowModel>
     {
-        private readonly IActivator<AuthenticationPageModel> _authenticationActivator;
-        private IController<AuthenticationPageModel> _authenticationController;
+        private readonly IActivator<AuthenticationControlModel> _authenticationActivator;
+        private IController<AuthenticationControlModel> _authenticationController;
         
-        private readonly IActivator<WorkspacePageModel> _workspaceActivator;
-        private IController<WorkspacePageModel> _workspaceController;
+        private readonly IActivator<WorkspaceControlModel> _workspaceActivator;
+        private IController<WorkspaceControlModel> _workspaceController;
 
         public ApplicationController(
             IAuthenticator authenticator,
             IApplicationPopupController applicationPopupController,
-            IActivator<AuthenticationPageModel> authenticationActivator,
-            IActivator<WorkspacePageModel> workspaceActivator)
+            IActivator<AuthenticationControlModel> authenticationActivator,
+            IActivator<WorkspaceControlModel> workspaceActivator)
         {
             _authenticationActivator = authenticationActivator;
             _workspaceActivator = workspaceActivator;
@@ -86,7 +86,7 @@ namespace Tel.Egram.Components.Application
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(popupModel =>
                 {
-                    Model.PopupControlModel = popupModel ?? new PopupControlModel
+                    Model.PopupModel = popupModel ?? new PopupControlModel
                     {
                         IsPopupVisible = false
                     };
@@ -95,10 +95,10 @@ namespace Tel.Egram.Components.Application
 
         private void GoToStartupPage()
         {
-            if (Model.StartupPageModel == null)
+            if (Model.StartupModel == null)
             {
-                var startupPageModel = new StartupPageModel();
-                Model.StartupPageModel = startupPageModel;
+                var startupPageModel = new StartupControlModel();
+                Model.StartupModel = startupPageModel;
             }
             
             Model.PageIndex = (int) Page.Initial;
@@ -106,40 +106,40 @@ namespace Tel.Egram.Components.Application
             _authenticationController?.Dispose();
             _workspaceController?.Dispose();
             
-            Model.WorkspacePageModel = null;
-            Model.AuthenticationPageModel = null;
+            Model.WorkspaceModel = null;
+            Model.AuthenticationModel = null;
         }
 
         private void GoToAuthenticationPage()
         {
-            if (Model.AuthenticationPageModel == null)
+            if (Model.AuthenticationModel == null)
             {
                 var model = _authenticationActivator.Activate(ref _authenticationController);
-                Model.AuthenticationPageModel = model;
+                Model.AuthenticationModel = model;
             }
             
             Model.PageIndex = (int) Page.Authentication;
 
             _workspaceController?.Dispose();
 
-            Model.StartupPageModel = null;
-            Model.WorkspacePageModel = null;
+            Model.StartupModel = null;
+            Model.WorkspaceModel = null;
         }
 
         private void GoToWorkspacePage()
         {
-            if (Model.WorkspacePageModel == null)
+            if (Model.WorkspaceModel == null)
             {
                 var model = _workspaceActivator.Activate(ref _workspaceController);
-                Model.WorkspacePageModel = model;
+                Model.WorkspaceModel = model;
             }
             
             Model.PageIndex = (int) Page.Workspace;
             
             _authenticationController?.Dispose();
             
-            Model.StartupPageModel = null;
-            Model.AuthenticationPageModel = null;
+            Model.StartupModel = null;
+            Model.AuthenticationModel = null;
         }
 
         public override void Dispose()

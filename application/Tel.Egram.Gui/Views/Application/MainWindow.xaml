@@ -21,13 +21,13 @@
         <Carousel
             SelectedIndex="{Binding PageIndex}">
         
-            <startup:StartupPage
+            <startup:StartupControl
                 DataContext="{Binding StartupModel}" />
         
-            <authentication:AuthenticationPage
+            <authentication:AuthenticationControl
                 DataContext="{Binding AuthenticationModel}" />
         
-            <workspace:WorkspacePage
+            <workspace:WorkspaceControl
                 DataContext="{Binding WorkspaceModel}" />
         
         </Carousel>

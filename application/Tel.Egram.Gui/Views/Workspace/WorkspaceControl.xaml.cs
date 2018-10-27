@@ -5,9 +5,9 @@ using PropertyChanged;
 namespace Tel.Egram.Gui.Views.Workspace
 {
     [DoNotNotify]
-    public class NavigationControl : UserControl
+    public class WorkspaceControl : UserControl
     {
-        public NavigationControl()
+        public WorkspaceControl()
         {
             AvaloniaXamlLoader.Load(this);
         }
