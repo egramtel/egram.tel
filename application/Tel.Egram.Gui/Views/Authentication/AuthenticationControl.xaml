@@ -143,6 +143,7 @@
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Background" Value="#1b2333" />
             <Setter Property="BorderBrush" Value="#3a455a" />
+            <Setter Property="Foreground" Value="#ffffff" />
         </Style>
         
         <Style Selector="TextBox /template/ Border">
