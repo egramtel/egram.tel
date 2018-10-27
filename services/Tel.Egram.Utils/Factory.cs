@@ -28,18 +28,20 @@ namespace Tel.Egram.Utils
     public sealed class Factory<TParam1, TResult> : IFactory<TParam1, TResult> where TResult : class
     {
         private readonly IServiceProvider _provider;
+        private readonly ITypeMapper _typeMapper;
 
-        public Factory(IServiceProvider provider)
+        public Factory(IServiceProvider provider, ITypeMapper typeMapper)
         {
             _provider = provider;
+            _typeMapper = typeMapper;
         }
         
         public TResult Create(TParam1 param1)
         {
-            var resultType = typeof(TResult);
             var param1Type = typeof(TParam1);
+            var resultType = _typeMapper[typeof(TResult)];
             
-            var ctor = resultType.GetConstructors().First();
+            var ctor = resultType.GetConstructors()[0];
 
             var args = ctor.GetParameters()
                 .Select(p => p.ParameterType)

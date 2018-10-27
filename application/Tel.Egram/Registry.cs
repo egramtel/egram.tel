@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -43,10 +44,6 @@ namespace Tel.Egram
     {
         public static void AddUtils(this IServiceCollection services)
         {
-            // utils
-            services.AddScoped(typeof(IFactory<>), typeof(Factory<>));
-            services.AddScoped(typeof(IFactory<,>), typeof(Factory<,>));
-            
             // tdlib
             services.AddScoped(_ =>
             {
@@ -171,6 +168,17 @@ namespace Tel.Egram
         {
             services.AddTransient<IController<WorkspaceControlModel>, WorkspaceController>();
             services.AddTransient<IController<NavigationControlModel>, NavigationController>();
+        }
+
+        public static void AddReflection(this IServiceCollection services)
+        {
+            // factories
+            services.AddScoped(typeof(IFactory<>), typeof(Factory<>));
+            services.AddScoped(typeof(IFactory<,>), typeof(Factory<,>));
+
+            // type mapper
+            var typeMapper = new TypeMapper(services);
+            services.AddScoped<ITypeMapper>(_ => typeMapper);
         }
     }
 }

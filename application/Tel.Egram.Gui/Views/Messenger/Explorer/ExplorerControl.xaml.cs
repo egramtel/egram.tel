@@ -10,7 +10,6 @@ using Tel.Egram.Utils;
 
 namespace Tel.Egram.Gui.Views.Messenger.Explorer
 {
-    [DoNotNotify]
     public class ExplorerControl : UserControl
     {
         public static readonly DirectProperty<ExplorerControl, Range> VisibleIndexesProperty =

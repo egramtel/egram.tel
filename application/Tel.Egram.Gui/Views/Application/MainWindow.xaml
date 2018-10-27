@@ -32,9 +32,9 @@
         
         </Carousel>
         
-        <popup:PopupControl
-            IsVisible="{Binding IsPopupVisible}"
-            DataContext="{Binding PopupModel}" />
+        <!-- <popup:PopupControl -->
+        <!--     IsVisible="{Binding IsPopupVisible}" -->
+        <!--     DataContext="{Binding PopupModel}" /> -->
         
     </Panel>
     

@@ -36,8 +36,7 @@ namespace Tel.Egram.Components.Workspace
             _messengerActivator = messengerActivator;
             _settingsActivator = settingsActivator;
 
-            BindNavigation()
-                .DisposeWith(this);
+            BindNavigation().DisposeWith(this);
         }
 
         private IDisposable BindNavigation()
@@ -45,7 +44,7 @@ namespace Tel.Egram.Components.Workspace
             var model = _navigationActivator.Activate(ref _navigationController);
             Model.NavigationModel = model;
             
-            return Model.NavigationModel.WhenAnyValue(m => m.SelectedTabIndex)
+            return model.WhenAnyValue(m => m.SelectedTabIndex)
                 .Select(index => (ContentKind)index)
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(AvaloniaScheduler.Instance)
@@ -68,37 +67,31 @@ namespace Tel.Egram.Components.Workspace
 
         private void InitSettings()
         {
-            if (Model.SettingsModel == null)
-            {   
-                _messengerController?.Dispose();
-                _messengerController = null;
-                Model.MessengerModel = null;
-                
-                var model = _settingsActivator.Activate(ref _settingsController);
-                Model.SettingsModel = model;
-            }
+            var messengerModel = _messengerActivator.Deactivate(ref _messengerController);
+            Model.MessengerModel = messengerModel;
+
+            _settingsActivator.Deactivate(ref _settingsController);
+            var settingsModel = _settingsActivator.Activate(ref _settingsController);
+            Model.SettingsModel = settingsModel;
         }
 
         private void InitMessenger(ContentKind kind)
         {
             var section = (Section) kind;
             
-            if (Model.MessengerModel == null)
-            {
-                _settingsController?.Dispose();
-                _settingsController = null;
-                Model.SettingsModel = null;
-                
-                var model = _messengerActivator.Activate(section, ref _messengerController);
-                Model.MessengerModel = model;
-            }
+            var settingsModel = _settingsActivator.Deactivate(ref _settingsController);
+            Model.SettingsModel = settingsModel;
+            
+            _messengerActivator.Deactivate(ref _messengerController);
+            var messengerModel = _messengerActivator.Activate(section, ref _messengerController);
+            Model.MessengerModel = messengerModel;
         }
 
         public override void Dispose()
         {
-            _navigationController?.Dispose();
-            _messengerController?.Dispose();
-            _settingsController?.Dispose();
+            _navigationActivator.Deactivate(ref _navigationController);
+            _messengerActivator.Deactivate(ref _messengerController);
+            _settingsActivator.Deactivate(ref _settingsController);
             
             base.Dispose();
         }

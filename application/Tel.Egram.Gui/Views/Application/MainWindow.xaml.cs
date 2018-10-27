@@ -5,7 +5,6 @@ using PropertyChanged;
 
 namespace Tel.Egram.Gui.Views.Application
 {
-    [DoNotNotify]
     public class MainWindow : Window
     {
         public MainWindow()

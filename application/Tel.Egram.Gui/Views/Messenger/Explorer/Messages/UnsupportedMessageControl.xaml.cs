@@ -4,7 +4,6 @@ using PropertyChanged;
 
 namespace Tel.Egram.Gui.Views.Messenger.Explorer.Messages
 {
-    [DoNotNotify]
     public class UnsupportedMessageControl : UserControl
     {
         public UnsupportedMessageControl()

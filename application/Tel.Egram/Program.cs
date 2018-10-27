@@ -33,6 +33,7 @@ namespace Tel.Egram
             services.AddWorkspace();
             services.AddSettings();
             services.AddMessenger();
+            services.AddReflection();
         }
 
         private static void Run(IServiceProvider provider)

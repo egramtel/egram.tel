@@ -25,6 +25,7 @@ namespace Tel.Egram.Components.Messenger.Informer
             switch (target)
             {
                 case Chat chat:
+                    Model.IsVisible = true;
                     Model.Title = chat.ChatData.Title;
                     Model.Label = chat.ChatData.Title;
                     return avatarLoader.LoadAvatar(chat.ChatData)

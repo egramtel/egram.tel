@@ -17,6 +17,13 @@ namespace Tel.Egram.Components
             controller = _factory.Create();
             return controller.Model;
         }
+
+        public T Deactivate(ref IController<T> controller)
+        {
+            controller?.Dispose();
+            controller = null;
+            return null;
+        }
     }
 
     public class Activator<TArg, T> : IActivator<TArg, T>
@@ -33,6 +40,13 @@ namespace Tel.Egram.Components
         {
             controller = _factory.Create(arg);
             return controller.Model;
+        }
+
+        public T Deactivate(ref IController<T> controller)
+        {
+            controller?.Dispose();
+            controller = null;
+            return null;
         }
     }
 }

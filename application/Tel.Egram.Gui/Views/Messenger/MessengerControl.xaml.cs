@@ -4,7 +4,6 @@ using PropertyChanged;
 
 namespace Tel.Egram.Gui.Views.Messenger
 {
-    [DoNotNotify]
     public class MessengerControl : UserControl
     {
         public MessengerControl()

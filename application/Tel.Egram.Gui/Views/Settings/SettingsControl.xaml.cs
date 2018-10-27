@@ -4,7 +4,6 @@ using PropertyChanged;
 
 namespace Tel.Egram.Gui.Views.Settings
 {
-    [DoNotNotify]
     public class SettingsControl : UserControl
     {
         public SettingsControl()

@@ -4,7 +4,6 @@ using PropertyChanged;
 
 namespace Tel.Egram.Gui.Views.Settings.Connection
 {
-    [DoNotNotify]
     public class ProxyPopupControl : UserControl
     {   
         public ProxyPopupControl()

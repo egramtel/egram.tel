@@ -51,7 +51,7 @@ namespace Tel.Egram.Components.Messenger
 
         private IDisposable BindCatalog(Section section)
         {
-            _catalogController?.Dispose();
+            _catalogActivator.Deactivate(ref _catalogController);
             var model = _catalogActivator.Activate(section, ref _catalogController);
             Model.CatalogModel = model;
 
@@ -64,7 +64,7 @@ namespace Tel.Egram.Components.Messenger
             
             return SubscribeToTarget(target =>
             {
-                _informerController?.Dispose();
+                _informerActivator.Deactivate(ref _informerController);
                 var model = _informerActivator.Activate(target, ref _informerController);
                 Model.InformerModel = model;
             });
@@ -76,7 +76,7 @@ namespace Tel.Egram.Components.Messenger
             
             return SubscribeToTarget(target =>
             {
-                _explorerController?.Dispose();
+                _explorerActivator.Deactivate(ref _explorerController);
                 var model = _explorerActivator.Activate(target, ref _explorerController);
                 Model.ExplorerModel = model;
             });
@@ -88,7 +88,7 @@ namespace Tel.Egram.Components.Messenger
             
             return SubscribeToTarget(target =>
             {
-                _editorController?.Dispose();
+                _editorActivator.Deactivate(ref _editorController);
                 var model = _editorActivator.Activate(target, ref _editorController);
                 Model.EditorModel = model;
             });
@@ -107,10 +107,10 @@ namespace Tel.Egram.Components.Messenger
 
         public override void Dispose()
         {
-            _catalogController?.Dispose();
-            _informerController?.Dispose();
-            _explorerController?.Dispose();
-            _editorController?.Dispose();
+            _catalogActivator.Deactivate(ref _catalogController);
+            _informerActivator.Deactivate(ref _informerController);
+            _explorerActivator.Deactivate(ref _explorerController);
+            _editorActivator.Deactivate(ref _editorController);
             
             base.Dispose();
         }

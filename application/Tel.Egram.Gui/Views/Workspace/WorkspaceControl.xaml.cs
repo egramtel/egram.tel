@@ -4,7 +4,6 @@ using PropertyChanged;
 
 namespace Tel.Egram.Gui.Views.Workspace
 {
-    [DoNotNotify]
     public class WorkspaceControl : UserControl
     {
         public WorkspaceControl()
