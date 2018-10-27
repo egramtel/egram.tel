@@ -1,6 +1,6 @@
 using TdLib;
-using Tel.Egram.Gui.Views.Messenger.Catalog.Entries;
 using Tel.Egram.Messaging.Chats;
+using Tel.Egram.Models.Messenger.Catalog.Entries;
 
 namespace Tel.Egram.Components.Messenger.Catalog
 {

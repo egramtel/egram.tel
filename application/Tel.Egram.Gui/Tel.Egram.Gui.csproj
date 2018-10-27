@@ -9,7 +9,6 @@
     <PackageReference Include="DynamicData" Version="6.5.1.2479" />
     <PackageReference Include="ReactiveUI" Version="9.0.1" />
     <PackageReference Include="System.Reactive" Version="4.0.0" />
-    <PackageReference Include="PropertyChanged.Fody" Version="2.5.9" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="**\*.png" />
@@ -20,11 +19,6 @@
     <EmbeddedResource Include="**\*.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="BotsContentControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Fonts\Roboto" />

@@ -1,5 +1,4 @@
-using Tel.Egram.Gui.Views.Application;
-using Tel.Egram.Gui.Views.Application.Popup;
+using Tel.Egram.Models.Application.Popup;
 
 namespace Tel.Egram.Components
 {
@@ -7,6 +6,6 @@ namespace Tel.Egram.Components
     {
         void HidePopup();
 
-        void ShowPopup(PopupControlModel popupControlModel);
+        void ShowPopup(PopupModel popupModel);
     }
 }

@@ -11,6 +11,7 @@
     <PackageReference Include="System.Reactive" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\application\Tel.Egram.Models\Tel.Egram.Models.csproj" />
     <ProjectReference Include="..\..\services\Tel.Egram.Messaging\Tel.Egram.Messaging.csproj" />
     <ProjectReference Include="..\..\services\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
     <ProjectReference Include="..\..\services\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />

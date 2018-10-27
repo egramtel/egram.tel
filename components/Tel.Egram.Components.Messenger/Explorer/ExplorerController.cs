@@ -5,15 +5,15 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using DynamicData;
 using ReactiveUI;
-using Tel.Egram.Gui.Views.Messenger.Explorer;
-using Tel.Egram.Gui.Views.Messenger.Explorer.Items;
-using Tel.Egram.Gui.Views.Messenger.Explorer.Messages;
 using Tel.Egram.Messaging.Chats;
+using Tel.Egram.Models.Messenger.Explorer;
+using Tel.Egram.Models.Messenger.Explorer.Items;
+using Tel.Egram.Models.Messenger.Explorer.Messages;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Explorer
 {
-    public class ExplorerController : BaseController<ExplorerControlModel>
+    public class ExplorerController : BaseController<ExplorerModel>
     {
         private readonly SourceList<ItemModel> _items;
         

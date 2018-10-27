@@ -7,28 +7,28 @@ using TdLib;
 using Tel.Egram.Authentication;
 using Tel.Egram.Components.Authentication;
 using Tel.Egram.Components.Workspace;
-using Tel.Egram.Gui.Views.Application;
-using Tel.Egram.Gui.Views.Application.Popup;
-using Tel.Egram.Gui.Views.Application.Startup;
-using Tel.Egram.Gui.Views.Authentication;
-using Tel.Egram.Gui.Views.Workspace;
+using Tel.Egram.Models.Application;
+using Tel.Egram.Models.Application.Popup;
+using Tel.Egram.Models.Application.Startup;
+using Tel.Egram.Models.Authentication;
+using Tel.Egram.Models.Workspace;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Application
 {
     public class ApplicationController : BaseController<MainWindowModel>
     {
-        private readonly IActivator<AuthenticationControlModel> _authenticationActivator;
-        private IController<AuthenticationControlModel> _authenticationController;
+        private readonly IActivator<AuthenticationModel> _authenticationActivator;
+        private IController<AuthenticationModel> _authenticationController;
         
-        private readonly IActivator<WorkspaceControlModel> _workspaceActivator;
-        private IController<WorkspaceControlModel> _workspaceController;
+        private readonly IActivator<WorkspaceModel> _workspaceActivator;
+        private IController<WorkspaceModel> _workspaceController;
 
         public ApplicationController(
             IAuthenticator authenticator,
             IApplicationPopupController applicationPopupController,
-            IActivator<AuthenticationControlModel> authenticationActivator,
-            IActivator<WorkspaceControlModel> workspaceActivator)
+            IActivator<AuthenticationModel> authenticationActivator,
+            IActivator<WorkspaceModel> workspaceActivator)
         {
             _authenticationActivator = authenticationActivator;
             _workspaceActivator = workspaceActivator;
@@ -78,7 +78,7 @@ namespace Tel.Egram.Components.Application
 
         private IDisposable BindPopup(IApplicationPopupController controller)
         {
-            return Observable.FromEventPattern<PopupControlModel>(
+            return Observable.FromEventPattern<PopupModel>(
                     h => controller.ContextChanged += h,
                     h => controller.ContextChanged -= h)
                 .Select(e => e.EventArgs)
@@ -86,7 +86,7 @@ namespace Tel.Egram.Components.Application
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(popupModel =>
                 {
-                    Model.PopupModel = popupModel ?? new PopupControlModel
+                    Model.PopupModel = popupModel ?? new PopupModel
                     {
                         IsPopupVisible = false
                     };
@@ -97,7 +97,7 @@ namespace Tel.Egram.Components.Application
         {
             if (Model.StartupModel == null)
             {
-                var startupPageModel = new StartupControlModel();
+                var startupPageModel = new StartupModel();
                 Model.StartupModel = startupPageModel;
             }
             

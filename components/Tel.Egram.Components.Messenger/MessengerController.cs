@@ -7,36 +7,36 @@ using Tel.Egram.Components.Messenger.Catalog;
 using Tel.Egram.Components.Messenger.Editor;
 using Tel.Egram.Components.Messenger.Explorer;
 using Tel.Egram.Components.Messenger.Informer;
-using Tel.Egram.Gui.Views.Messenger;
-using Tel.Egram.Gui.Views.Messenger.Catalog;
-using Tel.Egram.Gui.Views.Messenger.Editor;
-using Tel.Egram.Gui.Views.Messenger.Explorer;
-using Tel.Egram.Gui.Views.Messenger.Informer;
 using Tel.Egram.Messaging.Chats;
+using Tel.Egram.Models.Messenger;
+using Tel.Egram.Models.Messenger.Catalog;
+using Tel.Egram.Models.Messenger.Editor;
+using Tel.Egram.Models.Messenger.Explorer;
+using Tel.Egram.Models.Messenger.Informer;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger
 {
-    public class MessengerController : BaseController<MessengerControlModel>
+    public class MessengerController : BaseController<MessengerModel>
     {
-        private readonly IActivator<Section, CatalogControlModel> _catalogActivator;
-        private IController<CatalogControlModel> _catalogController;
+        private readonly IActivator<Section, CatalogModel> _catalogActivator;
+        private IController<CatalogModel> _catalogController;
         
-        private readonly IActivator<Target, InformerControlModel> _informerActivator;
-        private IController<InformerControlModel> _informerController;
+        private readonly IActivator<Target, InformerModel> _informerActivator;
+        private IController<InformerModel> _informerController;
         
-        private readonly IActivator<Target, ExplorerControlModel> _explorerActivator;
-        private IController<ExplorerControlModel> _explorerController;
+        private readonly IActivator<Target, ExplorerModel> _explorerActivator;
+        private IController<ExplorerModel> _explorerController;
         
-        private readonly IActivator<Target, EditorControlModel> _editorActivator;
-        private IController<EditorControlModel> _editorController;
+        private readonly IActivator<Target, EditorModel> _editorActivator;
+        private IController<EditorModel> _editorController;
 
         public MessengerController(
             Section section,
-            IActivator<Section, CatalogControlModel> catalogActivator,
-            IActivator<Target, InformerControlModel> informerActivator,
-            IActivator<Target, ExplorerControlModel> explorerActivator,
-            IActivator<Target, EditorControlModel> editorActivator)
+            IActivator<Section, CatalogModel> catalogActivator,
+            IActivator<Target, InformerModel> informerActivator,
+            IActivator<Target, ExplorerModel> explorerActivator,
+            IActivator<Target, EditorModel> editorActivator)
         {
             _catalogActivator = catalogActivator;
             _informerActivator = informerActivator;
@@ -60,7 +60,7 @@ namespace Tel.Egram.Components.Messenger
 
         private IDisposable BindInformer()
         {
-            Model.InformerModel = InformerControlModel.Hidden();
+            Model.InformerModel = InformerModel.Hidden();
             
             return SubscribeToTarget(target =>
             {
@@ -72,7 +72,7 @@ namespace Tel.Egram.Components.Messenger
 
         private IDisposable BindExplorer()
         {
-            Model.ExplorerModel = ExplorerControlModel.Hidden();
+            Model.ExplorerModel = ExplorerModel.Hidden();
             
             return SubscribeToTarget(target =>
             {
@@ -84,7 +84,7 @@ namespace Tel.Egram.Components.Messenger
 
         private IDisposable BindEditor()
         {
-            Model.EditorModel = EditorControlModel.Hidden();
+            Model.EditorModel = EditorModel.Hidden();
             
             return SubscribeToTarget(target =>
             {

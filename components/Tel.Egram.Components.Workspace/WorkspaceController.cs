@@ -7,30 +7,30 @@ using Tel.Egram.Components.Messenger;
 using Tel.Egram.Components.Messenger.Catalog;
 using Tel.Egram.Components.Settings;
 using Tel.Egram.Components.Workspace.Navigation;
-using Tel.Egram.Gui.Views.Messenger;
-using Tel.Egram.Gui.Views.Settings;
-using Tel.Egram.Gui.Views.Workspace;
-using Tel.Egram.Gui.Views.Workspace.Navigation;
 using Tel.Egram.Messaging.Chats;
+using Tel.Egram.Models.Messenger;
+using Tel.Egram.Models.Settings;
+using Tel.Egram.Models.Workspace;
+using Tel.Egram.Models.Workspace.Navigation;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Workspace
 {
-    public class WorkspaceController : BaseController<WorkspaceControlModel>
+    public class WorkspaceController : BaseController<WorkspaceModel>
     {
-        private readonly IActivator<NavigationControlModel> _navigationActivator;
-        private IController<NavigationControlModel> _navigationController;
+        private readonly IActivator<NavigationModel> _navigationActivator;
+        private IController<NavigationModel> _navigationController;
         
-        private readonly IActivator<Section, MessengerControlModel> _messengerActivator;
-        private IController<MessengerControlModel> _messengerController;
+        private readonly IActivator<Section, MessengerModel> _messengerActivator;
+        private IController<MessengerModel> _messengerController;
         
-        private readonly IActivator<SettingsControlModel> _settingsActivator;
-        private IController<SettingsControlModel> _settingsController;
+        private readonly IActivator<SettingsModel> _settingsActivator;
+        private IController<SettingsModel> _settingsController;
 
         public WorkspaceController(
-            IActivator<NavigationControlModel> navigationActivator,
-            IActivator<Section, MessengerControlModel> messengerActivator,
-            IActivator<SettingsControlModel> settingsActivator)
+            IActivator<NavigationModel> navigationActivator,
+            IActivator<Section, MessengerModel> messengerActivator,
+            IActivator<SettingsModel> settingsActivator)
         {
             _navigationActivator = navigationActivator;
             _messengerActivator = messengerActivator;

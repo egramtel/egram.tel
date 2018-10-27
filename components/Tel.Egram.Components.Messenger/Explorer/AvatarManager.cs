@@ -7,7 +7,7 @@ using System.Reactive.Linq;
 using DynamicData;
 using ReactiveUI;
 using Tel.Egram.Graphics;
-using Tel.Egram.Gui.Views.Messenger.Explorer.Messages;
+using Tel.Egram.Models.Messenger.Explorer.Messages;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Explorer

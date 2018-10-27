@@ -4,11 +4,11 @@ using System.Reactive.Linq;
 using ReactiveUI;
 using TdLib;
 using Tel.Egram.Authentication;
-using Tel.Egram.Gui.Views.Authentication;
+using Tel.Egram.Models.Authentication;
 
 namespace Tel.Egram.Components.Authentication
 {
-    public class AuthenticationController : BaseController<AuthenticationControlModel>
+    public class AuthenticationController : BaseController<AuthenticationModel>
     {
         public AuthenticationController(IAuthenticator authenticator)
         {

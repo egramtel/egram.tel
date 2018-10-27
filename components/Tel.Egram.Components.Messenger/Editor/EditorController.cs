@@ -4,13 +4,13 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using ReactiveUI;
 using TdLib;
-using Tel.Egram.Gui.Views.Messenger.Editor;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
+using Tel.Egram.Models.Messenger.Editor;
 
 namespace Tel.Egram.Components.Messenger.Editor
 {
-    public class EditorController : BaseController<EditorControlModel>
+    public class EditorController : BaseController<EditorModel>
     {
         public EditorController(Target target, IMessageSender messageSender)
         {

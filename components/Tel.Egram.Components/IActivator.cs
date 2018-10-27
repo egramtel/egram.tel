@@ -1,5 +1,3 @@
-using Tel.Egram.Gui.Views.Settings;
-
 namespace Tel.Egram.Components
 {
     public interface IActivator<T>
