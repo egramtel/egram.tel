@@ -1,4 +1,6 @@
 using TdLib;
+using Tel.Egram.Gui.Views.Messenger.Catalog.Entries;
+using Tel.Egram.Messaging.Chats;
 
 namespace Tel.Egram.Components.Messenger.Catalog
 {
@@ -11,10 +13,8 @@ namespace Tel.Egram.Components.Messenger.Catalog
         
         public static bool BotFilter(EntryModel model)
         {
-            if (model is ChatEntryModel chatEntryModel)
+            if (model.Target is Chat chat)
             {
-                var chat = chatEntryModel.Chat;
-            
                 if (chat.ChatData.Type is TdApi.ChatType.ChatTypePrivate)
                 {
                     return chat.User != null &&
@@ -26,10 +26,8 @@ namespace Tel.Egram.Components.Messenger.Catalog
 
         public static bool DirectFilter(EntryModel model)
         {
-            if (model is ChatEntryModel chatEntryModel)
+            if (model.Target is Chat chat)
             {
-                var chat = chatEntryModel.Chat;
-
                 if (chat.ChatData.Type is TdApi.ChatType.ChatTypePrivate)
                 {
                     return chat.User != null &&
@@ -41,10 +39,8 @@ namespace Tel.Egram.Components.Messenger.Catalog
 
         public static bool GroupFilter(EntryModel model)
         {
-            if (model is ChatEntryModel chatEntryModel)
+            if (model.Target is Chat chat)
             {
-                var chat = chatEntryModel.Chat;
-
                 if (chat.ChatData.Type is TdApi.ChatType.ChatTypeSupergroup supergroupType)
                 {
                     return !supergroupType.IsChannel;
@@ -57,10 +53,8 @@ namespace Tel.Egram.Components.Messenger.Catalog
 
         public static bool ChannelFilter(EntryModel model)
         {
-            if (model is ChatEntryModel chatEntryModel)
+            if (model.Target is Chat chat)
             {
-                var chat = chatEntryModel.Chat;
-
                 if (chat.ChatData.Type is TdApi.ChatType.ChatTypeSupergroup supergroupType)
                 {
                     return supergroupType.IsChannel;

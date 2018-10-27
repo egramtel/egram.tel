@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Reactive;
 using DynamicData;
-using Tel.Egram.Components.Messenger.Explorer.Messages;
 using Tel.Egram.Graphics;
+using Tel.Egram.Gui.Views.Messenger.Explorer.Messages;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Explorer

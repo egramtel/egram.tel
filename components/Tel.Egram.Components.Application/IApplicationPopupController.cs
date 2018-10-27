@@ -1,10 +1,10 @@
 using System;
-using Tel.Egram.Components.Popup;
+using Tel.Egram.Gui.Views.Application;
 
 namespace Tel.Egram.Components.Application
 {
     public interface IApplicationPopupController : IPopupController
     {
-        event EventHandler<PopupModel> ContextChanged;
+        event EventHandler<PopupControlModel> ContextChanged;
     }
 }

@@ -12,9 +12,10 @@
     <PackageReference Include="System.Reactive" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\application\Tel.Egram.Gui\Tel.Egram.Gui.csproj" />
     <ProjectReference Include="..\..\services\Tel.Egram.Authentication\Tel.Egram.Authentication.csproj" />
-    <ProjectReference Include="..\..\components\Tel.Egram.Components.Popup\Tel.Egram.Components.Popup.csproj" />
     <ProjectReference Include="..\..\components\Tel.Egram.Components.Settings\Tel.Egram.Components.Settings.csproj" />
     <ProjectReference Include="..\..\services\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Components\Tel.Egram.Components.csproj" />
   </ItemGroup>
 </Project>

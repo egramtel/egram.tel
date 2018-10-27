@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Tel.Egram.Components.Application;
 using Tel.Egram.Gui;
 using Tel.Egram.Gui.Views.Application;
-using Tel.Egram.Registry;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram
 {
@@ -37,8 +37,11 @@ namespace Tel.Egram
         {
             using (var scope = provider.CreateScope())
             {
-                var context = scope.ServiceProvider.GetService<ApplicationModel>();
+                var model = new MainWindowModel();
                 var app = scope.ServiceProvider.GetService<MainApplication>();
+                
+                scope.ServiceProvider.GetService<IFactory<MainWindowModel, IApplicationController>>()
+                    .Create(model);
                 
                 var builder = AppBuilder.Configure(app);
                 var os = builder.RuntimePlatform.GetRuntimeInfo().OperatingSystem;
@@ -66,7 +69,7 @@ namespace Tel.Egram
                 }
 
                 builder.UseReactiveUI();
-                builder.Start<MainWindow>(() => context);
+                builder.Start<MainWindow>(() => model);
             }
         }
     }

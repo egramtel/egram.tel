@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DynamicData;
-using Tel.Egram.Components.Messenger.Explorer.Messages;
+using Tel.Egram.Gui.Views.Messenger.Explorer.Messages;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
 

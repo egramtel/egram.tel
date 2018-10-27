@@ -7,6 +7,7 @@ using DynamicData;
 using ReactiveUI;
 using TdLib;
 using Tel.Egram.Graphics;
+using Tel.Egram.Gui.Views.Messenger.Catalog.Entries;
 using Tel.Egram.Messaging.Chats;
 
 namespace Tel.Egram.Components.Messenger.Catalog
@@ -15,7 +16,7 @@ namespace Tel.Egram.Components.Messenger.Catalog
     {
         private readonly CompositeDisposable _serviceDisposable = new CompositeDisposable();
 
-        private readonly Dictionary<long, ChatEntryModel> _entryStore;
+        private readonly Dictionary<long, EntryModel> _entryStore;
         private readonly SourceCache<EntryModel, long> _chats;
         public IObservableCache<EntryModel, long> Chats => _chats;
 
@@ -25,7 +26,7 @@ namespace Tel.Egram.Components.Messenger.Catalog
             IAvatarLoader avatarLoader
             )
         {
-            _entryStore = new Dictionary<long, ChatEntryModel>();
+            _entryStore = new Dictionary<long, EntryModel>();
             _chats = new SourceCache<EntryModel, long>(m => m.Id);
             
             LoadChats(chatLoader, avatarLoader)
@@ -43,7 +44,7 @@ namespace Tel.Egram.Components.Messenger.Catalog
         {
             return chatLoader.LoadChats()
                 .Select(GetChatEntryModel)
-                .Aggregate(new List<ChatEntryModel>(), (list, model) =>
+                .Aggregate(new List<EntryModel>(), (list, model) =>
                 {
                     model.Order = list.Count;
                     list.Add(model);
@@ -133,28 +134,28 @@ namespace Tel.Egram.Components.Messenger.Catalog
                 return Observable.Return(entry.Avatar);
             }
             
-            switch (entry)
+            switch (entry.Target)
             {
-                case ChatEntryModel chatEntry:
-                    return avatarLoader.LoadAvatar(chatEntry.Chat.ChatData);
+                case Chat chat:
+                    return avatarLoader.LoadAvatar(chat.ChatData);
                 
-                case AggregateEntryModel aggregateEntry:
+                case Aggregate aggregate:
                     return avatarLoader.LoadAvatar(new TdApi.Chat
                         {
-                            Id = aggregateEntry.Aggregate.Id
+                            Id = aggregate.Id
                         });
             }
             
             return Observable.Return<Avatar>(null);
         }
 
-        private ChatEntryModel GetChatEntryModel(Chat chat)
+        private EntryModel GetChatEntryModel(Chat chat)
         {
             var chatData = chat.ChatData;
             
             if (!_entryStore.TryGetValue(chatData.Id, out var entry))
             {
-                entry = new ChatEntryModel();
+                entry = EntryModel.FromTarget(chat);
                 UpdateChatEntryModel(entry, chat);
                 
                 _entryStore.Add(chatData.Id, entry);
@@ -163,11 +164,11 @@ namespace Tel.Egram.Components.Messenger.Catalog
             return entry;
         }
 
-        private void UpdateChatEntryModel(ChatEntryModel entry, Chat chat, Avatar avatar = null)
+        private void UpdateChatEntryModel(EntryModel entry, Chat chat, Avatar avatar = null)
         {
             var chatData = chat.ChatData;
             
-            entry.Chat = chat;
+            entry.Target = chat;
             entry.Id = chatData.Id;
             entry.Title = chatData.Title;
             entry.Avatar = avatar;

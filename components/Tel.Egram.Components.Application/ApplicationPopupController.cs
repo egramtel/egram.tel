@@ -1,20 +1,20 @@
 using System;
-using Tel.Egram.Components.Popup;
+using Tel.Egram.Gui.Views.Application;
 
 namespace Tel.Egram.Components.Application
 {
     public class ApplicationPopupController : IApplicationPopupController
     {
-        public event EventHandler<PopupModel> ContextChanged;
+        public event EventHandler<PopupControlModel> ContextChanged;
         
-        public void Hide()
+        public void HidePopup()
         {
             ContextChanged?.Invoke(this, null);
         }
 
-        public void Show(PopupModel popupModel)
+        public void ShowPopup(PopupControlModel popupControlModel)
         {
-            ContextChanged?.Invoke(this, popupModel);
+            ContextChanged?.Invoke(this, popupControlModel);
         }
     }
 }

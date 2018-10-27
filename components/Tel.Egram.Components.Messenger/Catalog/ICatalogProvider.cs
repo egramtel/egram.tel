@@ -1,4 +1,5 @@
 using DynamicData;
+using Tel.Egram.Gui.Views.Messenger.Catalog.Entries;
 
 namespace Tel.Egram.Components.Messenger.Catalog
 {

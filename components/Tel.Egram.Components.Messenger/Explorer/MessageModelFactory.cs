@@ -1,6 +1,6 @@
 using TdLib;
-using Tel.Egram.Components.Messenger.Explorer.Messages;
 using Tel.Egram.Graphics;
+using Tel.Egram.Gui.Views.Messenger.Explorer.Messages;
 using Tel.Egram.Messaging.Messages;
 
 namespace Tel.Egram.Components.Messenger.Explorer

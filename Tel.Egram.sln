@@ -31,11 +31,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Utils", "services
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Authentication", "services\Tel.Egram.Authentication\Tel.Egram.Authentication.csproj", "{5B6A93BB-F649-4FF8-A316-55E81C43B506}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Components.Popup", "components\Tel.Egram.Components.Popup\Tel.Egram.Components.Popup.csproj", "{18BA8357-ED41-4E2A-A30C-B786177E1559}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Components.Settings", "components\Tel.Egram.Components.Settings\Tel.Egram.Components.Settings.csproj", "{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Settings", "services\Tel.Egram.Settings\Tel.Egram.Settings.csproj", "{EABF6E1B-29D0-42B2-BA87-1523B156366F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Components", "components\Tel.Egram.Components\Tel.Egram.Components.csproj", "{9E5F11B0-6930-4E61-B86A-0E267369A48F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,10 +87,6 @@ Global
 		{5B6A93BB-F649-4FF8-A316-55E81C43B506}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B6A93BB-F649-4FF8-A316-55E81C43B506}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B6A93BB-F649-4FF8-A316-55E81C43B506}.Release|Any CPU.Build.0 = Release|Any CPU
-		{18BA8357-ED41-4E2A-A30C-B786177E1559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18BA8357-ED41-4E2A-A30C-B786177E1559}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{18BA8357-ED41-4E2A-A30C-B786177E1559}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{18BA8357-ED41-4E2A-A30C-B786177E1559}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -99,6 +95,10 @@ Global
 		{EABF6E1B-29D0-42B2-BA87-1523B156366F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EABF6E1B-29D0-42B2-BA87-1523B156366F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EABF6E1B-29D0-42B2-BA87-1523B156366F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E5F11B0-6930-4E61-B86A-0E267369A48F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E5F11B0-6930-4E61-B86A-0E267369A48F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E5F11B0-6930-4E61-B86A-0E267369A48F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E5F11B0-6930-4E61-B86A-0E267369A48F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,9 +115,9 @@ Global
 		{D2695397-39D0-4C9C-8F6E-D7E703605ECD} = {800BCC36-C57E-41FA-A5F7-21EB841913CE}
 		{50FB25CD-9951-4ADA-A30E-0008642DEEBE} = {800BCC36-C57E-41FA-A5F7-21EB841913CE}
 		{5B6A93BB-F649-4FF8-A316-55E81C43B506} = {800BCC36-C57E-41FA-A5F7-21EB841913CE}
-		{18BA8357-ED41-4E2A-A30C-B786177E1559} = {023AD020-281E-4DD4-AB74-99D9235C467E}
 		{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD} = {023AD020-281E-4DD4-AB74-99D9235C467E}
 		{EABF6E1B-29D0-42B2-BA87-1523B156366F} = {800BCC36-C57E-41FA-A5F7-21EB841913CE}
+		{9E5F11B0-6930-4E61-B86A-0E267369A48F} = {023AD020-281E-4DD4-AB74-99D9235C467E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D35C07F-9F13-4E04-A5E0-36C92839CCD3}
