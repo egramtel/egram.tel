@@ -9,42 +9,38 @@ using Tel.Egram.Gui.Views.Authentication;
 namespace Tel.Egram.Components.Authentication
 {
     public class AuthenticationController
-        : BaseController, IAuthenticationController
+        : BaseController<AuthenticationPageModel>, IAuthenticationController
     {
-        public AuthenticationController(
-            AuthenticationPageModel authenticationPageModel,
-            IAuthenticator authenticator)
+        public AuthenticationController(IAuthenticator authenticator)
         {
-            BindAuthenticator(authenticationPageModel, authenticator)
+            BindAuthenticator(authenticator)
                 .DisposeWith(this);
         }
 
-        private IDisposable BindAuthenticator(
-            AuthenticationPageModel model,
-            IAuthenticator authenticator)
+        private IDisposable BindAuthenticator(IAuthenticator authenticator)
         {
-            var canSendCode = model
+            var canSendCode = Model
                 .WhenAnyValue(x => x.PhoneNumber)
                 .Select(phone => !string.IsNullOrWhiteSpace(phone));
             
-            var canCheckCode = model
+            var canCheckCode = Model
                 .WhenAnyValue(x => x.ConfirmCode)
                 .Select(code => !string.IsNullOrWhiteSpace(code));
             
-            var canCheckPassword = model
+            var canCheckPassword = Model
                 .WhenAnyValue(x => x.Password)
                 .Select(password => !string.IsNullOrWhiteSpace(password));
             
-            model.SendCodeCommand = ReactiveCommand.CreateFromObservable(
-                () => authenticator.SetPhoneNumber(model.PhoneNumber),
+            Model.SendCodeCommand = ReactiveCommand.CreateFromObservable(
+                () => authenticator.SetPhoneNumber(Model.PhoneNumber),
                 canSendCode, RxApp.MainThreadScheduler);
 
-            model.CheckCodeCommand = ReactiveCommand.CreateFromObservable(
-                () => authenticator.CheckCode(model.ConfirmCode, model.FirstName, model.LastName),
+            Model.CheckCodeCommand = ReactiveCommand.CreateFromObservable(
+                () => authenticator.CheckCode(Model.ConfirmCode, Model.FirstName, Model.LastName),
                 canCheckCode, RxApp.MainThreadScheduler);
             
-            model.CheckPasswordCommand = ReactiveCommand.CreateFromObservable(
-                () => authenticator.CheckPassword(model.Password),
+            Model.CheckPasswordCommand = ReactiveCommand.CreateFromObservable(
+                () => authenticator.CheckPassword(Model.Password),
                 canCheckPassword, RxApp.MainThreadScheduler);
             
             var stateObservable = authenticator
@@ -58,36 +54,36 @@ namespace Tel.Egram.Components.Authentication
                     switch (state)
                     {
                         case TdApi.AuthorizationState.AuthorizationStateWaitPhoneNumber _:
-                            OnWaitingPhoneNumber(model);
+                            OnWaitingPhoneNumber();
                             break;
                         
                         case TdApi.AuthorizationState.AuthorizationStateWaitCode wait:
-                            OnWaitingConfirmCode(model, !wait.IsRegistered);
+                            OnWaitingConfirmCode(!wait.IsRegistered);
                             break;
                         
                         case TdApi.AuthorizationState.AuthorizationStateWaitPassword _:
-                            OnWaitingPassword(model);
+                            OnWaitingPassword();
                             break;
                     }
                 });
         }
         
-        private void OnWaitingPhoneNumber(AuthenticationPageModel model)
+        private void OnWaitingPhoneNumber()
         {
-            model.ConfirmIndex = 0;
-            model.PasswordIndex = 0;
+            Model.ConfirmIndex = 0;
+            Model.PasswordIndex = 0;
         }
 
-        private void OnWaitingConfirmCode(AuthenticationPageModel model, bool registration)
+        private void OnWaitingConfirmCode(bool registration)
         {
-            model.ConfirmIndex = 1;
-            model.PasswordIndex = 0;
+            Model.ConfirmIndex = 1;
+            Model.PasswordIndex = 0;
         }
 
-        private void OnWaitingPassword(AuthenticationPageModel model)
+        private void OnWaitingPassword()
         {
-            model.ConfirmIndex = 1;
-            model.PasswordIndex = 1;
+            Model.ConfirmIndex = 1;
+            Model.PasswordIndex = 1;
         }
     }
 }

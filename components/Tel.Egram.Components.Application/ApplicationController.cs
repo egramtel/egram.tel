@@ -15,34 +15,31 @@ using Tel.Egram.Utils;
 namespace Tel.Egram.Components.Application
 {
     public class ApplicationController
-        : BaseController, IApplicationController
+        : BaseController<MainWindowModel>, IApplicationController
     {   
-        private readonly IFactory<AuthenticationPageModel, IAuthenticationController> _authenticationControllerFactory;
+        private readonly IFactory<IAuthenticationController> _authenticationControllerFactory;
         private IAuthenticationController _authenticationController;
         
-        private readonly IFactory<WorkspacePageModel, IWorkspaceController> _workspaceControllerFactory;
+        private readonly IFactory<IWorkspaceController> _workspaceControllerFactory;
         private IWorkspaceController _workspaceController;
 
         public ApplicationController(
-            MainWindowModel model,
             IAuthenticator authenticator,
             IApplicationPopupController applicationPopupController,
-            IFactory<AuthenticationPageModel, IAuthenticationController> authenticationControllerFactory,
-            IFactory<WorkspacePageModel, IWorkspaceController> workspaceControllerFactory)
+            IFactory<IAuthenticationController> authenticationControllerFactory,
+            IFactory<IWorkspaceController> workspaceControllerFactory)
         {
             _authenticationControllerFactory = authenticationControllerFactory;
             _workspaceControllerFactory = workspaceControllerFactory;
             
-            BindAuthenticator(model, authenticator)
+            BindAuthenticator(authenticator)
                 .DisposeWith(this);
 
-            BindPopup(model, applicationPopupController)
+            BindPopup(applicationPopupController)
                 .DisposeWith(this);
         }
 
-        private IDisposable BindAuthenticator(
-            MainWindowModel model,
-            IAuthenticator authenticator)
+        private IDisposable BindAuthenticator(IAuthenticator authenticator)
         {
             return authenticator
                 .ObserveState()
@@ -52,14 +49,14 @@ namespace Tel.Egram.Components.Application
                     switch (state)
                     {
                         case TdApi.AuthorizationState.AuthorizationStateWaitTdlibParameters _:
-                            GoToStartupPage(model);
+                            GoToStartupPage();
                             authenticator.SetupParameters()
                                 .Subscribe()
                                 .DisposeWith(this);
                             break;
                     
                         case TdApi.AuthorizationState.AuthorizationStateWaitEncryptionKey _:
-                            GoToStartupPage(model);
+                            GoToStartupPage();
                             authenticator.CheckEncryptionKey()
                                 .Subscribe()
                                 .DisposeWith(this);
@@ -68,19 +65,17 @@ namespace Tel.Egram.Components.Application
                         case TdApi.AuthorizationState.AuthorizationStateWaitPhoneNumber _:
                         case TdApi.AuthorizationState.AuthorizationStateWaitCode _:
                         case TdApi.AuthorizationState.AuthorizationStateWaitPassword _:
-                            GoToAuthenticationPage(model);
+                            GoToAuthenticationPage();
                             break;
                 
                         case TdApi.AuthorizationState.AuthorizationStateReady _:
-                            GoToWorkspacePage(model);
+                            GoToWorkspacePage();
                             break;
                     }
                 });
         }
 
-        private IDisposable BindPopup(
-            MainWindowModel model,
-            IApplicationPopupController controller)
+        private IDisposable BindPopup(IApplicationPopupController controller)
         {
             return Observable.FromEventPattern<PopupControlModel>(
                     h => controller.ContextChanged += h,
@@ -90,62 +85,60 @@ namespace Tel.Egram.Components.Application
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(popupModel =>
                 {
-                    model.PopupControlModel = popupModel ?? new PopupControlModel
+                    Model.PopupControlModel = popupModel ?? new PopupControlModel
                     {
                         IsPopupVisible = false
                     };
                 });
         }
 
-        private void GoToStartupPage(MainWindowModel model)
+        private void GoToStartupPage()
         {
-            if (model.StartupPageModel == null)
+            if (Model.StartupPageModel == null)
             {
                 var startupPageModel = new StartupPageModel();
-                model.StartupPageModel = startupPageModel;
+                Model.StartupPageModel = startupPageModel;
             }
             
-            model.PageIndex = (int) Page.Initial;
+            Model.PageIndex = (int) Page.Initial;
 
             _authenticationController?.Dispose();
             _workspaceController?.Dispose();
             
-            model.WorkspacePageModel = null;
-            model.AuthenticationPageModel = null;
+            Model.WorkspacePageModel = null;
+            Model.AuthenticationPageModel = null;
         }
 
-        private void GoToAuthenticationPage(MainWindowModel model)
+        private void GoToAuthenticationPage()
         {
-            if (model.AuthenticationPageModel == null)
+            if (Model.AuthenticationPageModel == null)
             {
-                var authenticationPageModel = new AuthenticationPageModel();
-                _authenticationController = _authenticationControllerFactory.Create(authenticationPageModel);
-                model.AuthenticationPageModel = authenticationPageModel;
+                _authenticationController = _authenticationControllerFactory.Create();
+                Model.AuthenticationPageModel = _authenticationController.Model;
             }
             
-            model.PageIndex = (int) Page.Authentication;
+            Model.PageIndex = (int) Page.Authentication;
 
             _workspaceController?.Dispose();
 
-            model.StartupPageModel = null;
-            model.WorkspacePageModel = null;
+            Model.StartupPageModel = null;
+            Model.WorkspacePageModel = null;
         }
 
-        private void GoToWorkspacePage(MainWindowModel model)
+        private void GoToWorkspacePage()
         {
-            if (model.WorkspacePageModel == null)
+            if (Model.WorkspacePageModel == null)
             {
-                var workspacePageModel = new WorkspacePageModel();
-                _workspaceController = _workspaceControllerFactory.Create(workspacePageModel);
-                model.WorkspacePageModel = workspacePageModel;
+                _workspaceController = _workspaceControllerFactory.Create();
+                Model.WorkspacePageModel = _workspaceController.Model;
             }
             
-            model.PageIndex = (int) Page.Workspace;
+            Model.PageIndex = (int) Page.Workspace;
             
             _authenticationController?.Dispose();
             
-            model.StartupPageModel = null;
-            model.AuthenticationPageModel = null;
+            Model.StartupPageModel = null;
+            Model.AuthenticationPageModel = null;
         }
 
         public override void Dispose()

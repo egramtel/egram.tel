@@ -11,50 +11,47 @@ using Tel.Egram.Messaging.Messages;
 namespace Tel.Egram.Components.Messenger.Editor
 {
     public class EditorController
-        : BaseController, IEditorController
+        : BaseController<EditorControlModel>, IEditorController
     {
-        public EditorController(
-            EditorControlModel model,
-            IMessageSender messageSender)
+        public EditorController(Target target, IMessageSender messageSender)
         {
-            switch (model.Target)
+            switch (target)
             {
                 case Chat chat:
-                    BindMessageSender(model, chat, messageSender)
+                    BindMessageSender(chat, messageSender)
                         .DisposeWith(this);
                     break;
             }
         }
         
         private IDisposable BindMessageSender(
-            EditorControlModel model,
             Chat chat,
             IMessageSender messageSender)
         {
-            var canSendCode = model
+            var canSendCode = Model
                 .WhenAnyValue(m => m.Text)
                 .Select(text => !string.IsNullOrWhiteSpace(text));
             
-            model.SendCommand = ReactiveCommand.CreateFromObservable(
+            Model.SendCommand = ReactiveCommand.CreateFromObservable(
                 () => messageSender.SendMessage(chat.ChatData,
                     new TdApi.InputMessageContent.InputMessageText
                     {
                         ClearDraft = true,
                         Text = new TdApi.FormattedText
                         {
-                            Text = model.Text
+                            Text = Model.Text
                         }
                     })
                     .Select(_ => Unit.Default),
                 canSendCode,
                 RxApp.MainThreadScheduler);
 
-            return model.SendCommand
+            return Model.SendCommand
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(_ =>
                 {
-                    model.Text = null;
+                    Model.Text = null;
                 });
         }
     }

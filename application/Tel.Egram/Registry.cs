@@ -91,6 +91,8 @@ namespace Tel.Egram
         
         public static void AddApplication(this IServiceCollection services)
         {
+            services.AddTransient<IApplicationController, ApplicationController>();
+            
             services.AddScoped<MainApplication>();
             
             services.AddScoped(provider => new MainApplication.Initializer(() =>

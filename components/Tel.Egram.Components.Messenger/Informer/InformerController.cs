@@ -10,37 +10,35 @@ using Tel.Egram.Messaging.Chats;
 namespace Tel.Egram.Components.Messenger.Informer
 {
     public class InformerController
-        : BaseController, IInformerController
+        : BaseController<InformerControlModel>, IInformerController
     {
         public InformerController(
-            InformerControlModel model,
+            Target target,
             IAvatarLoader avatarLoader)
         {
-            BindInfo(model, avatarLoader)
+            BindInfo(target, avatarLoader)
                 .DisposeWith(this);
         }
         
         private IDisposable BindInfo(
-            InformerControlModel model, IAvatarLoader avatarLoader)
-        {
-            var target = model.Target;
-            
+            Target target, IAvatarLoader avatarLoader)
+        {   
             switch (target)
             {
                 case Chat chat:
-                    model.Title = chat.ChatData.Title;
-                    model.Label = chat.ChatData.Title;
+                    Model.Title = chat.ChatData.Title;
+                    Model.Label = chat.ChatData.Title;
                     return avatarLoader.LoadAvatar(chat.ChatData)
                         .SubscribeOn(TaskPoolScheduler.Default)
                         .ObserveOn(RxApp.MainThreadScheduler)
                         .Subscribe(avatar =>
                         {
-                            model.Avatar = avatar;
+                            Model.Avatar = avatar;
                         });
                 
                 case Aggregate aggregate:
-                    model.Title = aggregate.Id.ToString();
-                    model.Label = aggregate.Id.ToString();
+                    Model.Title = aggregate.Id.ToString();
+                    Model.Label = aggregate.Id.ToString();
                     return Disposable.Empty;
             }
             

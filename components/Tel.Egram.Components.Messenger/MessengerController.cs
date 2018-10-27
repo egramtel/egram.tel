@@ -18,102 +18,86 @@ using Tel.Egram.Utils;
 namespace Tel.Egram.Components.Messenger
 {
     public class MessengerController
-        : BaseController, IMessengerController
+        : BaseController<MessengerControlModel>, IMessengerController
     {
-        private readonly IFactory<CatalogControlModel, ICatalogController> _catalogControllerFactory;
+        private readonly IFactory<Section, ICatalogController> _catalogControllerFactory;
         private ICatalogController _catalogController;
         
-        private readonly IFactory<InformerControlModel, IInformerController> _informerControllerFactory;
+        private readonly IFactory<Target, IInformerController> _informerControllerFactory;
         private IInformerController _informerController;
         
-        private readonly IFactory<ExplorerControlModel, IExplorerController> _explorerControllerFactory;
+        private readonly IFactory<Target, IExplorerController> _explorerControllerFactory;
         private IExplorerController _explorerController;
         
-        private readonly IFactory<EditorControlModel, IEditorController> _editorControllerFactory;
+        private readonly IFactory<Target, IEditorController> _editorControllerFactory;
         private IEditorController _editorController;
 
         public MessengerController(
-            MessengerControlModel messengerModel,
-            IFactory<CatalogControlModel, ICatalogController> catalogControllerFactory,
-            IFactory<InformerControlModel, IInformerController> informerControllerFactory,
-            IFactory<ExplorerControlModel, IExplorerController> explorerControllerFactory,
-            IFactory<EditorControlModel, IEditorController> editorControllerFactory)
+            Section section,
+            IFactory<Section, ICatalogController> catalogControllerFactory,
+            IFactory<Target, IInformerController> informerControllerFactory,
+            IFactory<Target, IExplorerController> explorerControllerFactory,
+            IFactory<Target, IEditorController> editorControllerFactory)
         {
             _catalogControllerFactory = catalogControllerFactory;
             _informerControllerFactory = informerControllerFactory;
             _explorerControllerFactory = explorerControllerFactory;
             _editorControllerFactory = editorControllerFactory;
 
-            BindCatalog(messengerModel)
-                .DisposeWith(this);
-            
-            BindInformer(messengerModel)
-                .DisposeWith(this);
-            
-            BindExplorer(messengerModel)
-                .DisposeWith(this);
-            
-            BindEditor(messengerModel)
-                .DisposeWith(this);
+            BindCatalog(section).DisposeWith(this);
+            BindInformer().DisposeWith(this);
+            BindExplorer().DisposeWith(this);
+            BindEditor().DisposeWith(this);
         }
 
-        private IDisposable BindCatalog(MessengerControlModel model)
+        private IDisposable BindCatalog(Section section)
         {
-            var catalogModel = new CatalogControlModel();
-            
-            model.CatalogControlModel = catalogModel;
-
             _catalogController?.Dispose();
-            _catalogController = _catalogControllerFactory.Create(catalogModel);
+            _catalogController = _catalogControllerFactory.Create(section);
+            Model.CatalogControlModel = _catalogController.Model;
 
             return Disposable.Empty;
         }
 
-        private IDisposable BindInformer(MessengerControlModel model)
+        private IDisposable BindInformer()
         {
-            model.InformerControlModel = InformerControlModel.Hidden();
+            Model.InformerControlModel = InformerControlModel.Hidden();
             
-            return SubscribeToTarget(model, target =>
+            return SubscribeToTarget(target =>
             {
-                var informerModel = InformerControlModel.FromTarget(target);
-                model.InformerControlModel = informerModel;
-
                 _informerController?.Dispose();
-                _informerController = _informerControllerFactory.Create(informerModel);
+                _informerController = _informerControllerFactory.Create(target);
+                Model.InformerControlModel = _informerController.Model;
             });
         }
 
-        private IDisposable BindExplorer(MessengerControlModel model)
+        private IDisposable BindExplorer()
         {
-            model.ExplorerControlModel = ExplorerControlModel.Hidden();
+            Model.ExplorerControlModel = ExplorerControlModel.Hidden();
             
-            return SubscribeToTarget(model, target =>
+            return SubscribeToTarget(target =>
             {
-                var explorerModel = ExplorerControlModel.FromTarget(target);
-                model.ExplorerControlModel = explorerModel;
-
                 _explorerController?.Dispose();
-                _explorerController = _explorerControllerFactory.Create(explorerModel);
+                _explorerController = _explorerControllerFactory.Create(target);
+                Model.ExplorerControlModel = _explorerController.Model;
             });
         }
 
-        private IDisposable BindEditor(MessengerControlModel model)
+        private IDisposable BindEditor()
         {
-            model.EditorControlModel = EditorControlModel.Hidden();
+            Model.EditorControlModel = EditorControlModel.Hidden();
             
-            return SubscribeToTarget(model, target =>
+            return SubscribeToTarget(target =>
             {
-                var editorModel = EditorControlModel.FromTarget(target);
-                model.EditorControlModel = editorModel;
-
                 _editorController?.Dispose();
-                _editorController = _editorControllerFactory.Create(editorModel);
+                _editorController = _editorControllerFactory.Create(target);
+                Model.EditorControlModel = _editorController.Model;
             });
         }
 
-        private IDisposable SubscribeToTarget(MessengerControlModel model, Action<Target> action)
+        private IDisposable SubscribeToTarget(Action<Target> action)
         {
-            return model.WhenAnyValue(ctx => ctx.CatalogControlModel.SelectedEntry)
+            return Model.WhenAnyValue(ctx => ctx.CatalogControlModel.SelectedEntry)
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(entry =>

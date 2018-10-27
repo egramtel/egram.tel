@@ -37,11 +37,8 @@ namespace Tel.Egram
         {
             using (var scope = provider.CreateScope())
             {
-                var model = new MainWindowModel();
                 var app = scope.ServiceProvider.GetService<MainApplication>();
-                
-                scope.ServiceProvider.GetService<IFactory<MainWindowModel, IApplicationController>>()
-                    .Create(model);
+                var controller = scope.ServiceProvider.GetService<IApplicationController>();
                 
                 var builder = AppBuilder.Configure(app);
                 var os = builder.RuntimePlatform.GetRuntimeInfo().OperatingSystem;
@@ -69,7 +66,7 @@ namespace Tel.Egram
                 }
 
                 builder.UseReactiveUI();
-                builder.Start<MainWindow>(() => model);
+                builder.Start<MainWindow>(() => controller.Model);
             }
         }
     }

@@ -14,22 +14,16 @@ using Tel.Egram.Settings;
 namespace Tel.Egram.Components.Settings.Connection
 {
     public class ProxyPopupController
-        : BaseController, IProxyPopupController
+        : BaseController<ProxyPopupControlModel>, IProxyPopupController
     {
         public ProxyPopupController(
-            ProxyPopupControlModel model,
             IProxyManager proxyManager)
         {
-            BindProxies(model, proxyManager)
-                .DisposeWith(this);
-
-            BindActions(model, proxyManager)
-                .DisposeWith(this);
+            BindProxies(proxyManager).DisposeWith(this);
+            BindActions(proxyManager).DisposeWith(this);
         }
 
-        private IDisposable BindProxies(
-            ProxyPopupControlModel model,
-            IProxyManager proxyManager)
+        private IDisposable BindProxies(IProxyManager proxyManager)
         {
             return proxyManager.GetAllProxies()
                 .SubscribeOn(TaskPoolScheduler.Default)
@@ -37,41 +31,38 @@ namespace Tel.Egram.Components.Settings.Connection
                 .Subscribe(proxies =>
                 {
                     var models = proxies.Select(ProxyModel.FromProxy);
-                    model.Proxies = new ObservableCollectionExtended<ProxyModel>(models);
+                    Model.Proxies = new ObservableCollectionExtended<ProxyModel>(models);
                 });
         }
 
-        private IDisposable BindActions(
-            ProxyPopupControlModel model,
-            IProxyManager proxyManager)
+        private IDisposable BindActions(IProxyManager proxyManager)
         {
-            model.PopupTitle = "Proxy settings";
+            Model.PopupTitle = "Proxy settings";
 
-            model.AddProxyCommand = ReactiveCommand.CreateFromObservable(
-                () => AddProxy(model, proxyManager));
+            Model.AddProxyCommand = ReactiveCommand.CreateFromObservable(
+                () => AddProxy(proxyManager));
             
-            model.RemoveProxyCommand = ReactiveCommand.CreateFromObservable(
-                () => RemoveProxy(model, proxyManager));
+            Model.RemoveProxyCommand = ReactiveCommand.CreateFromObservable(
+                () => RemoveProxy(proxyManager));
             
-            model.SaveProxyCommand = ReactiveCommand.CreateFromObservable(
-                () => SaveProxy(model, proxyManager));
+            Model.SaveProxyCommand = ReactiveCommand.CreateFromObservable(
+                () => SaveProxy(proxyManager));
             
-            return model.WhenAnyValue(c => c.IsProxyEnabled)
-                .Select(isEnabled => ToggleProxy(model, proxyManager, isEnabled))
+            return Model.WhenAnyValue(c => c.IsProxyEnabled)
+                .Select(isEnabled => ToggleProxy(proxyManager, isEnabled))
                 .Subscribe();
         }
 
         private IObservable<Unit> ToggleProxy(
-            ProxyPopupControlModel model,
             IProxyManager proxyManager,
             bool isEnabled)
         {
             if (isEnabled)
             {
-                if (model.SelectedProxy != null)
+                if (Model.SelectedProxy != null)
                 {
                     return proxyManager.DisableProxy()
-                        .Concat(proxyManager.EnableProxy(model.SelectedProxy.Proxy));
+                        .Concat(proxyManager.EnableProxy(Model.SelectedProxy.Proxy));
                 }
             }
             else
@@ -82,9 +73,7 @@ namespace Tel.Egram.Components.Settings.Connection
             return Observable.Empty<Unit>();
         }
 
-        private IObservable<Unit> AddProxy(
-            ProxyPopupControlModel model,
-            IProxyManager proxyManager)
+        private IObservable<Unit> AddProxy(IProxyManager proxyManager)
         {
             var proxy = new TdApi.Proxy
             {
@@ -98,20 +87,18 @@ namespace Tel.Egram.Components.Settings.Connection
             };
             
             var proxyModel = ProxyModel.FromProxy(proxy);
-            model.Proxies.Add(proxyModel);
+            Model.Proxies.Add(proxyModel);
             
             return Observable.Empty<Unit>();
         }
 
-        private IObservable<Unit> RemoveProxy(
-            ProxyPopupControlModel model,
-            IProxyManager proxyManager)
+        private IObservable<Unit> RemoveProxy(IProxyManager proxyManager)
         {
-            var proxyModel = model.SelectedProxy;
+            var proxyModel = Model.SelectedProxy;
 
             if (proxyModel != null)
             {
-                model.Proxies.Remove(proxyModel);
+                Model.Proxies.Remove(proxyModel);
                 
                 if (proxyModel.Proxy.Id != 0)
                 {
@@ -122,11 +109,9 @@ namespace Tel.Egram.Components.Settings.Connection
             return Observable.Empty<Unit>();
         }
 
-        private IObservable<Unit> SaveProxy(
-            ProxyPopupControlModel model,
-            IProxyManager proxyManager)
+        private IObservable<Unit> SaveProxy(IProxyManager proxyManager)
         {
-            var proxyModel = model.SelectedProxy;
+            var proxyModel = Model.SelectedProxy;
 
             if (proxyModel != null)
             {

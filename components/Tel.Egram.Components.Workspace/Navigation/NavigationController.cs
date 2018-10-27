@@ -9,19 +9,17 @@ using Tel.Egram.Messaging.Users;
 namespace Tel.Egram.Components.Workspace.Navigation
 {
     public class NavigationController
-        : BaseController, INavigationController
+        : BaseController<NavigationControlModel>, INavigationController
     {
         public NavigationController(
-            NavigationControlModel model,
             IAvatarLoader avatarLoader,
             IUserLoader userLoader)
         {
-            BindAvatar(model, userLoader, avatarLoader)
+            BindAvatar(userLoader, avatarLoader)
                 .DisposeWith(this);
         }
         
         private IDisposable BindAvatar(
-            NavigationControlModel model,
             IUserLoader userLoader,
             IAvatarLoader avatarLoader)
         {
@@ -32,7 +30,7 @@ namespace Tel.Egram.Components.Workspace.Navigation
                 .ObserveOn(AvaloniaScheduler.Instance)
                 .Subscribe(avatar =>
                 {
-                    model.Avatar = avatar;
+                    Model.Avatar = avatar;
                 });
         }
     }

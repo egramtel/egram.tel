@@ -16,38 +16,36 @@ using Tel.Egram.Utils;
 namespace Tel.Egram.Components.Workspace
 {
     public class WorkspaceController
-        : BaseController, IWorkspaceController
+        : BaseController<WorkspacePageModel>, IWorkspaceController
     {
-        private readonly IFactory<NavigationControlModel, INavigationController> _navigationControllerFactory;
+        private readonly IFactory<INavigationController> _navigationControllerFactory;
         private INavigationController _navigationController;
         
-        private readonly IFactory<MessengerControlModel, IMessengerController> _messengerControllerFactory;
+        private readonly IFactory<Section, IMessengerController> _messengerControllerFactory;
         private IMessengerController _messengerController;
         
-        private readonly IFactory<SettingsControlModel, ISettingsController> _settingControllerFactory;
+        private readonly IFactory<ISettingsController> _settingControllerFactory;
         private ISettingsController _settingsController;
 
         public WorkspaceController(
-            WorkspacePageModel workspacePageModel,
-            IFactory<NavigationControlModel, INavigationController> navigationControllerFactory,
-            IFactory<MessengerControlModel, IMessengerController> messengerControllerFactory,
-            IFactory<SettingsControlModel, ISettingsController> settingControllerFactory)
+            IFactory<INavigationController> navigationControllerFactory,
+            IFactory<Section, IMessengerController> messengerControllerFactory,
+            IFactory<ISettingsController> settingControllerFactory)
         {
             _navigationControllerFactory = navigationControllerFactory;
             _messengerControllerFactory = messengerControllerFactory;
             _settingControllerFactory = settingControllerFactory;
 
-            BindNavigation(workspacePageModel)
+            BindNavigation()
                 .DisposeWith(this);
         }
 
-        private IDisposable BindNavigation(WorkspacePageModel model)
+        private IDisposable BindNavigation()
         {
-            var navigationModel = new NavigationControlModel();
-            model.NavigationControlModel = navigationModel;
-            _navigationController = _navigationControllerFactory.Create(navigationModel);
+            _navigationController = _navigationControllerFactory.Create();
+            Model.NavigationControlModel = _navigationController.Model;
             
-            return model.NavigationControlModel.WhenAnyValue(m => m.SelectedTabIndex)
+            return Model.NavigationControlModel.WhenAnyValue(m => m.SelectedTabIndex)
                 .Select(index => (ContentKind)index)
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(AvaloniaScheduler.Instance)
@@ -56,48 +54,42 @@ namespace Tel.Egram.Components.Workspace
                     switch (kind)
                     {
                         case ContentKind.Settings:
-                            model.ContentIndex = 1;
-                            InitSettings(model);
+                            Model.ContentIndex = 1;
+                            InitSettings();
                             break;
                         
                         default:
-                            model.ContentIndex = 0;
-                            InitMessenger(model, kind);
+                            Model.ContentIndex = 0;
+                            InitMessenger(kind);
                             break;
                     }
                 });
         }
 
-        private void InitSettings(WorkspacePageModel model)
+        private void InitSettings()
         {
-            if (model.SettingsControlModel == null)
-            {
-                var settingsControlModel = new SettingsControlModel();
-                
-                model.MessengerControlModel = null;
-                model.SettingsControlModel = settingsControlModel;
-
+            if (Model.SettingsControlModel == null)
+            {   
                 _messengerController?.Dispose();
                 _messengerController = null;
+                Model.MessengerControlModel = null;
                 
-                _settingsController = _settingControllerFactory.Create(settingsControlModel);
+                _settingsController = _settingControllerFactory.Create();
+                Model.SettingsControlModel = _settingsController.Model;
             }
         }
 
-        private void InitMessenger(WorkspacePageModel model, ContentKind kind)
+        private void InitMessenger(ContentKind kind)
         {
-            if (model.MessengerControlModel == null)
+            if (Model.MessengerControlModel == null)
             {
-                var section = (Section) kind;
-                var messengerControlModel = MessengerControlModel.FromSection(section);
-                
-                model.SettingsControlModel = null;
-                model.MessengerControlModel = messengerControlModel;
-
                 _settingsController?.Dispose();
                 _settingsController = null;
+                Model.SettingsControlModel = null;
                 
-                _messengerController = _messengerControllerFactory.Create(messengerControlModel);
+                var section = (Section) kind;
+                _messengerController = _messengerControllerFactory.Create(section);
+                Model.MessengerControlModel = _messengerController.Model;
             }
         }
 

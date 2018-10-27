@@ -13,44 +13,36 @@ using Tel.Egram.Messaging.Chats;
 namespace Tel.Egram.Components.Messenger.Catalog
 {
     public class CatalogController
-        : BaseController, ICatalogController
+        : BaseController<CatalogControlModel>, ICatalogController
     {
         private readonly Subject<IComparer<EntryModel>> _sortingController;
         private readonly Subject<Func<EntryModel, bool>> _filterController;
         
-        public CatalogController(
-            CatalogControlModel model,
-            ICatalogProvider catalogProvider)
+        public CatalogController(Section section, ICatalogProvider catalogProvider)
         {
             _filterController = new Subject<Func<EntryModel, bool>>();
             _sortingController = new Subject<IComparer<EntryModel>>();
 
-            BindProvider(model, catalogProvider)
-                .DisposeWith(this);
-            
-            BindSearch(model)
-                .DisposeWith(this);
+            BindProvider(catalogProvider).DisposeWith(this);
+            BindSearch(section).DisposeWith(this);
         }
 
-        private IDisposable BindProvider(
-            CatalogControlModel model,
-            ICatalogProvider catalogProvider)
-        {   
+        private IDisposable BindProvider(ICatalogProvider catalogProvider)
+        {
+            var entries = Model.Entries;
+            
             return catalogProvider.Chats.Connect()
                 .Filter(_filterController)
                 .Sort(_sortingController)
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(model.Entries)
+                .Bind(entries)
                 .Subscribe();
         }
 
-        private IDisposable BindSearch(
-            CatalogControlModel model)
-        {
-            var section = model.Section;
-            
-            return model.WhenAnyValue(m => m.SearchText)
+        private IDisposable BindSearch(Section section)
+        {   
+            return Model.WhenAnyValue(m => m.SearchText)
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .Subscribe(text =>
                 {

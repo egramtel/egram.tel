@@ -8,39 +8,38 @@ using ReactiveUI;
 using Tel.Egram.Gui.Views.Messenger.Explorer;
 using Tel.Egram.Gui.Views.Messenger.Explorer.Items;
 using Tel.Egram.Gui.Views.Messenger.Explorer.Messages;
+using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Explorer
 {
     public class ExplorerController
-        : BaseController, IExplorerController
+        : BaseController<ExplorerControlModel>, IExplorerController
     {
         private readonly SourceList<ItemModel> _items;
         
         public ExplorerController(
-            ExplorerControlModel model,
+            Target target,
             IMessageManager messageManager,
             IAvatarManager avatarManager)
         {
             _items = new SourceList<ItemModel>();
             
-            BindSource(model)
+            BindSource()
                 .DisposeWith(this);
             
-            BindVisibleRangeChanges(model, messageManager, avatarManager)
+            BindVisibleRangeChanges(target, messageManager, avatarManager)
                 .DisposeWith(this);
             
-            InitMessageLoading(model, messageManager, avatarManager)
+            InitMessageLoading(target, messageManager, avatarManager)
                 .DisposeWith(this);
         }
 
         private IDisposable InitMessageLoading(
-            ExplorerControlModel model,
+            Target target,
             IMessageManager messageManager,
             IAvatarManager avatarManager)
-        {
-            var target = model.Target;
-            
+        {   
             var messageLoading = messageManager.LoadPrevMessages(target)
                 .Select(models => new {
                     Action = new Action(() =>
@@ -81,14 +80,12 @@ namespace Tel.Egram.Components.Messenger.Explorer
         }
 
         private IDisposable BindVisibleRangeChanges(
-            ExplorerControlModel model,
+            Target target,
             IMessageManager messageManager,
             IAvatarManager avatarManager)
-        {
-            var target = model.Target;
-            
+        {   
             var prevRange = default(Range);
-            var visibleRangeChanges = model.WhenAnyValue(m => m.VisibleRange)
+            var visibleRangeChanges = Model.WhenAnyValue(m => m.VisibleRange)
                 .Select(range => new
                 {
                     PrevRange = prevRange,
@@ -191,12 +188,14 @@ namespace Tel.Egram.Components.Messenger.Explorer
                     });
         }
 
-        private IDisposable BindSource(ExplorerControlModel model)
+        private IDisposable BindSource()
         {
+            var items = Model.Items;
+            
             return _items.Connect()
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(model.Items)
+                .Bind(items)
                 .Subscribe();
         }
     }
