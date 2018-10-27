@@ -8,14 +8,13 @@ using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
 using TdLib;
-using Tel.Egram.Gui.Views.Settings;
-using Tel.Egram.Gui.Views.Settings.Connection;
+using Tel.Egram.Models.Settings.Connection;
 using Tel.Egram.Settings;
 
 namespace Tel.Egram.Components.Settings.Connection
 {
     public class ProxyPopupController
-        : BaseController<ProxyPopupControlModel>, IProxyPopupController
+        : BaseController<ProxyPopupModel>, IProxyPopupController
     {
         public ProxyPopupController(
             IProxyManager proxyManager)

@@ -6,13 +6,13 @@ using System.Reactive.Subjects;
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
-using Tel.Egram.Gui.Views.Messenger.Catalog;
-using Tel.Egram.Gui.Views.Messenger.Catalog.Entries;
 using Tel.Egram.Messaging.Chats;
+using Tel.Egram.Models.Messenger.Catalog;
+using Tel.Egram.Models.Messenger.Catalog.Entries;
 
 namespace Tel.Egram.Components.Messenger.Catalog
 {
-    public class CatalogController : BaseController<CatalogControlModel>
+    public class CatalogController : BaseController<CatalogModel>
     {
         private readonly Subject<IComparer<EntryModel>> _sortingController;
         private readonly Subject<Func<EntryModel, bool>> _filterController;

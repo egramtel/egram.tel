@@ -1,10 +1,10 @@
 using System;
-using Tel.Egram.Gui.Views.Settings;
+using Tel.Egram.Models.Settings;
 
 namespace Tel.Egram.Components.Settings
 {
     public interface ISettingsController : IDisposable
     {
-        SettingsControlModel Model { get; }
+        SettingsModel Model { get; }
     }
 }

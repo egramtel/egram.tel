@@ -4,12 +4,12 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using ReactiveUI;
 using Tel.Egram.Graphics;
-using Tel.Egram.Gui.Views.Messenger.Informer;
 using Tel.Egram.Messaging.Chats;
+using Tel.Egram.Models.Messenger.Informer;
 
 namespace Tel.Egram.Components.Messenger.Informer
 {
-    public class InformerController : BaseController<InformerControlModel>
+    public class InformerController : BaseController<InformerModel>
     {
         public InformerController(
             Target target,

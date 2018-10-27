@@ -33,6 +33,15 @@ using Tel.Egram.Gui.Views.Workspace.Navigation;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
 using Tel.Egram.Messaging.Users;
+using Tel.Egram.Models.Application;
+using Tel.Egram.Models.Authentication;
+using Tel.Egram.Models.Messenger;
+using Tel.Egram.Models.Messenger.Catalog;
+using Tel.Egram.Models.Messenger.Editor;
+using Tel.Egram.Models.Messenger.Explorer;
+using Tel.Egram.Models.Messenger.Informer;
+using Tel.Egram.Models.Workspace;
+using Tel.Egram.Models.Workspace.Navigation;
 using Tel.Egram.Persistance;
 using Tel.Egram.Settings;
 using Tel.Egram.Utils;
@@ -135,16 +144,16 @@ namespace Tel.Egram
         
         public static void AddAuthentication(this IServiceCollection services)
         {
-            services.AddTransient<IController<AuthenticationControlModel>, AuthenticationController>();
+            services.AddTransient<IController<AuthenticationModel>, AuthenticationController>();
         }
         
         public static void AddMessenger(this IServiceCollection services)
         {
-            services.AddTransient<IController<MessengerControlModel>, MessengerController>();
-            services.AddTransient<IController<CatalogControlModel>, CatalogController>();
-            services.AddTransient<IController<EditorControlModel>, EditorController>();
-            services.AddTransient<IController<ExplorerControlModel>, ExplorerController>();
-            services.AddTransient<IController<InformerControlModel>, InformerController>();
+            services.AddTransient<IController<MessengerModel>, MessengerController>();
+            services.AddTransient<IController<CatalogModel>, CatalogController>();
+            services.AddTransient<IController<EditorModel>, EditorController>();
+            services.AddTransient<IController<ExplorerModel>, ExplorerController>();
+            services.AddTransient<IController<InformerModel>, InformerController>();
             
             services.AddTransient<IAvatarManager, AvatarManager>();
             services.AddTransient<IMessageManager, MessageManager>();
@@ -166,8 +175,8 @@ namespace Tel.Egram
         
         public static void AddWorkspace(this IServiceCollection services)
         {
-            services.AddTransient<IController<WorkspaceControlModel>, WorkspaceController>();
-            services.AddTransient<IController<NavigationControlModel>, NavigationController>();
+            services.AddTransient<IController<WorkspaceModel>, WorkspaceController>();
+            services.AddTransient<IController<NavigationModel>, NavigationController>();
         }
 
         public static void AddReflection(this IServiceCollection services)

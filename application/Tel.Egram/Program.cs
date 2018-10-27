@@ -7,6 +7,7 @@ using Tel.Egram.Components;
 using Tel.Egram.Components.Application;
 using Tel.Egram.Gui;
 using Tel.Egram.Gui.Views.Application;
+using Tel.Egram.Models.Application;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram

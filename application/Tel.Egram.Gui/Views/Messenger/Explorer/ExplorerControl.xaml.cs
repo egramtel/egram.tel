@@ -4,7 +4,6 @@ using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using PropertyChanged;
 using ReactiveUI;
 using Tel.Egram.Utils;
 

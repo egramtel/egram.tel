@@ -3,13 +3,12 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Avalonia.Threading;
 using Tel.Egram.Graphics;
-using Tel.Egram.Gui.Views.Workspace;
-using Tel.Egram.Gui.Views.Workspace.Navigation;
 using Tel.Egram.Messaging.Users;
+using Tel.Egram.Models.Workspace.Navigation;
 
 namespace Tel.Egram.Components.Workspace.Navigation
 {
-    public class NavigationController : BaseController<NavigationControlModel>
+    public class NavigationController : BaseController<NavigationModel>
     {
         public NavigationController(
             IAvatarLoader avatarLoader,

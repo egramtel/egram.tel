@@ -1,17 +1,17 @@
 using Tel.Egram.Components.Settings.Connection;
-using Tel.Egram.Gui.Views.Settings;
-using Tel.Egram.Gui.Views.Settings.Connection;
+using Tel.Egram.Models.Settings;
+using Tel.Egram.Models.Settings.Connection;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Settings
 {
     public class SettingsController
-        : BaseController<SettingsControlModel>, ISettingsController
+        : BaseController<SettingsModel>, ISettingsController
     {
-        private readonly IFactory<ProxyPopupControlModel, IProxyPopupController> _proxyPopupControllerFactory;
+        private readonly IFactory<ProxyPopupModel, IProxyPopupController> _proxyPopupControllerFactory;
         private IProxyPopupController _proxyPopupController;
 
-        public SettingsController(IFactory<ProxyPopupControlModel, IProxyPopupController> proxyPopupControllerFactory)
+        public SettingsController(IFactory<ProxyPopupModel, IProxyPopupController> proxyPopupControllerFactory)
         {
             _proxyPopupControllerFactory = proxyPopupControllerFactory;
         }
