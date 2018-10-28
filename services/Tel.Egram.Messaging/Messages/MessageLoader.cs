@@ -23,7 +23,8 @@ namespace Tel.Egram.Messaging.Messages
             AggregateLoadingState state)
         {
             return LoadAggregateMessages(feed, state)
-                .SelectMany(MapToMessage);
+                .Select(MapToMessage)
+                .Concat();
         }
 
         public IObservable<Message> LoadPrevMessages(
@@ -32,7 +33,8 @@ namespace Tel.Egram.Messaging.Messages
             int limit)
         {
             return GetMessages(feed.ChatData, fromMessageId, limit, 0)
-                .SelectMany(MapToMessage);
+                .Select(MapToMessage)
+                .Concat();
         }
 
         public IObservable<Message> LoadNextMessages(
@@ -42,7 +44,8 @@ namespace Tel.Egram.Messaging.Messages
         {   
             return GetMessages(feed.ChatData, fromMessageId, limit, -limit)
                 .Where(m => m.Id != fromMessageId)
-                .SelectMany(MapToMessage);
+                .Select(MapToMessage)
+                .Concat();
         }
 
         private IObservable<Message> MapToMessage(TdApi.Message msg)
@@ -56,7 +59,7 @@ namespace Tel.Egram.Messaging.Messages
                     MessageData = msg,
                     Chat = chat
                 })
-                .SelectMany(message =>
+                .Select(message =>
                 {
                     if (message.MessageData.SenderUserId != 0)
                     {
@@ -73,7 +76,8 @@ namespace Tel.Egram.Messaging.Messages
                     }
 
                     return Observable.Return(message);
-                });
+                })
+                .Concat();
         }
 
         private IObservable<TdApi.Message> LoadAggregateMessages(
