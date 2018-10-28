@@ -19,7 +19,7 @@ namespace Tel.Egram.Messaging.Chats
         public IObservable<Chat> LoadChats()
         {
             return GetAllChats(new List<TdApi.Chat>())
-                .SelectMany(chat =>
+                .Select(chat =>
                 {
                     if (chat.Type is TdApi.ChatType.ChatTypePrivate type)
                     {
@@ -35,7 +35,8 @@ namespace Tel.Egram.Messaging.Chats
                     {
                         ChatData = chat
                     });
-                });
+                })
+                .Concat();
         }
 
         public IObservable<Chat> LoadChannels()
@@ -110,7 +111,7 @@ namespace Tel.Egram.Messaging.Chats
                     list.Add(chat);
                     return list;
                 })
-                .SelectMany(list =>
+                .Select(list =>
                 {
                     if (list.Count > 0)
                     {
@@ -120,7 +121,8 @@ namespace Tel.Egram.Messaging.Chats
                     }
                     
                     return chats.ToObservable();
-                });
+                })
+                .Concat();
         }
 
         private IObservable<TdApi.Chat> GetChats(long offsetOrder, long offsetChatId, int limit)
@@ -132,10 +134,11 @@ namespace Tel.Egram.Messaging.Chats
                     Limit = limit
                 })
                 .SelectMany(result => result.ChatIds)
-                .SelectMany(chatId => _agent.Execute(new TdApi.GetChat
+                .Select(chatId => _agent.Execute(new TdApi.GetChat
                 {
                     ChatId = chatId
-                }));
+                }))
+                .Concat();
         }
     }
 }
