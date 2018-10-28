@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Avalonia.Threading;
 using ReactiveUI;
@@ -47,7 +48,7 @@ namespace Tel.Egram.Components.Workspace
             return model.WhenAnyValue(m => m.SelectedTabIndex)
                 .Select(index => (ContentKind)index)
                 .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(AvaloniaScheduler.Instance)
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(kind =>
                 {
                     switch (kind)

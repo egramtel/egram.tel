@@ -8,6 +8,6 @@ namespace Tel.Egram.Models.Workspace.Navigation
     {
         public Avatar Avatar { get; set; }
 
-        public int SelectedTabIndex { get; set; } = 2;
+        public int SelectedTabIndex { get; set; }
     }
 }

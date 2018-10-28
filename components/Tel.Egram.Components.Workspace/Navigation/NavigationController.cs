@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Avalonia.Threading;
+using ReactiveUI;
 using Tel.Egram.Graphics;
 using Tel.Egram.Messaging.Users;
 using Tel.Egram.Models.Workspace.Navigation;
@@ -26,7 +27,7 @@ namespace Tel.Egram.Components.Workspace.Navigation
                 .GetMe()
                 .SelectMany(user => avatarLoader.LoadAvatar(user.UserData))
                 .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(AvaloniaScheduler.Instance)
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(avatar =>
                 {
                     Model.Avatar = avatar;

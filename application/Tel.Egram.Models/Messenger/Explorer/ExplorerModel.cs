@@ -9,17 +9,19 @@ namespace Tel.Egram.Models.Messenger.Explorer
     [AddINotifyPropertyChangedInterface]
     public class ExplorerModel
     {
-        public bool IsVisible { get; set; }
+        public bool IsVisible { get; set; } = true;
         
         public ObservableCollectionExtended<ItemModel> Items { get; set; }
+            = new ObservableCollectionExtended<ItemModel>();
         
         public Range VisibleRange { get; set; }
         
-        public Target Target { get; set; }
-        
         public static ExplorerModel Hidden()
         {
-            return new ExplorerModel();
+            return new ExplorerModel
+            {
+                IsVisible = false
+            };
         }
     }
 }

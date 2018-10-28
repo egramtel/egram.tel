@@ -101,7 +101,10 @@ namespace Tel.Egram.Components.Messenger
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(entry =>
                 {
-                    action(entry.Target);
+                    if (entry?.Target != null)
+                    {
+                        action(entry.Target);
+                    }
                 });
         }
 

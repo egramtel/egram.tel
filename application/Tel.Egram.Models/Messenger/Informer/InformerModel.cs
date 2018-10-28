@@ -6,7 +6,7 @@ namespace Tel.Egram.Models.Messenger.Informer
     [AddINotifyPropertyChangedInterface]
     public class InformerModel
     {
-        public bool IsVisible { get; set; }
+        public bool IsVisible { get; set; } = true;
         
         public string Title { get; set; }
         
@@ -16,7 +16,10 @@ namespace Tel.Egram.Models.Messenger.Informer
         
         public static InformerModel Hidden()
         {
-            return new InformerModel();
+            return new InformerModel
+            {
+                IsVisible = false
+            };
         }
     }
 }

@@ -12,22 +12,26 @@
         
         <catalog:CatalogControl
             DataContext="{Binding CatalogModel}"
+            IsVisible="{Binding IsVisible}"
             Grid.Column="0"
             Grid.RowSpan="3" />
         
         <informer:InformerControl
             DataContext="{Binding InformerModel}"
+            IsVisible="{Binding IsVisible}"
             Grid.Column="1"
             Grid.Row="0" />
         
         <explorer:ExplorerControl
             DataContext="{Binding ExplorerModel}"
+            IsVisible="{Binding IsVisible}"
             VisibleRange="{Binding VisibleRange, Mode=TwoWay}"
             Grid.Column="1"
             Grid.Row="1" />
         
         <editor:EditorControl
             DataContext="{Binding EditorModel}"
+            IsVisible="{Binding IsVisible}"
             Grid.Column="1"
             Grid.Row="2" />
         
