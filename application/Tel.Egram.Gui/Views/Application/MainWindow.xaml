@@ -31,7 +31,13 @@
                 DataContext="{Binding WorkspaceModel}" />
         
         </Carousel>
-        
+
+        <TextBlock
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Text="{Binding ConnectionState}"
+            />
+
         <!-- <popup:PopupControl -->
         <!--     IsVisible="{Binding IsPopupVisible}" -->
         <!--     DataContext="{Binding PopupModel}" /> -->
