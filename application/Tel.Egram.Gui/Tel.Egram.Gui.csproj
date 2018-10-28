@@ -3,10 +3,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.6.2-build6440-beta" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.6.2-build6440-beta" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.6.2-build6440-beta" />
-    <PackageReference Include="DynamicData" Version="6.5.1.2479" />
+    <PackageReference Include="Avalonia" Version="0.7.0-build331-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.7.0-build331-beta" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.7.0-build331-beta" />
+    <PackageReference Include="DynamicData" Version="6.6.1.2507" />
     <PackageReference Include="ReactiveUI" Version="9.0.1" />
     <PackageReference Include="System.Reactive" Version="4.0.0" />
   </ItemGroup>

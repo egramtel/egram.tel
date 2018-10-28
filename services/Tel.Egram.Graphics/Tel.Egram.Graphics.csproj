@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.6.2-build6440-beta" />
+    <PackageReference Include="Avalonia" Version="0.7.0-build331-beta" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.1" />
     <PackageReference Include="System.Reactive" Version="4.0.0" />
   </ItemGroup>
