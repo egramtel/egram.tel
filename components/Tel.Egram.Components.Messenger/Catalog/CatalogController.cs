@@ -9,6 +9,7 @@ using ReactiveUI;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Models.Messenger.Catalog;
 using Tel.Egram.Models.Messenger.Catalog.Entries;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Catalog
 {
@@ -17,24 +18,29 @@ namespace Tel.Egram.Components.Messenger.Catalog
         private readonly Subject<IComparer<EntryModel>> _sortingController;
         private readonly Subject<Func<EntryModel, bool>> _filterController;
         
-        public CatalogController(Section section, ICatalogProvider catalogProvider)
+        public CatalogController(
+            Section section,
+            ISchedulers schedulers,
+            ICatalogProvider catalogProvider)
         {
             _filterController = new Subject<Func<EntryModel, bool>>();
             _sortingController = new Subject<IComparer<EntryModel>>();
 
-            BindProvider(catalogProvider).DisposeWith(this);
+            BindProvider(schedulers, catalogProvider).DisposeWith(this);
             BindSearch(section).DisposeWith(this);
         }
 
-        private IDisposable BindProvider(ICatalogProvider catalogProvider)
+        private IDisposable BindProvider(
+            ISchedulers schedulers,
+            ICatalogProvider catalogProvider)
         {
             var entries = Model.Entries;
             
             return catalogProvider.Chats.Connect()
                 .Filter(_filterController)
                 .Sort(_sortingController)
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeOn(schedulers.Pool)
+                .ObserveOn(schedulers.Main)
                 .Bind(entries)
                 .Subscribe();
         }

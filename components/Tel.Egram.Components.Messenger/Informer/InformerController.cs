@@ -6,6 +6,7 @@ using ReactiveUI;
 using Tel.Egram.Graphics;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Models.Messenger.Informer;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Informer
 {
@@ -13,14 +14,17 @@ namespace Tel.Egram.Components.Messenger.Informer
     {
         public InformerController(
             Target target,
+            ISchedulers schedulers,
             IAvatarLoader avatarLoader)
         {
-            BindInfo(target, avatarLoader)
+            BindInfo(target, schedulers, avatarLoader)
                 .DisposeWith(this);
         }
         
         private IDisposable BindInfo(
-            Target target, IAvatarLoader avatarLoader)
+            Target target,
+            ISchedulers schedulers,
+            IAvatarLoader avatarLoader)
         {   
             switch (target)
             {
@@ -29,8 +33,8 @@ namespace Tel.Egram.Components.Messenger.Informer
                     Model.Title = chat.ChatData.Title;
                     Model.Label = chat.ChatData.Title;
                     return avatarLoader.LoadAvatar(chat.ChatData)
-                        .SubscribeOn(TaskPoolScheduler.Default)
-                        .ObserveOn(RxApp.MainThreadScheduler)
+                        .SubscribeOn(schedulers.Pool)
+                        .ObserveOn(schedulers.Main)
                         .Subscribe(avatar =>
                         {
                             Model.Avatar = avatar;

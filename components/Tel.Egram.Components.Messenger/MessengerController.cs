@@ -24,12 +24,14 @@ namespace Tel.Egram.Components.Messenger
         private IController<ExplorerModel> _explorerController;
         private IController<EditorModel> _editorController;
 
-        public MessengerController(Section section)
+        public MessengerController(
+            Section section,
+            ISchedulers schedulers)
         {
             BindCatalog(section).DisposeWith(this);
-            BindInformer().DisposeWith(this);
-            BindExplorer().DisposeWith(this);
-            BindEditor().DisposeWith(this);
+            BindInformer(schedulers).DisposeWith(this);
+            BindExplorer(schedulers).DisposeWith(this);
+            BindEditor(schedulers).DisposeWith(this);
         }
 
         private IDisposable BindCatalog(Section section)
@@ -40,44 +42,44 @@ namespace Tel.Egram.Components.Messenger
             return Disposable.Empty;
         }
 
-        private IDisposable BindInformer()
+        private IDisposable BindInformer(ISchedulers schedulers)
         {
             Model.InformerModel = InformerModel.Hidden();
             
-            return SubscribeToTarget(target =>
+            return SubscribeToTarget(schedulers, target =>
             {
                 var model = Activate(target, ref _informerController);
                 Model.InformerModel = model;
             });
         }
 
-        private IDisposable BindExplorer()
+        private IDisposable BindExplorer(ISchedulers schedulers)
         {
             Model.ExplorerModel = ExplorerModel.Hidden();
             
-            return SubscribeToTarget(target =>
+            return SubscribeToTarget(schedulers, target =>
             {
                 var model = Activate(target, ref _explorerController);
                 Model.ExplorerModel = model;
             });
         }
 
-        private IDisposable BindEditor()
+        private IDisposable BindEditor(ISchedulers schedulers)
         {
             Model.EditorModel = EditorModel.Hidden();
             
-            return SubscribeToTarget(target =>
+            return SubscribeToTarget(schedulers, target =>
             {
                 var model = Activate(target, ref _editorController);
                 Model.EditorModel = model;
             });
         }
 
-        private IDisposable SubscribeToTarget(Action<Target> action)
+        private IDisposable SubscribeToTarget(ISchedulers schedulers, Action<Target> action)
         {
             return Model.WhenAnyValue(ctx => ctx.CatalogModel.SelectedEntry)
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeOn(schedulers.Pool)
+                .ObserveOn(schedulers.Main)
                 .Subscribe(entry =>
                 {
                     if (entry?.Target != null)

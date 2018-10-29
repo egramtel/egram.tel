@@ -5,18 +5,23 @@ using ReactiveUI;
 using TdLib;
 using Tel.Egram.Authentication;
 using Tel.Egram.Models.Authentication;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Authentication
 {
     public class AuthenticationController : Controller<AuthenticationModel>
     {
-        public AuthenticationController(IAuthenticator authenticator)
+        public AuthenticationController(
+            ISchedulers schedulers,
+            IAuthenticator authenticator)
         {
-            BindAuthenticator(authenticator)
+            BindAuthenticator(schedulers, authenticator)
                 .DisposeWith(this);
         }
 
-        private IDisposable BindAuthenticator(IAuthenticator authenticator)
+        private IDisposable BindAuthenticator(
+            ISchedulers schedulers,
+            IAuthenticator authenticator)
         {
             var canSendCode = Model
                 .WhenAnyValue(x => x.PhoneNumber)
@@ -32,20 +37,20 @@ namespace Tel.Egram.Components.Authentication
             
             Model.SendCodeCommand = ReactiveCommand.CreateFromObservable(
                 () => authenticator.SetPhoneNumber(Model.PhoneNumber),
-                canSendCode, RxApp.MainThreadScheduler);
+                canSendCode, schedulers.Main);
 
             Model.CheckCodeCommand = ReactiveCommand.CreateFromObservable(
                 () => authenticator.CheckCode(Model.ConfirmCode, Model.FirstName, Model.LastName),
-                canCheckCode, RxApp.MainThreadScheduler);
+                canCheckCode, schedulers.Main);
             
             Model.CheckPasswordCommand = ReactiveCommand.CreateFromObservable(
                 () => authenticator.CheckPassword(Model.Password),
-                canCheckPassword, RxApp.MainThreadScheduler);
+                canCheckPassword, schedulers.Main);
             
             var stateObservable = authenticator
                 .ObserveState()
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler);
+                .SubscribeOn(schedulers.Pool)
+                .ObserveOn(schedulers.Main);
             
             return stateObservable
                 .Subscribe(state =>

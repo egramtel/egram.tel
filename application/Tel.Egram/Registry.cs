@@ -53,6 +53,9 @@ namespace Tel.Egram
     {
         public static void AddUtils(this IServiceCollection services)
         {
+            // schedulers
+            services.AddScoped<ISchedulers, Schedulers>();
+            
             // tdlib
             services.AddScoped(_ =>
             {

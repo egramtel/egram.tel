@@ -7,17 +7,21 @@ using TdLib;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
 using Tel.Egram.Models.Messenger.Editor;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Editor
 {
     public class EditorController : Controller<EditorModel>
     {
-        public EditorController(Target target, IMessageSender messageSender)
+        public EditorController(
+            Target target,
+            ISchedulers schedulers,
+            IMessageSender messageSender)
         {
             switch (target)
             {
                 case Chat chat:
-                    BindMessageSender(chat, messageSender)
+                    BindMessageSender(chat, schedulers, messageSender)
                         .DisposeWith(this);
                     break;
             }
@@ -25,6 +29,7 @@ namespace Tel.Egram.Components.Messenger.Editor
         
         private IDisposable BindMessageSender(
             Chat chat,
+            ISchedulers schedulers,
             IMessageSender messageSender)
         {
             var canSendCode = Model
@@ -43,11 +48,11 @@ namespace Tel.Egram.Components.Messenger.Editor
                     })
                     .Select(_ => Unit.Default),
                 canSendCode,
-                RxApp.MainThreadScheduler);
+                schedulers.Main);
 
             return Model.SendCommand
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeOn(schedulers.Pool)
+                .ObserveOn(schedulers.Main)
                 .Subscribe(_ =>
                 {
                     Model.Text = null;

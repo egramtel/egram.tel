@@ -23,20 +23,20 @@ namespace Tel.Egram.Components.Workspace
         private IController<MessengerModel> _messengerController;
         private IController<SettingsModel> _settingsController;
 
-        public WorkspaceController()
+        public WorkspaceController(ISchedulers schedulers)
         {
-            BindNavigation().DisposeWith(this);
+            BindNavigation(schedulers).DisposeWith(this);
         }
 
-        private IDisposable BindNavigation()
+        private IDisposable BindNavigation(ISchedulers schedulers)
         {
             var model = Activate(ref _navigationController);
             Model.NavigationModel = model;
             
             return model.WhenAnyValue(m => m.SelectedTabIndex)
                 .Select(index => (ContentKind)index)
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeOn(schedulers.Pool)
+                .ObserveOn(schedulers.Main)
                 .Subscribe(kind =>
                 {
                     switch (kind)

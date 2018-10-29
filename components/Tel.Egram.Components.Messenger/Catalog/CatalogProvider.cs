@@ -9,6 +9,7 @@ using TdLib;
 using Tel.Egram.Graphics;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Models.Messenger.Catalog.Entries;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Catalog
 {
@@ -21,6 +22,7 @@ namespace Tel.Egram.Components.Messenger.Catalog
         public IObservableCache<EntryModel, long> Chats => _chats;
 
         public CatalogProvider(
+            ISchedulers schedulers,
             IChatLoader chatLoader,
             IChatUpdater chatUpdater,
             IAvatarLoader avatarLoader
@@ -29,18 +31,23 @@ namespace Tel.Egram.Components.Messenger.Catalog
             _entryStore = new Dictionary<long, EntryModel>();
             _chats = new SourceCache<EntryModel, long>(m => m.Id);
             
-            LoadChats(chatLoader, avatarLoader)
+            LoadChats(schedulers, chatLoader, avatarLoader)
                 .DisposeWith(_serviceDisposable);
-            BindOrderUpdates(chatLoader, chatUpdater, avatarLoader)
+            
+            BindOrderUpdates(schedulers, chatLoader, chatUpdater, avatarLoader)
                 .DisposeWith(_serviceDisposable);
-            BindEntryUpdates(chatLoader, chatUpdater, avatarLoader)
+            
+            BindEntryUpdates(schedulers, chatLoader, chatUpdater, avatarLoader)
                 .DisposeWith(_serviceDisposable);
         }
 
         /// <summary>
         /// Load chats into observable cache
         /// </summary>
-        private IDisposable LoadChats(IChatLoader chatLoader, IAvatarLoader avatarLoader)
+        private IDisposable LoadChats(
+            ISchedulers schedulers,
+            IChatLoader chatLoader,
+            IAvatarLoader avatarLoader)
         {
             return chatLoader.LoadChats()
                 .Select(GetChatEntryModel)
@@ -63,8 +70,8 @@ namespace Tel.Egram.Components.Messenger.Catalog
                         Entry = entry,
                         Avatar = avatar
                     }))
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeOn(schedulers.Pool)
+                .ObserveOn(schedulers.Main)
                 .Subscribe(item =>
                 {
                     var entry = item.Entry;
@@ -77,20 +84,21 @@ namespace Tel.Egram.Components.Messenger.Catalog
         /// Subscribe to updates that involve order change
         /// </summary>
         private IDisposable BindOrderUpdates(
+            ISchedulers schedulers,
             IChatLoader chatLoader,
             IChatUpdater chatUpdater,
-            IAvatarLoader avatarLoader
-            )
+            IAvatarLoader avatarLoader)
         {
             return chatUpdater.GetOrderUpdates()
                 .Buffer(TimeSpan.FromSeconds(1))
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeOn(schedulers.Pool)
+                .ObserveOn(schedulers.Main)
                 .Subscribe(changes =>
                 {
                     if (changes.Count > 0)
                     {
-                        LoadChats(chatLoader, avatarLoader).DisposeWith(_serviceDisposable);
+                        LoadChats(schedulers, chatLoader, avatarLoader)
+                            .DisposeWith(_serviceDisposable);
                     }
                 });
         }
@@ -99,10 +107,10 @@ namespace Tel.Egram.Components.Messenger.Catalog
         /// Subscribe to updates for individual entries
         /// </summary>
         private IDisposable BindEntryUpdates(
+            ISchedulers schedulers,
             IChatLoader chatLoader,
             IChatUpdater chatUpdater,
-            IAvatarLoader avatarLoader
-            )
+            IAvatarLoader avatarLoader)
         {
             return chatUpdater.GetChatUpdates()
                 .Buffer(TimeSpan.FromSeconds(1))
@@ -119,8 +127,8 @@ namespace Tel.Egram.Components.Messenger.Catalog
                         Entry = item.Entry,
                         Avatar = avatar
                     }))
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeOn(schedulers.Pool)
+                .ObserveOn(schedulers.Main)
                 .Subscribe(item =>
                 {
                     UpdateChatEntryModel(item.Entry, item.Chat, item.Avatar);

@@ -22,21 +22,24 @@ namespace Tel.Egram.Components.Application
         private IController<WorkspaceModel> _workspaceController;
 
         public ApplicationController(
+            ISchedulers schedulers,
             IAuthenticator authenticator,
             IApplicationPopupController applicationPopupController)
         {   
-            BindAuthenticator(authenticator)
+            BindAuthenticator(schedulers, authenticator)
                 .DisposeWith(this);
 
-            BindPopup(applicationPopupController)
+            BindPopup(schedulers, applicationPopupController)
                 .DisposeWith(this);
         }
 
-        private IDisposable BindAuthenticator(IAuthenticator authenticator)
+        private IDisposable BindAuthenticator(
+            ISchedulers schedulers,
+            IAuthenticator authenticator)
         {
             return authenticator
                 .ObserveState()
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .ObserveOn(schedulers.Main)
                 .Subscribe(state =>
                 {   
                     switch (state)
@@ -68,14 +71,16 @@ namespace Tel.Egram.Components.Application
                 });
         }
 
-        private IDisposable BindPopup(IApplicationPopupController controller)
+        private IDisposable BindPopup(
+            ISchedulers schedulers,
+            IApplicationPopupController controller)
         {
             return Observable.FromEventPattern<PopupModel>(
                     h => controller.ContextChanged += h,
                     h => controller.ContextChanged -= h)
                 .Select(e => e.EventArgs)
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeOn(schedulers.Pool)
+                .ObserveOn(schedulers.Main)
                 .Subscribe(popupModel =>
                 {
                     Model.PopupModel = popupModel ?? new PopupModel

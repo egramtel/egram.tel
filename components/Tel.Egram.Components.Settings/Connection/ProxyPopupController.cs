@@ -10,6 +10,7 @@ using ReactiveUI;
 using TdLib;
 using Tel.Egram.Models.Settings.Connection;
 using Tel.Egram.Settings;
+using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Settings.Connection
 {
@@ -17,17 +18,20 @@ namespace Tel.Egram.Components.Settings.Connection
         : Controller<ProxyPopupModel>, IProxyPopupController
     {
         public ProxyPopupController(
+            ISchedulers schedulers,
             IProxyManager proxyManager)
         {
-            BindProxies(proxyManager).DisposeWith(this);
-            BindActions(proxyManager).DisposeWith(this);
+            BindProxies(schedulers, proxyManager).DisposeWith(this);
+            BindActions(schedulers, proxyManager).DisposeWith(this);
         }
 
-        private IDisposable BindProxies(IProxyManager proxyManager)
+        private IDisposable BindProxies(
+            ISchedulers schedulers,
+            IProxyManager proxyManager)
         {
             return proxyManager.GetAllProxies()
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeOn(schedulers.Pool)
+                .ObserveOn(schedulers.Main)
                 .Subscribe(proxies =>
                 {
                     var models = proxies.Select(ProxyModel.FromProxy);
@@ -35,7 +39,9 @@ namespace Tel.Egram.Components.Settings.Connection
                 });
         }
 
-        private IDisposable BindActions(IProxyManager proxyManager)
+        private IDisposable BindActions(
+            ISchedulers schedulers,
+            IProxyManager proxyManager)
         {
             Model.PopupTitle = "Proxy settings";
 

@@ -19,23 +19,25 @@ namespace Tel.Egram.Components.Messenger.Explorer
         
         public ExplorerController(
             Target target,
+            ISchedulers schedulers,
             IMessageManager messageManager,
             IAvatarManager avatarManager)
         {
             _items = new SourceList<ItemModel>();
             
-            BindSource()
+            BindSource(schedulers)
                 .DisposeWith(this);
             
-            BindVisibleRangeChanges(target, messageManager, avatarManager)
+            BindVisibleRangeChanges(target, schedulers, messageManager, avatarManager)
                 .DisposeWith(this);
             
-            InitMessageLoading(target, messageManager, avatarManager)
+            InitMessageLoading(target, schedulers, messageManager, avatarManager)
                 .DisposeWith(this);
         }
 
         private IDisposable InitMessageLoading(
             Target target,
+            ISchedulers schedulers,
             IMessageManager messageManager,
             IAvatarManager avatarManager)
         {   
@@ -75,11 +77,12 @@ namespace Tel.Egram.Components.Messenger.Explorer
                         .Concat(avatarLoadAction);
                 });
             
-            return SubscribeToActions(avatarLoading);
+            return SubscribeToActions(schedulers, avatarLoading);
         }
 
         private IDisposable BindVisibleRangeChanges(
             Target target,
+            ISchedulers schedulers,
             IMessageManager messageManager,
             IAvatarManager avatarManager)
         {   
@@ -164,15 +167,15 @@ namespace Tel.Egram.Components.Messenger.Explorer
                         .Concat(avatarLoadAction);
                 });
 
-            return SubscribeToActions(avatarLoading);
+            return SubscribeToActions(schedulers, avatarLoading);
         }
 
-        private IDisposable SubscribeToActions(IObservable<Action> actions)
+        private IDisposable SubscribeToActions(ISchedulers schedulers, IObservable<Action> actions)
         {
             return actions
                 .Buffer(TimeSpan.FromMilliseconds(100))
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeOn(schedulers.Pool)
+                .ObserveOn(schedulers.Main)
                 .Subscribe(
                     actionList =>
                     {
@@ -187,13 +190,13 @@ namespace Tel.Egram.Components.Messenger.Explorer
                     });
         }
 
-        private IDisposable BindSource()
+        private IDisposable BindSource(ISchedulers schedulers)
         {
             var items = Model.Items;
             
             return _items.Connect()
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeOn(schedulers.Pool)
+                .ObserveOn(schedulers.Main)
                 .Bind(items)
                 .Subscribe();
         }
