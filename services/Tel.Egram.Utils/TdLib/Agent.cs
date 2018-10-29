@@ -16,12 +16,6 @@ namespace Tel.Egram.Utils.TdLib
             _dialer = dialer;
         }
 
-        public virtual IObservable<TdApi.ConnectionState> ObserveConnectionState()
-        {
-            return Updates.OfType<TdApi.Update.UpdateConnectionState>()
-                .Select(update => update.State);
-        }
-
         public virtual IObservable<TdApi.Update> Updates
         {
             get

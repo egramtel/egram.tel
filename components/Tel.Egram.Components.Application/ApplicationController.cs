@@ -47,27 +47,25 @@ namespace Tel.Egram.Components.Application
 
         private IDisposable BindConnection(IAgent agent)
         {
-            return agent
-                .ObserveConnectionState()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(state =>
+            return agent.Updates.OfType<TdApi.Update.UpdateConnectionState>()
+                .Subscribe(update => 
                 {
-                    switch (state)
+                switch (update.State)
                     {
                         case TdApi.ConnectionState.ConnectionStateConnecting _:
-                            UpdateConnectionState(0);
+                            UpdateConnectionState(ConnectionState.Connecting);
                             break;
                         case TdApi.ConnectionState.ConnectionStateConnectingToProxy _:
-                            UpdateConnectionState(1);
+                            UpdateConnectionState(ConnectionState.ConnectingToProxy);
                             break;
                         case TdApi.ConnectionState.ConnectionStateReady _:
-                            UpdateConnectionState(2);
+                            UpdateConnectionState(ConnectionState.Ready);
                             break;
                         case TdApi.ConnectionState.ConnectionStateUpdating _:
-                            UpdateConnectionState(3);
+                            UpdateConnectionState(ConnectionState.Updating);
                             break;
                         case TdApi.ConnectionState.ConnectionStateWaitingForNetwork _:
-                            UpdateConnectionState(4);
+                            UpdateConnectionState(ConnectionState.WaitingForNetwork);
                             break;
                     }
                 });
@@ -175,15 +173,9 @@ namespace Tel.Egram.Components.Application
             Model.AuthenticationModel = null;
         }
 
-        private void UpdateConnectionState(int state)
+        private void UpdateConnectionState(ConnectionState state)
         {
-            if (Model.AuthenticationModel == null)
-            {
-                var model = _authenticationActivator.Activate(ref _authenticationController);
-                Model.AuthenticationModel = model;
-            }
-
-            var stateTexts = new string[]
+            string[] stateTexts = new string[]
             {
                 "Connecting...",
                 "Connecting to proxy...",
@@ -192,12 +184,7 @@ namespace Tel.Egram.Components.Application
                 "Waiting for network..."
             };
 
-            Model.ConnectionState = stateTexts[state];
-
-            _workspaceController?.Dispose();
-
-            Model.StartupModel = null;
-            Model.WorkspaceModel = null;
+            Model.ConnectionState = stateTexts[(int)state];
         }
 
         public override void Dispose()

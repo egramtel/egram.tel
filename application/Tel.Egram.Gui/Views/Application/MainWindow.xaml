@@ -41,7 +41,7 @@
         <!-- <popup:PopupControl -->
         <!--     IsVisible="{Binding IsPopupVisible}" -->
         <!--     DataContext="{Binding PopupModel}" /> -->
-        
+
     </Panel>
     
 </Window>

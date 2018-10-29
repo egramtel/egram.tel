@@ -7,8 +7,6 @@ namespace Tel.Egram.Utils.TdLib
     {
         IObservable<TdApi.Update> Updates { get; }
 
-        IObservable<TdApi.ConnectionState> ObserveConnectionState();
-
         IObservable<T> Execute<T>(TdApi.Function<T> function)
             where T : TdApi.Object;
     }
