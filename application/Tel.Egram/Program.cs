@@ -20,14 +20,13 @@ namespace Tel.Egram
             ConfigureServices(services);
             
             var provider = services.BuildServiceProvider();
-            Run(provider);
+            Run(services, provider);
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddUtils();
             services.AddServices();
-            services.AddComponents();
             services.AddApplication();
             services.AddPopup();
             services.AddAuthentication();
@@ -37,13 +36,17 @@ namespace Tel.Egram
             services.AddReflection();
         }
 
-        private static void Run(IServiceProvider provider)
+        private static void Run(ServiceCollection services, IServiceProvider provider)
         {
             using (var scope = provider.CreateScope())
             {
-                var app = scope.ServiceProvider.GetService<MainApplication>();
-                var controller = scope.ServiceProvider.GetService<IController<MainWindowModel>>();
+                IController<MainWindowModel> controller = null;
                 
+                ControllerActivator.Instance.SetServiceCollection(services);
+                ControllerActivator.Instance.SetServiceProvider(scope.ServiceProvider);
+                ControllerActivator.Instance.Activate(ref controller);
+                
+                var app = scope.ServiceProvider.GetService<MainApplication>();
                 var builder = AppBuilder.Configure(app);
                 var os = builder.RuntimePlatform.GetRuntimeInfo().OperatingSystem;
                 
@@ -71,6 +74,8 @@ namespace Tel.Egram
 
                 builder.UseReactiveUI();
                 builder.Start<MainWindow>(() => controller.Model);
+
+                ControllerActivator.Instance.Deactivate(ref controller);
             }
         }
     }

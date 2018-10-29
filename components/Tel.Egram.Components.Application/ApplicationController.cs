@@ -16,23 +16,15 @@ using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Application
 {
-    public class ApplicationController : BaseController<MainWindowModel>
+    public class ApplicationController : Controller<MainWindowModel>
     {
-        private readonly IActivator<AuthenticationModel> _authenticationActivator;
         private IController<AuthenticationModel> _authenticationController;
-        
-        private readonly IActivator<WorkspaceModel> _workspaceActivator;
         private IController<WorkspaceModel> _workspaceController;
 
         public ApplicationController(
             IAuthenticator authenticator,
-            IApplicationPopupController applicationPopupController,
-            IActivator<AuthenticationModel> authenticationActivator,
-            IActivator<WorkspaceModel> workspaceActivator)
-        {
-            _authenticationActivator = authenticationActivator;
-            _workspaceActivator = workspaceActivator;
-            
+            IApplicationPopupController applicationPopupController)
+        {   
             BindAuthenticator(authenticator)
                 .DisposeWith(this);
 
@@ -114,7 +106,7 @@ namespace Tel.Egram.Components.Application
         {
             if (Model.AuthenticationModel == null)
             {
-                var model = _authenticationActivator.Activate(ref _authenticationController);
+                var model = Activate(ref _authenticationController);
                 Model.AuthenticationModel = model;
             }
             
@@ -130,7 +122,7 @@ namespace Tel.Egram.Components.Application
         {
             if (Model.WorkspaceModel == null)
             {
-                var model = _workspaceActivator.Activate(ref _workspaceController);
+                var model = Activate(ref _workspaceController);
                 Model.WorkspaceModel = model;
             }
             
@@ -140,14 +132,6 @@ namespace Tel.Egram.Components.Application
             
             Model.StartupModel = null;
             Model.AuthenticationModel = null;
-        }
-
-        public override void Dispose()
-        {
-            _authenticationController?.Dispose();
-            _workspaceController?.Dispose();
-            
-            base.Dispose();
         }
     }
 }

@@ -9,7 +9,7 @@ using Tel.Egram.Models.Messenger.Informer;
 
 namespace Tel.Egram.Components.Messenger.Informer
 {
-    public class InformerController : BaseController<InformerModel>
+    public class InformerController : Controller<InformerModel>
     {
         public InformerController(
             Target target,

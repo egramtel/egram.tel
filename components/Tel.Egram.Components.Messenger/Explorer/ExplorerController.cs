@@ -13,7 +13,7 @@ using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Explorer
 {
-    public class ExplorerController : BaseController<ExplorerModel>
+    public class ExplorerController : Controller<ExplorerModel>
     {
         private readonly SourceList<ItemModel> _items;
         

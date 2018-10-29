@@ -17,32 +17,20 @@ using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Workspace
 {
-    public class WorkspaceController : BaseController<WorkspaceModel>
+    public class WorkspaceController : Controller<WorkspaceModel>
     {
-        private readonly IActivator<NavigationModel> _navigationActivator;
         private IController<NavigationModel> _navigationController;
-        
-        private readonly IActivator<Section, MessengerModel> _messengerActivator;
         private IController<MessengerModel> _messengerController;
-        
-        private readonly IActivator<SettingsModel> _settingsActivator;
         private IController<SettingsModel> _settingsController;
 
-        public WorkspaceController(
-            IActivator<NavigationModel> navigationActivator,
-            IActivator<Section, MessengerModel> messengerActivator,
-            IActivator<SettingsModel> settingsActivator)
+        public WorkspaceController()
         {
-            _navigationActivator = navigationActivator;
-            _messengerActivator = messengerActivator;
-            _settingsActivator = settingsActivator;
-
             BindNavigation().DisposeWith(this);
         }
 
         private IDisposable BindNavigation()
         {
-            var model = _navigationActivator.Activate(ref _navigationController);
+            var model = Activate(ref _navigationController);
             Model.NavigationModel = model;
             
             return model.WhenAnyValue(m => m.SelectedTabIndex)
@@ -68,11 +56,10 @@ namespace Tel.Egram.Components.Workspace
 
         private void InitSettings()
         {
-            var messengerModel = _messengerActivator.Deactivate(ref _messengerController);
+            var messengerModel = Deactivate(ref _messengerController);
             Model.MessengerModel = messengerModel;
 
-            _settingsActivator.Deactivate(ref _settingsController);
-            var settingsModel = _settingsActivator.Activate(ref _settingsController);
+            var settingsModel = Activate(ref _settingsController);
             Model.SettingsModel = settingsModel;
         }
 
@@ -80,21 +67,11 @@ namespace Tel.Egram.Components.Workspace
         {
             var section = (Section) kind;
             
-            var settingsModel = _settingsActivator.Deactivate(ref _settingsController);
+            var settingsModel = Deactivate(ref _settingsController);
             Model.SettingsModel = settingsModel;
             
-            _messengerActivator.Deactivate(ref _messengerController);
-            var messengerModel = _messengerActivator.Activate(section, ref _messengerController);
+            var messengerModel = Activate(section, ref _messengerController);
             Model.MessengerModel = messengerModel;
-        }
-
-        public override void Dispose()
-        {
-            _navigationActivator.Deactivate(ref _navigationController);
-            _messengerActivator.Deactivate(ref _messengerController);
-            _settingsActivator.Deactivate(ref _settingsController);
-            
-            base.Dispose();
         }
     }
 }

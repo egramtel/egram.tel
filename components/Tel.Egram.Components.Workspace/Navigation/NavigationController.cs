@@ -9,7 +9,7 @@ using Tel.Egram.Models.Workspace.Navigation;
 
 namespace Tel.Egram.Components.Workspace.Navigation
 {
-    public class NavigationController : BaseController<NavigationModel>
+    public class NavigationController : Controller<NavigationModel>
     {
         public NavigationController(
             IAvatarLoader avatarLoader,

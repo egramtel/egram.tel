@@ -103,12 +103,6 @@ namespace Tel.Egram
             // auth
             services.AddScoped<IAuthenticator, Authenticator>();
         }
-
-        public static void AddComponents(this IServiceCollection services)
-        {
-            services.AddScoped(typeof(IActivator<>), typeof(Activator<>));
-            services.AddScoped(typeof(IActivator<,>), typeof(Activator<,>));
-        }
         
         public static void AddApplication(this IServiceCollection services)
         {

@@ -6,7 +6,7 @@ using Tel.Egram.Utils;
 namespace Tel.Egram.Components.Settings
 {
     public class SettingsController
-        : BaseController<SettingsModel>, ISettingsController
+        : Controller<SettingsModel>, ISettingsController
     {
         private readonly IFactory<ProxyPopupModel, IProxyPopupController> _proxyPopupControllerFactory;
         private IProxyPopupController _proxyPopupController;

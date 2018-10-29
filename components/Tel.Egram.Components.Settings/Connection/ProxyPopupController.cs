@@ -14,7 +14,7 @@ using Tel.Egram.Settings;
 namespace Tel.Egram.Components.Settings.Connection
 {
     public class ProxyPopupController
-        : BaseController<ProxyPopupModel>, IProxyPopupController
+        : Controller<ProxyPopupModel>, IProxyPopupController
     {
         public ProxyPopupController(
             IProxyManager proxyManager)

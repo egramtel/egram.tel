@@ -17,32 +17,15 @@ using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger
 {
-    public class MessengerController : BaseController<MessengerModel>
+    public class MessengerController : Controller<MessengerModel>
     {
-        private readonly IActivator<Section, CatalogModel> _catalogActivator;
         private IController<CatalogModel> _catalogController;
-        
-        private readonly IActivator<Target, InformerModel> _informerActivator;
         private IController<InformerModel> _informerController;
-        
-        private readonly IActivator<Target, ExplorerModel> _explorerActivator;
         private IController<ExplorerModel> _explorerController;
-        
-        private readonly IActivator<Target, EditorModel> _editorActivator;
         private IController<EditorModel> _editorController;
 
-        public MessengerController(
-            Section section,
-            IActivator<Section, CatalogModel> catalogActivator,
-            IActivator<Target, InformerModel> informerActivator,
-            IActivator<Target, ExplorerModel> explorerActivator,
-            IActivator<Target, EditorModel> editorActivator)
+        public MessengerController(Section section)
         {
-            _catalogActivator = catalogActivator;
-            _informerActivator = informerActivator;
-            _explorerActivator = explorerActivator;
-            _editorActivator = editorActivator;
-
             BindCatalog(section).DisposeWith(this);
             BindInformer().DisposeWith(this);
             BindExplorer().DisposeWith(this);
@@ -51,8 +34,7 @@ namespace Tel.Egram.Components.Messenger
 
         private IDisposable BindCatalog(Section section)
         {
-            _catalogActivator.Deactivate(ref _catalogController);
-            var model = _catalogActivator.Activate(section, ref _catalogController);
+            var model = Activate(section, ref _catalogController);
             Model.CatalogModel = model;
 
             return Disposable.Empty;
@@ -64,8 +46,7 @@ namespace Tel.Egram.Components.Messenger
             
             return SubscribeToTarget(target =>
             {
-                _informerActivator.Deactivate(ref _informerController);
-                var model = _informerActivator.Activate(target, ref _informerController);
+                var model = Activate(target, ref _informerController);
                 Model.InformerModel = model;
             });
         }
@@ -76,8 +57,7 @@ namespace Tel.Egram.Components.Messenger
             
             return SubscribeToTarget(target =>
             {
-                _explorerActivator.Deactivate(ref _explorerController);
-                var model = _explorerActivator.Activate(target, ref _explorerController);
+                var model = Activate(target, ref _explorerController);
                 Model.ExplorerModel = model;
             });
         }
@@ -88,8 +68,7 @@ namespace Tel.Egram.Components.Messenger
             
             return SubscribeToTarget(target =>
             {
-                _editorActivator.Deactivate(ref _editorController);
-                var model = _editorActivator.Activate(target, ref _editorController);
+                var model = Activate(target, ref _editorController);
                 Model.EditorModel = model;
             });
         }
@@ -106,16 +85,6 @@ namespace Tel.Egram.Components.Messenger
                         action(entry.Target);
                     }
                 });
-        }
-
-        public override void Dispose()
-        {
-            _catalogActivator.Deactivate(ref _catalogController);
-            _informerActivator.Deactivate(ref _informerController);
-            _explorerActivator.Deactivate(ref _explorerController);
-            _editorActivator.Deactivate(ref _editorController);
-            
-            base.Dispose();
         }
     }
 }
