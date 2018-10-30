@@ -36,8 +36,7 @@ namespace Tel.Egram.Components.Messenger
 
         private IDisposable BindCatalog(Section section)
         {
-            var model = Activate(section, ref _catalogController);
-            Model.CatalogModel = model;
+            Model.CatalogModel = Activate(section, ref _catalogController);
 
             return Disposable.Empty;
         }
@@ -48,8 +47,7 @@ namespace Tel.Egram.Components.Messenger
             
             return SubscribeToTarget(schedulers, target =>
             {
-                var model = Activate(target, ref _informerController);
-                Model.InformerModel = model;
+                Model.InformerModel = Activate(target, ref _informerController);
             });
         }
 
@@ -59,8 +57,7 @@ namespace Tel.Egram.Components.Messenger
             
             return SubscribeToTarget(schedulers, target =>
             {
-                var model = Activate(target, ref _explorerController);
-                Model.ExplorerModel = model;
+                Model.ExplorerModel = Activate(target, ref _explorerController);
             });
         }
 
@@ -70,8 +67,7 @@ namespace Tel.Egram.Components.Messenger
             
             return SubscribeToTarget(schedulers, target =>
             {
-                var model = Activate(target, ref _editorController);
-                Model.EditorModel = model;
+                Model.EditorModel = Activate(target, ref _editorController);
             });
         }
 

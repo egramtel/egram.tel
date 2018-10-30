@@ -94,49 +94,39 @@ namespace Tel.Egram.Components.Application
         {
             if (Model.StartupModel == null)
             {
-                var startupPageModel = new StartupModel();
-                Model.StartupModel = startupPageModel;
+                Model.StartupModel = new StartupModel();
             }
+
+            Model.WorkspaceModel = Deactivate(ref _workspaceController);
+            Model.AuthenticationModel = Deactivate(ref _authenticationController);
             
             Model.PageIndex = (int) Page.Initial;
-
-            _authenticationController?.Dispose();
-            _workspaceController?.Dispose();
-            
-            Model.WorkspaceModel = null;
-            Model.AuthenticationModel = null;
         }
 
         private void GoToAuthenticationPage()
         {
             if (Model.AuthenticationModel == null)
             {
-                var model = Activate(ref _authenticationController);
-                Model.AuthenticationModel = model;
+                Model.AuthenticationModel = Activate(ref _authenticationController);
             }
             
             Model.PageIndex = (int) Page.Authentication;
 
-            _workspaceController?.Dispose();
-
             Model.StartupModel = null;
-            Model.WorkspaceModel = null;
+            Model.WorkspaceModel = Deactivate(ref _workspaceController);
         }
 
         private void GoToWorkspacePage()
         {
             if (Model.WorkspaceModel == null)
             {
-                var model = Activate(ref _workspaceController);
-                Model.WorkspaceModel = model;
+                Model.WorkspaceModel = Activate(ref _workspaceController);
             }
             
             Model.PageIndex = (int) Page.Workspace;
             
-            _authenticationController?.Dispose();
-            
             Model.StartupModel = null;
-            Model.AuthenticationModel = null;
+            Model.AuthenticationModel = Deactivate(ref _authenticationController);
         }
     }
 }

@@ -56,22 +56,16 @@ namespace Tel.Egram.Components.Workspace
 
         private void InitSettings()
         {
-            var messengerModel = Deactivate(ref _messengerController);
-            Model.MessengerModel = messengerModel;
-
-            var settingsModel = Activate(ref _settingsController);
-            Model.SettingsModel = settingsModel;
+            Model.MessengerModel = Deactivate(ref _messengerController);
+            Model.SettingsModel = Activate(ref _settingsController);
         }
 
         private void InitMessenger(ContentKind kind)
         {
             var section = (Section) kind;
             
-            var settingsModel = Deactivate(ref _settingsController);
-            Model.SettingsModel = settingsModel;
-            
-            var messengerModel = Activate(section, ref _messengerController);
-            Model.MessengerModel = messengerModel;
+            Model.SettingsModel = Deactivate(ref _settingsController);
+            Model.MessengerModel = Activate(section, ref _messengerController);
         }
     }
 }
