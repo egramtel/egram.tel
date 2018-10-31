@@ -3,8 +3,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\services\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj" />
-    <ProjectReference Include="..\..\services\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Reactive" Version="4.0.0" />

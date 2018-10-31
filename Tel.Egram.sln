@@ -3,41 +3,41 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram", "application\Tel.Egram\Tel.Egram.csproj", "{9E350FAF-4C2D-4E47-B6A7-FBBB72450418}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram", "src\Tel.Egram\Tel.Egram.csproj", "{9E350FAF-4C2D-4E47-B6A7-FBBB72450418}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Gui", "application\Tel.Egram.Gui\Tel.Egram.Gui.csproj", "{563D970A-38C2-4C36-8252-667A0984F6BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Gui", "src\Tel.Egram.Gui\Tel.Egram.Gui.csproj", "{563D970A-38C2-4C36-8252-667A0984F6BA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Components.Application", "components\Tel.Egram.Components.Application\Tel.Egram.Components.Application.csproj", "{7B7569D7-9BE6-44EF-8298-FAA48B18E7B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Components.Application", "src\Tel.Egram.Components.Application\Tel.Egram.Components.Application.csproj", "{7B7569D7-9BE6-44EF-8298-FAA48B18E7B6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{023AD020-281E-4DD4-AB74-99D9235C467E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "application", "application", "{AF2C72D4-DDCB-4077-8153-270EF061A94A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Components.Workspace", "components\Tel.Egram.Components.Workspace\Tel.Egram.Components.Workspace.csproj", "{9CC2DA34-9AFF-442D-8E02-BB7B7161FC27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Components.Workspace", "src\Tel.Egram.Components.Workspace\Tel.Egram.Components.Workspace.csproj", "{9CC2DA34-9AFF-442D-8E02-BB7B7161FC27}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Components.Authentication", "components\Tel.Egram.Components.Authentication\Tel.Egram.Components.Authentication.csproj", "{CFC70B90-A485-4A62-91D3-BA77409FC142}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Components.Authentication", "src\Tel.Egram.Components.Authentication\Tel.Egram.Components.Authentication.csproj", "{CFC70B90-A485-4A62-91D3-BA77409FC142}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{800BCC36-C57E-41FA-A5F7-21EB841913CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Persistance", "services\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj", "{04A561C4-9DC4-43AA-9588-7835F5CAC2E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Persistance", "src\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj", "{04A561C4-9DC4-43AA-9588-7835F5CAC2E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Graphics", "services\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj", "{DE16271E-5A1C-480A-8311-FE46EC492382}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Graphics", "src\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj", "{DE16271E-5A1C-480A-8311-FE46EC492382}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Components.Messenger", "components\Tel.Egram.Components.Messenger\Tel.Egram.Components.Messenger.csproj", "{4369B5F5-49CD-4813-8602-A9161E7A3896}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Components.Messenger", "src\Tel.Egram.Components.Messenger\Tel.Egram.Components.Messenger.csproj", "{4369B5F5-49CD-4813-8602-A9161E7A3896}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Messaging", "services\Tel.Egram.Messaging\Tel.Egram.Messaging.csproj", "{D2695397-39D0-4C9C-8F6E-D7E703605ECD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Messaging", "src\Tel.Egram.Messaging\Tel.Egram.Messaging.csproj", "{D2695397-39D0-4C9C-8F6E-D7E703605ECD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Utils", "services\Tel.Egram.Utils\Tel.Egram.Utils.csproj", "{50FB25CD-9951-4ADA-A30E-0008642DEEBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Utils", "src\Tel.Egram.Utils\Tel.Egram.Utils.csproj", "{50FB25CD-9951-4ADA-A30E-0008642DEEBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Authentication", "services\Tel.Egram.Authentication\Tel.Egram.Authentication.csproj", "{5B6A93BB-F649-4FF8-A316-55E81C43B506}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Authentication", "src\Tel.Egram.Authentication\Tel.Egram.Authentication.csproj", "{5B6A93BB-F649-4FF8-A316-55E81C43B506}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Components.Settings", "components\Tel.Egram.Components.Settings\Tel.Egram.Components.Settings.csproj", "{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Components.Settings", "src\Tel.Egram.Components.Settings\Tel.Egram.Components.Settings.csproj", "{D0ECC966-C6E4-4EA1-B033-1B6CD684A5DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Settings", "services\Tel.Egram.Settings\Tel.Egram.Settings.csproj", "{EABF6E1B-29D0-42B2-BA87-1523B156366F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Settings", "src\Tel.Egram.Settings\Tel.Egram.Settings.csproj", "{EABF6E1B-29D0-42B2-BA87-1523B156366F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Components", "components\Tel.Egram.Components\Tel.Egram.Components.csproj", "{9E5F11B0-6930-4E61-B86A-0E267369A48F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Components", "src\Tel.Egram.Components\Tel.Egram.Components.csproj", "{9E5F11B0-6930-4E61-B86A-0E267369A48F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Models", "application\Tel.Egram.Models\Tel.Egram.Models.csproj", "{A177EB6C-4F7C-41F3-8FA3-E594E8E5DAA8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Models", "src\Tel.Egram.Models\Tel.Egram.Models.csproj", "{A177EB6C-4F7C-41F3-8FA3-E594E8E5DAA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

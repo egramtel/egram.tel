@@ -26,8 +26,8 @@
     <Folder Include="Icons\Dark" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\services\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
-    <ProjectReference Include="..\..\services\Tel.Egram.Messaging\Tel.Egram.Messaging.csproj" />
-    <ProjectReference Include="..\..\services\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Messaging\Tel.Egram.Messaging.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
   </ItemGroup>
 </Project>

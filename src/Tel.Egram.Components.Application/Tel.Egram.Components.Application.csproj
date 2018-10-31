@@ -3,12 +3,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\application\Tel.Egram.Models\Tel.Egram.Models.csproj" />
-    <ProjectReference Include="..\..\services\Tel.Egram.Authentication\Tel.Egram.Authentication.csproj" />
-    <ProjectReference Include="..\..\components\Tel.Egram.Components.Authentication\Tel.Egram.Components.Authentication.csproj" />
-    <ProjectReference Include="..\..\components\Tel.Egram.Components.Workspace\Tel.Egram.Components.Workspace.csproj" />
-    <ProjectReference Include="..\..\services\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj" />
-    <ProjectReference Include="..\..\services\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Models\Tel.Egram.Models.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Authentication\Tel.Egram.Authentication.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Components.Authentication\Tel.Egram.Components.Authentication.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Components.Workspace\Tel.Egram.Components.Workspace.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
     <ProjectReference Include="..\Tel.Egram.Components\Tel.Egram.Components.csproj" />
   </ItemGroup>
   <ItemGroup>
