@@ -13,6 +13,7 @@ using Tel.Egram.Models.Application.Startup;
 using Tel.Egram.Models.Authentication;
 using Tel.Egram.Models.Workspace;
 using Tel.Egram.Utils;
+using Tel.Egram.Utils.TdLib;
 
 namespace Tel.Egram.Components.Application
 {
@@ -24,13 +25,44 @@ namespace Tel.Egram.Components.Application
         public ApplicationController(
             ISchedulers schedulers,
             IAuthenticator authenticator,
-            IApplicationPopupController applicationPopupController)
-        {   
+            IApplicationPopupController applicationPopupController,
+            IAgent agent)
+        {
+            BindConnection(schedulers, agent)
+                .DisposeWith(this);
+
             BindAuthenticator(schedulers, authenticator)
                 .DisposeWith(this);
 
             BindPopup(schedulers, applicationPopupController)
                 .DisposeWith(this);
+        }
+        
+        private IDisposable BindConnection(ISchedulers schedulers, IAgent agent)
+        {
+            return agent.Updates.OfType<TdApi.Update.UpdateConnectionState>()
+                .ObserveOn(schedulers.Main)
+                .Subscribe(update => 
+                {
+                    switch (update.State)
+                    {
+                        case TdApi.ConnectionState.ConnectionStateConnecting _:
+                            UpdateConnectionState(ConnectionState.Connecting);
+                            break;
+                        case TdApi.ConnectionState.ConnectionStateConnectingToProxy _:
+                            UpdateConnectionState(ConnectionState.ConnectingToProxy);
+                            break;
+                        case TdApi.ConnectionState.ConnectionStateReady _:
+                            UpdateConnectionState(ConnectionState.Ready);
+                            break;
+                        case TdApi.ConnectionState.ConnectionStateUpdating _:
+                            UpdateConnectionState(ConnectionState.Updating);
+                            break;
+                        case TdApi.ConnectionState.ConnectionStateWaitingForNetwork _:
+                            UpdateConnectionState(ConnectionState.WaitingForNetwork);
+                            break;
+                    }
+                });
         }
 
         private IDisposable BindAuthenticator(
@@ -127,6 +159,28 @@ namespace Tel.Egram.Components.Application
             
             Model.StartupModel = null;
             Model.AuthenticationModel = Deactivate(ref _authenticationController);
+        }
+
+        private void UpdateConnectionState(ConnectionState state)
+        {
+            string[] stateTexts = new string[]
+            {
+                "Connecting...",
+                "Connecting to proxy...",
+                "Ready.",
+                "Updating...",
+                "Waiting for network..."
+            };
+
+            Model.ConnectionState = stateTexts[(int)state];
+        }
+
+        public override void Dispose()
+        {
+            _authenticationController?.Dispose();
+            _workspaceController?.Dispose();
+            
+            base.Dispose();
         }
     }
 }

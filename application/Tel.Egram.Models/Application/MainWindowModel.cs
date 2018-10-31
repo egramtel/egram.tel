@@ -20,5 +20,7 @@ namespace Tel.Egram.Models.Application
         public int PageIndex { get; set; }
         
         public string WindowTitle { get; set; }
+
+        public string ConnectionState { get; set; }
     }
 }
