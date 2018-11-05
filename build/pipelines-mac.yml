@@ -12,7 +12,7 @@ variables:
 steps:
 - script: dotnet restore
   displayName: 'dotnet restore'
-  workingDirectory: $(Agent.BuildDirectory)/src/Tel.Egram
+  workingDirectory: $(system.defaultWorkingDirectory)/src/Tel.Egram
 - script: dotnet bundle -c $(buildConfiguration) -r osx-x64 -o $(Build.ArtifactStagingDirectory)
   displayName: 'dotnet bundle $(buildConfiguration)'
-  workingDirectory: $(Agent.BuildDirectory)/src/Tel.Egram
+  workingDirectory: $(system.defaultWorkingDirectory)/src/Tel.Egram
