@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Since create-dmg does not override, be sure to delete previous DMG
+test -f Egram.dmg && rm Egram.dmg
+
+# Create the DMG
+./create-dmg \
+  --volname "Egram" \
+  --window-size 600 400 \
+  --icon-size 100 \
+  --icon "Egram.app" 200 190 \
+  --app-drop-link 400 190 \
+  "Egram.dmg" \
+  $1

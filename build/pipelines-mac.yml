@@ -1,6 +1,3 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 pool:
@@ -16,3 +13,8 @@ steps:
 - script: dotnet bundle -c $(buildConfiguration) -r osx-x64 -o $(Build.ArtifactStagingDirectory)
   displayName: 'dotnet bundle $(buildConfiguration)'
   workingDirectory: $(system.defaultWorkingDirectory)/src/Tel.Egram
+- script: |
+    ./build-dmg $(Build.ArtifactStagingDirectory)/Egram.app
+    cp ./Egram.dmg $(Build.ArtifactStagingDirectory)
+  displayName: 'build-dmg'
+  workingDirectory: $(system.defaultWorkingDirectory)/build/dmg-builder
