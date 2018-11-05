@@ -9,12 +9,16 @@ variables:
 steps:
 - script: dotnet restore
   displayName: 'dotnet restore'
-  workingDirectory: $(system.defaultWorkingDirectory)/src/Tel.Egram
-- script: dotnet bundle -c $(buildConfiguration) -r osx-x64 -o $(Build.ArtifactStagingDirectory)
+  workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
+- script: dotnet bundle -c $(buildConfiguration) -r osx-x64
   displayName: 'dotnet bundle $(buildConfiguration)'
-  workingDirectory: $(system.defaultWorkingDirectory)/src/Tel.Egram
+  workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
 - script: |
-    ./build-dmg $(Build.ArtifactStagingDirectory)/Egram.app
-    cp ./Egram.dmg $(Build.ArtifactStagingDirectory)
+    ./build-dmg $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish/Egram.app
+    cp -r $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish/Egram.app $(Build.ArtifactStagingDirectory)
   displayName: 'build-dmg'
-  workingDirectory: $(system.defaultWorkingDirectory)/build/dmg-builder
+  workingDirectory: $(Build.SourcesDirectory)/build/dmg-builder
+- task: PublishPipelineArtifact@0
+  inputs:
+    artifactName: 'dmg'
+    targetPath: $(Build.ArtifactStagingDirectory)
