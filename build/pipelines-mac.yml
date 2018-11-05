@@ -12,5 +12,5 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-- script: dotnet publish -c $(buildConfiguration) -r osx-x64 -o $(Build.ArtifactStagingDirectory) --version-suffix $(Build.BuildNumber)
-  displayName: 'dotnet publish $(buildConfiguration)'
+- script: dotnet bundle -c $(buildConfiguration) -r osx-x64 -o $(Build.ArtifactStagingDirectory)
+  displayName: 'dotnet bundle $(buildConfiguration)'
