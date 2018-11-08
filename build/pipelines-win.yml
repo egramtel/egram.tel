@@ -17,9 +17,9 @@ steps:
   displayName: 'dotnet publish $(buildConfiguration)'
   workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
 - script: |
-    xcopy $(Build.SourcesDirectory)/build/nsis/64bit/installer.nsi $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish
-    "C:\Program Files (x86)\NSIS\makensis.exe" $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish/installer.nsi
-    xcopy $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish/egram-setup.exe $(Build.ArtifactStagingDirectory)
+    copy $(Build.SourcesDirectory)/build/nsis/64bit/installer.nsi $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/win-x64/publish/installer.nsi
+    "C:\Program Files (x86)\NSIS\makensis.exe" $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/win-x64/publish/installer.nsi
+    copy $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/win-x64/publish/egram-setup.exe $(Build.ArtifactStagingDirectory)/egram-setup.exe
   displayName: 'build-nsis'
 - task: PublishPipelineArtifact@0
   inputs:
