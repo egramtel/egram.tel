@@ -15,7 +15,6 @@ steps:
   workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
 - script: |
     ./build-dmg $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish/Egram.app
-    cp -r $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish/Egram.app $(Build.ArtifactStagingDirectory)
     cp *.dmg $(Build.ArtifactStagingDirectory)
   displayName: 'build-dmg'
   workingDirectory: $(Build.SourcesDirectory)/build/dmg-builder

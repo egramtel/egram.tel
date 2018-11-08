@@ -10,7 +10,18 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
-- script: dotnet publish -c $(buildConfiguration) -r win-x64 -o $(Build.ArtifactStagingDirectory) --version-suffix $(Build.BuildNumber)
+- script: dotnet restore
+  displayName: 'dotnet restore'
+  workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
+- script: dotnet publish -c $(buildConfiguration) -r win-x64
   displayName: 'dotnet publish $(buildConfiguration)'
+  workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
+- script: |
+    xcopy $(Build.SourcesDirectory)/build/nsis/64bit/installer.nsi $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish
+    "C:\Program Files (x86)\NSIS\makensis.exe" $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish/installer.nsi
+    xcopy $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish/egram-setup.exe $(Build.ArtifactStagingDirectory)
+  displayName: 'build-nsis'
+- task: PublishPipelineArtifact@0
+  inputs:
+    artifactName: 'installer'
+    targetPath: $(Build.ArtifactStagingDirectory)
