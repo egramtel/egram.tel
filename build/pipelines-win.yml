@@ -18,7 +18,7 @@ steps:
   workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
 - script: |
     copy $(Build.SourcesDirectory)\build\nsis\64bit\installer.nsi $(Build.SourcesDirectory)\src\Tel.Egram\bin\$(buildConfiguration)\netcoreapp2.1\win-x64\publish
-    "C:\Program Files (x86)\NSIS\makensis.exe" $(Build.SourcesDirectory)\src\Tel.Egram\bin\$(buildConfiguration)\netcoreapp2.1\win-x64\publish\installer.nsi
+    makensis $(Build.SourcesDirectory)\src\Tel.Egram\bin\$(buildConfiguration)\netcoreapp2.1\win-x64\publish\installer.nsi
     copy $(Build.SourcesDirectory)\src\Tel.Egram\bin\$(buildConfiguration)\netcoreapp2.1\win-x64\publish\egram-setup.exe $(Build.ArtifactStagingDirectory)
   displayName: 'build-nsis'
 - task: PublishPipelineArtifact@0
