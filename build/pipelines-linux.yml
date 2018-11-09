@@ -26,13 +26,13 @@ steps:
   displayName: 'dotnet publish $(buildConfiguration)'
   workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
 - script: |
-    tar -cvzf egram-ubuntu-x64.tar.gz $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/ubuntu-x64/publish
-    tar -cvzf egram-opensuse-x64.tar.gz $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/opensuse-x64/publish
-    tar -cvzf egram-fedora-x64.tar.gz $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/fedora-x64/publish
-    tar -cvzf egram-debian-x64.tar.gz $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/debian-x64/publish
+    tar -cvzf egram-ubuntu-x64.tar.gz --directory=$(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/ubuntu-x64/publish **/*
+    tar -cvzf egram-opensuse-x64.tar.gz --directory=$(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/opensuse-x64/publish **/*
+    tar -cvzf egram-fedora-x64.tar.gz --directory=$(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/fedora-x64/publish **/*
+    tar -cvzf egram-debian-x64.tar.gz --directory=$(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/debian-x64/publish **/*
     cp $(Build.SourcesDirectory)/src/Tel.Egram/*.tar.gz $(Build.ArtifactStagingDirectory)
   workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
 - task: PublishPipelineArtifact@0
   inputs:
-    artifactName: 'installer'
+    artifactName: 'archives'
     targetPath: $(Build.ArtifactStagingDirectory)
