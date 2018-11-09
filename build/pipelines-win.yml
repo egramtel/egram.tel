@@ -16,9 +16,9 @@ steps:
 - script: dotnet publish -c $(buildConfiguration) -r win-x64
   displayName: 'dotnet publish $(buildConfiguration)'
   workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
-- bash: |
-    wget -P $(Build.SourcesDirectory)/build/nsis https://github.com/egramtel/nsis/raw/master/nsis.zip
-    unzip $(Build.SourcesDirectory)/build/nsis/nsis.zip -d $(Build.SourcesDirectory)/build/nsis
+- powershell: |
+    Invoke-WebRequest -Uri https://github.com/egramtel/nsis/raw/master/nsis.zip -OutFile $(Build.SourcesDirectory)\build\nsis\nsis.zip
+    Expand-Archive -Path $(Build.SourcesDirectory)\build\nsis\nsis.zip -DestinationPath $(Build.SourcesDirectory)/build/nsis
   displayName: 'download-nsis'
 - script: |
     copy $(Build.SourcesDirectory)\build\nsis\64bit\installer.nsi $(Build.SourcesDirectory)\src\Tel.Egram\bin\$(buildConfiguration)\netcoreapp2.1\win-x64\publish
