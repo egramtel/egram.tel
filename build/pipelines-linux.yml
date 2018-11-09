@@ -10,7 +10,29 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
-- script: dotnet publish -c $(buildConfiguration) -r linux-x64 -o $(Build.ArtifactStagingDirectory) --version-suffix $(Build.BuildNumber)
+- script: dotnet restore
+  displayName: 'dotnet restore'
+  workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
+- script: dotnet publish -c $(buildConfiguration) -r ubuntu-x64
   displayName: 'dotnet publish $(buildConfiguration)'
+  workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
+- script: dotnet publish -c $(buildConfiguration) -r opensuse-x64
+  displayName: 'dotnet publish $(buildConfiguration)'
+  workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
+- script: dotnet publish -c $(buildConfiguration) -r fedora-x64
+  displayName: 'dotnet publish $(buildConfiguration)'
+  workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
+- script: dotnet publish -c $(buildConfiguration) -r debian-x64
+  displayName: 'dotnet publish $(buildConfiguration)'
+  workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
+- script: |
+    tar -cvzf egram-ubuntu-x64.tar.gz $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/ubuntu-x64/publish
+    tar -cvzf egram-opensuse-x64.tar.gz $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/opensuse-x64/publish
+    tar -cvzf egram-fedora-x64.tar.gz $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/fedora-x64/publish
+    tar -cvzf egram-debian-x64.tar.gz $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/debian-x64/publish
+    cp $(Build.SourcesDirectory)/src/Tel.Egram/*.tar.gz $(Build.ArtifactStagingDirectory)
+  workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
+- task: PublishPipelineArtifact@0
+  inputs:
+    artifactName: 'installer'
+    targetPath: $(Build.ArtifactStagingDirectory)

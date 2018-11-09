@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeIdentifiers>win-x64;osx-x64;ubuntu-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;osx-x64;ubuntu-x64;opensuse-x64;fedora-x64;debian-x64</RuntimeIdentifiers>
     <RuntimeFrameworkVersion>2.1.5</RuntimeFrameworkVersion>
   </PropertyGroup>
 
