@@ -69,7 +69,9 @@ namespace Tel.Egram
                 }
                 else
                 {
-                    builder.UsePlatformDetect();
+                    builder.UseWin32(
+                        deferredRendering: true
+                    ).UseSkia();
                 }
 
                 builder.UseReactiveUI();

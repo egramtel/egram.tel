@@ -14,6 +14,11 @@ steps:
   displayName: 'dotnet bundle $(buildConfiguration)'
   workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
 - script: |
+    cp $HOME/.nuget/packages/skiasharp/1.60.0/runtimes/osx/native/libSkiaSharp.dylib $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish/Egram.app/Contents/MacOS
+    cp $HOME/.nuget/packages/tdlib.native/1.3.0/runtimes/osx-x64/native/libtdjson.dylib $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish/Egram.app/Contents/MacOS
+  displayName: 'copy native dependencies'
+  workingDirectory: $(Build.SourcesDirectory)/src/Tel.Egram
+- script: |
     ./build-dmg $(Build.SourcesDirectory)/src/Tel.Egram/bin/$(buildConfiguration)/netcoreapp2.1/osx-x64/publish/Egram.app
     cp *.dmg $(Build.ArtifactStagingDirectory)
   displayName: 'build-dmg'
