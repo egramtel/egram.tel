@@ -33,6 +33,10 @@
     <PackageReference Include="Avalonia.Native" Version="0.7.0" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.7.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
+    <PackageReference Include="NSubsys" Version="0.7.0-build20180604-0047">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="ReactiveUI" Version="9.0.1" />
     <PackageReference Include="System.Reactive" Version="4.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.3" />
