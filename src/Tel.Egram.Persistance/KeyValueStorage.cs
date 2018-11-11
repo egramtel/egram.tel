@@ -11,9 +11,9 @@ namespace Tel.Egram.Persistance
     {
         private readonly DatabaseContext _db;
 
-        public KeyValueStorage(IDatabaseContextFactory databaseContextFactory)
+        public KeyValueStorage(DatabaseContext db)
         {
-            _db = databaseContextFactory.CreateDbContext();
+            _db = db;
         }
 
         public void Set<T>(string key, T value)

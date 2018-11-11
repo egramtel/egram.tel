@@ -6,8 +6,8 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
 using ReactiveUI;
+using Tel.Egram.Components.Messenger.Explorer.Messages;
 using Tel.Egram.Graphics;
-using Tel.Egram.Models.Messenger.Explorer.Messages;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Explorer

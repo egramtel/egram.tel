@@ -6,9 +6,9 @@ using System.Reactive.Linq;
 using DynamicData;
 using ReactiveUI;
 using TdLib;
+using Tel.Egram.Components.Messenger.Catalog.Entries;
 using Tel.Egram.Graphics;
 using Tel.Egram.Messaging.Chats;
-using Tel.Egram.Models.Messenger.Catalog.Entries;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Components.Messenger.Catalog
@@ -22,7 +22,6 @@ namespace Tel.Egram.Components.Messenger.Catalog
         public IObservableCache<EntryModel, long> Chats => _chats;
 
         public CatalogProvider(
-            ISchedulers schedulers,
             IChatLoader chatLoader,
             IChatUpdater chatUpdater,
             IAvatarLoader avatarLoader
@@ -31,13 +30,13 @@ namespace Tel.Egram.Components.Messenger.Catalog
             _entryStore = new Dictionary<long, EntryModel>();
             _chats = new SourceCache<EntryModel, long>(m => m.Id);
             
-            LoadChats(schedulers, chatLoader, avatarLoader)
+            LoadChats(chatLoader, avatarLoader)
                 .DisposeWith(_serviceDisposable);
             
-            BindOrderUpdates(schedulers, chatLoader, chatUpdater, avatarLoader)
+            BindOrderUpdates(chatLoader, chatUpdater, avatarLoader)
                 .DisposeWith(_serviceDisposable);
             
-            BindEntryUpdates(schedulers, chatLoader, chatUpdater, avatarLoader)
+            BindEntryUpdates(chatLoader, chatUpdater, avatarLoader)
                 .DisposeWith(_serviceDisposable);
         }
 
@@ -45,7 +44,6 @@ namespace Tel.Egram.Components.Messenger.Catalog
         /// Load chats into observable cache
         /// </summary>
         private IDisposable LoadChats(
-            ISchedulers schedulers,
             IChatLoader chatLoader,
             IAvatarLoader avatarLoader)
         {
@@ -70,8 +68,8 @@ namespace Tel.Egram.Components.Messenger.Catalog
                         Entry = entry,
                         Avatar = avatar
                     }))
-                .SubscribeOn(schedulers.Pool)
-                .ObserveOn(schedulers.Main)
+                .SubscribeOn(RxApp.TaskpoolScheduler)
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(item =>
                 {
                     var entry = item.Entry;
@@ -84,20 +82,19 @@ namespace Tel.Egram.Components.Messenger.Catalog
         /// Subscribe to updates that involve order change
         /// </summary>
         private IDisposable BindOrderUpdates(
-            ISchedulers schedulers,
             IChatLoader chatLoader,
             IChatUpdater chatUpdater,
             IAvatarLoader avatarLoader)
         {
             return chatUpdater.GetOrderUpdates()
                 .Buffer(TimeSpan.FromSeconds(1))
-                .SubscribeOn(schedulers.Pool)
-                .ObserveOn(schedulers.Main)
+                .SubscribeOn(RxApp.TaskpoolScheduler)
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(changes =>
                 {
                     if (changes.Count > 0)
                     {
-                        LoadChats(schedulers, chatLoader, avatarLoader)
+                        LoadChats(chatLoader, avatarLoader)
                             .DisposeWith(_serviceDisposable);
                     }
                 });
@@ -107,7 +104,6 @@ namespace Tel.Egram.Components.Messenger.Catalog
         /// Subscribe to updates for individual entries
         /// </summary>
         private IDisposable BindEntryUpdates(
-            ISchedulers schedulers,
             IChatLoader chatLoader,
             IChatUpdater chatUpdater,
             IAvatarLoader avatarLoader)
@@ -127,8 +123,8 @@ namespace Tel.Egram.Components.Messenger.Catalog
                         Entry = item.Entry,
                         Avatar = avatar
                     }))
-                .SubscribeOn(schedulers.Pool)
-                .ObserveOn(schedulers.Main)
+                .SubscribeOn(RxApp.TaskpoolScheduler)
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(item =>
                 {
                     UpdateChatEntryModel(item.Entry, item.Chat, item.Avatar);

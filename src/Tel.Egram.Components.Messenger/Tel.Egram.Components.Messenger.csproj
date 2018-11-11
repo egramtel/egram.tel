@@ -6,15 +6,13 @@
     <PackageReference Include="Avalonia" Version="0.7.0" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.7.0" />
     <PackageReference Include="DynamicData" Version="6.6.1.2507" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
     <PackageReference Include="ReactiveUI" Version="9.0.1" />
     <PackageReference Include="System.Reactive" Version="4.0.0" />
+    <PackageReference Include="PropertyChanged.Fody" Version="2.5.13" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Tel.Egram.Models\Tel.Egram.Models.csproj" />
     <ProjectReference Include="..\Tel.Egram.Messaging\Tel.Egram.Messaging.csproj" />
     <ProjectReference Include="..\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
     <ProjectReference Include="..\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
-    <ProjectReference Include="..\Tel.Egram.Components\Tel.Egram.Components.csproj" />
   </ItemGroup>
 </Project>

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
+using Tel.Egram.Components.Messenger.Explorer.Messages;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
-using Tel.Egram.Models.Messenger.Explorer.Messages;
 
 namespace Tel.Egram.Components.Messenger.Explorer
 {

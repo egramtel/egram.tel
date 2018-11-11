@@ -1,13 +1,11 @@
-using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Splat;
 using TdLib;
 using Tel.Egram.Authentication;
-using Tel.Egram.Components;
 using Tel.Egram.Components.Application;
 using Tel.Egram.Components.Authentication;
 using Tel.Egram.Components.Messenger;
@@ -15,69 +13,91 @@ using Tel.Egram.Components.Messenger.Catalog;
 using Tel.Egram.Components.Messenger.Editor;
 using Tel.Egram.Components.Messenger.Explorer;
 using Tel.Egram.Components.Messenger.Informer;
-using Tel.Egram.Components.Settings;
-using Tel.Egram.Components.Settings.Connection;
 using Tel.Egram.Components.Workspace;
 using Tel.Egram.Components.Workspace.Navigation;
 using Tel.Egram.Graphics;
 using Tel.Egram.Gui;
-using Tel.Egram.Gui.Views.Application;
-using Tel.Egram.Gui.Views.Authentication;
-using Tel.Egram.Gui.Views.Messenger;
-using Tel.Egram.Gui.Views.Messenger.Catalog;
-using Tel.Egram.Gui.Views.Messenger.Editor;
-using Tel.Egram.Gui.Views.Messenger.Explorer;
-using Tel.Egram.Gui.Views.Messenger.Informer;
-using Tel.Egram.Gui.Views.Workspace;
-using Tel.Egram.Gui.Views.Workspace.Navigation;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
 using Tel.Egram.Messaging.Users;
-using Tel.Egram.Models.Application;
-using Tel.Egram.Models.Authentication;
-using Tel.Egram.Models.Messenger;
-using Tel.Egram.Models.Messenger.Catalog;
-using Tel.Egram.Models.Messenger.Editor;
-using Tel.Egram.Models.Messenger.Explorer;
-using Tel.Egram.Models.Messenger.Informer;
-using Tel.Egram.Models.Workspace;
-using Tel.Egram.Models.Workspace.Navigation;
 using Tel.Egram.Persistance;
-using Tel.Egram.Settings;
-using Tel.Egram.Utils;
 using Tel.Egram.Utils.TdLib;
+using IBitmapLoader = Tel.Egram.Graphics.IBitmapLoader;
+using BitmapLoader = Tel.Egram.Graphics.BitmapLoader;
 
 namespace Tel.Egram
 {
     public static class Registry
     {
-        public static void AddUtils(this IServiceCollection services)
+        public static void AddTdLib(this IMutableDependencyResolver services)
         {
-            // schedulers
-            services.AddScoped<ISchedulers, Schedulers>();
-            
-            // tdlib
-            services.AddScoped(_ =>
+            services.RegisterLazySingleton(() =>
             {
                 Client.Log.SetVerbosityLevel(1);
                 return new Client();
             });
-            services.AddScoped<Hub>();
-            services.AddScoped<Dialer>();
-            services.AddScoped<IAgent, Agent>();
-            
-            // persistance
-            services.AddScoped<IStorage, Storage>();
-            services.AddScoped<IFileLoader, FileLoader>();
-            services.AddScoped<IDatabaseContextFactory, DatabaseContextFactory>();
-            services.AddScoped<IKeyValueStorage, KeyValueStorage>();
-            
-            // settings
-            services.AddScoped<IProxyManager, ProxyManager>();
 
+            services.RegisterLazySingleton(() =>
+            {
+                var client = services.GetService<Client>();
+                return new Hub(client);
+            });
+
+            services.RegisterLazySingleton(() =>
+            {
+                var client = services.GetService<Client>();
+                var hub = services.GetService<Hub>();
+                return new Dialer(client, hub);
+            });
+
+            services.RegisterLazySingleton<IAgent>(() =>
+            {
+                var hub = services.GetService<Hub>();
+                var dialer = services.GetService<Dialer>();
+                return new Agent(hub, dialer);
+            });
+        }
+        
+        public static void AddPersistance(this IMutableDependencyResolver services)
+        {
+            services.RegisterLazySingleton<IStorage>(() =>
+            {
+                return new Storage();
+            });
+            
+            services.RegisterLazySingleton<IFileLoader>(() =>
+            {
+                var agent = services.GetService<IAgent>();
+                return new FileLoader(agent);
+            });
+            
+            services.RegisterLazySingleton<IDatabaseContextFactory>(() =>
+            {
+                return new DatabaseContextFactory();
+            });
+            
+            services.RegisterLazySingleton(() =>
+            {
+                var factory = services.GetService<IDatabaseContextFactory>();
+                return factory.CreateDbContext();
+            });
+            
+            services.RegisterLazySingleton<IKeyValueStorage>(() =>
+            {
+                var db = services.GetService<DatabaseContext>();
+                return new KeyValueStorage(db);
+            });
+        }
+
+        public static void AddServices(this IMutableDependencyResolver services)
+        {
             // graphics
-            services.AddScoped<IColorMapper, ColorMapper>();
-            services.AddScoped<IAvatarCache>(p =>
+            services.RegisterLazySingleton<IColorMapper>(() =>
+            {
+                return new ColorMapper();
+            });
+            
+            services.RegisterLazySingleton<IAvatarCache>(() =>
             {
                 var options = Options.Create(new MemoryCacheOptions
                 {
@@ -85,106 +105,156 @@ namespace Tel.Egram
                 });
                 return new AvatarCache(new MemoryCache(options));
             });
-            services.AddScoped<IBitmapLoader, BitmapLoader>();
-            services.AddScoped<IAvatarLoader, AvatarLoader>();
-        }
-
-        public static void AddServices(this IServiceCollection services)
-        {
-            // feeds
-            services.AddScoped<IChatLoader, ChatLoader>();
-            services.AddScoped<IChatUpdater, ChatUpdater>();
-            services.AddScoped<IFeedLoader, FeedLoader>();
+            
+            services.RegisterLazySingleton<IBitmapLoader>(() =>
+            {
+                var fileLoader = services.GetService<IFileLoader>();
+                return new BitmapLoader(fileLoader);
+            });
+            
+            services.RegisterLazySingleton<IAvatarLoader>(() =>
+            {
+                var fileLoader = services.GetService<IFileLoader>();
+                var avatarCache = services.GetService<IAvatarCache>();
+                var colorMapper = services.GetService<IColorMapper>();
+                
+                return new AvatarLoader(
+                    fileLoader,
+                    avatarCache,
+                    colorMapper);
+            });
+            
+            // chats
+            services.RegisterLazySingleton<IChatLoader>(() =>
+            {
+                var agent = services.GetService<IAgent>();
+                return new ChatLoader(agent);
+            });
+            
+            services.RegisterLazySingleton<IChatUpdater>(() =>
+            {
+                var agent = services.GetService<IAgent>();
+                return new ChatUpdater(agent);
+            });
+            
+            services.RegisterLazySingleton<IFeedLoader>(() =>
+            {
+                var agent = services.GetService<IAgent>();
+                return new FeedLoader(agent);
+            });
             
             // messages
-            services.AddScoped<IMessageLoader, MessageLoader>();
-            services.AddScoped<IMessageSender, MessageSender>();
+            services.RegisterLazySingleton<IMessageLoader>(() =>
+            {
+                var agent = services.GetService<IAgent>();
+                return new MessageLoader(agent);
+            });
+            services.RegisterLazySingleton<IMessageSender>(() =>
+            {
+                var agent = services.GetService<IAgent>();
+                return new MessageSender(agent);
+            });
             
             // users
-            services.AddScoped<IUserLoader, UserLoader>();
+            services.RegisterLazySingleton<IUserLoader>(() =>
+            {
+                var agent = services.GetService<IAgent>();
+                return new UserLoader(agent);
+            });
             
             // auth
-            services.AddScoped<IAuthenticator, Authenticator>();
-        }
-        
-        public static void AddApplication(this IServiceCollection services)
-        {
-            services.AddTransient<IController<MainWindowModel>, ApplicationController>();
-            
-            services.AddScoped<MainApplication>();
-            
-            services.AddScoped(provider => new MainApplication.Initializer(() =>
+            services.RegisterLazySingleton<IAuthenticator>(() =>
             {
-                var db = provider.GetService<IDatabaseContextFactory>().CreateDbContext();
-                db.Database.Migrate();
+                var agent = services.GetService<IAgent>();
+                var storage = services.GetService<IStorage>();
+                return new Authenticator(agent, storage);
+            });
+        }
+        
+        public static void AddApplication(this IMutableDependencyResolver services)
+        {
+            services.RegisterLazySingleton(() =>
+            {
+                var application = new MainApplication();
                 
-                var hub = provider.GetService<Hub>();
-                var task = Task.Factory.StartNew(
-                    () => hub.Start(),
-                    TaskCreationOptions.LongRunning);
-
-                task.ContinueWith(t =>
+                application.Initializing += (sender, args) =>
                 {
-                    var exception = t.Exception;
-                    if (exception != null)
+                    var db = services.GetService<DatabaseContext>();
+                    db.Database.Migrate();
+                
+                    var hub = services.GetService<Hub>();
+                    var task = Task.Factory.StartNew(
+                        () => hub.Start(),
+                        TaskCreationOptions.LongRunning);
+                    
+                    task.ContinueWith(t =>
                     {
-                        // TODO: handle exception and shutdown
-                    }
-                });
-                
-                return Disposable.Create(() =>
+                        var exception = t.Exception;
+                        if (exception != null)
+                        {
+                            // TODO: handle exception and shutdown
+                        }
+                    });
+                };
+
+                application.Disposing += (sender, args) =>
                 {
+                    var hub = services.GetService<Hub>();
                     hub.Stop();
-                });
-            }));
+                };
+                
+                return application;
+            });
         }
         
-        public static void AddAuthentication(this IServiceCollection services)
+        public static void AddAuthentication(this IMutableDependencyResolver services)
         {
-            services.AddTransient<IController<AuthenticationModel>, AuthenticationController>();
+            //
         }
         
-        public static void AddMessenger(this IServiceCollection services)
+        public static void AddMessenger(this IMutableDependencyResolver services)
         {
-            services.AddTransient<IController<MessengerModel>, MessengerController>();
-            services.AddTransient<IController<CatalogModel>, CatalogController>();
-            services.AddTransient<IController<EditorModel>, EditorController>();
-            services.AddTransient<IController<ExplorerModel>, ExplorerController>();
-            services.AddTransient<IController<InformerModel>, InformerController>();
+            // catalog
+            services.RegisterLazySingleton<ICatalogProvider>(() =>
+            {
+                var chatLoader = services.GetService<IChatLoader>();
+                var chatUpdater = services.GetService<IChatUpdater>();
+                var avatarLoader = services.GetService<IAvatarLoader>();
+                
+                return new CatalogProvider(
+                    chatLoader,
+                    chatUpdater,
+                    avatarLoader);
+            });
             
-            services.AddTransient<IAvatarManager, AvatarManager>();
-            services.AddTransient<IMessageManager, MessageManager>();
-            services.AddTransient<IMessageModelFactory, MessageModelFactory>();
+            // messenger
+            services.RegisterLazySingleton<IAvatarManager>(() =>
+            {
+                var avatarLoader = services.GetService<IAvatarLoader>();
+                return new AvatarManager(avatarLoader);
+            });
             
-            services.AddScoped<ICatalogProvider, CatalogProvider>();
+            services.RegisterLazySingleton<IMessageModelFactory>(() =>
+            {
+                return new MessageModelFactory();
+            });
+            
+            services.RegisterLazySingleton<IMessageManager>(() =>
+            {
+                var messageLoader = services.GetService<IMessageLoader>();
+                var messageFactory = services.GetService<IMessageModelFactory>();
+                return new MessageManager(messageLoader, messageFactory);
+            });
         }
         
-        public static void AddPopup(this IServiceCollection services)
+        public static void AddSettings(this IMutableDependencyResolver services)
         {
-            services.AddScoped<IApplicationPopupController, ApplicationPopupController>();
-            services.AddScoped<IPopupController>(p => p.GetService<IApplicationPopupController>());
+            //
         }
         
-        public static void AddSettings(this IServiceCollection services)
+        public static void AddWorkspace(this IMutableDependencyResolver services)
         {
-            services.AddTransient<ISettingsController, SettingsController>();
-        }
-        
-        public static void AddWorkspace(this IServiceCollection services)
-        {
-            services.AddTransient<IController<WorkspaceModel>, WorkspaceController>();
-            services.AddTransient<IController<NavigationModel>, NavigationController>();
-        }
-
-        public static void AddReflection(this IServiceCollection services)
-        {
-            // factories
-            services.AddScoped(typeof(IFactory<>), typeof(Factory<>));
-            services.AddScoped(typeof(IFactory<,>), typeof(Factory<,>));
-
-            // type mapper
-            var typeMapper = new TypeMapper(services);
-            services.AddScoped<ITypeMapper>(_ => typeMapper);
+            //
         }
     }
 }

@@ -8,18 +8,18 @@ using Tel.Egram.Utils.TdLib;
 
 namespace Tel.Egram.Persistance
 {
-    public class FileLoader : IFileLoader, IDisposable
+    public class FileLoader : IFileLoader
     {
         private readonly IAgent _agent;
         private readonly ConcurrentDictionary<int, Subject<TdApi.File>> _files;
-        private readonly IDisposable _updatesSubscription;
+        //private readonly IDisposable _updatesSubscription;
 
         public FileLoader(IAgent agent)
         {
             _agent = agent;
             _files = new ConcurrentDictionary<int, Subject<TdApi.File>>();
-            _updatesSubscription = agent.Updates.OfType<TdApi.Update.UpdateFile>()
-                .Subscribe(HandleUpdate);
+//            _updatesSubscription = agent.Updates.OfType<TdApi.Update.UpdateFile>()
+//                .Subscribe(HandleUpdate);
         }
 
         public IObservable<TdApi.File> LoadFile(TdApi.File file, LoadPriority priority)
@@ -31,6 +31,9 @@ namespace Tel.Egram.Persistance
             
             if (downloadingNeeded)
             {
+                //_agent.Updates.OfType<TdApi.Update.UpdateFile>()
+                    
+                
                 bool isNew = false;
                 var subject = _files.GetOrAdd(file.Id, id =>
                 {
@@ -65,11 +68,6 @@ namespace Tel.Egram.Persistance
                     }
                 }
             }
-        }
-        
-        public void Dispose()
-        {
-            _updatesSubscription.Dispose();
         }
     }
 }

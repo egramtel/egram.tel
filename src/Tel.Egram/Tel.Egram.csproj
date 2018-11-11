@@ -21,7 +21,6 @@
     <ProjectReference Include="..\Tel.Egram.Components.Application\Tel.Egram.Components.Application.csproj" />
     <ProjectReference Include="..\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
     <ProjectReference Include="..\Tel.Egram.Gui\Tel.Egram.Gui.csproj" />
-    <ProjectReference Include="..\Tel.Egram.Models\Tel.Egram.Models.csproj" />
     <ProjectReference Include="..\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj" />
     <ProjectReference Include="..\Tel.Egram.Settings\Tel.Egram.Settings.csproj" />
   </ItemGroup>
@@ -32,7 +31,6 @@
     <PackageReference Include="Avalonia.Desktop" Version="0.7.0" />
     <PackageReference Include="Avalonia.Native" Version="0.7.0" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.7.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
     <PackageReference Include="NSubsys" Version="0.7.0-build20180604-0047">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

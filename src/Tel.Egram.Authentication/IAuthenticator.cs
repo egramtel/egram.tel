@@ -7,10 +7,10 @@ namespace Tel.Egram.Authentication
     public interface IAuthenticator
     {
         IObservable<TdApi.AuthorizationState> ObserveState();
-        IObservable<Unit> SetupParameters();
-        IObservable<Unit> CheckEncryptionKey();
-        IObservable<Unit> SetPhoneNumber(string phoneNumber);
-        IObservable<Unit> CheckCode(string code, string firstName, string lastName);
-        IObservable<Unit> CheckPassword(string password);
+        IObservable<TdApi.AuthorizationState> SetupParameters();
+        IObservable<TdApi.AuthorizationState> CheckEncryptionKey();
+        IObservable<TdApi.AuthorizationState> SetPhoneNumber(string phoneNumber);
+        IObservable<TdApi.AuthorizationState> CheckCode(string code, string firstName = null, string lastName = null);
+        IObservable<TdApi.AuthorizationState> CheckPassword(string password);
     }
 }

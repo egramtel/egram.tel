@@ -1,48 +1,27 @@
 ﻿using System;
+using Avalonia;
 using Avalonia.Markup.Xaml;
 
 namespace Tel.Egram.Gui
 {
-    public class MainApplication : Avalonia.Application
+    public class MainApplication : Application
     {
-        private readonly Initializer _initializer;
+        public event EventHandler Initializing;
 
-        public MainApplication(Initializer initializer)
-        {
-            _initializer = initializer;
-        }
+        public event EventHandler Disposing;
         
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
-            _initializer.Init();
+            
+            Initializing?.Invoke(this, null);
         }
         
         protected override void OnExiting(object sender, EventArgs e)
         {
-            _initializer.Dispose();
+            Disposing?.Invoke(this, null);
+            
             base.OnExiting(sender, e);
-        }
-        
-        public class Initializer : IDisposable
-        {
-            private Func<IDisposable> _init;
-            private IDisposable _handle;
-
-            public Initializer(Func<IDisposable> init)
-            {
-                _init = init;
-            }
-
-            public void Init()
-            {
-                _handle = _init();
-            }
-
-            public void Dispose()
-            {
-                _handle?.Dispose();
-            }
         }
     }
 }

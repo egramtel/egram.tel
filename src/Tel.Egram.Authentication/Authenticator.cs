@@ -22,13 +22,15 @@ namespace Tel.Egram.Authentication
         }
 
         public IObservable<TdApi.AuthorizationState> ObserveState()
-        {
+        {   
             return _agent.Updates.OfType<TdApi.Update.UpdateAuthorizationState>()
                 .Select(update => update.AuthorizationState);
         }
         
-        public IObservable<Unit> SetupParameters()
-        {   
+        public IObservable<TdApi.AuthorizationState> SetupParameters()
+        {
+            var state = ObserveState();
+            
             return _agent.Execute(new TdApi.SetTdlibParameters
                 {
                     Parameters = new TdApi.TdlibParameters
@@ -50,42 +52,55 @@ namespace Tel.Egram.Authentication
                         IgnoreFileNames = false
                     }
                 })
-                .Select(_ => Unit.Default);
+                .SelectMany(_ => state)
+                .FirstOrDefaultAsync();
         }
 
-        public IObservable<Unit> CheckEncryptionKey()
+        public IObservable<TdApi.AuthorizationState> CheckEncryptionKey()
         {
+            var state = ObserveState();
+            
             return _agent.Execute(new TdApi.CheckDatabaseEncryptionKey())
-                .Select(_ => Unit.Default);
+                .SelectMany(_ => state)
+                .FirstOrDefaultAsync();
         }
 
-        public IObservable<Unit> SetPhoneNumber(string phoneNumber)
+        public IObservable<TdApi.AuthorizationState> SetPhoneNumber(string phoneNumber)
         {
+            var state = ObserveState();
+            
             return _agent.Execute(new TdApi.SetAuthenticationPhoneNumber
                 {
                     PhoneNumber = phoneNumber
                 })
-                .Select(_ => Unit.Default);
+                .SelectMany(_ => state)
+                .FirstOrDefaultAsync();
         }
 
-        public IObservable<Unit> CheckCode(string code, string firstName, string lastName)
+        public IObservable<TdApi.AuthorizationState> CheckCode(string code, string firstName, string lastName)
         {
+            var state = ObserveState();
+            
             return _agent.Execute(new TdApi.CheckAuthenticationCode
                 {
                     Code = code,
                     FirstName = firstName,
                     LastName = lastName
                 })
-                .Select(_ => Unit.Default);
+                .SelectMany(_ => state)
+                .FirstOrDefaultAsync();
         }
 
-        public IObservable<Unit> CheckPassword(string password)
+        public IObservable<TdApi.AuthorizationState> CheckPassword(string password)
         {
+            var state = ObserveState();
+            
             return _agent.Execute(new TdApi.CheckAuthenticationPassword
                 {
                     Password = password
                 })
-                .Select(_ => Unit.Default);
+                .SelectMany(_ => state)
+                .FirstOrDefaultAsync();
         }
     }
 }
