@@ -40,6 +40,7 @@ namespace Tel.Egram
             var app = resolver.GetService<MainApplication>();
             var builder = AppBuilder.Configure(app);
             var os = builder.RuntimePlatform.GetRuntimeInfo().OperatingSystem;
+            var model = new MainWindowModel();
             
             if (os == OperatingSystemType.OSX)
             {
@@ -66,7 +67,10 @@ namespace Tel.Egram
             }
 
             builder.UseReactiveUI();
-            builder.Start<MainWindow>(() => new MainWindowModel());
+            
+            //model.Activator.Activate();
+            builder.Start<MainWindow>(() => model);
+            //model.Activator.Deactivate();
         }
     }
 }

@@ -5,11 +5,12 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using ReactiveUI;
+using Tel.Egram.Components.Messenger.Explorer;
 using Tel.Egram.Utils;
 
 namespace Tel.Egram.Gui.Views.Messenger.Explorer
 {
-    public class ExplorerControl : UserControl
+    public class ExplorerControl : ReactiveUserControl<ExplorerModel>
     {
         public static readonly DirectProperty<ExplorerControl, Range> VisibleIndexesProperty =
             AvaloniaProperty.RegisterDirect<ExplorerControl, Range>(

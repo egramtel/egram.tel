@@ -1,10 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using ReactiveUI;
+using Tel.Egram.Components.Application;
 
 namespace Tel.Egram.Gui.Views.Application
 {
-    public class MainWindow : Window
+    public class MainWindow : ReactiveWindow<MainWindowModel>
     {
         public MainWindow()
         {

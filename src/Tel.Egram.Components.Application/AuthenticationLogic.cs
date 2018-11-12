@@ -30,31 +30,20 @@ namespace Tel.Egram.Components.Application
             
             var stateUpdates = authenticator
                 .ObserveState()
+                .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler);
             
             stateUpdates.OfType<TdApi.AuthorizationState.AuthorizationStateWaitTdlibParameters>()
                 .SelectMany(_ => authenticator.SetupParameters())
-                .Subscribe(state => HandleState(model, state))
+                .Subscribe()
                 .DisposeWith(disposable);
 
             stateUpdates.OfType<TdApi.AuthorizationState.AuthorizationStateWaitEncryptionKey>()
                 .SelectMany(_ => authenticator.CheckEncryptionKey())
-                .Subscribe(state => HandleState(model, state))
+                .Subscribe()
                 .DisposeWith(disposable);
 
-            stateUpdates.OfType<TdApi.AuthorizationState.AuthorizationStateWaitPhoneNumber>()
-                .Subscribe(state => HandleState(model, state))
-                .DisposeWith(disposable);
-            
-            stateUpdates.OfType<TdApi.AuthorizationState.AuthorizationStateWaitCode>()
-                .Subscribe(state => HandleState(model, state))
-                .DisposeWith(disposable);
-            
-            stateUpdates.OfType<TdApi.AuthorizationState.AuthorizationStateWaitPassword>()
-                .Subscribe(state => HandleState(model, state))
-                .DisposeWith(disposable);
-            
-            stateUpdates.OfType<TdApi.AuthorizationState.AuthorizationStateReady>()
+            stateUpdates
                 .Subscribe(state => HandleState(model, state))
                 .DisposeWith(disposable);
 
