@@ -5,7 +5,7 @@ using Tel.Egram.Components.Settings;
 
 namespace Tel.Egram.Gui.Views.Settings
 {
-    public class SettingsControl : ReactiveUserControl<SettingsModel>
+    public class SettingsControl : BaseControl<SettingsModel>
     {
         public SettingsControl()
         {

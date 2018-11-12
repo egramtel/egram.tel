@@ -6,7 +6,7 @@ using Tel.Egram.Components.Application;
 
 namespace Tel.Egram.Gui.Views.Application
 {
-    public class MainWindow : ReactiveWindow<MainWindowModel>
+    public class MainWindow : BaseWindow<MainWindowModel>
     {
         public MainWindow()
         {

@@ -5,7 +5,7 @@ using Tel.Egram.Components.Messenger.Informer;
 
 namespace Tel.Egram.Gui.Views.Messenger.Informer
 {
-    public class InformerControl : ReactiveUserControl<InformerModel>
+    public class InformerControl : BaseControl<InformerModel>
     {
         public InformerControl()
         {

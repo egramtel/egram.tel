@@ -5,7 +5,7 @@ using Tel.Egram.Components.Messenger.Editor;
 
 namespace Tel.Egram.Gui.Views.Messenger.Editor
 {
-    public class EditorControl : ReactiveUserControl<EditorModel>
+    public class EditorControl : BaseControl<EditorModel>
     {
         public EditorControl()
         {

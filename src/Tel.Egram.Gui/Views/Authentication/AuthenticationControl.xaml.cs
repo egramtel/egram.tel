@@ -5,7 +5,7 @@ using Tel.Egram.Components.Authentication;
 
 namespace Tel.Egram.Gui.Views.Authentication
 {
-    public class AuthenticationControl : ReactiveUserControl<AuthenticationModel>
+    public class AuthenticationControl : BaseControl<AuthenticationModel>
     {
         public AuthenticationControl()
         {

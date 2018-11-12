@@ -5,7 +5,7 @@ using Tel.Egram.Components.Workspace;
 
 namespace Tel.Egram.Gui.Views.Workspace
 {
-    public class WorkspaceControl : ReactiveUserControl<WorkspaceModel>
+    public class WorkspaceControl : BaseControl<WorkspaceModel>
     {
         public WorkspaceControl()
         {

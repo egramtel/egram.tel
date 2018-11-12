@@ -10,7 +10,7 @@ using Tel.Egram.Utils;
 
 namespace Tel.Egram.Gui.Views.Messenger.Explorer
 {
-    public class ExplorerControl : ReactiveUserControl<ExplorerModel>
+    public class ExplorerControl : BaseControl<ExplorerModel>
     {
         public static readonly DirectProperty<ExplorerControl, Range> VisibleIndexesProperty =
             AvaloniaProperty.RegisterDirect<ExplorerControl, Range>(

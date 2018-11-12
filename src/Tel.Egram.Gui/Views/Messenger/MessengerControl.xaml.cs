@@ -5,7 +5,7 @@ using Tel.Egram.Components.Messenger;
 
 namespace Tel.Egram.Gui.Views.Messenger
 {
-    public class MessengerControl : ReactiveUserControl<MessengerModel>
+    public class MessengerControl : BaseControl<MessengerModel>
     {
         public MessengerControl()
         {
