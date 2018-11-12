@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using ReactiveUI;
+using Splat;
 using TdLib;
 using Tel.Egram.Utils.TdLib;
 
@@ -10,8 +11,16 @@ namespace Tel.Egram.Components.Application
     public static class ConnectionLogic
     {
         public static IDisposable BindConnectionInfo(
+            this MainWindowModel model)
+        {
+            return BindConnectionInfo(
+                model,
+                Locator.Current.GetService<IAgent>());
+        }
+
+        public static IDisposable BindConnectionInfo(
             this MainWindowModel model,
-            IAgent agent = null)
+            IAgent agent)
         {
             return agent.Updates.OfType<TdApi.Update.UpdateConnectionState>()
                 .ObserveOn(RxApp.MainThreadScheduler)

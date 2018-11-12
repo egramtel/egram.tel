@@ -2,6 +2,7 @@ using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
+using Splat;
 using TdLib;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
@@ -12,8 +13,18 @@ namespace Tel.Egram.Components.Messenger.Editor
     {
         public static IDisposable BindSender(
             this EditorModel model,
+            Chat chat)
+        {
+            return BindSender(
+                model,
+                chat,
+                Locator.Current.GetService<IMessageSender>());
+        }
+
+        public static IDisposable BindSender(
+            this EditorModel model,
             Chat chat,
-            IMessageSender messageSender = null)
+            IMessageSender messageSender)
         {
             var canSendCode = model
                 .WhenAnyValue(m => m.Text)

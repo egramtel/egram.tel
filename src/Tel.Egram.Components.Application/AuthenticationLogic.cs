@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using ReactiveUI;
+using Splat;
 using TdLib;
 using Tel.Egram.Authentication;
 using Tel.Egram.Components.Application.Startup;
@@ -14,8 +15,16 @@ namespace Tel.Egram.Components.Application
     public static class AuthenticationLogic
     {
         public static IDisposable BindAuthentication(
+            this MainWindowModel model)
+        {
+            return BindAuthentication(
+                model,
+                Locator.Current.GetService<IAuthenticator>());
+        }
+
+        public static IDisposable BindAuthentication(
             this MainWindowModel model,
-            IAuthenticator authenticator = null)
+            IAuthenticator authenticator)
         {
             var disposable = new CompositeDisposable();
             

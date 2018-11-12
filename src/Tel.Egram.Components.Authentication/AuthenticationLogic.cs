@@ -3,6 +3,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using ReactiveUI;
+using Splat;
 using TdLib;
 using Tel.Egram.Authentication;
 
@@ -11,8 +12,16 @@ namespace Tel.Egram.Components.Authentication
     public static class AuthenticationLogic
     {
         public static IDisposable BindAuthentication(
+            this AuthenticationModel model)
+        {
+            return BindAuthentication(
+                model,
+                Locator.Current.GetService<IAuthenticator>());
+        }
+
+        public static IDisposable BindAuthentication(
             this AuthenticationModel model,
-            IAuthenticator authenticator = null)
+            IAuthenticator authenticator)
         {   
             var canSendCode = model
                 .WhenAnyValue(x => x.PhoneNumber)

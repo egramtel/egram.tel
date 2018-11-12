@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using DynamicData;
 using ReactiveUI;
+using Splat;
 using Tel.Egram.Components.Messenger.Explorer.Messages;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Utils;
@@ -21,12 +22,23 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 .Bind(model.Items)
                 .Subscribe();
         }
-        
+
+        public static IDisposable InitMessageLoading(
+            this ExplorerModel model,
+            Target target)
+        {
+            return InitMessageLoading(
+                model,
+                target,
+                Locator.Current.GetService<IMessageManager>(),
+                Locator.Current.GetService<IAvatarManager>());
+        }
+
         public static IDisposable InitMessageLoading(
             this ExplorerModel model,
             Target target,
-            IMessageManager messageManager = null,
-            IAvatarManager avatarManager = null)
+            IMessageManager messageManager,
+            IAvatarManager avatarManager)
         {   
             var messageLoading = messageManager.LoadPrevMessages(target)
                 .Select(models => new {
@@ -69,9 +81,20 @@ namespace Tel.Egram.Components.Messenger.Explorer
 
         public static IDisposable BindVisibleRangeChanges(
             this ExplorerModel model,
+            Target target)
+        {
+            return BindVisibleRangeChanges(
+                model,
+                target,
+                Locator.Current.GetService<IMessageManager>(),
+                Locator.Current.GetService<IAvatarManager>());
+        }
+
+        public static IDisposable BindVisibleRangeChanges(
+            this ExplorerModel model,
             Target target,
-            IMessageManager messageManager = null,
-            IAvatarManager avatarManager = null)
+            IMessageManager messageManager,
+            IAvatarManager avatarManager)
         {
             var sourceItems = model.SourceItems;
             var prevRange = default(Range);
