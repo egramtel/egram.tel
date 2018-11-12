@@ -11,63 +11,45 @@ namespace Tel.Egram.Persistance
     public class FileLoader : IFileLoader
     {
         private readonly IAgent _agent;
-        private readonly ConcurrentDictionary<int, Subject<TdApi.File>> _files;
-        //private readonly IDisposable _updatesSubscription;
 
         public FileLoader(IAgent agent)
         {
             _agent = agent;
-            _files = new ConcurrentDictionary<int, Subject<TdApi.File>>();
-//            _updatesSubscription = agent.Updates.OfType<TdApi.Update.UpdateFile>()
-//                .Subscribe(HandleUpdate);
         }
 
         public IObservable<TdApi.File> LoadFile(TdApi.File file, LoadPriority priority)
         {
-            bool downloadingNeeded = file.Local == null
-                                     || !file.Local.IsDownloadingCompleted
-                                     || file.Local.Path == null
-                                     || !File.Exists(file.Local.Path);
-            
-            if (downloadingNeeded)
+            if (IsDownloadingNeeded(file))
             {
-                //_agent.Updates.OfType<TdApi.Update.UpdateFile>()
-                    
-                
-                bool isNew = false;
-                var subject = _files.GetOrAdd(file.Id, id =>
-                {
-                    isNew = true;
-                    return new Subject<TdApi.File>();
-                });
+                var updates = _agent.Updates
+                    .OfType<TdApi.Update.UpdateFile>()
+                    .Select(u => u.File)
+                    .Where(f => f.Id == file.Id)
+                    .TakeWhile(f => IsDownloadingNeeded(f));
 
-                return isNew
-                    ? _agent.Execute(new TdApi.DownloadFile { FileId = file.Id, Priority = (int) priority })
-                            .SelectMany(o => subject)
-                    : subject;
+                var download = Observable.Defer(() => _agent.Execute(new TdApi.DownloadFile
+                {
+                    FileId = file.Id,
+                    Priority = (int) priority
+                }));
+
+                var final = Observable.Defer(() => _agent.Execute(new TdApi.GetFile
+                {
+                    FileId = file.Id
+                }));
+
+                return download.Concat(updates).Concat(final);
             }
 
             return Observable.Return(file);
         }
 
-        private void HandleUpdate(TdApi.Update.UpdateFile update)
+        private bool IsDownloadingNeeded(TdApi.File file)
         {
-            if (_files.TryGetValue(update.File.Id, out var subject))
-            {
-                var localFile = update.File?.Local;
-                if (localFile != null && localFile.IsDownloadingCompleted)
-                {
-                    if (_files.TryRemove(update.File.Id, out subject))
-                    {
-                        subject.OnNext(update.File);
-                        subject.OnCompleted();
-                    }
-                    else
-                    {
-                        subject.OnNext(update.File);
-                    }
-                }
-            }
+            return file.Local == null
+                || !file.Local.IsDownloadingCompleted
+                || file.Local.Path == null
+                || !File.Exists(file.Local.Path);
         }
     }
 }
