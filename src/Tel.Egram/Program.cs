@@ -67,7 +67,10 @@ namespace Tel.Egram
             }
 
             builder.UseReactiveUI();
+
+            model.Activator.Activate();
             builder.Start<MainWindow>(() => model);
+            model.Activator.Deactivate();
         }
     }
 }
