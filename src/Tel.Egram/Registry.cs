@@ -13,6 +13,7 @@ using Tel.Egram.Components.Messenger.Catalog;
 using Tel.Egram.Components.Messenger.Editor;
 using Tel.Egram.Components.Messenger.Explorer;
 using Tel.Egram.Components.Messenger.Informer;
+using Tel.Egram.Components.Popup;
 using Tel.Egram.Components.Workspace;
 using Tel.Egram.Components.Workspace.Navigation;
 using Tel.Egram.Graphics;
@@ -168,6 +169,14 @@ namespace Tel.Egram
                 var agent = services.GetService<IAgent>();
                 var storage = services.GetService<IStorage>();
                 return new Authenticator(agent, storage);
+            });
+        }
+
+        public static void AddComponents(this IMutableDependencyResolver services)
+        {
+            services.RegisterLazySingleton<IPopupController>(() =>
+            {
+                return new PopupController();
             });
         }
         

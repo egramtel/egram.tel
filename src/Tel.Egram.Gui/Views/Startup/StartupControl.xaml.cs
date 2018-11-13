@@ -1,11 +1,11 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Tel.Egram.Gui.Views.Application.Popup
+namespace Tel.Egram.Gui.Views.Startup
 {
-    public class PopupControl : UserControl
+    public class StartupControl : UserControl
     {
-        public PopupControl()
+        public StartupControl()
         {
             AvaloniaXamlLoader.Load(this);
         }

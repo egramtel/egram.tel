@@ -1,9 +1,9 @@
 using System.Reactive.Disposables;
 using PropertyChanged;
 using ReactiveUI;
-using Tel.Egram.Components.Application.Popup;
 using Tel.Egram.Components.Application.Startup;
 using Tel.Egram.Components.Authentication;
+using Tel.Egram.Components.Popup;
 using Tel.Egram.Components.Workspace;
 
 namespace Tel.Egram.Components.Application
@@ -33,6 +33,9 @@ namespace Tel.Egram.Components.Application
                     .DisposeWith(disposables);
 
                 this.BindConnectionInfo()
+                    .DisposeWith(disposables);
+                
+                this.BindPopup()
                     .DisposeWith(disposables);
             });
         }

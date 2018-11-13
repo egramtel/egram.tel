@@ -30,6 +30,9 @@ namespace Tel.Egram.Components.Authentication
             {
                 this.BindAuthentication()
                     .DisposeWith(disposables);
+
+                this.BindProxySettings()
+                    .DisposeWith(disposables);
             });
         }
 

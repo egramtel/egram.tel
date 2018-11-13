@@ -1,10 +1,11 @@
 using System.Reactive;
 using DynamicData.Binding;
 using ReactiveUI;
+using Tel.Egram.Components.Popup;
 
 namespace Tel.Egram.Components.Settings.Connection
 {
-    public class ProxyPopupModel : ISupportsActivation
+    public class ProxyPopupContext : PopupContext, ISupportsActivation
     {
         public ReactiveCommand<Unit, Unit> AddProxyCommand { get; set; }
         

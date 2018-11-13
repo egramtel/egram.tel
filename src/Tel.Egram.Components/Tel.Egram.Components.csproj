@@ -1,7 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.7.0" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.7.0" />
@@ -10,8 +12,5 @@
     <PackageReference Include="System.Reactive" Version="4.0.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="2.5.13" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Tel.Egram.Components\Tel.Egram.Components.csproj" />
-    <ProjectReference Include="..\Tel.Egram.Settings\Tel.Egram.Settings.csproj" />
-  </ItemGroup>
+
 </Project>

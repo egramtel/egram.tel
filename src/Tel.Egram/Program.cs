@@ -27,6 +27,7 @@ namespace Tel.Egram
             services.AddPersistance();
             services.AddServices();
             
+            services.AddComponents();
             services.AddApplication();
             services.AddAuthentication();
             services.AddWorkspace();
