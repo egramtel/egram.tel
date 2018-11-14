@@ -228,12 +228,10 @@ namespace Tel.Egram
             {
                 var chatLoader = services.GetService<IChatLoader>();
                 var chatUpdater = services.GetService<IChatUpdater>();
-                var avatarLoader = services.GetService<IAvatarLoader>();
                 
                 return new CatalogProvider(
                     chatLoader,
-                    chatUpdater,
-                    avatarLoader);
+                    chatUpdater);
             });
             
             // messenger

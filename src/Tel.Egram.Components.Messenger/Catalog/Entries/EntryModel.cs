@@ -1,11 +1,13 @@
+using System.Reactive.Disposables;
 using PropertyChanged;
+using ReactiveUI;
 using Tel.Egram.Graphics;
 using Tel.Egram.Messaging.Chats;
 
 namespace Tel.Egram.Components.Messenger.Catalog.Entries
 {
     [AddINotifyPropertyChangedInterface]
-    public class EntryModel
+    public class EntryModel : ISupportsActivation
     {
         public long Id { get; set; }
         
@@ -21,6 +23,15 @@ namespace Tel.Egram.Components.Messenger.Catalog.Entries
         
         public Target Target { get; set; }
 
+        public EntryModel()
+        {
+            this.WhenActivated(disposables =>
+            {
+                this.BindAvatarLoading()
+                    .DisposeWith(disposables);
+            });
+        }
+        
         public static EntryModel FromTarget(Target target)
         {
             return new EntryModel
@@ -28,5 +39,7 @@ namespace Tel.Egram.Components.Messenger.Catalog.Entries
                 Target = target
             };
         }
+
+        public ViewModelActivator Activator { get; } = new ViewModelActivator();
     }
 }
