@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.LogicalTree;
 using ReactiveUI;
 
 namespace Tel.Egram.Gui.Views
@@ -19,6 +20,18 @@ namespace Tel.Egram.Gui.Views
                 (DataContext as ISupportsActivation)?.Activator?.Activate();
                 _dataContext = DataContext;
             };
+        }
+
+        protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
+        {
+            base.OnAttachedToLogicalTree(e);
+            (DataContext as ISupportsActivation)?.Activator?.Activate();
+        }
+
+        protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
+        {
+            (DataContext as ISupportsActivation)?.Activator?.Deactivate(true);
+            base.OnDetachedFromLogicalTree(e);
         }
     }
 }
