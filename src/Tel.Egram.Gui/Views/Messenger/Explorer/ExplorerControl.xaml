@@ -1,6 +1,9 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
-    xmlns:messages="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:messages="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages"
+    xmlns:explorer="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer"
+    xmlns:model="clr-namespace:Tel.Egram.Components.Messenger.Explorer.Messages;assembly=Tel.Egram.Components.Messenger">
 
     <ListBox
         Width="516"
@@ -18,23 +21,17 @@
             </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
         
-        <ListBox.ItemTemplate>
+        <ListBox.DataTemplates>
             
-            <DataTemplate>
-        
-                <Panel>
-                    <Carousel
-                        SelectedIndex="{Binding Type}">
-                        
-                        <messages:UnsupportedMessageControl />
-                        <messages:TextMessageControl />
-                        
-                    </Carousel>
-                </Panel>
-                
+            <DataTemplate DataType="{x:Type model:TextMessageModel}">
+                <messages:TextMessageControl />
             </DataTemplate>
             
-        </ListBox.ItemTemplate>
+            <DataTemplate DataType="{x:Type model:UnsupportedMessageModel}">
+                <messages:UnsupportedMessageControl />
+            </DataTemplate>
+            
+        </ListBox.DataTemplates>
         
     </ListBox>
     
