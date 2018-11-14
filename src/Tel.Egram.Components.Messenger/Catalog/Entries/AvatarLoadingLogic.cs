@@ -1,4 +1,5 @@
 using System;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Splat;
 using TdLib;
@@ -21,20 +22,42 @@ namespace Tel.Egram.Components.Messenger.Catalog.Entries
             this EntryModel model,
             IAvatarLoader avatarLoader)
         {
-            return LoadAvatar(avatarLoader, model)
-                .Subscribe(avatar =>
+            if (model.Avatar == null)
+            {
+                model.Avatar = GetAvatar(avatarLoader, model);
+
+                if (model.Avatar == null || model.Avatar.IsFallback)
                 {
-                    model.Avatar = avatar;
-                });
+                    return LoadAvatar(avatarLoader, model)
+                        .Subscribe(avatar =>
+                        {
+                            model.Avatar = avatar;
+                        });
+                }
+            }
+            
+            return Disposable.Empty;
+        }
+
+        private static Avatar GetAvatar(IAvatarLoader avatarLoader, EntryModel entry)
+        {
+            switch (entry.Target)
+            {
+                case Chat chat:
+                    return avatarLoader.GetAvatar(chat.ChatData);
+                
+                case Aggregate aggregate:
+                    return avatarLoader.GetAvatar(new TdApi.Chat
+                    {
+                        Id = aggregate.Id
+                    });
+            }
+
+            return null;
         }
         
         private static IObservable<Avatar> LoadAvatar(IAvatarLoader avatarLoader, EntryModel entry)
-        {
-            if (entry.Avatar != null)
-            {
-                return Observable.Return(entry.Avatar);
-            }
-            
+        {   
             switch (entry.Target)
             {
                 case Chat chat:
@@ -47,7 +70,7 @@ namespace Tel.Egram.Components.Messenger.Catalog.Entries
                     });
             }
             
-            return Observable.Return<Avatar>(null);
+            return Observable.Empty<Avatar>();
         }
     }
 }
