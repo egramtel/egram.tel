@@ -1,10 +1,19 @@
-﻿using PropertyChanged;
+﻿using System.Reactive;
+using PropertyChanged;
+using ReactiveUI;
 
 namespace Tel.Egram.Components.Popup
 {
     [AddINotifyPropertyChangedInterface]
     public class PopupContext
     {
-        public string PopupTitle { get; set; }
+        public string Title { get; set; }
+        
+        public ReactiveCommand<Unit, Unit> CloseCommand { get; }
+
+        public PopupContext()
+        {
+            CloseCommand = ReactiveCommand.Create(() => { }, null, RxApp.MainThreadScheduler);
+        }
     }
 }

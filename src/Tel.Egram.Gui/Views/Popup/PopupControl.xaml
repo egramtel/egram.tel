@@ -38,7 +38,7 @@
                     >
                     
                     <TextBlock
-                        Text="{Binding PopupTitle}"
+                        Text="{Binding Context.Title}"
                         Foreground="#444444"
                         FontWeight="Medium"
                         VerticalAlignment="Center"
@@ -49,7 +49,7 @@
                 <Button
                     Grid.Row="0"
                     Grid.Column="2"
-                    Command="{Binding PopupCloseCommand}"
+                    Command="{Binding Context.CloseCommand}"
                     Width="16"
                     Height="16"
                     Margin="10"

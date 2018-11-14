@@ -1,4 +1,6 @@
 using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using PropertyChanged;
 using ReactiveUI;
 
@@ -7,17 +9,19 @@ namespace Tel.Egram.Components.Popup
     [AddINotifyPropertyChangedInterface]
     public class PopupModel : ISupportsActivation
     {
-        public PopupContext PopupContext { get; set; }
+        public PopupContext Context { get; set; }
 
         public bool IsVisible { get; set; } = true;
-        
-        public int PopupIndex { get; set; }
-        
-        public ReactiveCommand<Unit, Unit> PopupCloseCommand { get; }
 
         public PopupModel(PopupContext context)
         {
-            PopupContext = context;
+            Context = context;
+            
+            this.WhenActivated(disposables =>
+            {
+                this.BindPopup()
+                    .DisposeWith(disposables);
+            });
         }
 
         private PopupModel()
