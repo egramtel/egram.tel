@@ -10,9 +10,9 @@ namespace Tel.Egram.Components.Authentication
     [AddINotifyPropertyChangedInterface]
     public class AuthenticationModel : ISupportsActivation
     {
-        public ReactiveCommand<Unit, TdApi.AuthorizationState> CheckPasswordCommand { get; set; }
-        public ReactiveCommand<Unit, TdApi.AuthorizationState> CheckCodeCommand { get; set; }
-        public ReactiveCommand<Unit, TdApi.AuthorizationState> SendCodeCommand { get; set; }
+        public ReactiveCommand<Unit, TdApi.Ok> CheckPasswordCommand { get; set; }
+        public ReactiveCommand<Unit, TdApi.Ok> CheckCodeCommand { get; set; }
+        public ReactiveCommand<Unit, TdApi.Ok> SendCodeCommand { get; set; }
         public ReactiveCommand<Unit, Unit> SetProxyCommand { get; set; }
         
         public int PasswordIndex { get; set; }

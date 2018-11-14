@@ -47,10 +47,10 @@ namespace Tel.Egram.Components.Authentication
                 () => authenticator.CheckPassword(model.Password),
                 canCheckPassword, RxApp.MainThreadScheduler);
 
-            return new CompositeDisposable(
-                model.SendCodeCommand.Subscribe(state => HandleState(model, state)),
-                model.CheckCodeCommand.Subscribe(state => HandleState(model, state)),
-                model.CheckPasswordCommand.Subscribe(state => HandleState(model, state)));
+            return authenticator.ObserveState()
+                .SubscribeOn(RxApp.TaskpoolScheduler)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(state => HandleState(model, state));
         }
 
         private static void HandleState(AuthenticationModel model, TdApi.AuthorizationState state)
