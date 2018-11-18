@@ -1,11 +1,16 @@
 ﻿<UserControl
-    xmlns="https://github.com/avaloniaui">
+    xmlns="https://github.com/avaloniaui"
+    xmlns:authentication="clr-namespace:Tel.Egram.Gui.Views.Authentication">
     
     <Grid
         Classes="AuthenticationPage"
         ColumnDefinitions="*,*"
         RowDefinitions="auto,auto,auto,auto,auto,*"
         >
+        
+        <authentication:WelcomeControl
+            Grid.Column="0"
+            Grid.RowSpan="6" />
         
         <Border
             Grid.Column="1"

@@ -1,0 +1,87 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui">
+    
+    <Grid
+        ColumnDefinitions="*,auto,*"
+        RowDefinitions="*,auto,*">
+        
+        <Grid
+            Grid.Column="1"
+            Grid.Row="1"
+            ColumnDefinitions="auto,*"
+            RowDefinitions="auto,auto,auto,auto,100">
+            
+            <TextBlock
+                Classes="Title"
+                Grid.ColumnSpan="2"
+                Grid.Row="0"
+                Text="Egram" />
+            
+            <Ellipse
+                Classes="Bullet"
+                Grid.Column="0"
+                Grid.Row="1" />
+            
+            <TextBlock
+                Grid.Column="1"
+                Grid.Row="1"
+                Text="This app is an unofficial client. It uses Telegram API and is a part of the Telegram ecosystem." />
+            
+            <Ellipse
+                Classes="Bullet"
+                Grid.Column="0"
+                Grid.Row="2" />
+            
+            <TextBlock
+                Grid.Column="1"
+                Grid.Row="2"
+                Text="Egram is an open source software and it is licensed under GNU GPL v3." />
+            
+            <Ellipse
+                Classes="Bullet"
+                Grid.Column="0"
+                Grid.Row="3" />
+            
+            <TextBlock
+                Grid.Column="1"
+                Grid.Row="3"
+                Text="This is alpha version and it's still under development. It is unstable and may occasionally eat your laundry." />
+            
+        </Grid>
+        
+    </Grid>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="Grid > Grid">
+            <Setter Property="Width" Value="312" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        
+        <Style Selector="Ellipse.Bullet">
+            <Setter Property="Width" Value="8" />
+            <Setter Property="Height" Value="8" />
+            <Setter Property="Margin" Value="8,20,8,0" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Fill" Value="#17a1e6" />
+        </Style>
+        
+        <Style Selector="TextBlock">
+            <Setter Property="Margin" Value="0,15,0,15" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Foreground" Value="#242e44" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Opacity" Value="0.8" />
+        </Style>
+        
+        <Style Selector="TextBlock.Title">
+            <Setter Property="Margin" Value="0,0,0,15" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="Medium" />
+        </Style>
+        
+    </UserControl.Styles>
+    
+</UserControl>
