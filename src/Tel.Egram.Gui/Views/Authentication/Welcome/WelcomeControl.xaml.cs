@@ -1,9 +1,7 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Tel.Egram.Components.Authentication;
 
-namespace Tel.Egram.Gui.Views.Authentication
+namespace Tel.Egram.Gui.Views.Authentication.Welcome
 {
     public class WelcomeControl : UserControl
     {

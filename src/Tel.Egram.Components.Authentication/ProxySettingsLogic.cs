@@ -3,6 +3,7 @@ using System.Reactive.Disposables;
 using ReactiveUI;
 using Splat;
 using Tel.Egram.Components.Popup;
+using Tel.Egram.Components.Settings.Proxy;
 
 namespace Tel.Egram.Components.Authentication
 {
@@ -21,7 +22,7 @@ namespace Tel.Egram.Components.Authentication
             IPopupController popupController)
         {
             model.SetProxyCommand = ReactiveCommand.Create(
-                () => popupController.Show(new PopupContext()),
+                () => popupController.Show(new ProxyPopupContext()),
                 null,
                 RxApp.MainThreadScheduler);
             

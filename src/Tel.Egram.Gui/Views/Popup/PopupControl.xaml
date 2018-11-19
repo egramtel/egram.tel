@@ -1,49 +1,43 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:settings="clr-namespace:Tel.Egram.Gui.Views.Settings"
-    xmlns:connection="clr-namespace:Tel.Egram.Gui.Views.Settings.Connection">
+    xmlns:proxy1="clr-namespace:Tel.Egram.Gui.Views.Popup.Proxy"
+    xmlns:proxy="clr-namespace:Tel.Egram.Components.Settings.Proxy;assembly=Tel.Egram.Components.Settings">
     
     <Grid
         RowDefinitions="auto,*"
-        ColumnDefinitions="*,auto,*"
-        >
+        ColumnDefinitions="*,auto,*">
         
         <Rectangle
             Grid.RowSpan="3"
             Grid.ColumnSpan="3"
             Fill="#000000"
-            Opacity="0.66"
-            />
+            Opacity="0.75" />
         
         <Border
             Grid.Column="1"
             Grid.Row="0"
             Margin="0,24,0,0"
             Background="#ffffff"
-            CornerRadius="4"
-            >
+            BorderThickness="1"
+            BorderBrush="#00c8ff"
+            CornerRadius="2">
             
             <Grid
-                RowDefinitions="auto,auto"
-                ColumnDefinitions="auto,*,auto"
-                >
+                RowDefinitions="auto,auto,auto"
+                ColumnDefinitions="auto,*,auto">
                 
                 <Border
+                    Classes="Title"
                     Grid.Row="0"
-                    Grid.ColumnSpan="3"
-                    Height="36"
-                    Padding="10"
-                    BorderThickness="0,0,0,1"
-                    BorderBrush="#d8d8d8"
-                    >
-                    
+                    Grid.RowSpan="2"
+                    Grid.ColumnSpan="3">
                     <TextBlock
-                        Text="{Binding Context.Title}"
                         Foreground="#444444"
                         FontWeight="Medium"
-                        VerticalAlignment="Center"
-                        />
-                    
+                        Text="{Binding Context.Title}"
+                        VerticalAlignment="Center" />
                 </Border>
                 
                 <Button
@@ -52,32 +46,34 @@
                     Command="{Binding Context.CloseCommand}"
                     Width="16"
                     Height="16"
-                    Margin="10"
+                    Margin="8"
                     Background="Transparent"
-                    BorderThickness="0"
-                    >
+                    BorderThickness="0">
                     
                     <Image
                         Source="resm:Tel.Egram.Gui.Icons.Dark.X32.png"
                         Width="16"
                         Height="16"
-                        Opacity="0.66"
-                        />
+                        Opacity="0.66" />
                     
                 </Button>
                 
                 <Carousel
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.ColumnSpan="3"
                     MinWidth="380"
                     MinHeight="20"
-                    Margin="10"
-                    SelectedIndex="{Binding PopupIndex}"
-                    >
+                    Margin="12,20,12,12"
+                    Items="{Binding Contexts}"
+                    SelectedItem="{Binding Context}">
                     
-                    <Panel/>
-                    
-                    <connection:ProxyPopupControl />
+                    <Carousel.DataTemplates>
+                        
+                        <DataTemplate DataType="{x:Type proxy:ProxyPopupContext}">
+                            <proxy1:ProxyPopupControl />
+                        </DataTemplate>
+                        
+                    </Carousel.DataTemplates>
                     
                 </Carousel>
                 
@@ -89,6 +85,20 @@
     
     <UserControl.Styles>
         
+        <Style Selector="Border.Title">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="10,0,10,0"/>
+            <Setter Property="Height" Value="32" />
+            <Setter Property="Background" Value="#fafafa" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderBrush" Value="#dddddd" />
+            <!-- <Setter Property="CornerRadius" Value="8,8,0,0" /> -->
+        </Style>
+        
+        <Style Selector="Border.Title TextBlock">
+            <!-- <Setter Property="Foreground" Value="#ffffff" /> -->
+            <!-- <Setter Property="FontSize" Value="13" /> -->
+        </Style>
         
     </UserControl.Styles>
     

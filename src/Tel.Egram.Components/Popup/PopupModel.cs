@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -9,12 +10,15 @@ namespace Tel.Egram.Components.Popup
     [AddINotifyPropertyChangedInterface]
     public class PopupModel : ISupportsActivation
     {
+        public PopupContext[] Contexts { get; set; }
+        
         public PopupContext Context { get; set; }
 
         public bool IsVisible { get; set; } = true;
 
         public PopupModel(PopupContext context)
         {
+            Contexts = new[] { context };
             Context = context;
             
             this.WhenActivated(disposables =>

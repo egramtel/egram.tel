@@ -33,6 +33,7 @@
         </Carousel>
 
         <TextBlock
+            IsVisible="False"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             Text="{Binding ConnectionState}" />

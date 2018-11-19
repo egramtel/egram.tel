@@ -1,6 +1,7 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
-    xmlns:authentication="clr-namespace:Tel.Egram.Gui.Views.Authentication">
+    xmlns:authentication="clr-namespace:Tel.Egram.Gui.Views.Authentication"
+    xmlns:welcome="clr-namespace:Tel.Egram.Gui.Views.Authentication.Welcome">
     
     <Grid
         Classes="AuthenticationPage"
@@ -8,7 +9,7 @@
         RowDefinitions="auto,auto,auto,auto,auto,*"
         >
         
-        <authentication:WelcomeControl
+        <welcome:WelcomeControl
             Grid.Column="0"
             Grid.RowSpan="6" />
         

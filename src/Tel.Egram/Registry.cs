@@ -22,6 +22,7 @@ using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
 using Tel.Egram.Messaging.Users;
 using Tel.Egram.Persistance;
+using Tel.Egram.Settings;
 using Tel.Egram.Utils.TdLib;
 using IBitmapLoader = Tel.Egram.Graphics.IBitmapLoader;
 using BitmapLoader = Tel.Egram.Graphics.BitmapLoader;
@@ -169,6 +170,13 @@ namespace Tel.Egram
                 var agent = services.GetService<IAgent>();
                 var storage = services.GetService<IStorage>();
                 return new Authenticator(agent, storage);
+            });
+            
+            // settings
+            services.RegisterLazySingleton<IProxyManager>(() =>
+            {
+                var agent = services.GetService<IAgent>();
+                return new ProxyManager(agent);
             });
         }
 

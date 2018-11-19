@@ -24,6 +24,7 @@
     <Folder Include="Fonts\Roboto" />
     <Folder Include="Icons\Light" />
     <Folder Include="Icons\Dark" />
+    <Folder Include="Images" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tel.Egram.Components.Application\Tel.Egram.Components.Application.csproj" />

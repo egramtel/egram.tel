@@ -17,10 +17,10 @@ namespace Tel.Egram.Settings
             _agent = agent;
         }
         
-        public IObservable<TdApi.Proxy[]> GetAllProxies()
+        public IObservable<TdApi.Proxy> GetAllProxies()
         {
             return _agent.Execute(new TdApi.GetProxies())
-                .Select(p => p.Proxies_);
+                .SelectMany(p => p.Proxies_ ?? new TdApi.Proxy[0]);
         }
 
         public IObservable<TdApi.Proxy> AddProxy(TdApi.Proxy proxy)
@@ -44,28 +44,25 @@ namespace Tel.Egram.Settings
             });
         }
 
-        public IObservable<Unit> RemoveProxy(TdApi.Proxy proxy)
+        public IObservable<TdApi.Ok> RemoveProxy(TdApi.Proxy proxy)
         {
             return _agent.Execute(new TdApi.RemoveProxy
                 {
                     ProxyId = proxy.Id
-                })
-                .Select(_ => Unit.Default);
+                });
         }
 
-        public IObservable<Unit> EnableProxy(TdApi.Proxy proxy)
+        public IObservable<TdApi.Ok> EnableProxy(TdApi.Proxy proxy)
         {
             return _agent.Execute(new TdApi.EnableProxy
                 {
                     ProxyId = proxy.Id
-                })
-                .Select(_ => Unit.Default);
+                });
         }
         
-        public IObservable<Unit> DisableProxy()
+        public IObservable<TdApi.Ok> DisableProxy()
         {
-            return _agent.Execute(new TdApi.DisableProxy())
-                .Select(_ => Unit.Default);
+            return _agent.Execute(new TdApi.DisableProxy());
         }
     }
 }

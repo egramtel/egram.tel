@@ -1,12 +1,22 @@
+using System.Reactive;
 using PropertyChanged;
+using ReactiveUI;
 using TdLib;
 
-namespace Tel.Egram.Components.Settings.Connection
+namespace Tel.Egram.Components.Settings.Proxy
 {
     [AddINotifyPropertyChangedInterface]
     public class ProxyModel
     {
+        public int Id { get; set; }
+        
         public TdApi.Proxy Proxy { get; set; }
+
+        public bool IsEditable { get; set; }
+        
+        public bool IsRemovable { get; set; }
+        
+        public ReactiveCommand<Unit, TdApi.Ok> RemoveCommand { get; set; }
         
         public bool IsSocks5 { get; set; }
         
@@ -14,11 +24,15 @@ namespace Tel.Egram.Components.Settings.Connection
         
         public bool IsMtProto { get; set; }
         
+        public bool IsServerInputVisible { get; set; }
+        
         public bool IsUsernameInputVisible { get; set; }
         
         public bool IsPasswordInputVisible { get; set; }
         
         public bool IsSecretInputVisible { get; set; }
+        
+        public string Label { get; set; }
         
         public string Server { get; set; }
         
@@ -30,10 +44,25 @@ namespace Tel.Egram.Components.Settings.Connection
         
         public string Secret { get; set; }
 
+        public static ProxyModel DisabledProxy()
+        {
+            return new ProxyModel
+            {
+                Id = -1,
+                Label = "Disable proxy",
+                IsServerInputVisible = true,
+                IsUsernameInputVisible = true,
+                IsPasswordInputVisible = true,
+                IsEditable = false,
+                IsRemovable = false
+            };
+        }
+        
         public static ProxyModel FromProxy(TdApi.Proxy proxy)
         {
             var model = new ProxyModel
             {
+                Id = proxy.Id,
                 Proxy = proxy
             };
 
@@ -59,10 +88,14 @@ namespace Tel.Egram.Components.Settings.Connection
                     model.Secret = mtproto.Secret;
                     break;
             }
-            
+
+            model.IsServerInputVisible = true;
             model.IsUsernameInputVisible = model.IsSocks5 || model.IsHttp;
             model.IsPasswordInputVisible = model.IsSocks5 || model.IsHttp;
             model.IsSecretInputVisible = model.IsMtProto;
+
+            model.IsRemovable = true;
+            model.IsEditable = true;
             
             return model;
         }
