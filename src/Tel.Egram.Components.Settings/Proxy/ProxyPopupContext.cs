@@ -9,14 +9,19 @@ namespace Tel.Egram.Components.Settings.Proxy
 {
     public class ProxyPopupContext : PopupContext, ISupportsActivation
     {
-        public ReactiveCommand<Unit, TdApi.Ok> AddProxyCommand { get; set; }
+        public ReactiveCommand<Unit, ProxyModel> AddProxyCommand { get; set; }
+        
+        public ReactiveCommand<ProxyModel, ProxyModel> SaveProxyCommand { get; set; }
+        
+        public ReactiveCommand<ProxyModel, ProxyModel> EnableProxyCommand { get; set; }
+        
+        public ReactiveCommand<ProxyModel, ProxyModel> RemoveProxyCommand { get; set; }
         
         public bool IsProxyEnabled { get; set; }
         
         public ProxyModel SelectedProxy { get; set; }
         
         public ObservableCollectionExtended<ProxyModel> Proxies { get; set; }
-            = new ObservableCollectionExtended<ProxyModel>();
 
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
 

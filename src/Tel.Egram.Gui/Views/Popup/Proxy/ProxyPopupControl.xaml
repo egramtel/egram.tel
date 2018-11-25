@@ -19,14 +19,24 @@
         </ListBox>
         
         <Grid
-            ColumnDefinitions="auto,*"
+            ColumnDefinitions="auto,auto,*"
             Grid.Row="1">
+            
             <Button
                 Classes="Link"
                 Command="{Binding AddProxyCommand}"
                 Grid.Column="0">
-                <TextBlock Text="Add Proxy" />
+                <TextBlock Text="Add" />
             </Button>
+            
+            <Button
+                Classes="Link"
+                Command="{Binding SaveProxyCommand}"
+                CommandParameter="{Binding SelectedProxy}"
+                Grid.Column="1">
+                <TextBlock Text="Save" />
+            </Button>
+            
         </Grid>
         
         <Grid

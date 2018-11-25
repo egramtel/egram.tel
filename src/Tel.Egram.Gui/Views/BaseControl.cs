@@ -11,7 +11,7 @@ namespace Tel.Egram.Gui.Views
     /// </summary>
     public class BaseControl<TViewModel> : ReactiveUserControl<TViewModel>
         where TViewModel : class
-    {
+    {   
         public BaseControl()
         {
             this.WhenActivated(disposables =>

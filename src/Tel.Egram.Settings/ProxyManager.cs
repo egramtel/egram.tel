@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using TdLib;
@@ -17,10 +18,10 @@ namespace Tel.Egram.Settings
             _agent = agent;
         }
         
-        public IObservable<TdApi.Proxy> GetAllProxies()
+        public IObservable<TdApi.Proxy[]> GetAllProxies()
         {
             return _agent.Execute(new TdApi.GetProxies())
-                .SelectMany(p => p.Proxies_ ?? new TdApi.Proxy[0]);
+                .Select(p => p.Proxies_);
         }
 
         public IObservable<TdApi.Proxy> AddProxy(TdApi.Proxy proxy)

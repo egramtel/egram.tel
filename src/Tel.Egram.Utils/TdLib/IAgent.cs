@@ -14,7 +14,7 @@ namespace Tel.Egram.Utils.TdLib
         IObservable<T> Execute<T>(TdApi.Function<T> function, TimeSpan timeout)
             where T : TdApi.Object;
 
-        IObservable<T> Execute<T>(TdApi.Function<T> function, CancellationToken ct)
+        IObservable<T> Execute<T>(TdApi.Function<T> function, CancellationToken cancellationToken)
             where T : TdApi.Object;
     }
 }

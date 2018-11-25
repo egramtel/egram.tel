@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reactive;
 using TdLib;
 
@@ -6,7 +7,7 @@ namespace Tel.Egram.Settings
 {
     public interface IProxyManager
     {
-        IObservable<TdApi.Proxy> GetAllProxies();
+        IObservable<TdApi.Proxy[]> GetAllProxies();
 
         IObservable<TdApi.Proxy> AddProxy(TdApi.Proxy proxy);
 

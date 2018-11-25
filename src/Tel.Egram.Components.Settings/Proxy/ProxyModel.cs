@@ -11,12 +11,18 @@ namespace Tel.Egram.Components.Settings.Proxy
         public int Id { get; set; }
         
         public TdApi.Proxy Proxy { get; set; }
+        
+        public bool IsEnabled { get; set; }
+        
+        public bool IsSaved { get; set; }
 
         public bool IsEditable { get; set; }
         
         public bool IsRemovable { get; set; }
         
-        public ReactiveCommand<Unit, TdApi.Ok> RemoveCommand { get; set; }
+        public ReactiveCommand<ProxyModel, ProxyModel> EnableCommand { get; set; }
+        
+        public ReactiveCommand<ProxyModel, ProxyModel> RemoveCommand { get; set; }
         
         public bool IsSocks5 { get; set; }
         
@@ -34,6 +40,8 @@ namespace Tel.Egram.Components.Settings.Proxy
         
         public string Label { get; set; }
         
+        public string UnsavedLabel { get; set; }
+        
         public string Server { get; set; }
         
         public string Port { get; set; }
@@ -50,11 +58,17 @@ namespace Tel.Egram.Components.Settings.Proxy
             {
                 Id = -1,
                 Label = "Disable proxy",
+                IsSaved = true,
                 IsServerInputVisible = true,
                 IsUsernameInputVisible = true,
                 IsPasswordInputVisible = true,
                 IsEditable = false,
-                IsRemovable = false
+                IsRemovable = false,
+                Server = "",
+                Port = "",
+                Username = "",
+                Password = "",
+                Secret = ""
             };
         }
         
@@ -63,29 +77,34 @@ namespace Tel.Egram.Components.Settings.Proxy
             var model = new ProxyModel
             {
                 Id = proxy.Id,
-                Proxy = proxy
+                Proxy = proxy,
+                IsEnabled = proxy.IsEnabled,
+                IsSaved = proxy.Id != 0
             };
 
-            model.Server = proxy.Server;
+            model.Server = proxy.Server ?? "";
             model.Port = proxy.Port == 0 ? "" : proxy.Port.ToString();
+            model.Username = "";
+            model.Password = "";
+            model.Secret = "";
             
             switch (proxy.Type)
             {
                 case TdApi.ProxyType.ProxyTypeSocks5 socks5:
                     model.IsSocks5 = true;
-                    model.Username = socks5.Username;
-                    model.Password = socks5.Password;
+                    model.Username = socks5.Username ?? "";
+                    model.Password = socks5.Password ?? "";
                     break;
                 
                 case TdApi.ProxyType.ProxyTypeHttp http:
                     model.IsHttp = true;
-                    model.Username = http.Username;
-                    model.Password = http.Password;
+                    model.Username = http.Username ?? "";
+                    model.Password = http.Password ?? "";
                     break;
                 
                 case TdApi.ProxyType.ProxyTypeMtproto mtproto:
                     model.IsMtProto = true;
-                    model.Secret = mtproto.Secret;
+                    model.Secret = mtproto.Secret ?? "";
                     break;
             }
 
