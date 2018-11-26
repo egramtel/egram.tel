@@ -32,7 +32,8 @@ namespace Tel.Egram.Components.Settings.Proxy
                 context.BindEnableAction(proxyManager),
                 context.BindAddAction(proxyManager),
                 context.BindSaveAction(proxyManager),
-                context.BindList(proxyManager));
+                context.BindList(proxyManager),
+                context.BindEditing(proxyManager));
         }
 
         private static IDisposable BindList(
@@ -71,6 +72,39 @@ namespace Tel.Egram.Components.Settings.Proxy
                     {
                         disabledProxy.IsEnabled = true;
                     }
+                });
+        }
+        
+        private static IDisposable BindEditing(
+            this ProxyPopupContext context,
+            IProxyManager proxyManager)
+        {
+            return context.WhenAnyValue(c => c.SelectedProxy)
+                .SelectMany(sp =>
+                {
+                    if (sp == null)
+                    {
+                        return Observable.Empty<ProxyModel>();
+                    }
+                    
+                    return Observable.Merge(
+                        sp.WhenAnyValue(p => p.IsSocks5).Skip(1).Select(_ => sp),
+                        sp.WhenAnyValue(p => p.IsHttp).Skip(1).Select(_ => sp),
+                        sp.WhenAnyValue(p => p.IsMtProto).Skip(1).Select(_ => sp),
+                        sp.WhenAnyValue(p => p.Server).Skip(1).Select(_ => sp),
+                        sp.WhenAnyValue(p => p.Port).Skip(1).Select(_ => sp),
+                        sp.WhenAnyValue(p => p.Username).Skip(1).Select(_ => sp),
+                        sp.WhenAnyValue(p => p.Password).Skip(1).Select(_ => sp),
+                        sp.WhenAnyValue(p => p.Secret).Skip(1).Select(_ => sp));
+                })
+                .Subscribe(sp =>
+                {
+                    sp.IsSaved = false;
+                    
+                    sp.IsServerInputVisible = true;
+                    sp.IsUsernameInputVisible = sp.IsSocks5 || sp.IsHttp;
+                    sp.IsPasswordInputVisible = sp.IsSocks5 || sp.IsHttp;
+                    sp.IsSecretInputVisible = sp.IsMtProto;
                 });
         }
 

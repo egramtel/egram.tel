@@ -5,7 +5,8 @@
         Width="516"
         Classes="ChatInfo"
         ColumnDefinitions="auto,*"
-        RowDefinitions="*,*">
+        RowDefinitions="*,*"
+        Background="#fafafa">
             
         <Border
             Grid.ColumnSpan="2"
