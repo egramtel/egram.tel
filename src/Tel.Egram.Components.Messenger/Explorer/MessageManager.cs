@@ -7,6 +7,7 @@ using DynamicData;
 using Tel.Egram.Components.Messenger.Explorer.Messages;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Messenger.Explorer
 {
@@ -32,11 +33,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 case Chat chat:
                     return LoadPrevMessages(chat, fromMessage)
                         .Select(_messageModelFactory.CreateMessage)
-                        .Aggregate(new List<MessageModel>(), (list, m) =>
-                        {
-                            list.Add(m);
-                            return list;
-                        })
+                        .CollectToList()
                         .Select(list =>
                         {
                             list.Reverse();
@@ -61,11 +58,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 case Chat chat:
                     return LoadNextMessages(chat, fromMessage)
                         .Select(_messageModelFactory.CreateMessage)
-                        .Aggregate(new List<MessageModel>(), (list, m) =>
-                        {
-                            list.Add(m);
-                            return list;
-                        })
+                        .CollectToList()
                         .Select(list =>
                         {
                             list.Reverse();

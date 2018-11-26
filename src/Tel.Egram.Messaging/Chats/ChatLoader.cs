@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using TdLib;
+using Tel.Egram.Utils.Reactive;
 using Tel.Egram.Utils.TdLib;
 
 namespace Tel.Egram.Messaging.Chats
@@ -19,7 +20,7 @@ namespace Tel.Egram.Messaging.Chats
         public IObservable<Chat> LoadChats()
         {
             return GetAllChats(new List<TdApi.Chat>())
-                .Select(chat =>
+                .SelectSeq(chat =>
                 {
                     if (chat.Type is TdApi.ChatType.ChatTypePrivate type)
                     {
@@ -35,8 +36,7 @@ namespace Tel.Egram.Messaging.Chats
                     {
                         ChatData = chat
                     });
-                })
-                .Concat();
+                });
         }
 
         public IObservable<Chat> LoadChannels()
@@ -106,12 +106,8 @@ namespace Tel.Egram.Messaging.Chats
             int limit = 100;
             
             return GetChats(offsetOrder, offsetChatId, limit)
-                .Aggregate(new List<TdApi.Chat>(), (list, chat) =>
-                {
-                    list.Add(chat);
-                    return list;
-                })
-                .Select(list =>
+                .CollectToList()
+                .SelectSeq(list =>
                 {
                     if (list.Count > 0)
                     {
@@ -121,8 +117,7 @@ namespace Tel.Egram.Messaging.Chats
                     }
                     
                     return chats.ToObservable();
-                })
-                .Concat();
+                });
         }
 
         private IObservable<TdApi.Chat> GetChats(long offsetOrder, long offsetChatId, int limit)
@@ -134,11 +129,10 @@ namespace Tel.Egram.Messaging.Chats
                     Limit = limit
                 })
                 .SelectMany(result => result.ChatIds)
-                .Select(chatId => _agent.Execute(new TdApi.GetChat
+                .SelectSeq(chatId => _agent.Execute(new TdApi.GetChat
                 {
                     ChatId = chatId
-                }))
-                .Concat();
+                }));
         }
     }
 }

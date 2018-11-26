@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using TdLib;
+using Tel.Egram.Utils.Reactive;
 using Tel.Egram.Utils.TdLib;
 
 namespace Tel.Egram.Messaging.Chats
@@ -28,11 +29,7 @@ namespace Tel.Egram.Messaging.Chats
                 {
                     ChatData = chat
                 })
-                .Aggregate(new List<Chat>(), (list, feed) =>
-                {
-                    list.Add(feed);
-                    return list;
-                })
+                .CollectToList()
                 .Select(list => new Aggregate(list));
         }
 
@@ -56,11 +53,7 @@ namespace Tel.Egram.Messaging.Chats
             int limit = 100;
             
             return GetChats(offsetOrder, offsetChatId, limit)
-                .Aggregate(new List<TdApi.Chat>(), (list, chat) =>
-                {
-                    list.Add(chat);
-                    return list;
-                })
+                .CollectToList()
                 .SelectMany(list =>
                 {
                     if (list.Count > 0)

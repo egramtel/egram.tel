@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using TdLib;
 using Tel.Egram.Messaging.Chats;
+using Tel.Egram.Utils.Reactive;
 using Tel.Egram.Utils.TdLib;
 
 namespace Tel.Egram.Messaging.Messages
@@ -23,8 +24,7 @@ namespace Tel.Egram.Messaging.Messages
             AggregateLoadingState state)
         {
             return LoadAggregateMessages(feed, state)
-                .Select(MapToMessage)
-                .Concat();
+                .SelectSeq(MapToMessage);
         }
 
         public IObservable<Message> LoadPrevMessages(
@@ -33,8 +33,7 @@ namespace Tel.Egram.Messaging.Messages
             int limit)
         {
             return GetMessages(feed.ChatData, fromMessageId, limit, 0)
-                .Select(MapToMessage)
-                .Concat();
+                .SelectSeq(MapToMessage);
         }
 
         public IObservable<Message> LoadNextMessages(
@@ -44,8 +43,7 @@ namespace Tel.Egram.Messaging.Messages
         {   
             return GetMessages(feed.ChatData, fromMessageId, limit, -limit)
                 .Where(m => m.Id != fromMessageId)
-                .Select(MapToMessage)
-                .Concat();
+                .SelectSeq(MapToMessage);
         }
 
         private IObservable<Message> MapToMessage(TdApi.Message msg)
@@ -59,7 +57,7 @@ namespace Tel.Egram.Messaging.Messages
                     MessageData = msg,
                     Chat = chat
                 })
-                .Select(message =>
+                .SelectSeq(message =>
                 {
                     if (message.MessageData.SenderUserId != 0)
                     {
@@ -76,8 +74,7 @@ namespace Tel.Egram.Messaging.Messages
                     }
 
                     return Observable.Return(message);
-                })
-                .Concat();
+                });
         }
 
         private IObservable<TdApi.Message> LoadAggregateMessages(
@@ -99,11 +96,7 @@ namespace Tel.Egram.Messaging.Messages
                                 LastMessageId = state.GetLastMessageId(f.ChatData.Id)
                             }, _limit, 0)
                         : Observable.Empty<TdApi.Message>())
-                    .Aggregate(new List<TdApi.Message>(), (l, m) =>
-                    {
-                        l.Add(m);
-                        return l;
-                    })
+                    .CollectToList()
                     .Do(l =>
                     {
                         // api has no guarantees about actual number of messages returned
@@ -118,11 +111,7 @@ namespace Tel.Egram.Messaging.Messages
             });
             
             return list.Merge()
-                .Aggregate(new List<TdApi.Message>(), (l, m) =>
-                {
-                    l.Add(m);
-                    return l;
-                })
+                .CollectToList()
                 .SelectMany(l =>
                 {
                     // make sure all messages are unique
@@ -165,25 +154,6 @@ namespace Tel.Egram.Messaging.Messages
                         state.LastMessageId = message.Id;
                     }
                 });
-//                .Aggregate(new List<TdApi.Message>(), (list, message) =>
-//                {
-//                    list.Add(message);
-//                    return list;
-//                })
-//                .SelectMany(list => list);
-//                .SelectMany(list =>
-//                {
-//                    if (list.Count < _limit)
-//                    {
-//                        // make one more query to avoid results with small number of messages
-//                        var additional = GetMessages(chat.Chat, state.LastMessageId)
-//                            .Do(message => { state.LastMessageId = message.Id; });
-//                        
-//                        return list.ToObservable().Concat(additional);
-//                    }
-//
-//                    return list.ToObservable();
-//                });
         }
 
         private IObservable<TdApi.Message> GetMessages(
