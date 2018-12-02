@@ -3,7 +3,7 @@ using System.Reactive.Linq;
 using ReactiveUI;
 using Splat;
 
-namespace Tel.Egram.Components.Popup
+namespace Tel.Egram.Components.Popups
 {
     public static class PopupLogic
     {

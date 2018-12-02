@@ -1,4 +1,4 @@
-namespace Tel.Egram.Components.Popup
+namespace Tel.Egram.Components.Popups
 {
     public interface IPopupController
     {

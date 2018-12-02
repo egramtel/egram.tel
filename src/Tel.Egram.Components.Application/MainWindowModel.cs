@@ -3,7 +3,8 @@ using PropertyChanged;
 using ReactiveUI;
 using Tel.Egram.Components.Application.Startup;
 using Tel.Egram.Components.Authentication;
-using Tel.Egram.Components.Popup;
+using Tel.Egram.Components.Notifications;
+using Tel.Egram.Components.Popups;
 using Tel.Egram.Components.Workspace;
 
 namespace Tel.Egram.Components.Application

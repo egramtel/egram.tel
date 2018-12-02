@@ -3,7 +3,7 @@ using System.Reactive.Disposables;
 using DynamicData.Binding;
 using ReactiveUI;
 using TdLib;
-using Tel.Egram.Components.Popup;
+using Tel.Egram.Components.Popups;
 
 namespace Tel.Egram.Components.Settings.Proxy
 {

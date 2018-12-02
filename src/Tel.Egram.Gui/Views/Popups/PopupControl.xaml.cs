@@ -1,8 +1,7 @@
-﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
-using Tel.Egram.Components.Popup;
+﻿using Avalonia.Markup.Xaml;
+using Tel.Egram.Components.Popups;
 
-namespace Tel.Egram.Gui.Views.Popup
+namespace Tel.Egram.Gui.Views.Popups
 {
     public class PopupControl : BaseControl<PopupModel>
     {

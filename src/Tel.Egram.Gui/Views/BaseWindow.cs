@@ -10,13 +10,16 @@ namespace Tel.Egram.Gui.Views
     /// </summary>
     public class BaseWindow<TViewModel> : ReactiveWindow<TViewModel>
         where TViewModel : class
-    {   
-        public BaseWindow()
+    {
+        public BaseWindow(bool activate = true)
         {
-            this.WhenActivated(disposables =>
+            if (activate)
             {
-                Disposable.Create(() => { }).DisposeWith(disposables);
-            });
+                this.WhenActivated(disposables =>
+                {
+                    Disposable.Create(() => { }).DisposeWith(disposables);
+                });
+            }
         }
     }
 }

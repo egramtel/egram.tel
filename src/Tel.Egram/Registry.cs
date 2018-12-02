@@ -13,7 +13,8 @@ using Tel.Egram.Components.Messenger.Catalog;
 using Tel.Egram.Components.Messenger.Editor;
 using Tel.Egram.Components.Messenger.Explorer;
 using Tel.Egram.Components.Messenger.Informer;
-using Tel.Egram.Components.Popup;
+using Tel.Egram.Components.Notifications;
+using Tel.Egram.Components.Popups;
 using Tel.Egram.Components.Workspace;
 using Tel.Egram.Components.Workspace.Navigation;
 using Tel.Egram.Graphics;
@@ -23,6 +24,7 @@ using Tel.Egram.Messaging.Messages;
 using Tel.Egram.Messaging.Users;
 using Tel.Egram.Persistance;
 using Tel.Egram.Settings;
+using Tel.Egram.Utils.Platforms;
 using Tel.Egram.Utils.TdLib;
 using IBitmapLoader = Tel.Egram.Graphics.IBitmapLoader;
 using BitmapLoader = Tel.Egram.Graphics.BitmapLoader;
@@ -31,6 +33,11 @@ namespace Tel.Egram
 {
     public static class Registry
     {
+        public static void AddUtils(this IMutableDependencyResolver services)
+        {
+            services.RegisterLazySingleton<IPlatform>(Platform.GetPlatform);
+        }
+        
         public static void AddTdLib(this IMutableDependencyResolver services)
         {
             services.RegisterLazySingleton(() =>
@@ -62,10 +69,7 @@ namespace Tel.Egram
         
         public static void AddPersistance(this IMutableDependencyResolver services)
         {
-            services.RegisterLazySingleton<IStorage>(() =>
-            {
-                return new Storage();
-            });
+            services.RegisterLazySingleton<IStorage>(() => new Storage());
             
             services.RegisterLazySingleton<IFileLoader>(() =>
             {
@@ -73,10 +77,7 @@ namespace Tel.Egram
                 return new FileLoader(agent);
             });
             
-            services.RegisterLazySingleton<IDatabaseContextFactory>(() =>
-            {
-                return new DatabaseContextFactory();
-            });
+            services.RegisterLazySingleton<IDatabaseContextFactory>(() => new DatabaseContextFactory());
             
             services.RegisterLazySingleton(() =>
             {
@@ -94,10 +95,7 @@ namespace Tel.Egram
         public static void AddServices(this IMutableDependencyResolver services)
         {
             // graphics
-            services.RegisterLazySingleton<IColorMapper>(() =>
-            {
-                return new ColorMapper();
-            });
+            services.RegisterLazySingleton<IColorMapper>(() => new ColorMapper());
             
             services.RegisterLazySingleton<IAvatarCache>(() =>
             {
@@ -182,10 +180,8 @@ namespace Tel.Egram
 
         public static void AddComponents(this IMutableDependencyResolver services)
         {
-            services.RegisterLazySingleton<IPopupController>(() =>
-            {
-                return new PopupController();
-            });
+            services.RegisterLazySingleton<INotificationController>(() => new NotificationController());
+            services.RegisterLazySingleton<IPopupController>(() => new PopupController());
         }
         
         public static void AddApplication(this IMutableDependencyResolver services)

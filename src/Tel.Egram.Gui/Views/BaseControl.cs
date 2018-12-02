@@ -12,12 +12,15 @@ namespace Tel.Egram.Gui.Views
     public class BaseControl<TViewModel> : ReactiveUserControl<TViewModel>
         where TViewModel : class
     {   
-        public BaseControl()
+        public BaseControl(bool activate = true)
         {
-            this.WhenActivated(disposables =>
+            if (activate)
             {
-                Disposable.Create(() => { }).DisposeWith(disposables);
-            });
+                this.WhenActivated(disposables =>
+                {
+                    Disposable.Create(() => { }).DisposeWith(disposables);
+                });
+            }
         }
     }
 }

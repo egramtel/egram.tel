@@ -2,7 +2,7 @@ using System;
 using System.Reactive.Disposables;
 using ReactiveUI;
 using Splat;
-using Tel.Egram.Components.Popup;
+using Tel.Egram.Components.Popups;
 using Tel.Egram.Components.Settings.Proxy;
 
 namespace Tel.Egram.Components.Authentication

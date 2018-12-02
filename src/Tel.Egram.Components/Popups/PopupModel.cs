@@ -1,11 +1,8 @@
-using System.Collections.Generic;
-using System.Reactive;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using PropertyChanged;
 using ReactiveUI;
 
-namespace Tel.Egram.Components.Popup
+namespace Tel.Egram.Components.Popups
 {
     [AddINotifyPropertyChangedInterface]
     public class PopupModel : ISupportsActivation

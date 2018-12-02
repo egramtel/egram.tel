@@ -3,11 +3,11 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using ReactiveUI;
 using Splat;
-using Tel.Egram.Components.Popup;
+using Tel.Egram.Components.Popups;
 
 namespace Tel.Egram.Components.Application
 {
-    public static class PopupLogic
+    public static class PopupsLogic
     {
         public static IDisposable BindPopup(
             this MainWindowModel model)

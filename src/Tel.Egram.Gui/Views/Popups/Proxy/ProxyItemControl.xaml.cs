@@ -1,11 +1,11 @@
 ﻿using Avalonia.Markup.Xaml;
 using Tel.Egram.Components.Settings.Proxy;
 
-namespace Tel.Egram.Gui.Views.Popup.Proxy
+namespace Tel.Egram.Gui.Views.Popups.Proxy
 {
-    public class ProxyPopupControl : BaseControl<ProxyPopupContext>
+    public class ProxyItemControl : BaseControl<ProxyModel>
     {   
-        public ProxyPopupControl()
+        public ProxyItemControl()
         {
             AvaloniaXamlLoader.Load(this);
         }

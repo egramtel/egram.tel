@@ -2,7 +2,7 @@
 using PropertyChanged;
 using ReactiveUI;
 
-namespace Tel.Egram.Components.Popup
+namespace Tel.Egram.Components.Popups
 {
     [AddINotifyPropertyChangedInterface]
     public class PopupContext

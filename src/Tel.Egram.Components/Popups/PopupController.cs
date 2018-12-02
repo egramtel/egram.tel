@@ -1,6 +1,6 @@
 using System.Reactive.Subjects;
 
-namespace Tel.Egram.Components.Popup
+namespace Tel.Egram.Components.Popups
 {
     public class PopupController : IPopupController
     {

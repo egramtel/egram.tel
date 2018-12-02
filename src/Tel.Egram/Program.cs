@@ -23,6 +23,7 @@ namespace Tel.Egram
         private static void ConfigureServices(
             IMutableDependencyResolver services)
         {
+            services.AddUtils();
             services.AddTdLib();
             services.AddPersistance();
             services.AddServices();
