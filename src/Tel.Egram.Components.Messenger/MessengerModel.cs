@@ -35,6 +35,9 @@ namespace Tel.Egram.Components.Messenger
 
                 this.BindEditor()
                     .DisposeWith(disposables);
+
+                this.BindNotifications()
+                    .DisposeWith(disposables);
             });
         }
         
