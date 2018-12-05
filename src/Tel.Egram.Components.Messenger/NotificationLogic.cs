@@ -27,14 +27,26 @@ namespace Tel.Egram.Components.Messenger
             var messages = notificationSource.MessagesNotifications();
 
             return chats.Merge(messages)
+                .Buffer(TimeSpan.FromSeconds(2))
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(notification =>
+                .Subscribe(notifications =>
                 {
-                    notificationController.Show(new NotificationModel
+                    switch (notifications.Count)
                     {
+                        case 0:
+                            break;
                         
-                    });
+                        case 1:
+                            notificationController.Show(
+                                NotificationModel.FromNotification(notifications[0]));
+                            break;
+                        
+                        default:
+                            notificationController.Show(
+                                NotificationModel.FromNotificationList(notifications));
+                            break;
+                    }
                 });
         }
     }

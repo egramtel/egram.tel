@@ -21,6 +21,7 @@ using Tel.Egram.Graphics;
 using Tel.Egram.Gui;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
+using Tel.Egram.Messaging.Notifications;
 using Tel.Egram.Messaging.Users;
 using Tel.Egram.Persistance;
 using Tel.Egram.Settings;
@@ -153,6 +154,13 @@ namespace Tel.Egram
             {
                 var agent = services.GetService<IAgent>();
                 return new MessageSender(agent);
+            });
+            
+            // notifications
+            services.RegisterLazySingleton<INotificationSource>(() =>
+            {
+                var agent = services.GetService<IAgent>();
+                return new NotificationSource(agent);
             });
             
             // users

@@ -16,6 +16,9 @@ namespace Tel.Egram.Messaging.Notifications
             _agent = agent;
         }
         
+        /// <summary>
+        /// Get notifications for new chats
+        /// </summary>
         public IObservable<Notification> ChatNotifications()
         {
             return _agent.Updates
@@ -26,11 +29,16 @@ namespace Tel.Egram.Messaging.Notifications
                 });
         }
 
+        /// <summary>
+        /// Get notifications for new messages from chats with
+        /// enabled notifications and not older than 1 minute
+        /// </summary>
         public IObservable<Notification> MessagesNotifications()
         {
             return _agent.Updates
                 .OfType<TdApi.Update.UpdateNewMessage>()
                 .Where(u => !u.DisableNotification)
+                .Where(u => u.Message.Date > DateTimeOffset.UtcNow.ToUnixTimeSeconds() - 60)
                 .Select(update => update.Message)
                 .SelectSeq(message =>
                 {
