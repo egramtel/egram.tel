@@ -46,6 +46,13 @@ namespace Tel.Egram.Messaging.Messages
                 .SelectSeq(MapToMessage);
         }
 
+        public IObservable<Message> LoadPinnedMessage(Chat chat)
+        {
+            return GetPinnedMessage(chat.ChatData)
+                .Where(m => m != null)
+                .SelectSeq(MapToMessage);
+        }
+
         private IObservable<Message> MapToMessage(TdApi.Message msg)
         {
             return _agent.Execute(new TdApi.GetChat
@@ -171,6 +178,15 @@ namespace Tel.Egram.Messaging.Messages
                     OnlyLocal = false
                 })
                 .SelectMany(history => history.Messages_);
+        }
+
+        private IObservable<TdApi.Message> GetPinnedMessage(
+            TdApi.Chat chat)
+        {
+            return _agent.Execute(new TdApi.GetChatPinnedMessage
+            {
+                ChatId = chat.Id
+            });
         }
     }
 }

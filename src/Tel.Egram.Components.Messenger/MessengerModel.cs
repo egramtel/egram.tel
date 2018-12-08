@@ -4,6 +4,7 @@ using ReactiveUI;
 using Tel.Egram.Components.Messenger.Catalog;
 using Tel.Egram.Components.Messenger.Editor;
 using Tel.Egram.Components.Messenger.Explorer;
+using Tel.Egram.Components.Messenger.Home;
 using Tel.Egram.Components.Messenger.Informer;
 using Tel.Egram.Messaging.Chats;
 
@@ -18,6 +19,8 @@ namespace Tel.Egram.Components.Messenger
         
         public ExplorerModel ExplorerModel { get; set; }
         
+        public HomeModel HomeModel { get; set; }
+        
         public EditorModel EditorModel { get; set; }
 
         public MessengerModel(Section section)
@@ -31,6 +34,9 @@ namespace Tel.Egram.Components.Messenger
                     .DisposeWith(disposables);
 
                 this.BindExplorer()
+                    .DisposeWith(disposables);
+
+                this.BindHome()
                     .DisposeWith(disposables);
 
                 this.BindEditor()

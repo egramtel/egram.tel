@@ -5,6 +5,7 @@ using ReactiveUI;
 using Tel.Egram.Components.Messenger.Catalog;
 using Tel.Egram.Components.Messenger.Editor;
 using Tel.Egram.Components.Messenger.Explorer;
+using Tel.Egram.Components.Messenger.Home;
 using Tel.Egram.Components.Messenger.Informer;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Utils;
@@ -24,7 +25,7 @@ namespace Tel.Egram.Components.Messenger
         {
             model.InformerModel = InformerModel.Hidden();
             
-            return model.SubscribeToTarget(target =>
+            return model.SubscribeToSelection(target =>
             {
                 model.InformerModel = new InformerModel(target);
             });
@@ -34,9 +35,19 @@ namespace Tel.Egram.Components.Messenger
         {
             model.ExplorerModel = ExplorerModel.Hidden();
             
-            return model.SubscribeToTarget(target =>
+            return model.SubscribeToSelection(target =>
             {
                 model.ExplorerModel = new ExplorerModel(target);
+            });
+        }
+
+        public static IDisposable BindHome(this MessengerModel model)
+        {
+            model.HomeModel = HomeModel.Hidden();
+            
+            return model.SubscribeToSelection(target =>
+            {
+                model.HomeModel = new HomeModel(target);
             });
         }
 
@@ -44,7 +55,7 @@ namespace Tel.Egram.Components.Messenger
         {
             model.EditorModel = EditorModel.Hidden();
             
-            return model.SubscribeToTarget(target =>
+            return model.SubscribeToSelection(target =>
             {
                 if (target is Chat chat)
                 {
@@ -57,7 +68,7 @@ namespace Tel.Egram.Components.Messenger
             });
         }
 
-        private static IDisposable SubscribeToTarget(this MessengerModel model, Action<Target> action)
+        private static IDisposable SubscribeToSelection(this MessengerModel model, Action<Target> action)
         {
             return model.WhenAnyValue(ctx => ctx.CatalogModel.SelectedEntry)
                 .SubscribeOn(RxApp.TaskpoolScheduler)

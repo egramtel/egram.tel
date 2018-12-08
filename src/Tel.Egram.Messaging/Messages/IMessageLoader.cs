@@ -9,5 +9,7 @@ namespace Tel.Egram.Messaging.Messages
         
         IObservable<Message> LoadNextMessages(Chat chat, long fromMessageId, int limit);
         IObservable<Message> LoadPrevMessages(Chat chat, long fromMessageId, int limit);
+
+        IObservable<Message> LoadPinnedMessage(Chat chat);
     }
 }

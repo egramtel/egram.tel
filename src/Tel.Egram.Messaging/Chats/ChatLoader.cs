@@ -11,10 +11,12 @@ namespace Tel.Egram.Messaging.Chats
     public class ChatLoader : IChatLoader
     {
         private readonly IAgent _agent;
+        private readonly long _promoChatId;
 
         public ChatLoader(IAgent agent)
         {
             _agent = agent;
+            _promoChatId = -1001316949630L;
         }
 
         public IObservable<Chat> LoadChats()
@@ -88,6 +90,31 @@ namespace Tel.Egram.Messaging.Chats
                 }
                 return false;
             });
+        }
+
+        public IObservable<Chat> LoadPromo()
+        {
+            return _agent.Execute(new TdApi.GetChat
+                {
+                    ChatId = _promoChatId
+                })
+                .SelectSeq(chat =>
+                {
+                    if (chat.Type is TdApi.ChatType.ChatTypePrivate type)
+                    {
+                        return GetUser(type.UserId)
+                            .Select(user => new Chat
+                            {
+                                ChatData = chat,
+                                User = user
+                            });
+                    }
+                        
+                    return Observable.Return(new Chat
+                    {
+                        ChatData = chat
+                    });
+                });
         }
 
         private IObservable<TdApi.User> GetUser(int id)

@@ -9,5 +9,6 @@ namespace Tel.Egram.Messaging.Chats
         IObservable<Chat> LoadDirects();
         IObservable<Chat> LoadGroups();
         IObservable<Chat> LoadBots();
+        IObservable<Chat> LoadPromo();
     }
 }
