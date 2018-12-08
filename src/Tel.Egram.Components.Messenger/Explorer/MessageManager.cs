@@ -25,56 +25,46 @@ namespace Tel.Egram.Components.Messenger.Explorer
         }
         
         public IObservable<IList<MessageModel>> LoadPrevMessages(
-            Target target, 
+            Chat chat, 
             Message fromMessage)
         {
-            switch (target)
-            {
-                case Chat chat:
-                    return LoadPrevMessages(chat, fromMessage)
-                        .Select(_messageModelFactory.CreateMessage)
-                        .CollectToList()
-                        .Select(list =>
-                        {
-                            list.Reverse();
-                            return list;
-                        });
-            }
-            
-            return Observable.Return(new List<MessageModel>());
+            return GetPrevMessages(chat, fromMessage)
+                .Select(_messageModelFactory.CreateMessage)
+                .CollectToList()
+                .Select(list =>
+                {
+                    list.Reverse();
+                    return list;
+                });
         }
 
-        public IObservable<IList<MessageModel>> LoadPrevMessages(Target target)
+        public IObservable<IList<MessageModel>> LoadPrevMessages(
+            Chat chat)
         {
-            return LoadPrevMessages(target, null);
+            return LoadPrevMessages(chat, null);
         }
 
         public IObservable<IList<MessageModel>> LoadNextMessages(
-            Target target, 
+            Chat chat, 
             Message fromMessage)
         {
-            switch (target)
-            {
-                case Chat chat:
-                    return LoadNextMessages(chat, fromMessage)
-                        .Select(_messageModelFactory.CreateMessage)
-                        .CollectToList()
-                        .Select(list =>
-                        {
-                            list.Reverse();
-                            return list;
-                        });
-            }
-            
-            return Observable.Return(new List<MessageModel>());
+            return GetNextMessages(chat, fromMessage)
+                .Select(_messageModelFactory.CreateMessage)
+                .CollectToList()
+                .Select(list =>
+                {
+                    list.Reverse();
+                    return list;
+                });
         }
 
-        public IObservable<IList<MessageModel>> LoadNextMessages(Target target)
+        public IObservable<IList<MessageModel>> LoadNextMessages(
+            Chat chat)
         {
-            return LoadNextMessages(target, null);
+            return LoadNextMessages(chat, null);
         }
 
-        private IObservable<Message> LoadNextMessages(
+        private IObservable<Message> GetNextMessages(
             Chat chat,
             Message fromMessage = null)
         {
@@ -88,7 +78,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
             return _messageLoader.LoadNextMessages(chat, fromMessageId, 32);
         }
 
-        private IObservable<Message> LoadPrevMessages(
+        private IObservable<Message> GetPrevMessages(
             Chat chat,
             Message fromMessage = null)
         {

@@ -12,40 +12,48 @@ namespace Tel.Egram.Components.Messenger.Informer
     {
         public static IDisposable BindInformer(
             this InformerModel model,
-            Target target)
+            Chat chat)
         {
             return BindInformer(
                 model,
-                target,
+                chat,
                 Locator.Current.GetService<IAvatarLoader>());
         }
 
         public static IDisposable BindInformer(
             this InformerModel model,
-            Target target,
+            Aggregate aggregate)
+        {
+            return BindInformer(
+                model,
+                aggregate,
+                Locator.Current.GetService<IAvatarLoader>());
+        }
+
+        public static IDisposable BindInformer(
+            this InformerModel model,
+            Chat chat,
             IAvatarLoader avatarLoader)
         {
-            switch (target)
-            {
-                case Chat chat:
-                    model.IsVisible = true;
-                    model.Title = chat.ChatData.Title;
-                    model.Label = chat.ChatData.Title;
+            model.Title = chat.ChatData.Title;
+            model.Label = chat.ChatData.Title;
                     
-                    return avatarLoader.LoadAvatar(chat.ChatData)
-                        .SubscribeOn(RxApp.TaskpoolScheduler)
-                        .ObserveOn(RxApp.MainThreadScheduler)
-                        .Subscribe(avatar =>
-                        {
-                            model.Avatar = avatar;
-                        });
-                
-                case Aggregate aggregate:
-                    model.Title = aggregate.Id.ToString();
-                    model.Label = aggregate.Id.ToString();
-                    
-                    return Disposable.Empty;
-            }
+            return avatarLoader.LoadAvatar(chat.ChatData)
+                .SubscribeOn(RxApp.TaskpoolScheduler)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(avatar =>
+                {
+                    model.Avatar = avatar;
+                });
+        }
+        
+        public static IDisposable BindInformer(
+            this InformerModel model,
+            Aggregate aggregate,
+            IAvatarLoader avatarLoader)
+        {
+            model.Title = aggregate.Id.ToString();
+            model.Label = aggregate.Id.ToString();
             
             return Disposable.Empty;
         }

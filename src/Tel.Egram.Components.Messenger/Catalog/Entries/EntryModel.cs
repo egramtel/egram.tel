@@ -20,8 +20,6 @@ namespace Tel.Egram.Components.Messenger.Catalog.Entries
         public bool HasUnread { get; set; }
 
         public string UnreadCount { get; set; }
-        
-        public Target Target { get; set; }
 
         public EntryModel()
         {
@@ -30,14 +28,6 @@ namespace Tel.Egram.Components.Messenger.Catalog.Entries
                 this.BindAvatarLoading()
                     .DisposeWith(disposables);
             });
-        }
-        
-        public static EntryModel FromTarget(Target target)
-        {
-            return new EntryModel
-            {
-                Target = target
-            };
         }
 
         public ViewModelActivator Activator { get; } = new ViewModelActivator();

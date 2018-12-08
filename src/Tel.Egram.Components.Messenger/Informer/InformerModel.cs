@@ -17,11 +17,20 @@ namespace Tel.Egram.Components.Messenger.Informer
         
         public Avatar Avatar { get; set; }
         
-        public InformerModel(Target target)
+        public InformerModel(Chat chat)
         {
             this.WhenActivated(disposables =>
             {
-                this.BindInformer(target)
+                this.BindInformer(chat)
+                    .DisposeWith(disposables);
+            });
+        }
+
+        public InformerModel(Aggregate aggregate)
+        {
+            this.WhenActivated(disposables =>
+            {
+                this.BindInformer(aggregate)
                     .DisposeWith(disposables);
             });
         }

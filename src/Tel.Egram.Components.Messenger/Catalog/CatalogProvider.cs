@@ -99,7 +99,7 @@ namespace Tel.Egram.Components.Messenger.Catalog
                     })
                 .Subscribe(item =>
                 {
-                    UpdateChatEntryModel(item.Entry, item.Chat);
+                    UpdateChatEntryModel((ChatEntryModel)item.Entry, item.Chat);
                 });
         }
 
@@ -109,8 +109,11 @@ namespace Tel.Egram.Components.Messenger.Catalog
             
             if (!_entryStore.TryGetValue(chatData.Id, out var entry))
             {
-                entry = EntryModel.FromTarget(chat);
-                UpdateChatEntryModel(entry, chat);
+                entry = new ChatEntryModel
+                {
+                    Chat = chat
+                };
+                UpdateChatEntryModel((ChatEntryModel)entry, chat);
                 
                 _entryStore.Add(chatData.Id, entry);
             }
@@ -118,11 +121,11 @@ namespace Tel.Egram.Components.Messenger.Catalog
             return entry;
         }
 
-        private void UpdateChatEntryModel(EntryModel entry, Chat chat)
+        private void UpdateChatEntryModel(ChatEntryModel entry, Chat chat)
         {
             var chatData = chat.ChatData;
             
-            entry.Target = chat;
+            entry.Chat = chat;
             entry.Id = chatData.Id;
             entry.Title = chatData.Title;
             entry.HasUnread = chatData.UnreadCount > 0;

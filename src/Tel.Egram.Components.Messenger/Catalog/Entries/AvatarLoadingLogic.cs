@@ -41,15 +41,15 @@ namespace Tel.Egram.Components.Messenger.Catalog.Entries
 
         private static Avatar GetAvatar(IAvatarLoader avatarLoader, EntryModel entry)
         {
-            switch (entry.Target)
+            switch (entry)
             {
-                case Chat chat:
-                    return avatarLoader.GetAvatar(chat.ChatData);
+                case ChatEntryModel chatEntryModel:
+                    return avatarLoader.GetAvatar(chatEntryModel.Chat.ChatData);
                 
-                case Aggregate aggregate:
+                case AggregateEntryModel aggregateEntryModel:
                     return avatarLoader.GetAvatar(new TdApi.Chat
                     {
-                        Id = aggregate.Id
+                        Id = aggregateEntryModel.Aggregate.Id
                     });
             }
 
@@ -58,15 +58,15 @@ namespace Tel.Egram.Components.Messenger.Catalog.Entries
         
         private static IObservable<Avatar> LoadAvatar(IAvatarLoader avatarLoader, EntryModel entry)
         {   
-            switch (entry.Target)
+            switch (entry)
             {
-                case Chat chat:
-                    return avatarLoader.LoadAvatar(chat.ChatData);
+                case ChatEntryModel chatEntryModel:
+                    return avatarLoader.LoadAvatar(chatEntryModel.Chat.ChatData);
                 
-                case Aggregate aggregate:
+                case AggregateEntryModel aggregateEntryModel:
                     return avatarLoader.LoadAvatar(new TdApi.Chat
                     {
-                        Id = aggregate.Id
+                        Id = aggregateEntryModel.Aggregate.Id
                     });
             }
             

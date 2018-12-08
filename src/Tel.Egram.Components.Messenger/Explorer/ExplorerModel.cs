@@ -22,17 +22,32 @@ namespace Tel.Egram.Components.Messenger.Explorer
         
         public Range VisibleRange { get; set; }
         
-        public ExplorerModel(Target target)
+        public ExplorerModel(Aggregate aggregate)
         {
             this.WhenActivated(disposables =>
             {
                 this.BindSource()
                     .DisposeWith(disposables);
             
-                this.BindVisibleRangeChanges(target)
+//                this.BindVisibleRangeChanges(aggregate)
+//                    .DisposeWith(disposables);
+//            
+//                this.InitMessageLoading(aggregate)
+//                    .DisposeWith(disposables);
+            });
+        }
+
+        public ExplorerModel(Chat chat)
+        {
+            this.WhenActivated(disposables =>
+            {
+                this.BindSource()
                     .DisposeWith(disposables);
             
-                this.InitMessageLoading(target)
+                this.BindVisibleRangeChanges(chat)
+                    .DisposeWith(disposables);
+            
+                this.InitMessageLoading(chat)
                     .DisposeWith(disposables);
             });
         }

@@ -3,6 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using ReactiveUI;
 using Tel.Egram.Components.Messenger.Catalog;
+using Tel.Egram.Components.Messenger.Catalog.Entries;
 using Tel.Egram.Components.Messenger.Editor;
 using Tel.Egram.Components.Messenger.Explorer;
 using Tel.Egram.Components.Messenger.Home;
@@ -25,9 +26,22 @@ namespace Tel.Egram.Components.Messenger
         {
             model.InformerModel = InformerModel.Hidden();
             
-            return model.SubscribeToSelection(target =>
+            return model.SubscribeToSelection(entry =>
             {
-                model.InformerModel = new InformerModel(target);
+                switch (entry)
+                {
+                    case ChatEntryModel chatEntryModel:
+                        model.InformerModel = new InformerModel(chatEntryModel.Chat);
+                        break;
+                    
+                    case AggregateEntryModel aggregateEntryModel:
+                        model.InformerModel = new InformerModel(aggregateEntryModel.Aggregate);
+                        break;
+                    
+                    case HomeEntryModel _:
+                        model.InformerModel = InformerModel.Hidden();
+                        break;
+                }
             });
         }
 
@@ -35,9 +49,22 @@ namespace Tel.Egram.Components.Messenger
         {
             model.ExplorerModel = ExplorerModel.Hidden();
             
-            return model.SubscribeToSelection(target =>
+            return model.SubscribeToSelection(entry =>
             {
-                model.ExplorerModel = new ExplorerModel(target);
+                switch (entry)
+                {
+                    case ChatEntryModel chatEntryModel:
+                        model.ExplorerModel = new ExplorerModel(chatEntryModel.Chat);
+                        break;
+                    
+                    case AggregateEntryModel aggregateEntryModel:
+                        model.ExplorerModel = new ExplorerModel(aggregateEntryModel.Aggregate);
+                        break;
+                    
+                    case HomeEntryModel _:
+                        model.ExplorerModel = ExplorerModel.Hidden();
+                        break;
+                }
             });
         }
 
@@ -45,9 +72,18 @@ namespace Tel.Egram.Components.Messenger
         {
             model.HomeModel = HomeModel.Hidden();
             
-            return model.SubscribeToSelection(target =>
+            return model.SubscribeToSelection(entry =>
             {
-                model.HomeModel = new HomeModel(target);
+                switch (entry)
+                {
+                    case HomeEntryModel _:
+                        model.HomeModel = new HomeModel();
+                        break;
+                    
+                    default:
+                        model.HomeModel = HomeModel.Hidden();
+                        break;
+                }
             });
         }
 
@@ -55,29 +91,31 @@ namespace Tel.Egram.Components.Messenger
         {
             model.EditorModel = EditorModel.Hidden();
             
-            return model.SubscribeToSelection(target =>
+            return model.SubscribeToSelection(entry =>
             {
-                if (target is Chat chat)
+                switch (entry)
                 {
-                    model.EditorModel = new EditorModel(chat);
-                }
-                else
-                {
-                    model.EditorModel = EditorModel.Hidden();
+                    case ChatEntryModel chatEntryModel:
+                        model.EditorModel = new EditorModel(chatEntryModel.Chat);
+                        break;
+                    
+                    default:
+                        model.EditorModel = EditorModel.Hidden();
+                        break;
                 }
             });
         }
 
-        private static IDisposable SubscribeToSelection(this MessengerModel model, Action<Target> action)
+        private static IDisposable SubscribeToSelection(this MessengerModel model, Action<EntryModel> action)
         {
             return model.WhenAnyValue(ctx => ctx.CatalogModel.SelectedEntry)
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(entry =>
                 {
-                    if (entry?.Target != null)
+                    if (entry != null)
                     {
-                        action(entry.Target);
+                        action(entry);
                     }
                 });
         }

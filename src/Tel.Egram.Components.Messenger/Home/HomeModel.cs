@@ -16,7 +16,7 @@ namespace Tel.Egram.Components.Messenger.Home
         
         public ObservableCollectionExtended<MessageModel> PromotedMessages { get; set; }
         
-        public HomeModel(Target target)
+        public HomeModel()
         {
             this.WhenActivated(disposables =>
             {
@@ -26,10 +26,6 @@ namespace Tel.Egram.Components.Messenger.Home
                 this.BindPromoted()
                     .DisposeWith(disposables);
             });
-        }
-
-        private HomeModel()
-        {
         }
         
         public ViewModelActivator Activator => new ViewModelActivator();

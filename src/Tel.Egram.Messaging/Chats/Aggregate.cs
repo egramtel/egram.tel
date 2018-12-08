@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Tel.Egram.Messaging.Chats
 {
-    public class Aggregate : Target
+    public class Aggregate
     {
         public long Id { get; set; }
         

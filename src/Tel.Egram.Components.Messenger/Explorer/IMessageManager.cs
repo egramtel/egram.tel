@@ -9,9 +9,9 @@ namespace Tel.Egram.Components.Messenger.Explorer
 {
     public interface IMessageManager
     {
-        IObservable<IList<MessageModel>> LoadPrevMessages(Target target, Message fromMessage);
-        IObservable<IList<MessageModel>> LoadPrevMessages(Target target);
-        IObservable<IList<MessageModel>> LoadNextMessages(Target target, Message fromMessage);
-        IObservable<IList<MessageModel>> LoadNextMessages(Target target);
+        IObservable<IList<MessageModel>> LoadPrevMessages(Chat chat, Message fromMessage);
+        IObservable<IList<MessageModel>> LoadPrevMessages(Chat chat);
+        IObservable<IList<MessageModel>> LoadNextMessages(Chat chat, Message fromMessage);
+        IObservable<IList<MessageModel>> LoadNextMessages(Chat chat);
     }
 }

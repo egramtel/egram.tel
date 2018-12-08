@@ -25,22 +25,22 @@ namespace Tel.Egram.Components.Messenger.Explorer
 
         public static IDisposable InitMessageLoading(
             this ExplorerModel model,
-            Target target)
+            Chat chat)
         {
             return InitMessageLoading(
                 model,
-                target,
+                chat,
                 Locator.Current.GetService<IMessageManager>(),
                 Locator.Current.GetService<IAvatarManager>());
         }
 
         public static IDisposable InitMessageLoading(
             this ExplorerModel model,
-            Target target,
+            Chat chat,
             IMessageManager messageManager,
             IAvatarManager avatarManager)
         {   
-            var messageLoading = messageManager.LoadPrevMessages(target)
+            var messageLoading = messageManager.LoadPrevMessages(chat)
                 .Select(models => new {
                     Action = new Action(() =>
                     {
@@ -81,18 +81,18 @@ namespace Tel.Egram.Components.Messenger.Explorer
 
         public static IDisposable BindVisibleRangeChanges(
             this ExplorerModel model,
-            Target target)
+            Chat chat)
         {
             return BindVisibleRangeChanges(
                 model,
-                target,
+                chat,
                 Locator.Current.GetService<IMessageManager>(),
                 Locator.Current.GetService<IAvatarManager>());
         }
 
         public static IDisposable BindVisibleRangeChanges(
             this ExplorerModel model,
-            Target target,
+            Chat chat,
             IMessageManager messageManager,
             IAvatarManager avatarManager)
         {
@@ -117,7 +117,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                         {
                             var items = sourceItems.Items.OfType<MessageModel>().ToList();
                             var firstMessage = items.FirstOrDefault();
-                            return messageManager.LoadPrevMessages(target, firstMessage?.Message)
+                            return messageManager.LoadPrevMessages(chat, firstMessage?.Message)
                                 .Select(models => new {
                                     Action = new Action(() =>
                                     {
@@ -132,7 +132,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                         {
                             var items = sourceItems.Items.OfType<MessageModel>().ToList();
                             var lastMessage = items.LastOrDefault();
-                            return messageManager.LoadNextMessages(target, lastMessage?.Message)
+                            return messageManager.LoadNextMessages(chat, lastMessage?.Message)
                                 .Select(models => new {
                                     Action = new Action(() =>
                                     {
