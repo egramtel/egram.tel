@@ -4,9 +4,9 @@ Egram is an unofficial crossplatform Telegram client written in C#, .NET Core, [
 
 | Platform | Status | Download |
 | -------- | ------ | -------- |
-| MacOS    | [![Build Status](https://dev.azure.com/egramtel/egramtel/_apis/build/status/egram?branchName=master)](https://dev.azure.com/egramtel/egramtel/_build/latest?definitionId=5?branchName=master) | https://github.com/egramtel/egram.tel/releases |
-| Windows  | [![Build Status](https://dev.azure.com/egramtel/egramtel/_apis/build/status/egram?branchName=master)](https://dev.azure.com/egramtel/egramtel/_build/latest?definitionId=5?branchName=master) | https://github.com/egramtel/egram.tel/releases |
-| Linux    | [![Build Status](https://dev.azure.com/egramtel/egramtel/_apis/build/status/egram?branchName=master)](https://dev.azure.com/egramtel/egramtel/_build/latest?definitionId=5?branchName=master) | https://github.com/egramtel/egram.tel/releases |
+| MacOS    | [![Build Status](https://dev.azure.com/egramtel/egramtel/_apis/build/status/egram?branchName=master)](https://dev.azure.com/egramtel/egramtel/_build/latest?definitionId=5?branchName=master) | [DMG](https://github.com/egramtel/egram.tel/releases) |
+| Windows  | [![Build Status](https://dev.azure.com/egramtel/egramtel/_apis/build/status/egram?branchName=master)](https://dev.azure.com/egramtel/egramtel/_build/latest?definitionId=5?branchName=master) | [EXE](https://github.com/egramtel/egram.tel/releases) |
+| Linux    | [![Build Status](https://dev.azure.com/egramtel/egramtel/_apis/build/status/egram?branchName=master)](https://dev.azure.com/egramtel/egramtel/_build/latest?definitionId=5?branchName=master) | [TAR.GZ](https://github.com/egramtel/egram.tel/releases) |
 
 ## Project
 
