@@ -2,11 +2,11 @@
 
 Egram is an unofficial crossplatform Telegram client written in C#, .NET Core, [ReactiveUI](https://github.com/reactiveui/ReactiveUI) and [Avalonia](https://github.com/AvaloniaUI/Avalonia).
 
-| Platform | Status |
-| -------- | ------ |
-| MacOS    | [![Build Status](https://dev.azure.com/egramtel/egramtel/_apis/build/status/egram.mac)](https://dev.azure.com/egramtel/egramtel/_build/latest?definitionId=3) |
-| Windows  | [![Build Status](https://dev.azure.com/egramtel/egramtel/_apis/build/status/egram.win)](https://dev.azure.com/egramtel/egramtel/_build/latest?definitionId=1) |
-| Linux    | [![Build Status](https://dev.azure.com/egramtel/egramtel/_apis/build/status/egram.linux)](https://dev.azure.com/egramtel/egramtel/_build/latest?definitionId=4) |
+| Platform | Status | Download |
+| -------- | ------ | -------- |
+| MacOS    | [![Build Status](https://dev.azure.com/egramtel/egramtel/_apis/build/status/egram?branchName=master)](https://dev.azure.com/egramtel/egramtel/_build/latest?definitionId=5?branchName=master) | https://github.com/egramtel/egram.tel/releases |
+| Windows  | [![Build Status](https://dev.azure.com/egramtel/egramtel/_apis/build/status/egram?branchName=master)](https://dev.azure.com/egramtel/egramtel/_build/latest?definitionId=5?branchName=master) | https://github.com/egramtel/egram.tel/releases |
+| Linux    | [![Build Status](https://dev.azure.com/egramtel/egramtel/_apis/build/status/egram?branchName=master)](https://dev.azure.com/egramtel/egramtel/_build/latest?definitionId=5?branchName=master) | https://github.com/egramtel/egram.tel/releases |
 
 ## Project
 
