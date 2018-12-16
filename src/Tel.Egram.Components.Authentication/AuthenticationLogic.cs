@@ -1,4 +1,5 @@
 using System;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -6,6 +7,7 @@ using ReactiveUI;
 using Splat;
 using TdLib;
 using Tel.Egram.Authentication;
+using Tel.Egram.Components.Authentication.Results;
 
 namespace Tel.Egram.Components.Authentication
 {
@@ -36,16 +38,19 @@ namespace Tel.Egram.Components.Authentication
                 .Select(password => !string.IsNullOrWhiteSpace(password));
             
             model.SendCodeCommand = ReactiveCommand.CreateFromObservable(
-                () => authenticator.SetPhoneNumber(model.PhoneNumber),
-                canSendCode, RxApp.MainThreadScheduler);
+                (AuthenticationModel m) => SendCode(authenticator, m.PhoneNumber),
+                canSendCode,
+                RxApp.MainThreadScheduler);
 
             model.CheckCodeCommand = ReactiveCommand.CreateFromObservable(
-                () => authenticator.CheckCode(model.ConfirmCode, model.FirstName, model.LastName),
-                canCheckCode, RxApp.MainThreadScheduler);
+                (AuthenticationModel m) => CheckCode(authenticator, m.ConfirmCode, m.FirstName, m.LastName),
+                canCheckCode,
+                RxApp.MainThreadScheduler);
             
             model.CheckPasswordCommand = ReactiveCommand.CreateFromObservable(
-                () => authenticator.CheckPassword(model.Password),
-                canCheckPassword, RxApp.MainThreadScheduler);
+                (AuthenticationModel m) => CheckPassword(authenticator, m.Password),
+                canCheckPassword,
+                RxApp.MainThreadScheduler);
 
             return authenticator.ObserveState()
                 .SubscribeOn(RxApp.TaskpoolScheduler)
@@ -77,8 +82,10 @@ namespace Tel.Egram.Components.Authentication
             model.PasswordIndex = 0;
         }
 
-        private static void OnWaitingConfirmCode(AuthenticationModel model, bool registration)
+        private static void OnWaitingConfirmCode(AuthenticationModel model, bool isRegistration)
         {
+            model.IsRegistration = isRegistration;
+            
             model.ConfirmIndex = 1;
             model.PasswordIndex = 0;
         }
@@ -87,6 +94,35 @@ namespace Tel.Egram.Components.Authentication
         {
             model.ConfirmIndex = 1;
             model.PasswordIndex = 1;
+        }
+
+        private static IObservable<SendCodeResult> SendCode(
+            IAuthenticator authenticator,
+            string phoneNumber)
+        {
+            return authenticator
+                .SetPhoneNumber(phoneNumber)
+                .Select(_ => new SendCodeResult());
+        }
+
+        private static IObservable<CheckCodeResult> CheckCode(
+            IAuthenticator authenticator,
+            string code,
+            string firstName,
+            string lastName)
+        {
+            return authenticator
+                .CheckCode(code, firstName, lastName)
+                .Select(_ => new CheckCodeResult());
+        }
+
+        private static IObservable<CheckPasswordResult> CheckPassword(
+            IAuthenticator authenticator,
+            string password)
+        {
+            return authenticator
+                .CheckPassword(password)
+                .Select(_ => new CheckPasswordResult());
         }
     }
 }

@@ -39,8 +39,8 @@
             Classes="Action"
             Grid.Row="2"
             Grid.Column="1"
-            Command="{Binding SendCodeCommand}"
-            >
+            CommandParameter="{Binding}"
+            Command="{Binding SendCodeCommand}">
             <TextBlock Text="Send code" />
         </Button>
         
@@ -68,20 +68,32 @@
                 
                 <TextBox
                     Grid.Row="1"
+                    IsVisible="{Binding IsRegistration}"
                     Text="{Binding FirstName, Mode=TwoWay}"
                     Watermark="First name" />
                 
                 <TextBox
                     Grid.Row="2"
+                    IsVisible="{Binding IsRegistration}"
                     Text="{Binding LastName, Mode=TwoWay}"
                     Watermark="Last name (optional)" />
                 
                 <Button
                     Classes="Action"
                     Grid.Row="3"
-                    Command="{Binding CheckCodeCommand}"
-                    >
+                    IsVisible="{Binding IsRegistration}"
+                    CommandParameter="{Binding}"
+                    Command="{Binding CheckCodeCommand}">
                     <TextBlock Text="Sign up" />
+                </Button>
+               
+                <Button
+                    Classes="Action"
+                    Grid.Row="3"
+                    IsVisible="{Binding !IsRegistration}"
+                    CommandParameter="{Binding}"
+                    Command="{Binding CheckCodeCommand}">
+                    <TextBlock Text="Sign in" />
                 </Button>
                 
             </Grid>
@@ -113,6 +125,7 @@
                 <Button
                     Classes="Action"
                     Grid.Row="1"
+                    CommandParameter="{Binding}"
                     Command="{Binding CheckPasswordCommand}"
                     >
                     <TextBlock Text="Log in" />

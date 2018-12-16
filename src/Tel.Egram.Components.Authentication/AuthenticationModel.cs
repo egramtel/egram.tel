@@ -4,16 +4,20 @@ using System.Reactive.Disposables;
 using PropertyChanged;
 using ReactiveUI;
 using TdLib;
+using Tel.Egram.Components.Authentication.Results;
 
 namespace Tel.Egram.Components.Authentication
 {
     [AddINotifyPropertyChangedInterface]
     public class AuthenticationModel : ISupportsActivation
     {
-        public ReactiveCommand<Unit, TdApi.Ok> CheckPasswordCommand { get; set; }
-        public ReactiveCommand<Unit, TdApi.Ok> CheckCodeCommand { get; set; }
-        public ReactiveCommand<Unit, TdApi.Ok> SendCodeCommand { get; set; }
         public ReactiveCommand<Unit, Unit> SetProxyCommand { get; set; }
+        
+        public ReactiveCommand<AuthenticationModel, SendCodeResult> SendCodeCommand { get; set; }
+        public ReactiveCommand<AuthenticationModel, CheckCodeResult> CheckCodeCommand { get; set; }
+        public ReactiveCommand<AuthenticationModel, CheckPasswordResult> CheckPasswordCommand { get; set; }
+        
+        public bool IsRegistration { get; set; }
         
         public int PasswordIndex { get; set; }
         public int ConfirmIndex { get; set; }
