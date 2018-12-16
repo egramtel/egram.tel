@@ -128,7 +128,7 @@
                     CommandParameter="{Binding}"
                     Command="{Binding CheckPasswordCommand}"
                     >
-                    <TextBlock Text="Log in" />
+                    <TextBlock Text="Check Password" />
                 </Button>
                         
             </Grid>
