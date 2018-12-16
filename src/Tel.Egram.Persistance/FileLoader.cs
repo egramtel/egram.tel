@@ -4,6 +4,7 @@ using System.IO;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using TdLib;
+using Tel.Egram.Utils.Reactive;
 using Tel.Egram.Utils.TdLib;
 
 namespace Tel.Egram.Persistance
@@ -21,24 +22,23 @@ namespace Tel.Egram.Persistance
         {
             if (IsDownloadingNeeded(file))
             {
-                var updates = _agent.Updates
-                    .OfType<TdApi.Update.UpdateFile>()
-                    .Select(u => u.File)
-                    .Where(f => f.Id == file.Id)
-                    .TakeWhile(f => IsDownloadingNeeded(f));
-
-                var download = Observable.Defer(() => _agent.Execute(new TdApi.DownloadFile
-                {
-                    FileId = file.Id,
-                    Priority = (int) priority
-                }));
-
-                var final = Observable.Defer(() => _agent.Execute(new TdApi.GetFile
-                {
-                    FileId = file.Id
-                }));
-
-                return download.Concat(updates).Concat(final);
+                return _agent.Execute(new TdApi.DownloadFile
+                    {
+                        FileId = file.Id,
+                        Priority = (int) priority
+                    })
+                    .SelectSeq(downloading =>
+                    {
+                        return _agent.Updates
+                            .OfType<TdApi.Update.UpdateFile>()
+                            .Select(u => u.File)
+                            .Where(f => f.Id == downloading.Id)
+                            .TakeWhile(f => IsDownloadingNeeded(f));
+                    })
+                    .Concat(Observable.Defer(() => _agent.Execute(new TdApi.GetFile
+                    {
+                        FileId = file.Id
+                    })));
             }
 
             return Observable.Return(file);
