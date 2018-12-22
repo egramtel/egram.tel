@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 
-namespace Tel.Egram.Graphics
+namespace Tel.Egram.Graphics.Avatars
 {
     public class AvatarCache : IAvatarCache
     {

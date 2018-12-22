@@ -2,6 +2,7 @@
 using ReactiveUI;
 using Tel.Egram.Components.Messenger.Explorer.Items;
 using Tel.Egram.Graphics;
+using Tel.Egram.Graphics.Avatars;
 using Tel.Egram.Messaging.Messages;
 
 namespace Tel.Egram.Components.Messenger.Explorer.Messages

@@ -2,7 +2,7 @@ using System;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 
-namespace Tel.Egram.Graphics
+namespace Tel.Egram.Graphics.Avatars
 {
     public class Avatar
     {

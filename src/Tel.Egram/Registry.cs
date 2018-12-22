@@ -18,6 +18,7 @@ using Tel.Egram.Components.Popups;
 using Tel.Egram.Components.Workspace;
 using Tel.Egram.Components.Workspace.Navigation;
 using Tel.Egram.Graphics;
+using Tel.Egram.Graphics.Avatars;
 using Tel.Egram.Graphics.Previews;
 using Tel.Egram.Gui;
 using Tel.Egram.Messaging.Chats;

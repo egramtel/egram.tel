@@ -2,6 +2,7 @@ using System.Reactive.Disposables;
 using PropertyChanged;
 using ReactiveUI;
 using Tel.Egram.Graphics;
+using Tel.Egram.Graphics.Avatars;
 using Tel.Egram.Messaging.Chats;
 
 namespace Tel.Egram.Components.Messenger.Informer

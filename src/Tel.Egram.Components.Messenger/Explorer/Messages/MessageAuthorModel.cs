@@ -1,4 +1,5 @@
 using Tel.Egram.Graphics;
+using Tel.Egram.Graphics.Avatars;
 
 namespace Tel.Egram.Components.Messenger.Explorer.Messages
 {

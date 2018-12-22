@@ -2,6 +2,7 @@ using System.Reactive.Disposables;
 using PropertyChanged;
 using ReactiveUI;
 using Tel.Egram.Graphics;
+using Tel.Egram.Graphics.Avatars;
 
 namespace Tel.Egram.Components.Workspace.Navigation
 {

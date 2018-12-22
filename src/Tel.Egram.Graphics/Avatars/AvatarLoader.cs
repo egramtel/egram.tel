@@ -8,7 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 using TdLib;
 using Tel.Egram.Persistance;
 
-namespace Tel.Egram.Graphics
+namespace Tel.Egram.Graphics.Avatars
 {
     public class AvatarLoader : IAvatarLoader, IDisposable
     {

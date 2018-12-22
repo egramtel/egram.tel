@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using ReactiveUI;
 using Splat;
 using Tel.Egram.Graphics;
+using Tel.Egram.Graphics.Avatars;
 using Tel.Egram.Messaging.Chats;
 
 namespace Tel.Egram.Components.Messenger.Informer

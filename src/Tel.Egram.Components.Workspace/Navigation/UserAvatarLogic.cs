@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using ReactiveUI;
 using Splat;
 using Tel.Egram.Graphics;
+using Tel.Egram.Graphics.Avatars;
 using Tel.Egram.Messaging.Users;
 
 namespace Tel.Egram.Components.Workspace.Navigation

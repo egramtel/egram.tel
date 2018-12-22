@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using Splat;
 using TdLib;
 using Tel.Egram.Graphics;
+using Tel.Egram.Graphics.Avatars;
 using Tel.Egram.Messaging.Chats;
 
 namespace Tel.Egram.Components.Messenger.Catalog.Entries

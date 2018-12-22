@@ -1,8 +1,7 @@
 ﻿using System;
-using Avalonia.Media.Imaging;
 using TdLib;
 
-namespace Tel.Egram.Graphics
+namespace Tel.Egram.Graphics.Avatars
 {
     public interface IAvatarLoader
     {
