@@ -19,6 +19,31 @@ namespace Tel.Egram.Messaging.Chats
             _promoChatId = -1001316949630L;
         }
 
+        public IObservable<Chat> LoadChat(long chatId)
+        {
+            return _agent.Execute(new TdApi.GetChat
+                {
+                    ChatId = chatId
+                })
+                .SelectSeq(chat =>
+                {
+                    if (chat.Type is TdApi.ChatType.ChatTypePrivate type)
+                    {
+                        return GetUser(type.UserId)
+                            .Select(user => new Chat
+                            {
+                                ChatData = chat,
+                                User = user
+                            });
+                    }
+
+                    return Observable.Return(new Chat
+                    {
+                        ChatData = chat
+                    });
+                });
+        }
+
         public IObservable<Chat> LoadChats()
         {
             return GetAllChats(new List<TdApi.Chat>())

@@ -13,55 +13,81 @@ namespace Tel.Egram.Components.Messenger.Explorer
 {
     public class MessageManager : IMessageManager
     {
+        private readonly IChatLoader _chatLoader;
         private readonly IMessageLoader _messageLoader;
         private readonly IMessageModelFactory _messageModelFactory;
 
         public MessageManager(
+            IChatLoader chatLoader,
             IMessageLoader messageLoader,
             IMessageModelFactory messageModelFactory)
         {
+            _chatLoader = chatLoader;
             _messageLoader = messageLoader;
             _messageModelFactory = messageModelFactory;
         }
         
         public IObservable<IList<MessageModel>> LoadPrevMessages(
             Chat chat, 
-            Message fromMessage)
+            Message fromMessage = null)
         {
-            return GetPrevMessages(chat, fromMessage)
-                .Select(_messageModelFactory.CreateMessage)
-                .CollectToList()
-                .Select(list =>
-                {
-                    list.Reverse();
-                    return list;
-                });
+            return GetChat(chat)
+                .SelectSeq(c => GetPrevMessages(c, fromMessage)
+                    .Select(_messageModelFactory.CreateMessage)
+                    .ToList()
+                    .Select(list => list.Reverse().ToList()));
         }
 
-        public IObservable<IList<MessageModel>> LoadPrevMessages(
-            Chat chat)
+        public IObservable<IList<MessageModel>> LoadInitMessages(
+            Chat chat,
+            Message fromMessage = null)
         {
-            return LoadPrevMessages(chat, null);
-        }
-
-        public IObservable<IList<MessageModel>> LoadNextMessages(
-            Chat chat, 
-            Message fromMessage)
-        {
-            return GetNextMessages(chat, fromMessage)
-                .Select(_messageModelFactory.CreateMessage)
-                .CollectToList()
-                .Select(list =>
-                {
-                    list.Reverse();
-                    return list;
-                });
+            return Observable.Concat(
+                LoadPrevMessages(chat, fromMessage),
+                LoadMessage(chat, fromMessage),
+                LoadNextMessages(chat, fromMessage))
+                    .ToList()
+                    .Select(list =>
+                    {
+                        var prev = list[0];
+                        var current = list[1];
+                        var next = list[2];
+                        
+                        return prev.Concat(current).Concat(next).ToList();
+                    });
         }
 
         public IObservable<IList<MessageModel>> LoadNextMessages(
-            Chat chat)
+            Chat chat,
+            Message fromMessage)
         {
-            return LoadNextMessages(chat, null);
+            return GetChat(chat)
+                .SelectSeq(c => GetNextMessages(c, fromMessage)
+                    .Select(_messageModelFactory.CreateMessage)
+                    .ToList())
+                    .Select(list => list.Reverse().Skip(1).ToList());
+        }
+
+        private IObservable<IList<MessageModel>> LoadMessage(
+            Chat chat,
+            Message fromMessage)
+        {   
+            var messageId = chat.ChatData.LastReadInboxMessageId;
+            
+            if (fromMessage != null)
+            {
+                messageId = fromMessage.MessageData.Id;
+            }
+
+            return _messageLoader
+                .LoadMessage(chat.ChatData.Id, messageId)
+                .Select(_messageModelFactory.CreateMessage)
+                .ToList();
+        }
+
+        private IObservable<Chat> GetChat(Chat chat)
+        {
+            return _chatLoader.LoadChat(chat.ChatData.Id);
         }
 
         private IObservable<Message> GetNextMessages(

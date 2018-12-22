@@ -19,6 +19,16 @@ namespace Tel.Egram.Messaging.Messages
             _agent = agent;
         }
 
+        public IObservable<Message> LoadMessage(long chatId, long messageId)
+        {
+            return _agent.Execute(new TdApi.GetMessage
+                {
+                    ChatId = chatId,
+                    MessageId = messageId
+                })
+                .SelectSeq(MapToMessage);
+        }
+
         public IObservable<Message> LoadMessages(
             Aggregate feed,
             AggregateLoadingState state)
@@ -41,7 +51,7 @@ namespace Tel.Egram.Messaging.Messages
             long fromMessageId,
             int limit)
         {   
-            return GetMessages(feed.ChatData, fromMessageId, limit, -limit)
+            return GetMessages(feed.ChatData, fromMessageId, limit, -(limit - 1))
                 .Where(m => m.Id != fromMessageId)
                 .SelectSeq(MapToMessage);
         }
@@ -174,7 +184,7 @@ namespace Tel.Egram.Messaging.Messages
                     ChatId = chat.Id,
                     FromMessageId = fromMessageId,
                     Limit = limit,
-                    Offset = offset >= 0 ? 0 : offset + 2, // limit must be greater than -offset by 2
+                    Offset = offset,
                     OnlyLocal = false
                 })
                 .SelectMany(history => history.Messages_);

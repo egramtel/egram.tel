@@ -24,17 +24,17 @@ namespace Tel.Egram.Components.Messenger.Explorer
         
         public ExplorerModel(Aggregate aggregate)
         {
-            this.WhenActivated(disposables =>
-            {
-                this.BindSource()
-                    .DisposeWith(disposables);
-            
+//            this.WhenActivated(disposables =>
+//            {
+//                this.BindSource()
+//                    .DisposeWith(disposables);
+//            
 //                this.BindVisibleRangeChanges(aggregate)
 //                    .DisposeWith(disposables);
 //            
 //                this.InitMessageLoading(aggregate)
 //                    .DisposeWith(disposables);
-            });
+//            });
         }
 
         public ExplorerModel(Chat chat)
@@ -44,8 +44,8 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 this.BindSource()
                     .DisposeWith(disposables);
             
-                this.BindVisibleRangeChanges(chat)
-                    .DisposeWith(disposables);
+//                this.BindVisibleRangeChanges(chat)
+//                    .DisposeWith(disposables);
             
                 this.InitMessageLoading(chat)
                     .DisposeWith(disposables);

@@ -1,4 +1,6 @@
-﻿using Tel.Egram.Components.Messenger.Explorer.Items;
+﻿using System.Reactive.Disposables;
+using ReactiveUI;
+using Tel.Egram.Components.Messenger.Explorer.Items;
 using Tel.Egram.Graphics;
 using Tel.Egram.Messaging.Messages;
 

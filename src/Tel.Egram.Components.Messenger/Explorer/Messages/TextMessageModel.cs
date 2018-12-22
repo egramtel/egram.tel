@@ -1,12 +1,21 @@
+using System.Reactive.Disposables;
+using ReactiveUI;
+
 namespace Tel.Egram.Components.Messenger.Explorer.Messages
 {
-    public class TextMessageModel : MessageModel
+    public class TextMessageModel : MessageModel, ISupportsActivation
     {
         public string Text { get; set; }
-
-        public override string ToString()
+        
+        public TextMessageModel()
         {
-            return Text;
+            this.WhenActivated(disposables =>
+            {
+                this.BindAvatarLoading()
+                    .DisposeWith(disposables);
+            });
         }
+        
+        public ViewModelActivator Activator { get; } = new ViewModelActivator();
     }
 }

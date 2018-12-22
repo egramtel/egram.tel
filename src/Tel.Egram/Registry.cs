@@ -247,12 +247,6 @@ namespace Tel.Egram
             });
             
             // messenger
-            services.RegisterLazySingleton<IAvatarManager>(() =>
-            {
-                var avatarLoader = services.GetService<IAvatarLoader>();
-                return new AvatarManager(avatarLoader);
-            });
-            
             services.RegisterLazySingleton<IMessageModelFactory>(() =>
             {
                 return new MessageModelFactory();
@@ -260,9 +254,11 @@ namespace Tel.Egram
             
             services.RegisterLazySingleton<IMessageManager>(() =>
             {
+                var chatLoader = services.GetService<IChatLoader>();
                 var messageLoader = services.GetService<IMessageLoader>();
                 var messageFactory = services.GetService<IMessageModelFactory>();
-                return new MessageManager(messageLoader, messageFactory);
+                
+                return new MessageManager(chatLoader, messageLoader, messageFactory);
             });
         }
         
