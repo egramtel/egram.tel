@@ -20,11 +20,11 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 case TdApi.MessageContent.MessagePhoto messagePhoto:
                     return CreatePhotoMessage(message, messagePhoto);
                 
-//                case TdApi.MessageContent.MessageSticker messageSticker:
-//                    return CreateStickerMessage(message, messageSticker);
+                case TdApi.MessageContent.MessageSticker messageSticker:
+                    return CreateStickerMessage(message, messageSticker);
                 
-//                case TdApi.MessageContent.MessageVideo messageVideo:
-//                    return CreateVideoMessage(message, messageVideo);
+                case TdApi.MessageContent.MessageVideo messageVideo:
+                    return CreateVideoMessage(message, messageVideo);
                 
                 default:
                     return CreateUnsupportedMessage(message);
@@ -70,7 +70,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
             {
                 AuthorName = authorName,
                 Message = message,
-                Photo = photo,
+                PhotoData = photo,
                 Text = text
             };
         }
@@ -79,14 +79,44 @@ namespace Tel.Egram.Components.Messenger.Explorer
             Message message,
             TdApi.MessageContent.MessageSticker messageSticker)
         {
-            throw new System.NotImplementedException();
+            var user = message.User;
+            var chat = message.Chat;
+
+            var authorName = (user == null)
+                ? chat.Title
+                : $"{user.FirstName} {user.LastName}";
+            
+            var sticker = messageSticker.Sticker;
+            
+            return new StickerMessageModel
+            {
+                AuthorName = authorName,
+                Message = message,
+                StickerData = sticker
+            };
         }
 
         private VideoMessageModel CreateVideoMessage(
             Message message,
             TdApi.MessageContent.MessageVideo messageVideo)
         {
-            throw new System.NotImplementedException();
+            var user = message.User;
+            var chat = message.Chat;
+
+            var authorName = (user == null)
+                ? chat.Title
+                : $"{user.FirstName} {user.LastName}";
+            
+            var text = messageVideo.Caption.Text;
+            var video = messageVideo.Video;
+            
+            return new VideoMessageModel
+            {
+                AuthorName = authorName,
+                Message = message,
+                VideoData = video,
+                Text = text
+            };
         }
 
         private MessageModel CreateUnsupportedMessage(Message message)

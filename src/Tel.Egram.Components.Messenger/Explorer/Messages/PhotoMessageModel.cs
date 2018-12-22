@@ -5,13 +5,11 @@ using Tel.Egram.Graphics.Previews;
 
 namespace Tel.Egram.Components.Messenger.Explorer.Messages
 {
-    public class PhotoMessageModel : MessageModel, ISupportsActivation
+    public class PhotoMessageModel : PreviewableMessageModel, ISupportsActivation
     {
         public string Text { get; set; }
         
-        public Preview Preview { get; set; }
-        
-        public TdApi.Photo Photo { get; set; }
+        public TdApi.Photo PhotoData { get; set; }
         
         public PhotoMessageModel()
         {

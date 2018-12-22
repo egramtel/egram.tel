@@ -66,6 +66,52 @@ namespace Tel.Egram.Graphics.Previews
                 });
         }
 
+        public Preview GetPreview(TdApi.PhotoSize photoSize)
+        {
+            var file = photoSize?.Photo;
+            
+            return new Preview
+            {
+                Bitmap = GetBitmap(file),
+                Quality = PreviewQuality.High
+            };
+        }
+
+        public IObservable<Preview> LoadPreview(TdApi.PhotoSize photoSize)
+        {
+            var file = photoSize?.Photo;
+            
+            return LoadBitmap(file)
+                .Select(bitmap => new Preview
+                {
+                    Bitmap = bitmap,
+                    Quality = PreviewQuality.High
+                });
+        }
+
+        public Preview GetPreview(TdApi.Sticker sticker)
+        {
+            var file = sticker.Sticker_;
+            
+            return new Preview
+            {
+                Bitmap = GetBitmap(file),
+                Quality = PreviewQuality.High
+            };
+        }
+
+        public IObservable<Preview> LoadPreview(TdApi.Sticker sticker)
+        {
+            var file = sticker.Sticker_;
+            
+            return LoadBitmap(file)
+                .Select(bitmap => new Preview
+                {
+                    Bitmap = bitmap,
+                    Quality = PreviewQuality.High
+                });
+        }
+
         private IObservable<IBitmap> LoadBitmap(TdApi.File file)
         {
             if (file != null)

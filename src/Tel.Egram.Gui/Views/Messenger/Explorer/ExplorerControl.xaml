@@ -31,6 +31,14 @@
                 <messages:PhotoMessageControl />
             </DataTemplate>
             
+            <DataTemplate DataType="{x:Type model:VideoMessageModel}">
+                <messages:VideoMessageControl />
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type model:StickerMessageModel}">
+                <messages:StickerMessageControl />
+            </DataTemplate>
+            
             <DataTemplate DataType="{x:Type model:UnsupportedMessageModel}">
                 <messages:UnsupportedMessageControl />
             </DataTemplate>

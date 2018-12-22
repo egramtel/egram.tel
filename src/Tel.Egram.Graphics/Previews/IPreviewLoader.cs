@@ -8,5 +8,13 @@ namespace Tel.Egram.Graphics.Previews
         Preview GetPreview(TdApi.Photo photo, PreviewQuality quality);
 
         IObservable<Preview> LoadPreview(TdApi.Photo photo, PreviewQuality quality);
+
+        Preview GetPreview(TdApi.PhotoSize photoSize);
+        
+        IObservable<Preview> LoadPreview(TdApi.PhotoSize photoSize);
+
+        Preview GetPreview(TdApi.Sticker sticker);
+
+        IObservable<Preview> LoadPreview(TdApi.Sticker sticker);
     }
 }
