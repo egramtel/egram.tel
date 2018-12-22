@@ -18,6 +18,7 @@ using Tel.Egram.Components.Popups;
 using Tel.Egram.Components.Workspace;
 using Tel.Egram.Components.Workspace.Navigation;
 using Tel.Egram.Graphics;
+using Tel.Egram.Graphics.Previews;
 using Tel.Egram.Gui;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
@@ -98,6 +99,13 @@ namespace Tel.Egram
             // graphics
             services.RegisterLazySingleton<IColorMapper>(() => new ColorMapper());
             
+            services.RegisterLazySingleton<IBitmapLoader>(() =>
+            {
+                var fileLoader = services.GetService<IFileLoader>();
+                return new BitmapLoader(fileLoader);
+            });
+            
+            // avatars
             services.RegisterLazySingleton<IAvatarCache>(() =>
             {
                 var options = Options.Create(new MemoryCacheOptions
@@ -105,12 +113,6 @@ namespace Tel.Egram
                     SizeLimit = 128 // maximum 128 cached bitmaps
                 });
                 return new AvatarCache(new MemoryCache(options));
-            });
-            
-            services.RegisterLazySingleton<IBitmapLoader>(() =>
-            {
-                var fileLoader = services.GetService<IFileLoader>();
-                return new BitmapLoader(fileLoader);
             });
             
             services.RegisterLazySingleton<IAvatarLoader>(() =>
@@ -123,6 +125,26 @@ namespace Tel.Egram
                     fileLoader,
                     avatarCache,
                     colorMapper);
+            });
+            
+            // previews
+            services.RegisterLazySingleton<IPreviewCache>(() =>
+            {
+                var options = Options.Create(new MemoryCacheOptions
+                {
+                    SizeLimit = 16 // maximum 16 cached bitmaps
+                });
+                return new PreviewCache(new MemoryCache(options));
+            });
+            
+            services.RegisterLazySingleton<IPreviewLoader>(() =>
+            {
+                var fileLoader = services.GetService<IFileLoader>();
+                var previewCache = services.GetService<IPreviewCache>();
+                
+                return new PreviewLoader(
+                    fileLoader,
+                    previewCache);
             });
             
             // chats

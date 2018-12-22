@@ -16,12 +16,24 @@ namespace Tel.Egram.Components.Messenger.Explorer
             {
                 case TdApi.MessageContent.MessageText messageText:
                     return CreateTextMessage(message, messageText);
+                
+                case TdApi.MessageContent.MessagePhoto messagePhoto:
+                    return CreatePhotoMessage(message, messagePhoto);
+                
+//                case TdApi.MessageContent.MessageSticker messageSticker:
+//                    return CreateStickerMessage(message, messageSticker);
+                
+//                case TdApi.MessageContent.MessageVideo messageVideo:
+//                    return CreateVideoMessage(message, messageVideo);
+                
                 default:
                     return CreateUnsupportedMessage(message);
             }
         }
 
-        private MessageModel CreateTextMessage(Message message, TdApi.MessageContent.MessageText messageText)
+        private TextMessageModel CreateTextMessage(
+            Message message,
+            TdApi.MessageContent.MessageText messageText)
         {
             var user = message.User;
             var chat = message.Chat;
@@ -38,6 +50,43 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 Message = message,
                 Text = text
             };
+        }
+
+        private PhotoMessageModel CreatePhotoMessage(
+            Message message,
+            TdApi.MessageContent.MessagePhoto messagePhoto)
+        {
+            var user = message.User;
+            var chat = message.Chat;
+
+            var authorName = (user == null)
+                ? chat.Title
+                : $"{user.FirstName} {user.LastName}";
+            
+            var text = messagePhoto.Caption.Text;
+            var photo = messagePhoto.Photo;
+            
+            return new PhotoMessageModel
+            {
+                AuthorName = authorName,
+                Message = message,
+                Photo = photo,
+                Text = text
+            };
+        }
+
+        private StickerMessageModel CreateStickerMessage(
+            Message message,
+            TdApi.MessageContent.MessageSticker messageSticker)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private VideoMessageModel CreateVideoMessage(
+            Message message,
+            TdApi.MessageContent.MessageVideo messageVideo)
+        {
+            throw new System.NotImplementedException();
         }
 
         private MessageModel CreateUnsupportedMessage(Message message)

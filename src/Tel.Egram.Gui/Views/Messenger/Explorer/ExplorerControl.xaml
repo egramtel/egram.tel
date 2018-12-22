@@ -27,6 +27,10 @@
                 <messages:TextMessageControl />
             </DataTemplate>
             
+            <DataTemplate DataType="{x:Type model:PhotoMessageModel}">
+                <messages:PhotoMessageControl />
+            </DataTemplate>
+            
             <DataTemplate DataType="{x:Type model:UnsupportedMessageModel}">
                 <messages:UnsupportedMessageControl />
             </DataTemplate>
