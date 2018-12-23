@@ -5,7 +5,9 @@
     xmlns:explorer="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer"
     xmlns:model="clr-namespace:Tel.Egram.Components.Messenger.Explorer.Messages;assembly=Tel.Egram.Components.Messenger"
     xmlns:visual="clr-namespace:Tel.Egram.Components.Messenger.Explorer.Messages.Visual;assembly=Tel.Egram.Components.Messenger"
-    xmlns:basic="clr-namespace:Tel.Egram.Components.Messenger.Explorer.Messages.Basic;assembly=Tel.Egram.Components.Messenger">
+    xmlns:basic="clr-namespace:Tel.Egram.Components.Messenger.Explorer.Messages.Basic;assembly=Tel.Egram.Components.Messenger"
+    xmlns:basic1="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages.Basic"
+    xmlns:visual1="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages.Visual">
 
     <ListBox
         Width="516"
@@ -26,23 +28,23 @@
         <ListBox.DataTemplates>
             
             <DataTemplate DataType="{x:Type basic:TextMessageModel}">
-                <messages:TextMessageControl />
+                <basic1:TextMessageControl />
             </DataTemplate>
             
             <DataTemplate DataType="{x:Type visual:PhotoMessageModel}">
-                <messages:PhotoMessageControl />
+                <visual1:PhotoMessageControl />
             </DataTemplate>
             
             <DataTemplate DataType="{x:Type visual:VideoMessageModel}">
-                <messages:VideoMessageControl />
+                <visual1:VideoMessageControl />
             </DataTemplate>
             
             <DataTemplate DataType="{x:Type visual:StickerMessageModel}">
-                <messages:StickerMessageControl />
+                <visual1:StickerMessageControl />
             </DataTemplate>
             
             <DataTemplate DataType="{x:Type model:UnsupportedMessageModel}">
-                <messages:UnsupportedMessageControl />
+                <basic1:UnsupportedMessageControl />
             </DataTemplate>
             
         </ListBox.DataTemplates>
