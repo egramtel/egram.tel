@@ -16,7 +16,4 @@
     <ProjectReference Include="..\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
     <ProjectReference Include="..\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Explorer\Messages\Notes" />
-  </ItemGroup>
 </Project>
