@@ -1,86 +1,26 @@
 ﻿<UserControl
-    xmlns="https://github.com/avaloniaui">
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shared="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages.Shared">
     
-    <Grid
-        RowDefinitions="auto,auto,auto"
-        ColumnDefinitions="auto,*"
-        >
+    <shared:MessageControl>
         
-        <Panel
-            DataContext="{Binding Avatar}"
-            Classes="Avatar"
-            Grid.Row="0"
-            Grid.Column="0"
-            Grid.RowSpan="2"
-            VerticalAlignment="Top"
-            Margin="16,8,8,8">
+        <StackPanel Orientation="Vertical">
             
-            <Ellipse
-                IsVisible="{Binding IsFallback}"
-                Fill="{Binding Brush}"
-                Width="32"
-                Height="32" />
-            
-            <TextBlock
-                IsVisible="{Binding IsFallback}"
-                Text="{Binding Label}"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="#ffffff" />
-            
-            <Image
-                Source="{Binding Bitmap}"
-                Width="32"
-                Height="32" >
-                
-                <Image.Clip>
-                    <EllipseGeometry Rect="0,0,32,32" />
-                </Image.Clip>
-                
-            </Image>
-            
-        </Panel>
-        
-        <Border
-            Grid.Row="0"
-            Grid.Column="1"
-            Height="24"
-            Margin="0,8"
-            VerticalAlignment="Center">
-            
-            <TextBlock
-                Text="{Binding AuthorName}"
-                FontWeight="Medium"
-                TextWrapping="Wrap"
-                VerticalAlignment="Center" />
-            
-        </Border>
-        
-        <Border
-            Grid.Row="1"
-            Grid.Column="1"
-            Grid.ColumnSpan="2"
-            DataContext="{Binding Preview}">
-            
-            <Image
-                MaxHeight="300"
-                Stretch="Uniform"
-                Source="{Binding Bitmap}" />
-            
-        </Border>
-        
-        <Border
-            Grid.Row="2"
-            Grid.Column="1"
-            Grid.ColumnSpan="2">
+            <Border
+                DataContext="{Binding Preview}">
+                <Image
+                    MaxHeight="300"
+                    Stretch="Uniform"
+                    Source="{Binding Bitmap}" />
+            </Border>
             
             <TextBlock
                 Text="{Binding Text}"
                 TextWrapping="Wrap"
                 VerticalAlignment="Center" />
             
-        </Border>
+        </StackPanel>
         
-    </Grid>
+    </shared:MessageControl>
         
 </UserControl>

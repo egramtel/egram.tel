@@ -1,0 +1,84 @@
+﻿<ContentControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shared="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages.Shared">
+    
+    <ContentControl.Styles>
+        
+        <Style Selector="shared|MessageControl">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    
+                    <Grid
+                        RowDefinitions="auto,auto"
+                        ColumnDefinitions="auto,*">
+        
+                        <Panel
+                            DataContext="{Binding Avatar}"
+                            Classes="Avatar"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.RowSpan="2"
+                            VerticalAlignment="Top"
+                            Margin="16,8,8,8">
+            
+                            <Ellipse
+                                IsVisible="{Binding IsFallback}"
+                                Fill="{Binding Brush}"
+                                Width="32"
+                                Height="32" />
+            
+                            <TextBlock
+                                IsVisible="{Binding IsFallback}"
+                                Text="{Binding Label}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Foreground="#ffffff" />
+            
+                            <Image
+                                Source="{Binding Bitmap}"
+                                Width="32"
+                                Height="32" >
+                
+                                <Image.Clip>
+                                    <EllipseGeometry Rect="0,0,32,32" />
+                                </Image.Clip>
+                
+                            </Image>
+            
+                        </Panel>
+        
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Height="24"
+                            Margin="0,8"
+                            VerticalAlignment="Center">
+            
+                            <TextBlock
+                                Text="{Binding AuthorName}"
+                                FontWeight="Medium"
+                                TextWrapping="Wrap"
+                                VerticalAlignment="Center" />
+            
+                        </Border>
+                
+                        <Border
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2">
+                    
+                            <ContentPresenter
+                                Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}" />
+                    
+                        </Border>
+        
+                    </Grid>
+                    
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        
+    </ContentControl.Styles>
+        
+</ContentControl>
