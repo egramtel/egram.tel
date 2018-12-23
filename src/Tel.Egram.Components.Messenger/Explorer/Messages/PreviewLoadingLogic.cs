@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Splat;
+using Tel.Egram.Components.Messenger.Explorer.Messages.Visual;
 using Tel.Egram.Graphics.Previews;
 
 namespace Tel.Egram.Components.Messenger.Explorer.Messages

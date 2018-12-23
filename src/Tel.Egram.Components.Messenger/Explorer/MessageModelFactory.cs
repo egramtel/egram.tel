@@ -1,5 +1,7 @@
 using TdLib;
 using Tel.Egram.Components.Messenger.Explorer.Messages;
+using Tel.Egram.Components.Messenger.Explorer.Messages.Basic;
+using Tel.Egram.Components.Messenger.Explorer.Messages.Visual;
 using Tel.Egram.Graphics;
 using Tel.Egram.Messaging.Messages;
 

@@ -1,17 +1,16 @@
 using System.Reactive.Disposables;
 using ReactiveUI;
 using TdLib;
-using Tel.Egram.Graphics.Previews;
 
-namespace Tel.Egram.Components.Messenger.Explorer.Messages
+namespace Tel.Egram.Components.Messenger.Explorer.Messages.Visual
 {
-    public class PhotoMessageModel : PreviewableMessageModel, ISupportsActivation
+    public class VideoMessageModel : VisualMessageModel, ISupportsActivation
     {
         public string Text { get; set; }
         
-        public TdApi.Photo PhotoData { get; set; }
+        public TdApi.Video VideoData { get; set; }
         
-        public PhotoMessageModel()
+        public VideoMessageModel()
         {
             this.WhenActivated(disposables =>
             {

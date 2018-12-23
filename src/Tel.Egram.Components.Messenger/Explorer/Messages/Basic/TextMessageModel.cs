@@ -1,23 +1,17 @@
 using System.Reactive.Disposables;
 using ReactiveUI;
-using TdLib;
 
-namespace Tel.Egram.Components.Messenger.Explorer.Messages
+namespace Tel.Egram.Components.Messenger.Explorer.Messages.Basic
 {
-    public class VideoMessageModel : PreviewableMessageModel, ISupportsActivation
+    public class TextMessageModel : MessageModel, ISupportsActivation
     {
         public string Text { get; set; }
         
-        public TdApi.Video VideoData { get; set; }
-        
-        public VideoMessageModel()
+        public TextMessageModel()
         {
             this.WhenActivated(disposables =>
             {
                 this.BindAvatarLoading()
-                    .DisposeWith(disposables);
-
-                this.BindPreviewLoading()
                     .DisposeWith(disposables);
             });
         }

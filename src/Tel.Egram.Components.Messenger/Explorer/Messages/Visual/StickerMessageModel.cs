@@ -1,17 +1,21 @@
 using System.Reactive.Disposables;
 using ReactiveUI;
+using TdLib;
 
-namespace Tel.Egram.Components.Messenger.Explorer.Messages
+namespace Tel.Egram.Components.Messenger.Explorer.Messages.Visual
 {
-    public class TextMessageModel : MessageModel, ISupportsActivation
+    public class StickerMessageModel : VisualMessageModel, ISupportsActivation
     {
-        public string Text { get; set; }
+        public TdApi.Sticker StickerData { get; set; }
         
-        public TextMessageModel()
+        public StickerMessageModel()
         {
             this.WhenActivated(disposables =>
             {
                 this.BindAvatarLoading()
+                    .DisposeWith(disposables);
+
+                this.BindPreviewLoading()
                     .DisposeWith(disposables);
             });
         }

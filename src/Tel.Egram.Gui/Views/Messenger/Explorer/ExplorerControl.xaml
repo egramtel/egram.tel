@@ -3,7 +3,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:messages="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages"
     xmlns:explorer="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer"
-    xmlns:model="clr-namespace:Tel.Egram.Components.Messenger.Explorer.Messages;assembly=Tel.Egram.Components.Messenger">
+    xmlns:model="clr-namespace:Tel.Egram.Components.Messenger.Explorer.Messages;assembly=Tel.Egram.Components.Messenger"
+    xmlns:visual="clr-namespace:Tel.Egram.Components.Messenger.Explorer.Messages.Visual;assembly=Tel.Egram.Components.Messenger"
+    xmlns:basic="clr-namespace:Tel.Egram.Components.Messenger.Explorer.Messages.Basic;assembly=Tel.Egram.Components.Messenger">
 
     <ListBox
         Width="516"
@@ -23,19 +25,19 @@
         
         <ListBox.DataTemplates>
             
-            <DataTemplate DataType="{x:Type model:TextMessageModel}">
+            <DataTemplate DataType="{x:Type basic:TextMessageModel}">
                 <messages:TextMessageControl />
             </DataTemplate>
             
-            <DataTemplate DataType="{x:Type model:PhotoMessageModel}">
+            <DataTemplate DataType="{x:Type visual:PhotoMessageModel}">
                 <messages:PhotoMessageControl />
             </DataTemplate>
             
-            <DataTemplate DataType="{x:Type model:VideoMessageModel}">
+            <DataTemplate DataType="{x:Type visual:VideoMessageModel}">
                 <messages:VideoMessageControl />
             </DataTemplate>
             
-            <DataTemplate DataType="{x:Type model:StickerMessageModel}">
+            <DataTemplate DataType="{x:Type visual:StickerMessageModel}">
                 <messages:StickerMessageControl />
             </DataTemplate>
             
