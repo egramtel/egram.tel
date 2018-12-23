@@ -10,6 +10,8 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
     public abstract class MessageModel : ItemModel
     {
         public string AuthorName { get; set; }
+
+        public string Time { get; set; }
         
         public Avatar Avatar { get; set; }
         

@@ -11,20 +11,11 @@ namespace Tel.Egram.Components.Messenger.Explorer
             Message message,
             TdApi.MessageContent.MessagePhoto messagePhoto)
         {
-            var user = message.User;
-            var chat = message.Chat;
-
-            var authorName = (user == null)
-                ? chat.Title
-                : $"{user.FirstName} {user.LastName}";
-            
             var text = messagePhoto.Caption.Text;
             var photo = messagePhoto.Photo;
             
             return new PhotoMessageModel
             {
-                AuthorName = authorName,
-                Message = message,
                 PhotoData = photo,
                 Text = text
             };
@@ -34,19 +25,10 @@ namespace Tel.Egram.Components.Messenger.Explorer
             Message message,
             TdApi.MessageContent.MessageSticker messageSticker)
         {
-            var user = message.User;
-            var chat = message.Chat;
-
-            var authorName = (user == null)
-                ? chat.Title
-                : $"{user.FirstName} {user.LastName}";
-            
             var sticker = messageSticker.Sticker;
             
             return new StickerMessageModel
             {
-                AuthorName = authorName,
-                Message = message,
                 StickerData = sticker
             };
         }
@@ -55,20 +37,11 @@ namespace Tel.Egram.Components.Messenger.Explorer
             Message message,
             TdApi.MessageContent.MessageVideo messageVideo)
         {
-            var user = message.User;
-            var chat = message.Chat;
-
-            var authorName = (user == null)
-                ? chat.Title
-                : $"{user.FirstName} {user.LastName}";
-            
             var text = messageVideo.Caption.Text;
             var video = messageVideo.Video;
             
             return new VideoMessageModel
             {
-                AuthorName = authorName,
-                Message = message,
                 VideoData = video,
                 Text = text
             };

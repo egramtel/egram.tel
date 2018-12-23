@@ -10,7 +10,8 @@
                     
                     <Grid
                         RowDefinitions="auto,auto"
-                        ColumnDefinitions="auto,*">
+                        ColumnDefinitions="auto,*,auto"
+                        Margin="8,0,8,0">
         
                         <Panel
                             DataContext="{Binding Avatar}"
@@ -19,7 +20,7 @@
                             Grid.Column="0"
                             Grid.RowSpan="2"
                             VerticalAlignment="Top"
-                            Margin="16,8,8,8">
+                            Margin="8">
             
                             <Ellipse
                                 IsVisible="{Binding IsFallback}"
@@ -61,11 +62,28 @@
                                 VerticalAlignment="Center" />
             
                         </Border>
+                        
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Height="24"
+                            Margin="8"
+                            VerticalAlignment="Center">
+                            
+                            <TextBlock
+                                Text="{Binding Time}"
+                                FontWeight="Light"
+                                FontSize="11"
+                                TextWrapping="Wrap"
+                                VerticalAlignment="Center" />
+                            
+                        </Border>
                 
                         <Border
                             Grid.Row="1"
                             Grid.Column="1"
-                            Grid.ColumnSpan="2">
+                            Grid.ColumnSpan="2"
+                            Margin="0,0,8,0">
                     
                             <ContentPresenter
                                 Name="PART_ContentPresenter"

@@ -1,3 +1,4 @@
+using System;
 using TdLib;
 using Tel.Egram.Components.Messenger.Explorer.Messages;
 using Tel.Egram.Components.Messenger.Explorer.Messages.Basic;
@@ -10,6 +11,13 @@ namespace Tel.Egram.Components.Messenger.Explorer
     public partial class MessageModelFactory : IMessageModelFactory
     {
         public MessageModel CreateMessage(Message message)
+        {
+            var model = GetMessage(message);
+            ApplyMessageAttributes(model, message);
+            return model;
+        }
+
+        private MessageModel GetMessage(Message message)
         {
             var messageData = message.MessageData;
             var content = messageData.Content;
@@ -134,6 +142,23 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 default:
                     return CreateUnsupportedMessage(message);
             }
+        }
+
+        private void ApplyMessageAttributes(MessageModel model, Message message)
+        {
+            var user = message.User;
+            var chat = message.Chat;
+
+            var authorName = (user == null)
+                ? chat.Title
+                : $"{user.FirstName} {user.LastName}";
+
+            var time = DateTimeOffset.FromUnixTimeSeconds(message.MessageData.Date)
+                .ToLocalTime();
+                
+            model.Message = message;
+            model.AuthorName = authorName;
+            model.Time = time.ToString(time.ToString("t"));
         }
     }
 }
