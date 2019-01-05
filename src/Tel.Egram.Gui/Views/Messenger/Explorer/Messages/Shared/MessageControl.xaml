@@ -81,6 +81,7 @@
                             Grid.Row="1"
                             Grid.Column="1"
                             Grid.ColumnSpan="2"
+                            Name="Reply"
                             IsVisible="{Binding HasReply}" />
                         
                         <Border

@@ -17,6 +17,9 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages.Visual
 
                 this.BindPreviewLoading()
                     .DisposeWith(disposables);
+                
+                Reply.BindPreviewLoading()
+                    .DisposeWith(disposables);
             });
         }
         

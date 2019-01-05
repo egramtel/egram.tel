@@ -10,6 +10,14 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
     public static class PreviewLoadingLogic
     {
         public static IDisposable BindPreviewLoading(
+            this ReplyModel model)
+        {
+            return BindPreviewLoading(
+                model,
+                Locator.Current.GetService<IPreviewLoader>());
+        }
+        
+        public static IDisposable BindPreviewLoading(
             this PhotoMessageModel model)
         {
             return BindPreviewLoading(
@@ -33,6 +41,30 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
                 Locator.Current.GetService<IPreviewLoader>());
         }
         
+        public static IDisposable BindPreviewLoading(
+            this ReplyModel model,
+            IPreviewLoader previewLoader)
+        {
+            if (model.Preview == null)
+            {
+                model.Preview = GetPreview(previewLoader, model);
+
+                if (model.Preview == null || model.Preview.Bitmap == null)
+                {
+                    return LoadPreview(previewLoader, model)
+                        .Subscribe(preview =>
+                        {
+                            model.Preview = preview;
+                            model.HasPreview = true;
+                        });
+                }
+
+                model.HasPreview = true;
+            }
+            
+            return Disposable.Empty;
+        }
+
         public static IDisposable BindPreviewLoading(
             this PhotoMessageModel model,
             IPreviewLoader previewLoader)
@@ -96,6 +128,46 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
             return Disposable.Empty;
         }
 
+        private static Preview GetPreview(IPreviewLoader previewLoader, ReplyModel model)
+        {
+            if (model.PhotoData != null)
+            {
+                return previewLoader.GetPreview(model.PhotoData, PreviewQuality.Low);
+            }
+
+            if (model.VideoData?.Thumbnail != null)
+            {
+                return previewLoader.GetPreview(model.VideoData.Thumbnail);
+            }
+
+            if (model.StickerData?.Thumbnail != null)
+            {
+                return previewLoader.GetPreview(model.StickerData.Thumbnail);
+            }
+
+            return null;
+        }
+
+        private static IObservable<Preview> LoadPreview(IPreviewLoader previewLoader, ReplyModel model)
+        {
+            if (model.PhotoData != null)
+            {
+                return previewLoader.LoadPreview(model.PhotoData, PreviewQuality.Low);
+            }
+            
+            if (model.VideoData?.Thumbnail != null)
+            {
+                return previewLoader.LoadPreview(model.VideoData.Thumbnail);
+            }
+            
+            if (model.StickerData?.Thumbnail != null)
+            {
+                return previewLoader.LoadPreview(model.StickerData.Thumbnail);
+            }
+            
+            return Observable.Empty<Preview>();
+        }
+        
         private static Preview GetPreview(IPreviewLoader previewLoader, PhotoMessageModel model)
         {
             if (model.PhotoData != null)

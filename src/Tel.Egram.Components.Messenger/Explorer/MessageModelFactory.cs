@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Avalonia.Media.Imaging;
 using TdLib;
 using Tel.Egram.Components.Messenger.Explorer.Messages;
 using Tel.Egram.Components.Messenger.Explorer.Messages.Basic;
@@ -169,6 +170,9 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 model.Reply.Message = message.ReplyMessage;
                 model.Reply.AuthorName = GetReplyAuthorName(message.ReplyMessage);
                 model.Reply.Text = GetReplyText(message.ReplyMessage);
+                model.Reply.PhotoData = GetReplyPhoto(message.ReplyMessage);
+                model.Reply.VideoData = GetReplyVideo(message.ReplyMessage);
+                model.Reply.StickerData = GetReplySticker(message.ReplyMessage);
             }
         }
 
@@ -208,6 +212,36 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 text.Take(64)
                     .TakeWhile(c => c != '\n' && c != '\r')
                     .ToArray());
+        }
+
+        private TdApi.Photo GetReplyPhoto(Message message)
+        {
+            if (message.MessageData.Content is TdApi.MessageContent.MessagePhoto messagePhoto)
+            {
+                return messagePhoto.Photo;
+            }
+
+            return null;
+        }
+
+        private TdApi.Video GetReplyVideo(Message message)
+        {
+            if (message.MessageData.Content is TdApi.MessageContent.MessageVideo messageVideo)
+            {
+                return messageVideo.Video;
+            }
+
+            return null;
+        }
+
+        private TdApi.Sticker GetReplySticker(Message message)
+        {
+            if (message.MessageData.Content is TdApi.MessageContent.MessageSticker messageSticker)
+            {
+                return messageSticker.Sticker;
+            }
+
+            return null;
         }
     }
 }
