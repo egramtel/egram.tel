@@ -21,20 +21,28 @@ namespace Tel.Egram.Messaging.Messages
 
         public IObservable<Message> LoadMessage(long chatId, long messageId)
         {
-            return _agent.Execute(new TdApi.GetMessage
+            var scope = new MessageLoaderScope(_agent);
+            
+            return scope.GetMessage(chatId, messageId)
+                .SelectSeq(m => MapToMessage(scope, m))
+                .Finally(() =>
                 {
-                    ChatId = chatId,
-                    MessageId = messageId
-                })
-                .SelectSeq(m => MapToMessage(m));
+                    scope.Dispose();
+                });
         }
 
         public IObservable<Message> LoadMessages(
             Aggregate feed,
             AggregateLoadingState state)
         {
+            var scope = new MessageLoaderScope(_agent);
+            
             return LoadAggregateMessages(feed, state)
-                .SelectSeq(m => MapToMessage(m));
+                .SelectSeq(m => MapToMessage(scope, m))
+                .Finally(() =>
+                {
+                    scope.Dispose();
+                });
         }
 
         public IObservable<Message> LoadPrevMessages(
@@ -42,28 +50,49 @@ namespace Tel.Egram.Messaging.Messages
             long fromMessageId,
             int limit)
         {
+            var scope = new MessageLoaderScope(_agent);
+            
             return GetMessages(feed.ChatData, fromMessageId, limit, 0)
-                .SelectSeq(m => MapToMessage(m));
+                .SelectSeq(m => MapToMessage(scope, m))
+                .Finally(() =>
+                {
+                    scope.Dispose();
+                });
         }
 
         public IObservable<Message> LoadNextMessages(
             Chat feed,
             long fromMessageId,
             int limit)
-        {   
+        {
+            var scope = new MessageLoaderScope(_agent);
+            
             return GetMessages(feed.ChatData, fromMessageId, limit, -(limit - 1))
                 .Where(m => m.Id != fromMessageId)
-                .SelectSeq(m => MapToMessage(m));
+                .SelectSeq(m => MapToMessage(scope, m))
+                .Finally(() =>
+                {
+                    scope.Dispose();
+                });
         }
 
         public IObservable<Message> LoadPinnedMessage(Chat chat)
         {
+            var scope = new MessageLoaderScope(_agent);
+            
             return GetPinnedMessage(chat.ChatData)
                 .Where(m => m != null)
-                .SelectSeq(m => MapToMessage(m));
+                .SelectSeq(m => MapToMessage(scope, m))
+                .Finally(() =>
+                {
+                    scope.Dispose();
+                });
         }
 
-        private IObservable<Message> MapToMessage(TdApi.Message msg, bool fetchReply = true)
+        private IObservable<Message> MapToMessage(
+            MessageLoaderScope scope,
+            TdApi.Message msg,
+            bool fetchReply = true)
         {
             return Observable.Return(new Message
                 {
@@ -72,10 +101,7 @@ namespace Tel.Egram.Messaging.Messages
                 .SelectSeq(message =>
                 {
                     // get chat data
-                    return _agent.Execute(new TdApi.GetChat
-                        {
-                            ChatId = msg.ChatId
-                        })
+                    return scope.GetChat(msg.ChatId)
                         .Select(chat =>
                         {
                             message.ChatData = chat;
@@ -87,10 +113,7 @@ namespace Tel.Egram.Messaging.Messages
                     // get user data
                     if (message.MessageData.SenderUserId != 0)
                     {
-                        return _agent.Execute(new TdApi.GetUser
-                            {
-                                UserId = message.MessageData.SenderUserId
-                            })
+                        return scope.GetUser(message.MessageData.SenderUserId)
                             .Select(user =>
                             {
                                 message.UserData = user;
@@ -105,12 +128,8 @@ namespace Tel.Egram.Messaging.Messages
                     // get reply data
                     if (fetchReply && message.MessageData.ReplyToMessageId != 0)
                     {
-                        return _agent.Execute(new TdApi.GetMessage
-                            {
-                                ChatId = message.MessageData.ChatId,
-                                MessageId = message.MessageData.ReplyToMessageId
-                            })
-                            .SelectSeq(m => MapToMessage(m, false))
+                        return scope.GetMessage(message.MessageData.ChatId, message.MessageData.ReplyToMessageId)
+                            .SelectSeq(m => MapToMessage(scope, m, false))
                             .Select(reply =>
                             {
                                 message.ReplyMessage = reply;
