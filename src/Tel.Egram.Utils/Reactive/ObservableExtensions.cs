@@ -27,5 +27,21 @@ namespace Tel.Egram.Utils.Reactive
         {
             return observable.Select(selector).Concat();
         }
+
+        /// <summary>
+        /// Subscribe with error handling
+        /// </summary>
+        public static IDisposable Accept<T>(this IObservable<T> observable, Action<T> onNext)
+        {
+            return observable.Subscribe(onNext, e => Console.Error.WriteLine(e));
+        }
+        
+        /// <summary>
+        /// Subscribe with error handling
+        /// </summary>
+        public static IDisposable Accept<T>(this IObservable<T> observable)
+        {
+            return observable.Subscribe(_ => { }, e => Console.Error.WriteLine(e));
+        }
     }
 }

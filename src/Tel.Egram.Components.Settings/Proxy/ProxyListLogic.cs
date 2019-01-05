@@ -10,6 +10,7 @@ using ReactiveUI;
 using Splat;
 using TdLib;
 using Tel.Egram.Settings;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Settings.Proxy
 {
@@ -43,7 +44,7 @@ namespace Tel.Egram.Components.Settings.Proxy
             return proxyManager.GetAllProxies()
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(proxies =>
+                .Accept(proxies =>
                 {
                     var disabledProxy = ProxyModel.DisabledProxy();
                     disabledProxy.EnableCommand = context.EnableProxyCommand;
@@ -97,7 +98,7 @@ namespace Tel.Egram.Components.Settings.Proxy
                         sp.WhenAnyValue(p => p.Password).Skip(1).Select(_ => sp),
                         sp.WhenAnyValue(p => p.Secret).Skip(1).Select(_ => sp));
                 })
-                .Subscribe(sp =>
+                .Accept(sp =>
                 {
                     sp.IsSaved = false;
                     
@@ -118,7 +119,7 @@ namespace Tel.Egram.Components.Settings.Proxy
                 RxApp.MainThreadScheduler);
 
             return context.RemoveProxyCommand
-                .Subscribe(proxyModel =>
+                .Accept(proxyModel =>
                 {
                     if (proxyModel == context.SelectedProxy)
                     {
@@ -139,7 +140,7 @@ namespace Tel.Egram.Components.Settings.Proxy
                 RxApp.MainThreadScheduler);
 
             return context.EnableProxyCommand
-                .Subscribe(proxyModel =>
+                .Accept(proxyModel =>
                 {
                     if (!proxyModel.IsEnabled)
                     {
@@ -163,7 +164,7 @@ namespace Tel.Egram.Components.Settings.Proxy
                 RxApp.MainThreadScheduler);
 
             return context.AddProxyCommand
-                .Subscribe(proxyModel =>
+                .Accept(proxyModel =>
                 {
                     proxyModel.RemoveCommand = context.RemoveProxyCommand;
                     proxyModel.EnableCommand = context.EnableProxyCommand;
@@ -183,7 +184,7 @@ namespace Tel.Egram.Components.Settings.Proxy
                 RxApp.MainThreadScheduler);
 
             return context.SaveProxyCommand
-                .Subscribe(proxyModel =>
+                .Accept(proxyModel =>
                 {
                     proxyModel.IsSaved = true;
                 });

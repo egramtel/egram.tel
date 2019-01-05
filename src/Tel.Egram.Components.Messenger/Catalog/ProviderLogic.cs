@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using DynamicData;
 using ReactiveUI;
 using Splat;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Messenger.Catalog
 {
@@ -30,7 +31,7 @@ namespace Tel.Egram.Components.Messenger.Catalog
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(entries)
-                .Subscribe();
+                .Accept();
         }
     }
 }

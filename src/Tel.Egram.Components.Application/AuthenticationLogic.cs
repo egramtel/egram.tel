@@ -9,6 +9,7 @@ using Tel.Egram.Components.Application.Startup;
 using Tel.Egram.Components.Authentication;
 using Tel.Egram.Components.Workspace;
 using Tel.Egram.Utils;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Application
 {
@@ -35,16 +36,16 @@ namespace Tel.Egram.Components.Application
             
             stateUpdates.OfType<TdApi.AuthorizationState.AuthorizationStateWaitTdlibParameters>()
                 .SelectMany(_ => authenticator.SetupParameters())
-                .Subscribe()
+                .Accept()
                 .DisposeWith(disposable);
 
             stateUpdates.OfType<TdApi.AuthorizationState.AuthorizationStateWaitEncryptionKey>()
                 .SelectMany(_ => authenticator.CheckEncryptionKey())
-                .Subscribe()
+                .Accept()
                 .DisposeWith(disposable);
 
             stateUpdates
-                .Subscribe(state => HandleState(model, state))
+                .Accept(state => HandleState(model, state))
                 .DisposeWith(disposable);
 
             return disposable;

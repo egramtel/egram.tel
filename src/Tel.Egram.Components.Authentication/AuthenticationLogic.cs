@@ -8,6 +8,7 @@ using Splat;
 using TdLib;
 using Tel.Egram.Authentication;
 using Tel.Egram.Components.Authentication.Results;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Authentication
 {
@@ -55,7 +56,7 @@ namespace Tel.Egram.Components.Authentication
             return authenticator.ObserveState()
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(state => HandleState(model, state));
+                .Accept(state => HandleState(model, state));
         }
 
         private static void HandleState(AuthenticationModel model, TdApi.AuthorizationState state)

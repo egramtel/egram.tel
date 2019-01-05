@@ -6,6 +6,7 @@ using ReactiveUI;
 using Tel.Egram.Components.Messenger;
 using Tel.Egram.Components.Settings;
 using Tel.Egram.Messaging.Chats;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Workspace
 {
@@ -20,7 +21,7 @@ namespace Tel.Egram.Components.Workspace
                 .Select(index => (ContentKind)index)
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(kind =>
+                .Accept(kind =>
                 {
                     switch (kind)
                     {

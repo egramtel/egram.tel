@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using ReactiveUI;
 using Splat;
 using Tel.Egram.Components.Popups;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Application
 {
@@ -30,7 +31,7 @@ namespace Tel.Egram.Components.Application
                 return trigger
                     .SubscribeOn(RxApp.TaskpoolScheduler)
                     .ObserveOn(RxApp.MainThreadScheduler)
-                    .Subscribe(context =>
+                    .Accept(context =>
                     {
                         model.PopupModel = context == null
                             ? PopupModel.Hidden()

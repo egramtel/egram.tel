@@ -5,6 +5,7 @@ using Splat;
 using Tel.Egram.Graphics;
 using Tel.Egram.Graphics.Avatars;
 using Tel.Egram.Messaging.Users;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Workspace.Navigation
 {
@@ -29,7 +30,7 @@ namespace Tel.Egram.Components.Workspace.Navigation
                 .SelectMany(user => avatarLoader.LoadAvatar(user.UserData))
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(avatar =>
+                .Accept(avatar =>
                 {
                     model.Avatar = avatar;
                 });

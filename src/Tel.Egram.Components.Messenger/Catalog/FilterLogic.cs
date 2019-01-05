@@ -5,6 +5,7 @@ using DynamicData.Binding;
 using ReactiveUI;
 using Tel.Egram.Components.Messenger.Catalog.Entries;
 using Tel.Egram.Messaging.Chats;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Messenger.Catalog
 {
@@ -16,7 +17,7 @@ namespace Tel.Egram.Components.Messenger.Catalog
         {   
             return model.WhenAnyValue(m => m.SearchText)
                 .Throttle(TimeSpan.FromMilliseconds(500))
-                .Subscribe(text =>
+                .Accept(text =>
                 {
                     var sorting = GetSorting(e => e.Order);
                     var filter = GetFilter(section);

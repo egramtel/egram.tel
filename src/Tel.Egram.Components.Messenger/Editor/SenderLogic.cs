@@ -6,6 +6,7 @@ using Splat;
 using TdLib;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Messaging.Messages;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Messenger.Editor
 {
@@ -47,7 +48,7 @@ namespace Tel.Egram.Components.Messenger.Editor
             return model.SendCommand
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ =>
+                .Accept(_ =>
                 {
                     model.Text = null;
                 });

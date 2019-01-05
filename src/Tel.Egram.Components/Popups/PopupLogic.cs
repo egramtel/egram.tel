@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Linq;
 using ReactiveUI;
 using Splat;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Popups
 {
@@ -22,7 +23,7 @@ namespace Tel.Egram.Components.Popups
             return model.Context.CloseCommand
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ =>
+                .Accept(_ =>
                 {
                     popupController.Hide();
                 });

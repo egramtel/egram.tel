@@ -4,6 +4,7 @@ using ReactiveUI;
 using Splat;
 using Tel.Egram.Components.Notifications;
 using Tel.Egram.Messaging.Notifications;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Messenger
 {
@@ -30,7 +31,7 @@ namespace Tel.Egram.Components.Messenger
                 .Buffer(TimeSpan.FromSeconds(2))
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(notifications =>
+                .Accept(notifications =>
                 {
                     switch (notifications.Count)
                     {

@@ -8,6 +8,7 @@ using Splat;
 using Tel.Egram.Components.Notifications;
 using Tel.Egram.Gui.Views.Notifications;
 using Tel.Egram.Utils.Platforms;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Gui.Views.Application
 {
@@ -33,7 +34,7 @@ namespace Tel.Egram.Gui.Views.Application
                 return trigger
                     .SubscribeOn(RxApp.TaskpoolScheduler)
                     .ObserveOn(RxApp.MainThreadScheduler)
-                    .Subscribe(model =>
+                    .Accept(model =>
                     {
                         var screen = mainWindow.Screens.Primary;
                         var window = new NotificationWindow();

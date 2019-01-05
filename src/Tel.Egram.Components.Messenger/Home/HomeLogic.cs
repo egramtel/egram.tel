@@ -41,7 +41,7 @@ namespace Tel.Egram.Components.Messenger.Home
                 {
                     return messageLoader.LoadNextMessages(chat, 0, 10);
                 })
-                .Subscribe(message =>
+                .Accept(message =>
                 {
                     var messageModel = messageModelFactory.CreateMessage(message);
                     model.PromotedMessages.Add(messageModel);

@@ -6,6 +6,7 @@ using TdLib;
 using Tel.Egram.Graphics;
 using Tel.Egram.Graphics.Avatars;
 using Tel.Egram.Messaging.Chats;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Messenger.Catalog.Entries
 {
@@ -30,7 +31,7 @@ namespace Tel.Egram.Components.Messenger.Catalog.Entries
                 if (model.Avatar == null || model.Avatar.IsFallback)
                 {
                     return LoadAvatar(avatarLoader, model)
-                        .Subscribe(avatar =>
+                        .Accept(avatar =>
                         {
                             model.Avatar = avatar;
                         });

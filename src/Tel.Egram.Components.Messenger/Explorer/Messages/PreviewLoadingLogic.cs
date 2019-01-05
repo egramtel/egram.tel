@@ -5,6 +5,7 @@ using ReactiveUI;
 using Splat;
 using Tel.Egram.Components.Messenger.Explorer.Messages.Visual;
 using Tel.Egram.Graphics.Previews;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Messenger.Explorer.Messages
 {
@@ -55,7 +56,7 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
                     return LoadPreview(previewLoader, model)
                         .SubscribeOn(RxApp.TaskpoolScheduler)
                         .ObserveOn(RxApp.MainThreadScheduler)
-                        .Subscribe(preview =>
+                        .Accept(preview =>
                         {
                             model.Preview = preview;
                             model.HasPreview = true;
@@ -81,7 +82,7 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
                     return LoadPreview(previewLoader, model)
                         .SubscribeOn(RxApp.TaskpoolScheduler)
                         .ObserveOn(RxApp.MainThreadScheduler)
-                        .Subscribe(preview =>
+                        .Accept(preview =>
                         {
                             model.Preview = preview;
                         });
@@ -104,7 +105,7 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
                     return LoadPreview(previewLoader, model)
                         .SubscribeOn(RxApp.TaskpoolScheduler)
                         .ObserveOn(RxApp.MainThreadScheduler)
-                        .Subscribe(preview =>
+                        .Accept(preview =>
                         {
                             model.Preview = preview;
                         });
@@ -127,7 +128,7 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
                     return LoadPreview(previewLoader, model)
                         .SubscribeOn(RxApp.TaskpoolScheduler)
                         .ObserveOn(RxApp.MainThreadScheduler)
-                        .Subscribe(preview =>
+                        .Accept(preview =>
                         {
                             model.Preview = preview;
                         });

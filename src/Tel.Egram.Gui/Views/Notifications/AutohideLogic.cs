@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using ReactiveUI;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Gui.Views.Notifications
 {
@@ -13,7 +14,7 @@ namespace Tel.Egram.Gui.Views.Notifications
             var timer = Observable.Timer(TimeSpan.FromSeconds(5))
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ =>
+                .Accept(_ =>
                 {
                     window.Close();
                 });

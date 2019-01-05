@@ -10,6 +10,7 @@ using Tel.Egram.Components.Messenger.Home;
 using Tel.Egram.Components.Messenger.Informer;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Utils;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Messenger
 {
@@ -111,7 +112,7 @@ namespace Tel.Egram.Components.Messenger
             return model.WhenAnyValue(ctx => ctx.CatalogModel.SelectedEntry)
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(entry =>
+                .Accept(entry =>
                 {
                     if (entry != null)
                     {

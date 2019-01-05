@@ -10,6 +10,7 @@ using Tel.Egram.Components.Messenger.Catalog.Entries;
 using Tel.Egram.Graphics;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Utils;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Messenger.Catalog
 {
@@ -54,7 +55,7 @@ namespace Tel.Egram.Components.Messenger.Catalog
                     return list;
                 })
                 .Synchronize(_chats)
-                .Subscribe(entries =>
+                .Accept(entries =>
                 {
                     _chats.EditDiff(entries, (m1, m2) => m1.Id == m2.Id);
                     _chats.Refresh();
@@ -72,7 +73,7 @@ namespace Tel.Egram.Components.Messenger.Catalog
                 .Buffer(TimeSpan.FromSeconds(1))
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(changes =>
+                .Accept(changes =>
                 {
                     if (changes.Count > 0)
                     {
@@ -97,7 +98,7 @@ namespace Tel.Egram.Components.Messenger.Catalog
                         Chat = chat,
                         Entry = GetChatEntryModel(chat)
                     })
-                .Subscribe(item =>
+                .Accept(item =>
                 {
                     UpdateChatEntryModel((ChatEntryModel)item.Entry, item.Chat);
                 });

@@ -8,6 +8,7 @@ using Splat;
 using Tel.Egram.Components.Messenger.Explorer.Messages;
 using Tel.Egram.Messaging.Chats;
 using Tel.Egram.Utils;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Messenger.Explorer
 {
@@ -20,7 +21,7 @@ namespace Tel.Egram.Components.Messenger.Explorer
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(model.Items)
-                .Subscribe();
+                .Accept();
         }
 
         public static IDisposable InitMessageLoading(
@@ -41,10 +42,10 @@ namespace Tel.Egram.Components.Messenger.Explorer
             return messageManager.LoadInitMessages(chat)
                 .ObserveOn(RxApp.TaskpoolScheduler)
                 .SubscribeOn(RxApp.MainThreadScheduler)
-                .Subscribe(messageModels =>
+                .Accept(messageModels =>
                 {
                     model.SourceItems.InsertRange(messageModels, 0);
-                }, e => Console.WriteLine(e));
+                });
         }
     }
 }

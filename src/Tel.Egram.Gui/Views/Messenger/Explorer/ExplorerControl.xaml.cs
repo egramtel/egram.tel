@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml;
 using ReactiveUI;
 using Tel.Egram.Components.Messenger.Explorer;
 using Tel.Egram.Utils;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Gui.Views.Messenger.Explorer
 {
@@ -48,7 +49,7 @@ namespace Tel.Egram.Gui.Views.Messenger.Explorer
             _scrollSubscription = offsetChanges
                 .Merge(extentChanges)
                 .Merge(viewportChanges)
-                .Subscribe(_ =>
+                .Accept(_ =>
                 {
                     var offset = _listBox.Scroll.Offset;
                     var viewport = _listBox.Scroll.Viewport;

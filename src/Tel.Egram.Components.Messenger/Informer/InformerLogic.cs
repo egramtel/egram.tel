@@ -6,6 +6,7 @@ using Splat;
 using Tel.Egram.Graphics;
 using Tel.Egram.Graphics.Avatars;
 using Tel.Egram.Messaging.Chats;
+using Tel.Egram.Utils.Reactive;
 
 namespace Tel.Egram.Components.Messenger.Informer
 {
@@ -42,7 +43,7 @@ namespace Tel.Egram.Components.Messenger.Informer
             return avatarLoader.LoadAvatar(chat.ChatData)
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(avatar =>
+                .Accept(avatar =>
                 {
                     model.Avatar = avatar;
                 });

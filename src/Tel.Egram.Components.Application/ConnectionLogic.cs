@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using ReactiveUI;
 using Splat;
 using TdLib;
+using Tel.Egram.Utils.Reactive;
 using Tel.Egram.Utils.TdLib;
 
 namespace Tel.Egram.Components.Application
@@ -24,7 +25,7 @@ namespace Tel.Egram.Components.Application
         {
             return agent.Updates.OfType<TdApi.Update.UpdateConnectionState>()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(update => 
+                .Accept(update => 
                 {
                     switch (update.State)
                     {
