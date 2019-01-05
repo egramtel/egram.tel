@@ -1,6 +1,7 @@
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using ReactiveUI;
 using Splat;
 using TdLib;
 using Tel.Egram.Graphics;
@@ -29,6 +30,8 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
                 if (model.Avatar == null || model.Avatar.IsFallback)
                 {
                     return LoadAvatar(avatarLoader, model)
+                        .SubscribeOn(RxApp.TaskpoolScheduler)
+                        .ObserveOn(RxApp.MainThreadScheduler)
                         .Subscribe(avatar =>
                         {
                             model.Avatar = avatar;

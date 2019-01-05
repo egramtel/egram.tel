@@ -1,6 +1,7 @@
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using ReactiveUI;
 using Splat;
 using Tel.Egram.Components.Messenger.Explorer.Messages.Visual;
 using Tel.Egram.Graphics.Previews;
@@ -52,6 +53,8 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
                 if (model.Preview == null || model.Preview.Bitmap == null)
                 {
                     return LoadPreview(previewLoader, model)
+                        .SubscribeOn(RxApp.TaskpoolScheduler)
+                        .ObserveOn(RxApp.MainThreadScheduler)
                         .Subscribe(preview =>
                         {
                             model.Preview = preview;
@@ -76,6 +79,8 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
                 if (model.Preview == null || model.Preview.Bitmap == null)
                 {
                     return LoadPreview(previewLoader, model)
+                        .SubscribeOn(RxApp.TaskpoolScheduler)
+                        .ObserveOn(RxApp.MainThreadScheduler)
                         .Subscribe(preview =>
                         {
                             model.Preview = preview;
@@ -97,6 +102,8 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
                 if (model.Preview == null || model.Preview.Bitmap == null)
                 {
                     return LoadPreview(previewLoader, model)
+                        .SubscribeOn(RxApp.TaskpoolScheduler)
+                        .ObserveOn(RxApp.MainThreadScheduler)
                         .Subscribe(preview =>
                         {
                             model.Preview = preview;
@@ -118,6 +125,8 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
                 if (model.Preview == null || model.Preview.Bitmap == null)
                 {
                     return LoadPreview(previewLoader, model)
+                        .SubscribeOn(RxApp.TaskpoolScheduler)
+                        .ObserveOn(RxApp.MainThreadScheduler)
                         .Subscribe(preview =>
                         {
                             model.Preview = preview;
