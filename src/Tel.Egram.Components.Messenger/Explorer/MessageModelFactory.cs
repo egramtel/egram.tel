@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TdLib;
 using Tel.Egram.Components.Messenger.Explorer.Messages;
 using Tel.Egram.Components.Messenger.Explorer.Messages.Basic;
@@ -146,8 +147,8 @@ namespace Tel.Egram.Components.Messenger.Explorer
 
         private void ApplyMessageAttributes(MessageModel model, Message message)
         {
-            var user = message.User;
-            var chat = message.Chat;
+            var user = message.UserData;
+            var chat = message.ChatData;
 
             var authorName = (user == null)
                 ? chat.Title
@@ -159,6 +160,54 @@ namespace Tel.Egram.Components.Messenger.Explorer
             model.Message = message;
             model.AuthorName = authorName;
             model.Time = time.ToString(time.ToString("t"));
+
+            if (message.ReplyMessage != null)
+            {
+                model.HasReply = true;
+                model.Reply = new ReplyModel();
+                
+                model.Reply.Message = message.ReplyMessage;
+                model.Reply.AuthorName = GetReplyAuthorName(message.ReplyMessage);
+                model.Reply.Text = GetReplyText(message.ReplyMessage);
+            }
+        }
+
+        private string GetReplyAuthorName(Message message)
+        {
+            var replyUser = message.UserData;
+            var replyChat = message.ChatData;
+            
+            var replyAuthorName = (replyUser == null)
+                ? replyChat.Title
+                : $"{replyUser.FirstName} {replyUser.LastName}";
+
+            return replyAuthorName;
+        }
+
+        private string GetReplyText(Message message)
+        {
+            var messageData = message.MessageData;
+            var content = messageData.Content;
+
+            string text = null;
+            switch (content)
+            {
+                case TdApi.MessageContent.MessageText messageText:
+                    text = messageText.Text?.Text;
+                    break;
+                
+                case TdApi.MessageContent.MessagePhoto messagePhoto:
+                    text = messagePhoto.Caption?.Text;
+                    break;
+            }
+
+            if (text == null)
+                return text;
+            
+            return new string(
+                text.Take(64)
+                    .TakeWhile(c => c != '\n' && c != '\r')
+                    .ToArray());
         }
     }
 }

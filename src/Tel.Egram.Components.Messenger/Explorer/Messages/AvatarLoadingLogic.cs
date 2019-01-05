@@ -41,9 +41,9 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
 
         private static Avatar GetAvatar(IAvatarLoader avatarLoader, MessageModel entry)
         {
-            if (entry.Message?.User != null)
+            if (entry.Message?.UserData != null)
             {
-                return avatarLoader.GetAvatar(entry.Message.User);
+                return avatarLoader.GetAvatar(entry.Message.UserData);
             }
             
             return null;
@@ -51,9 +51,9 @@ namespace Tel.Egram.Components.Messenger.Explorer.Messages
         
         private static IObservable<Avatar> LoadAvatar(IAvatarLoader avatarLoader, MessageModel entry)
         {
-            if (entry.Message?.User != null)
+            if (entry.Message?.UserData != null)
             {
-                return avatarLoader.LoadAvatar(entry.Message.User);
+                return avatarLoader.LoadAvatar(entry.Message.UserData);
             }
             
             return Observable.Empty<Avatar>();

@@ -26,7 +26,7 @@ namespace Tel.Egram.Messaging.Messages
                     ChatId = chatId,
                     MessageId = messageId
                 })
-                .SelectSeq(MapToMessage);
+                .SelectSeq(m => MapToMessage(m));
         }
 
         public IObservable<Message> LoadMessages(
@@ -34,7 +34,7 @@ namespace Tel.Egram.Messaging.Messages
             AggregateLoadingState state)
         {
             return LoadAggregateMessages(feed, state)
-                .SelectSeq(MapToMessage);
+                .SelectSeq(m => MapToMessage(m));
         }
 
         public IObservable<Message> LoadPrevMessages(
@@ -43,7 +43,7 @@ namespace Tel.Egram.Messaging.Messages
             int limit)
         {
             return GetMessages(feed.ChatData, fromMessageId, limit, 0)
-                .SelectSeq(MapToMessage);
+                .SelectSeq(m => MapToMessage(m));
         }
 
         public IObservable<Message> LoadNextMessages(
@@ -53,43 +53,71 @@ namespace Tel.Egram.Messaging.Messages
         {   
             return GetMessages(feed.ChatData, fromMessageId, limit, -(limit - 1))
                 .Where(m => m.Id != fromMessageId)
-                .SelectSeq(MapToMessage);
+                .SelectSeq(m => MapToMessage(m));
         }
 
         public IObservable<Message> LoadPinnedMessage(Chat chat)
         {
             return GetPinnedMessage(chat.ChatData)
                 .Where(m => m != null)
-                .SelectSeq(MapToMessage);
+                .SelectSeq(m => MapToMessage(m));
         }
 
-        private IObservable<Message> MapToMessage(TdApi.Message msg)
+        private IObservable<Message> MapToMessage(TdApi.Message msg, bool fetchReply = true)
         {
-            return _agent.Execute(new TdApi.GetChat
+            return Observable.Return(new Message
                 {
-                    ChatId = msg.ChatId
-                })
-                .Select(chat => new Message
-                {
-                    MessageData = msg,
-                    Chat = chat
+                    MessageData = msg
                 })
                 .SelectSeq(message =>
                 {
+                    // get chat data
+                    return _agent.Execute(new TdApi.GetChat
+                        {
+                            ChatId = msg.ChatId
+                        })
+                        .Select(chat =>
+                        {
+                            message.ChatData = chat;
+                            return message;
+                        });
+                })
+                .SelectSeq(message =>
+                {
+                    // get user data
                     if (message.MessageData.SenderUserId != 0)
                     {
                         return _agent.Execute(new TdApi.GetUser
                             {
                                 UserId = message.MessageData.SenderUserId
                             })
-                            .Select(user => new Message
+                            .Select(user =>
                             {
-                                MessageData = message.MessageData,
-                                Chat = message.Chat,
-                                User = user
+                                message.UserData = user;
+                                return message;
                             });
                     }
 
+                    return Observable.Return(message);
+                })
+                .SelectSeq(message =>
+                {
+                    // get reply data
+                    if (fetchReply && message.MessageData.ReplyToMessageId != 0)
+                    {
+                        return _agent.Execute(new TdApi.GetMessage
+                            {
+                                ChatId = message.MessageData.ChatId,
+                                MessageId = message.MessageData.ReplyToMessageId
+                            })
+                            .SelectSeq(m => MapToMessage(m, false))
+                            .Select(reply =>
+                            {
+                                message.ReplyMessage = reply;
+                                return message;
+                            });
+                    }
+                    
                     return Observable.Return(message);
                 });
         }
