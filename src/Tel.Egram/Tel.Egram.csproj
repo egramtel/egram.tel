@@ -27,10 +27,10 @@
   
   <ItemGroup>
     <PackageReference Update="Microsoft.NETCore.App" Version="2.1.5" />
-    <PackageReference Include="Avalonia" Version="0.7.1-build697-beta" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.7.1-build697-beta" />
-    <PackageReference Include="Avalonia.Native" Version="0.7.1-build697-beta" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.7.1-build697-beta" />
+    <PackageReference Include="Avalonia" Version="0.7.1-build1091-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.7.1-build1091-beta" />
+    <PackageReference Include="Avalonia.Native" Version="0.7.1-build1091-beta" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.7.1-build1091-beta" />
     <PackageReference Include="NSubsys" Version="0.7.0-build20180604-0047">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

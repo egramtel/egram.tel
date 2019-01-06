@@ -1,15 +1,19 @@
 ﻿<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    >
+    xmlns:styles="clr-namespace:Tel.Egram.Gui.Styles">
+    
+    <Styles.Resources>
+        <styles:RobotoFontFamily x:Key="RobotoFontFamily"/>
+    </Styles.Resources>
     
     <Style Selector="TextBlock">
-        <Setter Property="FontFamily" Value="resm:Tel.Egram.Gui.Fonts?assembly=Tel.Egram.Gui#Roboto" />
+        <Setter Property="FontFamily" Value="{StaticResource RobotoFontFamily}" />
         <Setter Property="FontSize" Value="13" />
     </Style>
     
     <Style Selector="TextBox">
-        <Setter Property="FontFamily" Value="resm:Tel.Egram.Gui.Fonts?assembly=Tel.Egram.Gui#Roboto" />
+        <Setter Property="FontFamily" Value="{StaticResource RobotoFontFamily}" />
         <Setter Property="FontSize" Value="13" />
     </Style>
     

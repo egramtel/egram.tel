@@ -9,8 +9,8 @@
     <ProjectReference Include="..\Tel.Egram.Components.Settings\Tel.Egram.Components.Settings.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.7.1-build697-beta" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.7.1-build697-beta" />
+    <PackageReference Include="Avalonia" Version="0.7.1-build1091-beta" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.7.1-build1091-beta" />
     <PackageReference Include="DynamicData" Version="6.6.1.2507" />
     <PackageReference Include="ReactiveUI" Version="9.0.1" />
     <PackageReference Include="System.Reactive" Version="4.0.0" />
