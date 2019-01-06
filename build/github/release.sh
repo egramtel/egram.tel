@@ -37,5 +37,10 @@ echo $f
 GITHUB_ASSET="https://uploads.github.com/repos/$GITHUB_OWNER/egram.tel/releases/$release_id/assets?name=$(basename "$f")&access_token=$GITHUB_ACCESS_TOKEN"
 curl --data-binary @"$f" -H "Content-Type: application/octet-stream" "$GITHUB_ASSET"
 
+f="$SYSTEM_ARTIFACTSDIRECTORY/_egram/installer/egram.zip"
+echo $f
+GITHUB_ASSET="https://uploads.github.com/repos/$GITHUB_OWNER/egram.tel/releases/$release_id/assets?name=$(basename "$f")&access_token=$GITHUB_ACCESS_TOKEN"
+curl --data-binary @"$f" -H "Content-Type: application/octet-stream" "$GITHUB_ASSET"
+
 echo "Success!"
 exit 0

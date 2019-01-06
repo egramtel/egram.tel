@@ -25,6 +25,8 @@ jobs:
     displayName: 'copy native dependencies'
     workingDirectory: $(Build.SourcesDirectory)\src\Tel.Egram
   - powershell: |
+      Compress-Archive -Path $(Build.SourcesDirectory)\src\Tel.Egram\bin\$(buildConfiguration)\netcoreapp2.1\win-x64\publish -DestinationPath $(Build.ArtifactStagingDirectory)\egram.zip
+  - powershell: |
       Invoke-WebRequest -Uri https://github.com/egramtel/nsis/raw/master/nsis.zip -OutFile $(Build.SourcesDirectory)\build\nsis\nsis.zip
       Expand-Archive -Path $(Build.SourcesDirectory)\build\nsis\nsis.zip -DestinationPath $(Build.SourcesDirectory)/build/nsis
     displayName: 'download-nsis'
