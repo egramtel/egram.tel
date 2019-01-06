@@ -21,14 +21,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Icons\Light" />
-    <Folder Include="Images" />
-    <Folder Include="Views\Messenger\Explorer\Messages\Shared" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Tel.Egram.Components.Application\Tel.Egram.Components.Application.csproj" />
-    <ProjectReference Include="..\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
-    <ProjectReference Include="..\Tel.Egram.Messaging\Tel.Egram.Messaging.csproj" />
-    <ProjectReference Include="..\Tel.Egram.Utils\Tel.Egram.Utils.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Gui.Views\Tel.Egram.Gui.Views.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Model\Tel.Egram.Model.csproj" />
   </ItemGroup>
 </Project>

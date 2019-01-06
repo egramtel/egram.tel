@@ -2,13 +2,10 @@
 using Avalonia;
 using Avalonia.Gtk3;
 using Avalonia.Platform;
-using Microsoft.Extensions.DependencyInjection;
 using Splat;
-using Tel.Egram.Components;
-using Tel.Egram.Components.Application;
 using Tel.Egram.Gui;
 using Tel.Egram.Gui.Views.Application;
-using Tel.Egram.Utils;
+using Tel.Egram.Model.Application;
 
 namespace Tel.Egram
 {

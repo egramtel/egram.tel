@@ -18,11 +18,9 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Tel.Egram.Components.Application\Tel.Egram.Components.Application.csproj" />
-    <ProjectReference Include="..\Tel.Egram.Graphics\Tel.Egram.Graphics.csproj" />
     <ProjectReference Include="..\Tel.Egram.Gui\Tel.Egram.Gui.csproj" />
-    <ProjectReference Include="..\Tel.Egram.Persistance\Tel.Egram.Persistance.csproj" />
-    <ProjectReference Include="..\Tel.Egram.Settings\Tel.Egram.Settings.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Model\Tel.Egram.Model.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Services\Tel.Egram.Services.csproj" />
   </ItemGroup>
   
   <ItemGroup>

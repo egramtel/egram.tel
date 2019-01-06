@@ -1,0 +1,7 @@
+namespace Tel.Egram.Services.Utils.Platforms
+{
+    public class LinuxPlatform : Platform
+    {
+        
+    }
+}
