@@ -54,8 +54,8 @@ namespace Tel.Egram.Gui.Views.Application
         {
             switch (platform)
             {
-                case WindowsPlatform _:
-                    return outer.Width - inner.Width;
+                //case WindowsPlatform _:
+                //    return outer.Width - inner.Width;
                 default:
                     return outer.Width - inner.Width;
             }
@@ -65,8 +65,8 @@ namespace Tel.Egram.Gui.Views.Application
         {
             switch (platform)
             {
-                case WindowsPlatform _:
-                    return outer.Height - inner.Height;
+                //case WindowsPlatform _:
+                //    return outer.Height - inner.Height;
                 default:
                     return 0.0;
             }
