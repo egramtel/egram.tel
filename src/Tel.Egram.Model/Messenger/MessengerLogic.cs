@@ -58,7 +58,7 @@ namespace Tel.Egram.Model.Messenger
                         break;
                     
                     case AggregateEntryModel aggregateEntryModel:
-                        model.ExplorerModel = new ExplorerModel(aggregateEntryModel.Aggregate);
+                        //model.ExplorerModel = new ExplorerModel(aggregateEntryModel.Aggregate);
                         break;
                     
                     case HomeEntryModel _:

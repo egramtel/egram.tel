@@ -1,11 +1,16 @@
+using System;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Binding;
 using PropertyChanged;
 using ReactiveUI;
 using Tel.Egram.Model.Messenger.Explorer.Items;
+using Tel.Egram.Model.Messenger.Explorer.Loaders;
 using Tel.Egram.Services.Messaging.Chats;
 using Tel.Egram.Services.Utils;
+using Tel.Egram.Services.Utils.Reactive;
 
 namespace Tel.Egram.Model.Messenger.Explorer
 {
@@ -14,44 +19,46 @@ namespace Tel.Egram.Model.Messenger.Explorer
     {
         public bool IsVisible { get; set; } = true;
         
+        public Range VisibleRange { get; set; }
+        
         public ObservableCollectionExtended<ItemModel> Items { get; set; }
             = new ObservableCollectionExtended<ItemModel>();
         
         public SourceList<ItemModel> SourceItems { get; set; }
             = new SourceList<ItemModel>();
-        
-        public Range VisibleRange { get; set; }
-        
-        public ExplorerModel(Aggregate aggregate)
-        {
-//            this.WhenActivated(disposables =>
-//            {
-//                this.BindSource()
-//                    .DisposeWith(disposables);
-//            
-//                this.BindVisibleRangeChanges(aggregate)
-//                    .DisposeWith(disposables);
-//            
-//                this.InitMessageLoading(aggregate)
-//                    .DisposeWith(disposables);
-//            });
-        }
 
         public ExplorerModel(Chat chat)
         {
             this.WhenActivated(disposables =>
             {
-                this.BindSource()
+                BindSource()
                     .DisposeWith(disposables);
-            
-//                this.BindVisibleRangeChanges(chat)
-//                    .DisposeWith(disposables);
-            
-                this.InitMessageLoading(chat)
+
+                var conductor = new MessageLoaderConductor();
+                
+                new InitMessageLoader(conductor)
+                    .Bind(this, chat)
+                    .DisposeWith(disposables);
+
+                new NextMessageLoader(conductor)
+                    .Bind(this, chat)
+                    .DisposeWith(disposables);
+
+                new PrevMessageLoader(conductor)
+                    .Bind(this, chat)
                     .DisposeWith(disposables);
             });
         }
 
+        private IDisposable BindSource()
+        {   
+            return SourceItems.Connect()
+                .SubscribeOn(RxApp.TaskpoolScheduler)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(Items)
+                .Accept();
+        }
+        
         private ExplorerModel()
         {
         }

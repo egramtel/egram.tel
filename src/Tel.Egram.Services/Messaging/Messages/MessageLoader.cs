@@ -44,14 +44,29 @@ namespace Tel.Egram.Services.Messaging.Messages
                 });
         }
 
-        public IObservable<Message> LoadPrevMessages(
-            Chat feed,
+        public IObservable<Message> LoadInitMessages(
+            Chat chat,
             long fromMessageId,
             int limit)
         {
             var scope = new MessageLoaderScope(_agent);
             
-            return GetMessages(feed.ChatData, fromMessageId, limit, 0)
+            return GetMessages(chat.ChatData, fromMessageId, limit, -(limit - 1) / 2)
+                .SelectSeq(m => MapToMessage(scope, m))
+                .Finally(() =>
+                {
+                    scope.Dispose();
+                });
+        }
+
+        public IObservable<Message> LoadPrevMessages(
+            Chat chat,
+            long fromMessageId,
+            int limit)
+        {
+            var scope = new MessageLoaderScope(_agent);
+            
+            return GetMessages(chat.ChatData, fromMessageId, limit, 0)
                 .SelectSeq(m => MapToMessage(scope, m))
                 .Finally(() =>
                 {
@@ -60,13 +75,13 @@ namespace Tel.Egram.Services.Messaging.Messages
         }
 
         public IObservable<Message> LoadNextMessages(
-            Chat feed,
+            Chat chat,
             long fromMessageId,
             int limit)
         {
             var scope = new MessageLoaderScope(_agent);
             
-            return GetMessages(feed.ChatData, fromMessageId, limit, -(limit - 1))
+            return GetMessages(chat.ChatData, fromMessageId, limit, -(limit - 1))
                 .Where(m => m.Id != fromMessageId)
                 .SelectSeq(m => MapToMessage(scope, m))
                 .Finally(() =>

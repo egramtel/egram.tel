@@ -8,6 +8,7 @@ using TdLib;
 using Tel.Egram.Gui;
 using Tel.Egram.Model.Messenger.Catalog;
 using Tel.Egram.Model.Messenger.Explorer;
+using Tel.Egram.Model.Messenger.Explorer.Factories;
 using Tel.Egram.Model.Notifications;
 using Tel.Egram.Model.Popups;
 using Tel.Egram.Services.Authentication;
@@ -266,15 +267,6 @@ namespace Tel.Egram
             services.RegisterLazySingleton<IMessageModelFactory>(() =>
             {
                 return new MessageModelFactory();
-            });
-            
-            services.RegisterLazySingleton<IMessageManager>(() =>
-            {
-                var chatLoader = services.GetService<IChatLoader>();
-                var messageLoader = services.GetService<IMessageLoader>();
-                var messageFactory = services.GetService<IMessageModelFactory>();
-                
-                return new MessageManager(chatLoader, messageLoader, messageFactory);
             });
         }
         

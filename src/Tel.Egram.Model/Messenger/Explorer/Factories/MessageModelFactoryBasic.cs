@@ -3,7 +3,7 @@ using Tel.Egram.Model.Messenger.Explorer.Messages;
 using Tel.Egram.Model.Messenger.Explorer.Messages.Basic;
 using Tel.Egram.Services.Messaging.Messages;
 
-namespace Tel.Egram.Model.Messenger.Explorer
+namespace Tel.Egram.Model.Messenger.Explorer.Factories
 {
     public partial class MessageModelFactory : IMessageModelFactory
     {

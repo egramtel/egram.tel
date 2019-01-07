@@ -9,6 +9,7 @@ namespace Tel.Egram.Services.Messaging.Messages
         IObservable<Message> LoadMessages(Aggregate aggregate, AggregateLoadingState state);
         
         IObservable<Message> LoadNextMessages(Chat chat, long fromMessageId, int limit);
+        IObservable<Message> LoadInitMessages(Chat chat, long fromMessageId, int limit);
         IObservable<Message> LoadPrevMessages(Chat chat, long fromMessageId, int limit);
 
         IObservable<Message> LoadPinnedMessage(Chat chat);
