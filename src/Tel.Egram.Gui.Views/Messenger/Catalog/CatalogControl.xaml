@@ -108,14 +108,19 @@
         
         <Style Selector="ListBoxItem Grid > Border">
             <Setter Property="CornerRadius" Value="14,0,0,14" />
+            <Setter Property="Padding" Value="3,0,8,0" />
         </Style>
         
         <Style Selector="ListBoxItem:selected Grid > Border">
             <Setter Property="Background" Value="#435270" />
         </Style>
         
-        <Style Selector="ListBoxItem Panel">
-            <Setter Property="Margin" Value="4,3,8,3"/>
+        <Style Selector="ListBoxItem Panel.Title">
+            <Setter Property="Margin" Value="6,3,2,3"/>
+        </Style>
+        
+        <Style Selector="ListBoxItem Panel.Indicator">
+            <Setter Property="Margin" Value="2,3,8,3"/>
         </Style>
         
         <Style Selector="ListBoxItem TextBlock">

@@ -106,6 +106,11 @@ namespace Tel.Egram.Gui.Views.Shared
         {
             if (e.Sender is AvatarControl avatarControl)
             {
+                if (e.NewValue is null)
+                {
+                    avatarControl.SourceBrush = null;
+                }
+                
                 if (e.NewValue is IBitmap bitmap)
                 {
                     avatarControl.SourceBrush = new ImageBrush(bitmap);
@@ -117,6 +122,11 @@ namespace Tel.Egram.Gui.Views.Shared
         {
             if (e.Sender is AvatarControl avatarControl)
             {
+                if (e.NewValue is null)
+                {
+                    avatarControl.ColorBrush = null;
+                }
+                
                 if (e.NewValue is Color color)
                 {
                     avatarControl.ColorBrush = new SolidColorBrush(color);
@@ -128,6 +138,11 @@ namespace Tel.Egram.Gui.Views.Shared
         {
             if (e.Sender is AvatarControl avatarControl)
             {
+                if (e.NewValue is null)
+                {
+                    avatarControl.TextColorBrush = null;
+                }
+                
                 if (e.NewValue is Color color)
                 {
                     avatarControl.TextColorBrush = new SolidColorBrush(color);

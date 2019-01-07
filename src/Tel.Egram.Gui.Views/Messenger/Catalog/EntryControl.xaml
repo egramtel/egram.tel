@@ -16,7 +16,8 @@
             Color="{Binding Color}"
             TextColor="{Binding TextColor}"
             Text="{Binding Label}"
-            Size="22" />
+            Size="22"
+            Margin="3,0,0,0"/>
 
         <Panel
             Classes="Title"
