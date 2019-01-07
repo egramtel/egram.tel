@@ -1,6 +1,7 @@
 ﻿<ContentControl
     xmlns="https://github.com/avaloniaui"
-    xmlns:shared="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages.Shared">
+    xmlns:shared="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages.Shared"
+    xmlns:shared1="clr-namespace:Tel.Egram.Gui.Views.Shared">
     
     <ContentControl.Styles>
         
@@ -13,40 +14,18 @@
                         ColumnDefinitions="auto,*,auto"
                         Margin="8,0,8,0">
         
-                        <Panel
+                        <shared1:AvatarControl
                             DataContext="{Binding Avatar}"
-                            Classes="Avatar"
+                            VerticalAlignment="Top"
+                            Margin="8,8,8,0"
                             Grid.Row="0"
                             Grid.Column="0"
                             Grid.RowSpan="3"
-                            VerticalAlignment="Top"
-                            Margin="8,8,8,0">
-            
-                            <Ellipse
-                                IsVisible="{Binding IsFallback}"
-                                Fill="{Binding Brush}"
-                                Width="32"
-                                Height="32" />
-            
-                            <TextBlock
-                                IsVisible="{Binding IsFallback}"
-                                Text="{Binding Label}"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Foreground="#ffffff" />
-            
-                            <Image
-                                Source="{Binding Bitmap}"
-                                Width="32"
-                                Height="32" >
-                
-                                <Image.Clip>
-                                    <EllipseGeometry Rect="0,0,32,32" />
-                                </Image.Clip>
-                
-                            </Image>
-            
-                        </Panel>
+                            Source="{Binding Bitmap}"
+                            Color="{Binding Color}"
+                            TextColor="{Binding TextColor}"
+                            Text="{Binding Label}"
+                            Size="32" />
         
                         <Border
                             Grid.Row="0"

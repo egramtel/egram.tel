@@ -16,7 +16,6 @@ namespace Tel.Egram.Services.Graphics.Avatars
         private readonly IFileLoader _fileLoader;
         private readonly IColorMapper _colorMapper;
 
-        private readonly ConcurrentDictionary<long, SolidColorBrush> _brushCache;
         private readonly object _locker;
 
         public AvatarLoader(
@@ -28,7 +27,6 @@ namespace Tel.Egram.Services.Graphics.Avatars
             _cache = avatarCache;
             _colorMapper = colorMapper;
             
-            _brushCache = new ConcurrentDictionary<long, SolidColorBrush>();
             _locker = new object();
         }
 
@@ -37,7 +35,7 @@ namespace Tel.Egram.Services.Graphics.Avatars
             return new Avatar
             {
                 Bitmap = forceFallback ? null : GetBitmap(user.ProfilePhoto?.Small),
-                BrushFactory = GetBrushFactory(user),
+                Color = GetColor(user),
                 Label = GetLabel(user)
             };
         }
@@ -47,7 +45,7 @@ namespace Tel.Egram.Services.Graphics.Avatars
             return new Avatar
             {
                 Bitmap = forceFallback ? null : GetBitmap(chat.Photo?.Small),
-                BrushFactory = GetBrushFactory(chat),
+                Color = GetColor(chat),
                 Label = GetLabel(chat)
             };
         }
@@ -58,7 +56,7 @@ namespace Tel.Egram.Services.Graphics.Avatars
                 .Select(bitmap => new Avatar
                 {
                     Bitmap = bitmap,
-                    BrushFactory = GetBrushFactory(user),
+                    Color = GetColor(user),
                     Label = GetLabel(user)
                 });
         }
@@ -69,7 +67,7 @@ namespace Tel.Egram.Services.Graphics.Avatars
                 .Select(bitmap => new Avatar
                 {
                     Bitmap = bitmap,
-                    BrushFactory = GetBrushFactory(chat),
+                    Color = GetColor(chat),
                     Label = GetLabel(chat)
                 });
         }
@@ -100,34 +98,14 @@ namespace Tel.Egram.Services.Graphics.Avatars
             return null;
         }
 
-        private Func<IBrush> GetBrushFactory(TdApi.User user)
+        private Color GetColor(TdApi.User user)
         {
-            return () =>
-            {
-                if (_brushCache.TryGetValue(user.Id, out var brush))
-                {
-                    return brush;
-                }
-                
-                brush = new SolidColorBrush(Color.Parse("#" + _colorMapper[user.Id]));
-                _brushCache.TryAdd(user.Id, brush);
-                return brush;
-            };
+            return Color.Parse("#" + _colorMapper[user.Id]);
         }
 
-        private Func<IBrush> GetBrushFactory(TdApi.Chat chat)
+        private Color GetColor(TdApi.Chat chat)
         {
-            return () =>
-            {
-                if (_brushCache.TryGetValue(chat.Id, out var brush))
-                {
-                    return brush;
-                }
-                
-                brush = new SolidColorBrush(Color.Parse("#" + _colorMapper[chat.Id]));
-                _brushCache.TryAdd(chat.Id, brush);
-                return brush;
-            };
+            return Color.Parse("#" + _colorMapper[chat.Id]);
         }
 
         private IBitmap GetBitmap(TdApi.File file)

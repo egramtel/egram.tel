@@ -1,5 +1,6 @@
 ﻿<UserControl
-    xmlns="https://github.com/avaloniaui">
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shared="clr-namespace:Tel.Egram.Gui.Views.Shared">
     
     <Grid
         Width="516"
@@ -11,38 +12,16 @@
             Grid.ColumnSpan="3"
             Grid.RowSpan="2" />
             
-        <Panel
+        <shared:AvatarControl
             DataContext="{Binding Avatar}"
-            Classes="Avatar"
-            Margin="8,0,0,0"
+            Margin="16,0,8,0"
             Grid.Column="0"
-            Grid.RowSpan="2">
-            
-            <Ellipse
-                IsVisible="{Binding IsFallback}"
-                Fill="{Binding Brush}"
-                Width="32"
-                Height="32" />
-            
-            <TextBlock
-                IsVisible="{Binding IsFallback}"
-                Text="{Binding Label}"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="#ffffff" />
-            
-            <Image
-                Source="{Binding Bitmap}"
-                Width="32"
-                Height="32" >
-                
-                <Image.Clip>
-                    <EllipseGeometry Rect="0,0,32,32" />
-                </Image.Clip>
-                
-            </Image>
-            
-        </Panel>
+            Grid.RowSpan="2"
+            Source="{Binding Bitmap}"
+            Color="{Binding Color}"
+            TextColor="{Binding TextColor}"
+            Text="{Binding Label}"
+            Size="32" />
             
         <TextBlock
             Grid.Column="1"

@@ -8,9 +8,9 @@ namespace Tel.Egram.Services.Graphics.Avatars
     {
         public IBitmap Bitmap { get; set; }
 
-        public Func<IBrush> BrushFactory { get; set; }
+        public Color TextColor { get; set; } = Colors.White;
         
-        public IBrush Brush => BrushFactory?.Invoke();
+        public Color Color { get; set; }
         
         public string Label { get; set; }
 

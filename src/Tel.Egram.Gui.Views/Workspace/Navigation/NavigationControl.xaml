@@ -1,5 +1,6 @@
 ﻿<UserControl
-    xmlns="https://github.com/avaloniaui">
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shared="clr-namespace:Tel.Egram.Gui.Views.Shared">
     
     <Grid
         ColumnDefinitions="*"
@@ -13,18 +14,13 @@
             Grid.Row="0"
             >
             
-            <Image
-                Source="{Binding Avatar.Bitmap}"
-                Margin="0,8,0,0"
-                Width="32"
-                Height="32"
-                >
-                
-                <Image.Clip>
-                    <EllipseGeometry Rect="0,0,32,32" />
-                </Image.Clip>
-                
-            </Image>
+            <shared:AvatarControl
+                DataContext="{Binding Avatar}"
+                Source="{Binding Bitmap}"
+                Color="{Binding Color}"
+                TextColor="{Binding TextColor}"
+                Text="{Binding Label}"
+                Size="32" />
             
         </Button>
         
