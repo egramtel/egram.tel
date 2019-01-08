@@ -21,6 +21,8 @@ namespace Tel.Egram.Model.Messenger.Explorer
         
         public Range VisibleRange { get; set; }
         
+        public ItemModel TargetItem { get; set; }
+        
         public ObservableCollectionExtended<ItemModel> Items { get; set; }
             = new ObservableCollectionExtended<ItemModel>();
         
@@ -53,8 +55,6 @@ namespace Tel.Egram.Model.Messenger.Explorer
         private IDisposable BindSource()
         {   
             return SourceItems.Connect()
-                .SubscribeOn(RxApp.TaskpoolScheduler)
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(Items)
                 .Accept();
         }

@@ -7,6 +7,7 @@ using DynamicData;
 using ReactiveUI;
 using Splat;
 using Tel.Egram.Model.Messenger.Explorer.Factories;
+using Tel.Egram.Model.Messenger.Explorer.Items;
 using Tel.Egram.Model.Messenger.Explorer.Messages;
 using Tel.Egram.Services.Messaging.Chats;
 using Tel.Egram.Services.Messaging.Messages;
@@ -52,7 +53,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Loaders
                 .Synchronize(_conductor.Locker)
                 .SelectSeq(r => StartLoading(chat))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Accept(list => HandleLoading(model, list));
+                .Accept(list => HandleLoading(model, chat, list));
         }
 
         private IObservable<IList<MessageModel>> StartLoading(
@@ -72,10 +73,22 @@ namespace Tel.Egram.Model.Messenger.Explorer.Loaders
 
         private void HandleLoading(
             ExplorerModel model,
+            Chat chat,
             IList<MessageModel> messageModels)
         {
             //Console.WriteLine("End init");
+            
+            // find last read message to scroll to it later
+            var targetItem = messageModels
+                .FirstOrDefault(m => m.Message.MessageData.Id == chat.ChatData.LastReadInboxMessageId);
+
+            if (targetItem == null && messageModels.Count > 0)
+            {
+                targetItem = messageModels[messageModels.Count / 2];
+            }
+
             model.SourceItems.AddRange(messageModels);
+            model.TargetItem = targetItem;
         }
         
         private IObservable<IList<MessageModel>> LoadInitMessages(

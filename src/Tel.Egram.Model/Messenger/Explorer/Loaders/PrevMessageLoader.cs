@@ -8,6 +8,7 @@ using DynamicData;
 using ReactiveUI;
 using Splat;
 using Tel.Egram.Model.Messenger.Explorer.Factories;
+using Tel.Egram.Model.Messenger.Explorer.Items;
 using Tel.Egram.Model.Messenger.Explorer.Messages;
 using Tel.Egram.Services.Messaging.Chats;
 using Tel.Egram.Services.Messaging.Messages;
@@ -47,6 +48,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Loaders
             Chat chat)
         {
             return model.WhenAnyValue(m => m.VisibleRange)
+                .Throttle(TimeSpan.FromSeconds(1))
                 .Select(r => r.Index)
                 .DistinctUntilChanged()
                 .Where(index => model.SourceItems.Count != 0) // skip initial
@@ -55,7 +57,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Loaders
                 .Synchronize(_conductor.Locker)
                 .SelectSeq(r => StartLoading(model, chat))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Accept(list => HandleLoading(model, list));
+                .Accept(list => HandleLoading(model, chat, list));
         }
         
         private IObservable<IList<MessageModel>> StartLoading(
@@ -81,9 +83,29 @@ namespace Tel.Egram.Model.Messenger.Explorer.Loaders
 
         private void HandleLoading(
             ExplorerModel model,
+            Chat chat,
             IList<MessageModel> messageModels)
         {
             //Console.WriteLine("End prev");
+
+            ItemModel targetItem = null;
+
+            // find item which is currently visible to scroll to it later
+            if (model.SourceItems.Count > 0)
+            {
+                targetItem = model.SourceItems.Items
+                    .Skip(model.VisibleRange.Index)
+                    .OfType<MessageModel>()
+                    .FirstOrDefault();
+            }
+
+            // or take last added item
+            if (targetItem == null && messageModels.Count > 0)
+            {
+                targetItem = messageModels[messageModels.Count - 1];
+            }
+
+            model.TargetItem = targetItem;
             model.SourceItems.InsertRange(messageModels, 0);
         }
         

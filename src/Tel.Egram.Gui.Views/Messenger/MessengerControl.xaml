@@ -26,6 +26,7 @@
             DataContext="{Binding ExplorerModel}"
             IsVisible="{Binding IsVisible}"
             VisibleRange="{Binding VisibleRange, Mode=TwoWay}"
+            TargetItem="{Binding TargetItem, Mode=TwoWay}"
             Grid.Column="1"
             Grid.Row="1" />
         

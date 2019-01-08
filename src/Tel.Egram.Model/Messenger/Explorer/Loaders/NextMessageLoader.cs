@@ -47,6 +47,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Loaders
             Chat chat)
         {
             return model.WhenAnyValue(m => m.VisibleRange)
+                .Throttle(TimeSpan.FromSeconds(1))
                 .Select(r => r.LastIndex)
                 .DistinctUntilChanged()
                 .Where(index => model.SourceItems.Count != 0) // skip initial
