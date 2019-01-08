@@ -47,9 +47,11 @@ namespace Tel.Egram.Model.Messenger.Explorer.Loaders
             Chat chat)
         {
             return model.WhenAnyValue(m => m.VisibleRange)
-                .Where(r => model.SourceItems.Count != 0) // skip initial
-                .Where(r => r.Index - 4 < 0) // top is within 4 items
-                .Where(r => !_conductor.IsBusy) // ignore if other load are already in progress
+                .Select(r => r.Index)
+                .DistinctUntilChanged()
+                .Where(index => model.SourceItems.Count != 0) // skip initial
+                .Where(index => index - 4 < 0) // top is within 4 items
+                .Where(index => !_conductor.IsBusy) // ignore if other load are already in progress
                 .Synchronize(_conductor.Locker)
                 .SelectSeq(r => StartLoading(model, chat))
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -60,7 +62,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Loaders
             ExplorerModel model,
             Chat chat)
         {
-            Console.WriteLine("Start prev: {0}", Thread.CurrentThread.ManagedThreadId);
+            //Console.WriteLine("Start prev: {0}", Thread.CurrentThread.ManagedThreadId);
             _conductor.IsBusy = true;
 
             var fromMessage = model.SourceItems.Items
@@ -81,7 +83,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Loaders
             ExplorerModel model,
             IList<MessageModel> messageModels)
         {
-            Console.WriteLine("End prev");
+            //Console.WriteLine("End prev");
             model.SourceItems.InsertRange(messageModels, 0);
         }
         

@@ -58,7 +58,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Loaders
         private IObservable<IList<MessageModel>> StartLoading(
             Chat chat)
         {
-            Console.WriteLine("Start init: {0}", Thread.CurrentThread.ManagedThreadId);
+            //Console.WriteLine("Start init: {0}", Thread.CurrentThread.ManagedThreadId);
             _conductor.IsBusy = true;
             
             return LoadInitMessages(chat)
@@ -74,7 +74,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Loaders
             ExplorerModel model,
             IList<MessageModel> messageModels)
         {
-            Console.WriteLine("End init");
+            //Console.WriteLine("End init");
             model.SourceItems.AddRange(messageModels);
         }
         
