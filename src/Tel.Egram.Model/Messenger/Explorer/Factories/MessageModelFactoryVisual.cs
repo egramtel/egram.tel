@@ -5,7 +5,7 @@ using Tel.Egram.Services.Messaging.Messages;
 
 namespace Tel.Egram.Model.Messenger.Explorer.Factories
 {
-    public partial class MessageModelFactory : IMessageModelFactory
+    public partial class MessageModelFactory
     {
         private PhotoMessageModel CreatePhotoMessage(
             Message message,

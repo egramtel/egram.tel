@@ -5,7 +5,9 @@
     xmlns:visual="clr-namespace:Tel.Egram.Model.Messenger.Explorer.Messages.Visual;assembly=Tel.Egram.Model"
     xmlns:model="clr-namespace:Tel.Egram.Model.Messenger.Explorer.Messages;assembly=Tel.Egram.Model"
     xmlns:basic1="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages.Basic"
-    xmlns:visual1="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages.Visual">
+    xmlns:visual1="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages.Visual"
+    xmlns:special="clr-namespace:Tel.Egram.Model.Messenger.Explorer.Messages.Special;assembly=Tel.Egram.Model"
+    xmlns:special1="clr-namespace:Tel.Egram.Gui.Views.Messenger.Explorer.Messages.Special">
 
     <ListBox
         Width="516"
@@ -39,6 +41,10 @@
             
             <DataTemplate DataType="{x:Type visual:StickerMessageModel}">
                 <visual1:StickerMessageControl />
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type special:DocumentMessageModel}">
+                <special1:DocumentMessageControl />
             </DataTemplate>
             
             <DataTemplate DataType="{x:Type model:UnsupportedMessageModel}">

@@ -4,7 +4,7 @@ using Tel.Egram.Services.Messaging.Messages;
 
 namespace Tel.Egram.Model.Messenger.Explorer.Factories
 {
-    public partial class MessageModelFactory : IMessageModelFactory
+    public partial class MessageModelFactory
     {
         private MessageModel CreateCallMessage(Message message, TdApi.MessageContent.MessageCall messageCall)
         {
