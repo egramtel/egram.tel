@@ -74,6 +74,12 @@ namespace Tel.Egram
                 return new FileLoader(agent);
             });
             
+            services.RegisterLazySingleton<IFileExplorer>(() =>
+            {
+                var platform = services.GetService<IPlatform>();
+                return new FileExplorer(platform);
+            });
+            
             services.RegisterLazySingleton<IDatabaseContextFactory>(() => new DatabaseContextFactory());
             
             services.RegisterLazySingleton(() =>

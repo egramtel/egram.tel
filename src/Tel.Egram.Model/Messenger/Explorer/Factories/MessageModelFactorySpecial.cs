@@ -11,11 +11,13 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             Message message,
             TdApi.MessageContent.MessageDocument messageDocument)
         {
+            var document = messageDocument.Document;
             var name = messageDocument.Document.FileName;
             var text = messageDocument.Caption.Text;
             
             return new DocumentMessageModel
             {
+                Document = document,
                 Name = name,
                 Text = text
             };

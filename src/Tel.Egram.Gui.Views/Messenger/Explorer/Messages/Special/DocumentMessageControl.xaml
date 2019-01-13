@@ -23,6 +23,8 @@
             
             <Button
                 IsVisible="{Binding !IsDownloaded}"
+                Command="{Binding DownloadCommand}"
+                CommandParameter="{Binding}"
                 Classes="Link"
                 Grid.Row="0"
                 Grid.Column="2">
@@ -32,6 +34,8 @@
             
             <Button
                 IsVisible="{Binding IsDownloaded}"
+                Command="{Binding ShowCommand}"
+                CommandParameter="{Binding}"
                 Classes="Link"
                 Grid.Row="0"
                 Grid.Column="2">
