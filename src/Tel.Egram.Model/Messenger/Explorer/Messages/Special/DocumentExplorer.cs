@@ -44,8 +44,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Messages.Special
                 var fileInfo = new FileInfo(localFile.Path);
                 if (fileInfo.Exists)
                 {
-                    var directory = fileInfo.Directory;
-                    _fileExplorer.Open(directory);
+                    _fileExplorer.OpenDirectory(fileInfo);
                 }
             }
 

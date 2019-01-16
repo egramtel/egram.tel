@@ -14,16 +14,36 @@ namespace Tel.Egram.Services.Persistance
             _platform = platform;
         }
 
-        public void Open(DirectoryInfo directory)
+        /// <summary>
+        /// <inheritdoc cref="IFileExplorer"/>
+        /// </summary>
+        public void OpenDirectory(DirectoryInfo directory)
         {
             switch (_platform)
             {
                 case WindowsPlatform _:
-                    Process.Start("explorer.exe", directory.FullName);
+                    Process.Start("explorer.exe", $"\"{directory.FullName}\"");
                     break;
                 
                 case MacosPlatform _:
-                    Process.Start("open", directory.FullName);
+                    Process.Start("open", $"\"{directory.FullName}\"");
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="IFileExplorer"/>
+        /// </summary>
+        public void OpenDirectory(FileInfo file)
+        {
+            switch (_platform)
+            {
+                case WindowsPlatform _:
+                    Process.Start("explorer.exe", $"/select,\"{file.FullName}\"");
+                    break;
+
+                case MacosPlatform _:
+                    Process.Start("open", $"-R \"{file.FullName}\"");
                     break;
             }
         }
