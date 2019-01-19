@@ -4,9 +4,9 @@ using Tel.Egram.Services.Messaging.Messages;
 
 namespace Tel.Egram.Model.Messenger.Explorer.Factories
 {
-    public partial class MessageModelFactory
+    public class NoteMessageModelFactory : INoteMessageModelFactory
     {
-        private MessageModel CreateCallMessage(Message message, TdApi.MessageContent.MessageCall messageCall)
+        public MessageModel CreateCallMessage(Message message, TdApi.MessageContent.MessageCall messageCall)
         {
             return new UnsupportedMessageModel
             {
@@ -14,7 +14,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateBasicGroupChatCreateMessage(Message message, TdApi.MessageContent.MessageBasicGroupChatCreate basicGroupChatCreate)
+        public MessageModel CreateBasicGroupChatCreateMessage(Message message, TdApi.MessageContent.MessageBasicGroupChatCreate basicGroupChatCreate)
         {
             return new UnsupportedMessageModel
             {
@@ -22,7 +22,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateChatChangeTitleMessage(Message message, TdApi.MessageContent.MessageChatChangeTitle chatChangeTitle)
+        public MessageModel CreateChatChangeTitleMessage(Message message, TdApi.MessageContent.MessageChatChangeTitle chatChangeTitle)
         {
             return new UnsupportedMessageModel
             {
@@ -30,7 +30,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateChatChangePhotoMessage(Message message, TdApi.MessageContent.MessageChatChangePhoto chatChangePhoto)
+        public MessageModel CreateChatChangePhotoMessage(Message message, TdApi.MessageContent.MessageChatChangePhoto chatChangePhoto)
         {
             return new UnsupportedMessageModel
             {
@@ -38,7 +38,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateChatDeletePhotoMessage(Message message, TdApi.MessageContent.MessageChatDeletePhoto chatDeletePhoto)
+        public MessageModel CreateChatDeletePhotoMessage(Message message, TdApi.MessageContent.MessageChatDeletePhoto chatDeletePhoto)
         {
             return new UnsupportedMessageModel
             {
@@ -46,7 +46,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateChatAddMembersMessage(Message message, TdApi.MessageContent.MessageChatAddMembers chatAddMembers)
+        public MessageModel CreateChatAddMembersMessage(Message message, TdApi.MessageContent.MessageChatAddMembers chatAddMembers)
         {
             return new UnsupportedMessageModel
             {
@@ -54,7 +54,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateChatJoinByLinkMessage(Message message, TdApi.MessageContent.MessageChatJoinByLink chatJoinByLink)
+        public MessageModel CreateChatJoinByLinkMessage(Message message, TdApi.MessageContent.MessageChatJoinByLink chatJoinByLink)
         {
             return new UnsupportedMessageModel
             {
@@ -62,7 +62,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateChatDeleteMemberMessage(Message message, TdApi.MessageContent.MessageChatDeleteMember chatDeleteMember)
+        public MessageModel CreateChatDeleteMemberMessage(Message message, TdApi.MessageContent.MessageChatDeleteMember chatDeleteMember)
         {
             return new UnsupportedMessageModel
             {
@@ -70,7 +70,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateChatUpgradeToMessage(Message message, TdApi.MessageContent.MessageChatUpgradeTo chatUpgradeTo)
+        public MessageModel CreateChatUpgradeToMessage(Message message, TdApi.MessageContent.MessageChatUpgradeTo chatUpgradeTo)
         {
             return new UnsupportedMessageModel
             {
@@ -78,7 +78,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateChatUpgradeFromMessage(Message message, TdApi.MessageContent.MessageChatUpgradeFrom chatUpgradeFrom)
+        public MessageModel CreateChatUpgradeFromMessage(Message message, TdApi.MessageContent.MessageChatUpgradeFrom chatUpgradeFrom)
         {
             return new UnsupportedMessageModel
             {
@@ -86,7 +86,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreatePinMessageMessage(Message message, TdApi.MessageContent.MessagePinMessage pinMessage)
+        public MessageModel CreatePinMessageMessage(Message message, TdApi.MessageContent.MessagePinMessage pinMessage)
         {
             return new UnsupportedMessageModel
             {
@@ -94,7 +94,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateScreenshotTakenMessage(Message message, TdApi.MessageContent.MessageScreenshotTaken screenshotTaken)
+        public MessageModel CreateScreenshotTakenMessage(Message message, TdApi.MessageContent.MessageScreenshotTaken screenshotTaken)
         {
             return new UnsupportedMessageModel
             {
@@ -102,7 +102,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateChatSetTtlMessage(Message message, TdApi.MessageContent.MessageChatSetTtl chatSetTtl)
+        public MessageModel CreateChatSetTtlMessage(Message message, TdApi.MessageContent.MessageChatSetTtl chatSetTtl)
         {
             return new UnsupportedMessageModel
             {
@@ -110,7 +110,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateCustomServiceActionMessage(Message message, TdApi.MessageContent.MessageCustomServiceAction customServiceAction)
+        public MessageModel CreateCustomServiceActionMessage(Message message, TdApi.MessageContent.MessageCustomServiceAction customServiceAction)
         {
             return new UnsupportedMessageModel
             {

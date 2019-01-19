@@ -5,9 +5,9 @@ using Tel.Egram.Services.Messaging.Messages;
 
 namespace Tel.Egram.Model.Messenger.Explorer.Factories
 {
-    public partial class MessageModelFactory
+    public class VisualMessageModelFactory : IVisualMessageModelFactory
     {
-        private PhotoMessageModel CreatePhotoMessage(
+        public PhotoMessageModel CreatePhotoMessage(
             Message message,
             TdApi.MessageContent.MessagePhoto messagePhoto)
         {
@@ -21,7 +21,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private StickerMessageModel CreateStickerMessage(
+        public StickerMessageModel CreateStickerMessage(
             Message message,
             TdApi.MessageContent.MessageSticker messageSticker)
         {
@@ -33,7 +33,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private VideoMessageModel CreateVideoMessage(
+        public VideoMessageModel CreateVideoMessage(
             Message message,
             TdApi.MessageContent.MessageVideo messageVideo)
         {
@@ -47,7 +47,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateExpiredPhotoMessage(Message message, TdApi.MessageContent.MessageExpiredPhoto expiredPhoto)
+        public MessageModel CreateExpiredPhotoMessage(Message message, TdApi.MessageContent.MessageExpiredPhoto expiredPhoto)
         {
             return new UnsupportedMessageModel
             {
@@ -55,7 +55,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateAnimationMessage(Message message, TdApi.MessageContent.MessageAnimation messageAnimation)
+        public MessageModel CreateAnimationMessage(Message message, TdApi.MessageContent.MessageAnimation messageAnimation)
         {
             return new UnsupportedMessageModel
             {
@@ -63,7 +63,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateExpiredVideoMessage(Message message, TdApi.MessageContent.MessageExpiredVideo expiredVideo)
+        public MessageModel CreateExpiredVideoMessage(Message message, TdApi.MessageContent.MessageExpiredVideo expiredVideo)
         {
             return new UnsupportedMessageModel
             {
@@ -71,7 +71,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateVideoNoteMessage(Message message, TdApi.MessageContent.MessageVideoNote videoNote)
+        public MessageModel CreateVideoNoteMessage(Message message, TdApi.MessageContent.MessageVideoNote videoNote)
         {
             return new UnsupportedMessageModel
             {

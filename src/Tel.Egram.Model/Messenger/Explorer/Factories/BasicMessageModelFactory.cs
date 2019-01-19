@@ -5,9 +5,14 @@ using Tel.Egram.Services.Messaging.Messages;
 
 namespace Tel.Egram.Model.Messenger.Explorer.Factories
 {
-    public partial class MessageModelFactory
+    public class BasicMessageModelFactory : IBasicMessageModelFactory
     {
-        private TextMessageModel CreateTextMessage(
+        public BasicMessageModelFactory()
+        {
+            
+        }
+        
+        public TextMessageModel CreateTextMessage(
             Message message,
             TdApi.MessageContent.MessageText messageText)
         {
@@ -19,7 +24,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
 
-        private MessageModel CreateUnsupportedMessage(Message message)
+        public MessageModel CreateUnsupportedMessage(Message message)
         {
             return new UnsupportedMessageModel
             {

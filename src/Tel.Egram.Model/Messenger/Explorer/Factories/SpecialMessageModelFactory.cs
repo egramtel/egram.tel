@@ -2,12 +2,21 @@ using TdLib;
 using Tel.Egram.Model.Messenger.Explorer.Messages;
 using Tel.Egram.Model.Messenger.Explorer.Messages.Special;
 using Tel.Egram.Services.Messaging.Messages;
+using Tel.Egram.Services.Utils.Formatting;
 
 namespace Tel.Egram.Model.Messenger.Explorer.Factories
 {
-    public partial class MessageModelFactory
+    public class SpecialMessageModelFactory : ISpecialMessageModelFactory
     {
-        private DocumentMessageModel CreateDocumentMessage(
+        private readonly IStringFormatter _stringFormatter;
+
+        public SpecialMessageModelFactory(
+            IStringFormatter stringFormatter)
+        {
+            _stringFormatter = stringFormatter;
+        }
+        
+        public DocumentMessageModel CreateDocumentMessage(
             Message message,
             TdApi.MessageContent.MessageDocument messageDocument)
         {
@@ -25,98 +34,98 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             };
         }
         
-        private MessageModel CreateGameScoreMessage(
+        public MessageModel CreateGameScoreMessage(
             Message message,
             TdApi.MessageContent.MessageGameScore gameScore)
         {
             return new UnsupportedMessageModel();
         }
         
-        private MessageModel CreatePaymentSuccessfulMessage(
+        public MessageModel CreatePaymentSuccessfulMessage(
             Message message,
             TdApi.MessageContent.MessagePaymentSuccessful paymentSuccessful)
         {
             return new UnsupportedMessageModel();
         }
 
-        private MessageModel CreatePaymentSuccessfulBotMessage(
+        public MessageModel CreatePaymentSuccessfulBotMessage(
             Message message,
             TdApi.MessageContent.MessagePaymentSuccessfulBot paymentSuccessfulBot)
         {
             return new UnsupportedMessageModel();
         }
 
-        private MessageModel CreateContactRegisteredMessage(
+        public MessageModel CreateContactRegisteredMessage(
             Message message,
             TdApi.MessageContent.MessageContactRegistered contactRegistered)
         {
             return new UnsupportedMessageModel();
         }
 
-        private MessageModel CreateWebsiteConnectedMessage(
+        public MessageModel CreateWebsiteConnectedMessage(
             Message message,
             TdApi.MessageContent.MessageWebsiteConnected websiteConnected)
         {
             return new UnsupportedMessageModel();
         }
 
-        private MessageModel CreateLocationMessage(
+        public MessageModel CreateLocationMessage(
             Message message,
             TdApi.MessageContent.MessageLocation location)
         {
             return new UnsupportedMessageModel();
         }
 
-        private MessageModel CreateVenueMessage(
+        public MessageModel CreateVenueMessage(
             Message message,
             TdApi.MessageContent.MessageVenue venue)
         {
             return new UnsupportedMessageModel();
         }
 
-        private MessageModel CreateContactMessage(
+        public MessageModel CreateContactMessage(
             Message message,
             TdApi.MessageContent.MessageContact contact)
         {
             return new UnsupportedMessageModel();
         }
 
-        private MessageModel CreateGameMessage(
+        public MessageModel CreateGameMessage(
             Message message,
             TdApi.MessageContent.MessageGame game)
         {
             return new UnsupportedMessageModel();
         }
 
-        private MessageModel CreateInvoiceMessage(
+        public MessageModel CreateInvoiceMessage(
             Message message,
             TdApi.MessageContent.MessageInvoice invoice)
         {
             return new UnsupportedMessageModel();
         }
 
-        private MessageModel CreatePassportDataSentMessage(
+        public MessageModel CreatePassportDataSentMessage(
             Message message,
             TdApi.MessageContent.MessagePassportDataSent passportDataSent)
         {
             return new UnsupportedMessageModel();
         }
 
-        private MessageModel CreatePassportDataReceivedMessage(
+        public MessageModel CreatePassportDataReceivedMessage(
             Message message,
             TdApi.MessageContent.MessagePassportDataReceived passportDataReceived)
         {
             return new UnsupportedMessageModel();
         }
 
-        private MessageModel CreateAudioMessage(
+        public MessageModel CreateAudioMessage(
             Message message,
             TdApi.MessageContent.MessageAudio messageAudio)
         {
             return new UnsupportedMessageModel();
         }
 
-        private MessageModel CreateVoiceNoteMessage(
+        public MessageModel CreateVoiceNoteMessage(
             Message message,
             TdApi.MessageContent.MessageVoiceNote voiceNote)
         {

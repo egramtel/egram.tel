@@ -272,10 +272,42 @@ namespace Tel.Egram
             });
             
             // messenger
-            services.RegisterLazySingleton<IMessageModelFactory>(() =>
+            services.RegisterLazySingleton<IBasicMessageModelFactory>(() =>
+            {
+                return new BasicMessageModelFactory();
+            });
+            
+            services.RegisterLazySingleton<INoteMessageModelFactory>(() =>
+            {
+                return new NoteMessageModelFactory();
+            });
+            
+            services.RegisterLazySingleton<ISpecialMessageModelFactory>(() =>
             {
                 var stringFormatter = new StringFormatter();
-                return new MessageModelFactory(stringFormatter);
+                return new SpecialMessageModelFactory(stringFormatter);
+            });
+            
+            services.RegisterLazySingleton<IVisualMessageModelFactory>(() =>
+            {
+                return new VisualMessageModelFactory();
+            });
+            
+            services.RegisterLazySingleton<IMessageModelFactory>(() =>
+            {
+                var basicMessageModelFactory = services.GetService<IBasicMessageModelFactory>();
+                var noteMessageModelFactory = services.GetService<INoteMessageModelFactory>();
+                var specialMessageModelFactory = services.GetService<ISpecialMessageModelFactory>();
+                var visualMessageModelFactory = services.GetService<IVisualMessageModelFactory>();
+                
+                var stringFormatter = new StringFormatter();
+                
+                return new MessageModelFactory(
+                    basicMessageModelFactory,
+                    noteMessageModelFactory,
+                    specialMessageModelFactory,
+                    visualMessageModelFactory,
+                    stringFormatter);
             });
         }
         
