@@ -4,8 +4,10 @@ namespace Tel.Egram.Services.Utils.Formatting
 {
     public interface IStringFormatter
     {
-        string AsShortTime(DateTimeOffset dateTimeOffset);
+        string FormatShortTime(DateTimeOffset dateTimeOffset);
 
-        string AsShortTime(int timestamp);
+        string FormatShortTime(int timestamp);
+
+        string FormatMemorySize(long bytes);
     }
 }

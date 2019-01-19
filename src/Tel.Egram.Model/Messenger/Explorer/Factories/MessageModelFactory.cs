@@ -162,7 +162,7 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
                 
             model.Message = message;
             model.AuthorName = authorName;
-            model.Time = _stringFormatter.AsShortTime(message.MessageData.Date);
+            model.Time = _stringFormatter.FormatShortTime(message.MessageData.Date);
 
             if (message.ReplyMessage != null)
             {

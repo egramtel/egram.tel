@@ -5,7 +5,7 @@
     <shared:MessageControl>
         
         <Grid
-            ColumnDefinitions="auto,auto,auto,*"
+            ColumnDefinitions="auto,auto,auto,auto,*"
             RowDefinitions="auto,auto">
             
             <Panel
@@ -21,13 +21,19 @@
                 Grid.Column="1"
                 Text="{Binding Name}" />
             
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="2"
+                Text="{Binding Size}"
+                Classes="Size" />
+            
             <Button
                 IsVisible="{Binding !IsDownloaded}"
                 Command="{Binding DownloadCommand}"
                 CommandParameter="{Binding}"
                 Classes="Link"
                 Grid.Row="0"
-                Grid.Column="2">
+                Grid.Column="3">
                 <TextBlock
                     Text="Download" />
             </Button>
@@ -38,7 +44,7 @@
                 CommandParameter="{Binding}"
                 Classes="Link"
                 Grid.Row="0"
-                Grid.Column="2">
+                Grid.Column="3">
                 <TextBlock
                     Text="Show" />
             </Button>
@@ -46,7 +52,7 @@
             <TextBlock
                 Grid.Row="1"
                 Grid.Column="0"
-                Grid.ColumnSpan="4"
+                Grid.ColumnSpan="5"
                 Text="{Binding Text}"
                 TextWrapping="Wrap"
                 VerticalAlignment="Center" />
@@ -76,10 +82,16 @@
         
         <Style Selector="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+        
+        <Style Selector="TextBlock.Size">
+            <Setter Property="Foreground" Value="#7d8fa0" />
+            <Setter Property="FontSize" Value="11" />
         </Style>
         
         <Style Selector="Button.Link">
-            <Setter Property="Margin" Value="10,0" />
+            <Setter Property="Margin" Value="0" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />

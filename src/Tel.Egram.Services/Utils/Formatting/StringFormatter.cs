@@ -4,17 +4,28 @@ namespace Tel.Egram.Services.Utils.Formatting
 {
     public class StringFormatter : IStringFormatter
     {
-        public string AsShortTime(DateTimeOffset dateTimeOffset)
+        public string FormatShortTime(DateTimeOffset dateTimeOffset)
         {
             return dateTimeOffset.ToString("hh:mm");
         }
 
-        public string AsShortTime(int timestamp)
+        public string FormatShortTime(int timestamp)
         {
             var time = DateTimeOffset.FromUnixTimeSeconds(timestamp)
                 .ToLocalTime();
 
-            return AsShortTime(time);
+            return FormatShortTime(time);
+        }
+
+        public string FormatMemorySize(long bytes)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+            int order = 0;
+            while (bytes >= 1024 && order < sizes.Length - 1) {
+                order++;
+                bytes = bytes / 1024;
+            }
+            return $"{bytes:0.##} {sizes[order]}";
         }
     }
 }

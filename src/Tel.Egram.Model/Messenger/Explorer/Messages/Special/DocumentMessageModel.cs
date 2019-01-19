@@ -15,6 +15,8 @@ namespace Tel.Egram.Model.Messenger.Explorer.Messages.Special
         
         public string Text { get; set; }
         
+        public string Size { get; set; }
+        
         public ReactiveCommand<DocumentMessageModel, bool> DownloadCommand { get; set; }
         
         public ReactiveCommand<DocumentMessageModel, bool> ShowCommand { get; set; }

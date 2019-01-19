@@ -14,12 +14,14 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             var document = messageDocument.Document;
             var name = messageDocument.Document.FileName;
             var text = messageDocument.Caption.Text;
+            var size = $"({_stringFormatter.FormatMemorySize(messageDocument.Document.Document_.Size)})";
             
             return new DocumentMessageModel
             {
                 Document = document,
                 Name = name,
-                Text = text
+                Text = text,
+                Size = size
             };
         }
         
