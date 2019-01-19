@@ -3,11 +3,20 @@ using System.Linq;
 using TdLib;
 using Tel.Egram.Model.Messenger.Explorer.Messages;
 using Tel.Egram.Services.Messaging.Messages;
+using Tel.Egram.Services.Utils.Formatting;
 
 namespace Tel.Egram.Model.Messenger.Explorer.Factories
 {
     public partial class MessageModelFactory : IMessageModelFactory
     {
+        private readonly IStringFormatter _stringFormatter;
+
+        public MessageModelFactory(
+            IStringFormatter stringFormatter)
+        {
+            _stringFormatter = stringFormatter;
+        }
+        
         public MessageModel CreateMessage(Message message)
         {
             var model = GetMessage(message);
@@ -150,13 +159,10 @@ namespace Tel.Egram.Model.Messenger.Explorer.Factories
             var authorName = (user == null)
                 ? chat.Title
                 : $"{user.FirstName} {user.LastName}";
-
-            var time = DateTimeOffset.FromUnixTimeSeconds(message.MessageData.Date)
-                .ToLocalTime();
                 
             model.Message = message;
             model.AuthorName = authorName;
-            model.Time = time.ToString(time.ToString("t"));
+            model.Time = _stringFormatter.AsShortTime(message.MessageData.Date);
 
             if (message.ReplyMessage != null)
             {

@@ -21,6 +21,7 @@ using Tel.Egram.Services.Messaging.Notifications;
 using Tel.Egram.Services.Messaging.Users;
 using Tel.Egram.Services.Persistance;
 using Tel.Egram.Services.Settings;
+using Tel.Egram.Services.Utils.Formatting;
 using Tel.Egram.Services.Utils.Platforms;
 using Tel.Egram.Services.Utils.TdLib;
 using IBitmapLoader = Tel.Egram.Services.Graphics.IBitmapLoader;
@@ -33,6 +34,7 @@ namespace Tel.Egram
         public static void AddUtils(this IMutableDependencyResolver services)
         {
             services.RegisterLazySingleton<IPlatform>(Platform.GetPlatform);
+            services.RegisterLazySingleton<IStringFormatter>(() => new StringFormatter());
         }
         
         public static void AddTdLib(this IMutableDependencyResolver services)
@@ -272,7 +274,8 @@ namespace Tel.Egram
             // messenger
             services.RegisterLazySingleton<IMessageModelFactory>(() =>
             {
-                return new MessageModelFactory();
+                var stringFormatter = new StringFormatter();
+                return new MessageModelFactory(stringFormatter);
             });
         }
         
