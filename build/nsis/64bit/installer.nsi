@@ -3,7 +3,7 @@
 Name "Egram"
 OutFile "egram-setup.exe"
 
-InstallDir "$PROGRAMFILES64\Egram"
+InstallDir "$APPDATA\Egram"
 
 InstallDirRegKey HKCU "Software\Egram64" ""
 
@@ -40,8 +40,6 @@ Section "Shortcut"
 SectionEnd
 
 Section "Uninstall"
-
-  File /r ".\*"
 
   Delete "$INSTDIR\Uninstall.exe"
 
