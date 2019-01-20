@@ -1,0 +1,37 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:authentication="clr-namespace:Tel.Egram.Views.Authentication"
+    xmlns:welcome="clr-namespace:Tel.Egram.Views.Authentication.Welcome">
+    
+    <Grid
+        ColumnDefinitions="auto,*,auto">
+        
+        <Image
+            Grid.Column="0"
+            Source="{Binding Flag}" />
+        
+        <TextBlock
+            Grid.Column="1"
+            Text="{Binding CountryCode}" />
+        
+        <TextBlock
+            Grid.Column="2"
+            Text="{Binding Code}" />
+        
+    </Grid>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="Image">
+            <Setter Property="Width" Value="16" />
+            <Setter Property="Height" Value="16" />
+            <Setter Property="Margin" Value="4" />
+        </Style>
+        
+        <Style Selector="TextBlock">
+            <Setter Property="Margin" Value="4" />
+        </Style>
+        
+    </UserControl.Styles>
+    
+</UserControl>

@@ -18,7 +18,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Tel.Egram.Gui\Tel.Egram.Gui.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Application\Tel.Egram.Application.csproj" />
     <ProjectReference Include="..\Tel.Egram.Model\Tel.Egram.Model.csproj" />
     <ProjectReference Include="..\Tel.Egram.Services\Tel.Egram.Services.csproj" />
   </ItemGroup>

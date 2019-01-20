@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Tel.Egram.Application</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.7.1-build1258-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.7.1-build1258-beta" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.7.1-build1258-beta" />
+    <PackageReference Include="DynamicData" Version="6.6.1.2507" />
+    <PackageReference Include="ReactiveUI" Version="9.0.1" />
+    <PackageReference Include="System.Reactive" Version="4.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="**\*.txt" />
+    <EmbeddedResource Include="**\*.png" />
+    <EmbeddedResource Include="**\*.ttf" />
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="**\*.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tel.Egram.Model\Tel.Egram.Model.csproj" />
+    <ProjectReference Include="..\Tel.Egram.Views\Tel.Egram.Views.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources" />
+  </ItemGroup>
+</Project>

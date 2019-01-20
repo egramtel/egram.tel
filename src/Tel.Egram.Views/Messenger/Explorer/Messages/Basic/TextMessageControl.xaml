@@ -1,0 +1,15 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shared="clr-namespace:Tel.Egram.Views.Messenger.Explorer.Messages.Shared">
+
+    <shared:MessageControl>
+        
+        <TextBlock
+            Text="{Binding Text}"
+            Margin="0,0,16,0"
+            TextWrapping="Wrap"
+            VerticalAlignment="Center" />
+        
+    </shared:MessageControl>
+
+</UserControl>

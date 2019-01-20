@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram", "src\Tel.Egram\Tel.Egram.csproj", "{9E350FAF-4C2D-4E47-B6A7-FBBB72450418}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Gui", "src\Tel.Egram.Gui\Tel.Egram.Gui.csproj", "{563D970A-38C2-4C36-8252-667A0984F6BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tel.Egram.Application", "src\Tel.Egram.Application\Tel.Egram.Application.csproj", "{563D970A-38C2-4C36-8252-667A0984F6BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Model", "src\Tel.Egram.Model\Tel.Egram.Model.csproj", "{D532C829-670F-463A-BF6E-1557C0FCC33B}"
 EndProject
@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Services", "src\T
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{767B3FCF-751E-46FC-AF59-0949BA90EB74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Gui.Views", "src\Tel.Egram.Gui.Views\Tel.Egram.Gui.Views.csproj", "{E272E3DE-72EF-42BF-9E76-09C569A4BCE9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tel.Egram.Views", "src\Tel.Egram.Views\Tel.Egram.Views.csproj", "{E272E3DE-72EF-42BF-9E76-09C569A4BCE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

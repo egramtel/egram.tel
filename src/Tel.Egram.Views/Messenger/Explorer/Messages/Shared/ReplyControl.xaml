@@ -1,0 +1,60 @@
+﻿<ContentControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shared="clr-namespace:Tel.Egram.Views.Messenger.Explorer.Messages.Shared">
+    
+    <Border
+        DataContext="{Binding Reply}"
+        BorderThickness="2,0,0,0"
+        BorderBrush="#17a1e6"
+        Margin="0,6,0,0">
+        
+        <Grid
+            RowDefinitions="auto,auto"
+            ColumnDefinitions="auto,*">
+
+            <Border
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.RowSpan="2"
+                IsVisible="{Binding HasPreview}">
+                <Image
+                    Width="24"
+                    Height="24"
+                    Margin="6,0,6,0"
+                    DataContext="{Binding Preview}"
+                    Source="{Binding Bitmap}"/>
+            </Border>
+            
+            <Border
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="8,0,0,0"
+                VerticalAlignment="Center">
+
+                <TextBlock
+                    Text="{Binding AuthorName}"
+                    FontWeight="Medium"
+                    TextWrapping="Wrap"
+                    VerticalAlignment="Center" />
+
+            </Border>
+        
+            <Border
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="8,0,0,0">
+    
+                <TextBlock
+                    Text="{Binding Text}"
+                    Foreground="#666666"
+                    Margin="0,0,0,0"
+                    TextWrapping="NoWrap"
+                    VerticalAlignment="Center" />
+    
+            </Border>
+
+        </Grid>
+        
+    </Border>
+    
+</ContentControl>

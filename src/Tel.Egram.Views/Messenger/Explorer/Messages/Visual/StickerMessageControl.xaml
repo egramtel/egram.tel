@@ -1,0 +1,17 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shared="clr-namespace:Tel.Egram.Views.Messenger.Explorer.Messages.Shared">
+    
+    <shared:MessageControl>
+            
+        <Border
+            DataContext="{Binding Preview}">
+            <Image
+                MaxHeight="180"
+                Stretch="Uniform"
+                Source="{Binding Bitmap}" />
+        </Border>
+        
+    </shared:MessageControl>
+
+</UserControl>

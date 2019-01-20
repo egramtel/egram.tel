@@ -1,0 +1,86 @@
+﻿<ContentControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shared="clr-namespace:Tel.Egram.Views.Messenger.Explorer.Messages.Shared"
+    xmlns:shared1="clr-namespace:Tel.Egram.Views.Shared">
+    
+    <ContentControl.Styles>
+        
+        <Style Selector="shared|MessageControl">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    
+                    <Grid
+                        RowDefinitions="auto,auto,auto"
+                        ColumnDefinitions="auto,*,auto"
+                        Margin="8,0,8,0">
+        
+                        <shared1:AvatarControl
+                            DataContext="{Binding Avatar}"
+                            VerticalAlignment="Top"
+                            Margin="8,8,8,0"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.RowSpan="3"
+                            Source="{Binding Bitmap}"
+                            Color="{Binding Color}"
+                            TextColor="{Binding TextColor}"
+                            Text="{Binding Label}"
+                            Size="32" />
+        
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="0,8,0,0"
+                            VerticalAlignment="Center">
+            
+                            <TextBlock
+                                Text="{Binding AuthorName}"
+                                FontWeight="Medium"
+                                TextWrapping="Wrap"
+                                VerticalAlignment="Center" />
+            
+                        </Border>
+                        
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="8,8,8,0"
+                            VerticalAlignment="Center">
+                            
+                            <TextBlock
+                                Text="{Binding Time}"
+                                FontWeight="Light"
+                                FontSize="11"
+                                TextWrapping="Wrap"
+                                VerticalAlignment="Center" />
+                            
+                        </Border>
+                
+                        <shared:ReplyControl
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            Name="Reply"
+                            IsVisible="{Binding HasReply}" />
+                        
+                        <Border
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            Margin="0,6,0,0">
+                    
+                            <ContentPresenter
+                                Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}" />
+                    
+                        </Border>
+        
+                    </Grid>
+                    
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        
+    </ContentControl.Styles>
+        
+</ContentControl>

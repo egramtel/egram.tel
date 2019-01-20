@@ -1,0 +1,98 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui">
+    
+    <Grid
+        Width="516"
+        RowDefinitions="auto,auto"
+        >
+        
+        <TextBox
+            Grid.Row="0"
+            Watermark="Write a message"
+            Text="{Binding Text, Mode=TwoWay}"
+            />
+        
+        <Grid
+            Classes="ButtonContainer"
+            Grid.Row="1"
+            ColumnDefinitions="auto,auto,auto,*,auto"
+            >
+            
+            <Button
+                Classes="Send"
+                Grid.Column="0"
+                Command="{Binding SendCommand}"
+                >
+                <TextBlock Text="Send" />
+            </Button>
+            
+            <Button
+                Classes="Action"
+                Grid.Column="1"
+                >
+                <!-- <Image Source="resm:Tel.Egram.Application.Icons.image.png?assembly=Tel.Egram.Application" /> -->
+            </Button>
+            
+            <Button
+                Classes="Action"
+                Grid.Column="2"
+                >
+                <!-- <Image Source="resm:Tel.Egram.Application.Icons.file.png?assembly=Tel.Egram.Application" /> -->
+            </Button>
+            
+            <Panel
+                Grid.Column="3" />
+            
+            <Button
+                Classes="Action"
+                Grid.Column="4"
+                >
+                <Image Source="resm:Tel.Egram.Application.Icons.Dark.Mic32.png?assembly=Tel.Egram.Application" />
+            </Button>
+            
+        </Grid>
+        
+    </Grid>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="TextBox">
+            <Setter Property="BorderThickness" Value="0,1,0,0" />
+            <Setter Property="BorderBrush" Value="#d8d8d8" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="AcceptsReturn" Value="True" />
+        </Style>
+        
+        <Style Selector="Grid.ButtonContainer">
+            <Setter Property="Margin" Value="12,0,12,8" />
+        </Style>
+        
+        <Style Selector="Button.Send">
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Padding" Value="12,0,12,0"/>
+            <Setter Property="Margin" Value="0,0,16,0" />
+            <Setter Property="Background" Value="#17a1e6" />
+            <Setter Property="Foreground" Value="#ffffff" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        
+        <Style Selector="Button.Send /template/ ContentPresenter">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        
+        <Style Selector="Button.Action">
+            <Setter Property="Width" Value="22"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        
+        <Style Selector="Button Image">
+            <Setter Property="Width" Value="16" />
+            <Setter Property="Height" Value="16" />
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+        
+    </UserControl.Styles>
+        
+</UserControl>

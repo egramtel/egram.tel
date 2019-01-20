@@ -1,0 +1,83 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:basic="clr-namespace:Tel.Egram.Model.Messenger.Explorer.Messages.Basic;assembly=Tel.Egram.Model"
+    xmlns:visual="clr-namespace:Tel.Egram.Model.Messenger.Explorer.Messages.Visual;assembly=Tel.Egram.Model"
+    xmlns:model="clr-namespace:Tel.Egram.Model.Messenger.Explorer.Messages;assembly=Tel.Egram.Model"
+    xmlns:basic1="clr-namespace:Tel.Egram.Views.Messenger.Explorer.Messages.Basic"
+    xmlns:visual1="clr-namespace:Tel.Egram.Views.Messenger.Explorer.Messages.Visual"
+    xmlns:special="clr-namespace:Tel.Egram.Model.Messenger.Explorer.Messages.Special;assembly=Tel.Egram.Model"
+    xmlns:special1="clr-namespace:Tel.Egram.Views.Messenger.Explorer.Messages.Special">
+
+    <ListBox
+        Width="516"
+        Name="ItemList"
+        Grid.Row="1"
+        Items="{Binding Items}"
+        VirtualizationMode="None"
+        BorderThickness="0"
+        ScrollViewer.VerticalScrollBarVisibility="Visible"
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel VerticalAlignment="Bottom" />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        
+        <ListBox.DataTemplates>
+            
+            <DataTemplate DataType="{x:Type basic:TextMessageModel}">
+                <basic1:TextMessageControl />
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type visual:PhotoMessageModel}">
+                <visual1:PhotoMessageControl />
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type visual:VideoMessageModel}">
+                <visual1:VideoMessageControl />
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type visual:StickerMessageModel}">
+                <visual1:StickerMessageControl />
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type special:DocumentMessageModel}">
+                <special1:DocumentMessageControl />
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type model:UnsupportedMessageModel}">
+                <basic1:UnsupportedMessageControl />
+            </DataTemplate>
+            
+        </ListBox.DataTemplates>
+        
+    </ListBox>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="ListBox">
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        
+        <Style Selector="ListBoxItem">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0,4" />
+        </Style>
+        
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#444444" />
+        </Style>
+        
+    </UserControl.Styles>
+
+</UserControl>

@@ -1,0 +1,37 @@
+﻿<ContentControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shared="clr-namespace:Tel.Egram.Views.Shared">
+    
+    <ContentControl.Styles>
+        
+        <Style Selector="shared|AvatarControl">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    
+                    <Panel>
+            
+                        <Ellipse
+                            Width="{TemplateBinding Size}"
+                            Height="{TemplateBinding Size}"
+                            Fill="{TemplateBinding ColorBrush}" />
+            
+                        <TextBlock
+                            Text="{TemplateBinding Text}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="{TemplateBinding TextColorBrush}" />
+            
+                        <Ellipse
+                            Width="{TemplateBinding Size}"
+                            Height="{TemplateBinding Size}"
+                            Fill="{TemplateBinding SourceBrush}"/>
+            
+                    </Panel>
+                    
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        
+    </ContentControl.Styles>
+        
+</ContentControl>

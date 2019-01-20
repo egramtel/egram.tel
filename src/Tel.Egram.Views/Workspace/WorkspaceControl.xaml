@@ -1,0 +1,30 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:workspace="clr-namespace:Tel.Egram.Views.Workspace"
+    xmlns:settings="clr-namespace:Tel.Egram.Views.Settings"
+    xmlns:messenger="clr-namespace:Tel.Egram.Views.Messenger"
+    xmlns:navigation="clr-namespace:Tel.Egram.Views.Workspace.Navigation">
+    
+    <Grid
+        ColumnDefinitions="64,*"
+        RowDefinitions="*">
+    
+        <navigation:NavigationControl
+            DataContext="{Binding NavigationModel}"
+            Grid.Column="0" />
+        
+        <Carousel
+            Grid.Column="1"
+            SelectedIndex="{Binding ContentIndex}">
+            
+            <messenger:MessengerControl
+                DataContext="{Binding MessengerModel}" />
+            
+            <settings:SettingsControl
+                DataContext="{Binding SettingsModel}" />
+            
+        </Carousel>
+        
+    </Grid>
+    
+</UserControl>

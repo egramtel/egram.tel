@@ -1,0 +1,181 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:proxy="clr-namespace:Tel.Egram.Views.Popups.Proxy">
+    
+    <Grid
+        RowDefinitions="auto,auto,auto,auto,auto,auto">
+        
+        <ListBox
+            Items="{Binding Proxies}"
+            SelectedItem="{Binding SelectedProxy, Mode=TwoWay}"
+            Grid.Row="0">
+            
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <proxy:ProxyItemControl />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            
+        </ListBox>
+        
+        <Grid
+            ColumnDefinitions="auto,auto,*"
+            Grid.Row="1">
+            
+            <Button
+                Classes="Link"
+                Command="{Binding AddProxyCommand}"
+                Grid.Column="0">
+                <TextBlock Text="Add" />
+            </Button>
+            
+            <Button
+                Classes="Link"
+                Command="{Binding SaveProxyCommand}"
+                CommandParameter="{Binding SelectedProxy}"
+                Grid.Column="1">
+                <TextBlock Text="Save" />
+            </Button>
+            
+        </Grid>
+        
+        <Grid
+            ColumnDefinitions="*,*,*"
+            Grid.Row="2">
+            
+            <RadioButton
+                IsChecked="{Binding SelectedProxy.IsSocks5, Mode=TwoWay}"
+                IsEnabled="{Binding SelectedProxy.IsEditable}"
+                Grid.Column="0">
+                <TextBlock Text="Socks5" />
+            </RadioButton>
+            
+            <RadioButton
+                IsChecked="{Binding SelectedProxy.IsHttp, Mode=TwoWay}"
+                IsEnabled="{Binding SelectedProxy.IsEditable}"
+                Grid.Column="1">
+                <TextBlock Text="HTTP" />
+            </RadioButton>
+            
+            <RadioButton
+                IsChecked="{Binding SelectedProxy.IsMtProto, Mode=TwoWay}"
+                IsEnabled="{Binding SelectedProxy.IsEditable}"
+                Grid.Column="2">
+                <TextBlock Text="MTProto" />
+            </RadioButton>
+            
+        </Grid>
+        
+        <Grid
+            ColumnDefinitions="3*,8,1*"
+            Grid.Row="3">
+            
+            <TextBox
+                Grid.Column="0"
+                IsEnabled="{Binding SelectedProxy.IsEditable}"
+                IsVisible="{Binding SelectedProxy.IsServerInputVisible}"
+                Text="{Binding SelectedProxy.Server, Mode=TwoWay}"
+                Watermark="Server" />
+            
+            <TextBox
+                Grid.Column="2"
+                IsEnabled="{Binding SelectedProxy.IsEditable}"
+                IsVisible="{Binding SelectedProxy.IsServerInputVisible}"
+                Text="{Binding SelectedProxy.Port, Mode=TwoWay}"
+                Watermark="Port" />
+            
+        </Grid>
+        
+        <TextBox
+            IsEnabled="{Binding SelectedProxy.IsEditable}"
+            IsVisible="{Binding SelectedProxy.IsSecretInputVisible}"
+            Watermark="Secret"
+            Text="{Binding SelectedProxy.Secret, Mode=TwoWay}"
+            Grid.Row="4" />
+        
+        <TextBox
+            IsEnabled="{Binding SelectedProxy.IsEditable}"
+            IsVisible="{Binding SelectedProxy.IsUsernameInputVisible}"
+            Watermark="Username (optional)"
+            Text="{Binding SelectedProxy.Username, Mode=TwoWay}"
+            Grid.Row="4" />
+        
+        <TextBox
+            IsEnabled="{Binding SelectedProxy.IsEditable}"
+            IsVisible="{Binding SelectedProxy.IsPasswordInputVisible}"
+            Watermark="Password (optional)"
+            Text="{Binding SelectedProxy.Password, Mode=TwoWay}"
+            Grid.Row="5" />
+        
+    </Grid>
+    
+    <UserControl.Styles>
+        
+        <Style Selector="ListBox">
+            <Setter Property="Height" Value="100" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#727985" />
+        </Style>
+        
+        <Style Selector="ListBox CheckBox">
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+        
+        <Style Selector="Button">
+            <Setter Property="MinWidth" Value="26" />
+            <Setter Property="Height" Value="26" />
+            <Setter Property="Margin" Value="0,8,8,0" />
+            <Setter Property="Background" Value="#5195e1" />
+            <Setter Property="Foreground" Value="#ffffff" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        
+        <Style Selector="Button /template/ ContentPresenter">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        
+        <Style Selector="Button Image">
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+        </Style>
+        
+        <Style Selector="Button TextBlock">
+            <Setter Property="Margin" Value="10,0" />
+        </Style>
+        
+        <Style Selector="Button.Link">
+            <Setter Property="Margin" Value="0,8,0,0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        
+        <Style Selector="Button.Link TextBlock">
+            <Setter Property="Foreground" Value="#5195e1" />
+        </Style>
+        
+        <Style Selector="RadioButton">
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Margin" Value="0,16,0,0" />
+        </Style>
+        
+        <Style Selector="CheckBox">
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+        
+        <Style Selector="TextBox">
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Margin" Value="0,8,0,0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#727985" />
+        </Style>
+        
+        <Style Selector="TextBox /template/ Border">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        
+    </UserControl.Styles>
+    
+</UserControl>

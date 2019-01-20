@@ -5,7 +5,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Splat;
 using TdLib;
-using Tel.Egram.Gui;
+using Tel.Egram.Application;
 using Tel.Egram.Model.Messenger.Catalog;
 using Tel.Egram.Model.Messenger.Explorer;
 using Tel.Egram.Model.Messenger.Explorer.Factories;

@@ -55,10 +55,10 @@ namespace Tel.Egram.Model.Authentication.Phone
 
         private IBitmap GetFlag(IAssetLoader assetLoader, string countryCode)
         {
-            var uri = new Uri($"resm:Tel.Egram.Gui.Images.Flags.{countryCode}.png?assembly=Tel.Egram.Gui");
+            var uri = new Uri($"resm:Tel.Egram.Application.Images.Flags.{countryCode}.png?assembly=Tel.Egram.Application");
             if (!assetLoader.Exists(uri))
             {
-                uri = new Uri($"resm:Tel.Egram.Gui.Images.Flags._unknown.png?assembly=Tel.Egram.Gui");
+                uri = new Uri($"resm:Tel.Egram.Application.Images.Flags._unknown.png?assembly=Tel.Egram.Application");
             }
 
             using (var stream = assetLoader.Open(uri))

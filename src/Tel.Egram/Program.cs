@@ -3,8 +3,8 @@ using Avalonia;
 using Avalonia.Gtk3;
 using Avalonia.Platform;
 using Splat;
-using Tel.Egram.Gui;
-using Tel.Egram.Gui.Views.Application;
+using Tel.Egram.Application;
+using Tel.Egram.Views.Application;
 using Tel.Egram.Model.Application;
 
 namespace Tel.Egram
