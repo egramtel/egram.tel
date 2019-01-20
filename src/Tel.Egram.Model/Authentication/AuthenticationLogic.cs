@@ -36,7 +36,7 @@ namespace Tel.Egram.Model.Authentication
                 .Select(password => !string.IsNullOrWhiteSpace(password));
             
             model.SendCodeCommand = ReactiveCommand.CreateFromObservable(
-                (AuthenticationModel m) => SendCode(authenticator, m.PhoneNumber),
+                (AuthenticationModel m) => SendCode(authenticator, m.PhoneCode.Code + m.PhoneNumber),
                 canSendCode,
                 RxApp.MainThreadScheduler);
 

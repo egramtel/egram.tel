@@ -11,6 +11,7 @@
     <PackageReference Include="System.Reactive" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="**\*.txt" />
     <EmbeddedResource Include="**\*.png" />
     <EmbeddedResource Include="**\*.ttf" />
     <Compile Update="**\*.xaml.cs">
@@ -23,5 +24,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Tel.Egram.Gui.Views\Tel.Egram.Gui.Views.csproj" />
     <ProjectReference Include="..\Tel.Egram.Model\Tel.Egram.Model.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources" />
   </ItemGroup>
 </Project>

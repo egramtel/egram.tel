@@ -68,6 +68,9 @@ namespace Tel.Egram
         
         public static void AddPersistance(this IMutableDependencyResolver services)
         {
+            services.RegisterLazySingleton<IResourceManager>(
+                () => new ResourceManager(typeof(MainApplication).Assembly));
+            
             services.RegisterLazySingleton<IStorage>(() => new Storage());
             
             services.RegisterLazySingleton<IFileLoader>(() =>

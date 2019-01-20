@@ -17,4 +17,9 @@
         <Setter Property="FontSize" Value="13" />
     </Style>
     
+    <Style Selector="DropDown">
+        <Setter Property="FontFamily" Value="{StaticResource RobotoFontFamily}" />
+        <Setter Property="FontSize" Value="13" />
+    </Style>
+    
 </Styles>

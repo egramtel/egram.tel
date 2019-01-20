@@ -1,7 +1,9 @@
 using System.Reactive;
 using System.Reactive.Disposables;
+using DynamicData.Binding;
 using PropertyChanged;
 using ReactiveUI;
+using Tel.Egram.Model.Authentication.Phone;
 using Tel.Egram.Model.Authentication.Results;
 
 namespace Tel.Egram.Model.Authentication
@@ -20,6 +22,9 @@ namespace Tel.Egram.Model.Authentication
         public int PasswordIndex { get; set; }
         public int ConfirmIndex { get; set; }
         
+        public ObservableCollectionExtended<PhoneCodeModel> PhoneCodes { get; set; }
+        public PhoneCodeModel PhoneCode { get; set; }
+        
         public string PhoneNumber { get; set; }
         public string ConfirmCode { get; set; }
         public string FirstName { get; set; }
@@ -30,6 +35,10 @@ namespace Tel.Egram.Model.Authentication
         {
             this.WhenActivated(disposables =>
             {
+                new PhoneCodeLoader()
+                    .Bind(this)
+                    .DisposeWith(disposables);
+
                 this.BindAuthentication()
                     .DisposeWith(disposables);
 
