@@ -41,7 +41,7 @@ namespace Tel.Egram.Gui.Views.Application
                         window.Show();
                         
                         window.DataContext = model;
-                        window.Position = new Point(
+                        window.Position = new PixelPoint(
                             GetXForNotification(platform, screen.Bounds, window.Bounds),
                             GetYForNotification(platform, screen.Bounds, window.Bounds));
                     });
@@ -50,25 +50,25 @@ namespace Tel.Egram.Gui.Views.Application
             return Disposable.Empty;
         }
 
-        private static double GetXForNotification(IPlatform platform, Rect outer, Rect inner)
+        private static int GetXForNotification(IPlatform platform, PixelRect outer, Rect inner)
         {
             switch (platform)
             {
                 //case WindowsPlatform _:
                 //    return outer.Width - inner.Width;
                 default:
-                    return outer.Width - inner.Width;
+                    return outer.Width - (int)inner.Width;
             }
         }
 
-        private static double GetYForNotification(IPlatform platform, Rect outer, Rect inner)
+        private static int GetYForNotification(IPlatform platform, PixelRect outer, Rect inner)
         {
             switch (platform)
             {
                 //case WindowsPlatform _:
                 //    return outer.Height - inner.Height;
                 default:
-                    return 0.0;
+                    return 0;
             }
         }
     }
