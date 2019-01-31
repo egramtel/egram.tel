@@ -45,12 +45,12 @@ namespace Tel.Egram.Model.Messenger.Explorer.Messages
         {
             if (entry.Message?.UserData != null)
             {
-                return avatarLoader.GetAvatar(entry.Message.UserData);
+                return avatarLoader.GetAvatar(entry.Message.UserData, AvatarSize.Regular);
             }
 
             if (entry.Message?.ChatData != null)
             {
-                return avatarLoader.GetAvatar(entry.Message.ChatData);
+                return avatarLoader.GetAvatar(entry.Message.ChatData, AvatarSize.Regular);
             }
             
             return null;
@@ -60,12 +60,12 @@ namespace Tel.Egram.Model.Messenger.Explorer.Messages
         {
             if (entry.Message?.UserData != null)
             {
-                return avatarLoader.LoadAvatar(entry.Message.UserData);
+                return avatarLoader.LoadAvatar(entry.Message.UserData, AvatarSize.Regular);
             }
 
             if (entry.Message?.ChatData != null)
             {
-                return avatarLoader.LoadAvatar(entry.Message.ChatData);
+                return avatarLoader.LoadAvatar(entry.Message.ChatData, AvatarSize.Regular);
             }
             
             return Observable.Empty<Avatar>();

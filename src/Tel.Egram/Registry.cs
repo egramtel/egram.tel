@@ -123,11 +123,15 @@ namespace Tel.Egram
             
             services.RegisterLazySingleton<IAvatarLoader>(() =>
             {
+                var platform = services.GetService<IPlatform>();
+                var storage = services.GetService<IStorage>();
                 var fileLoader = services.GetService<IFileLoader>();
                 var avatarCache = services.GetService<IAvatarCache>();
                 var colorMapper = services.GetService<IColorMapper>();
                 
                 return new AvatarLoader(
+                    platform,
+                    storage,
                     fileLoader,
                     avatarCache,
                     colorMapper);

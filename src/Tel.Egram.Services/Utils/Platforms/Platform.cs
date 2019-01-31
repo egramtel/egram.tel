@@ -18,5 +18,7 @@ namespace Tel.Egram.Services.Utils.Platforms
             
             throw new NotSupportedException("OS is not supported");
         }
+
+        public virtual int PixelDensity => 1;
     }
 }

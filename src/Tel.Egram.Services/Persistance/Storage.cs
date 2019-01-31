@@ -20,6 +20,9 @@ namespace Tel.Egram.Services.Persistance
             CacheDirectory = Path.Combine(BaseDirectory, "cache");
             Directory.CreateDirectory(CacheDirectory);
 
+            AvatarCacheDirectory = Path.Combine(CacheDirectory, "avatars");
+            Directory.CreateDirectory(AvatarCacheDirectory);
+
             DataDirectory = Path.Combine(CacheDirectory, "data");
             Directory.CreateDirectory(DataDirectory);
             
@@ -37,7 +40,9 @@ namespace Tel.Egram.Services.Persistance
         public string TdLibDirectory { get; }
         
         public string CacheDirectory { get; }
-        
+
+        public string AvatarCacheDirectory { get; }
+
         public string DataDirectory { get; }
         
         public string DatabaseFile { get; }

@@ -26,7 +26,7 @@ namespace Tel.Egram.Model.Workspace.Navigation
         {
             return userLoader
                 .GetMe()
-                .SelectMany(user => avatarLoader.LoadAvatar(user.UserData))
+                .SelectMany(user => avatarLoader.LoadAvatar(user.UserData, AvatarSize.Regular))
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Accept(avatar =>

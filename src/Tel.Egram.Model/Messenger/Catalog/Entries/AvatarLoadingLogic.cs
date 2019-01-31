@@ -44,13 +44,14 @@ namespace Tel.Egram.Model.Messenger.Catalog.Entries
             switch (entry)
             {
                 case ChatEntryModel chatEntryModel:
-                    return avatarLoader.GetAvatar(chatEntryModel.Chat.ChatData);
+                    return avatarLoader.GetAvatar(chatEntryModel.Chat.ChatData, AvatarSize.Small);
                 
                 case AggregateEntryModel aggregateEntryModel:
                     return avatarLoader.GetAvatar(new TdApi.Chat
-                    {
-                        Id = aggregateEntryModel.Aggregate.Id
-                    });
+                        {
+                            Id = aggregateEntryModel.Aggregate.Id
+                        },
+                        AvatarSize.Small);
             }
 
             return null;
@@ -61,13 +62,14 @@ namespace Tel.Egram.Model.Messenger.Catalog.Entries
             switch (entry)
             {
                 case ChatEntryModel chatEntryModel:
-                    return avatarLoader.LoadAvatar(chatEntryModel.Chat.ChatData);
+                    return avatarLoader.LoadAvatar(chatEntryModel.Chat.ChatData, AvatarSize.Small);
                 
                 case AggregateEntryModel aggregateEntryModel:
                     return avatarLoader.LoadAvatar(new TdApi.Chat
-                    {
-                        Id = aggregateEntryModel.Aggregate.Id
-                    });
+                        {
+                            Id = aggregateEntryModel.Aggregate.Id
+                        },
+                        AvatarSize.Small);
             }
             
             return Observable.Empty<Avatar>();

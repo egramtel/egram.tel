@@ -39,7 +39,7 @@ namespace Tel.Egram.Model.Messenger.Informer
             model.Title = chat.ChatData.Title;
             model.Label = chat.ChatData.Title;
                     
-            return avatarLoader.LoadAvatar(chat.ChatData)
+            return avatarLoader.LoadAvatar(chat.ChatData, AvatarSize.Regular)
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Accept(avatar =>

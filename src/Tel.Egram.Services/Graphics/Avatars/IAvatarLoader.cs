@@ -5,9 +5,9 @@ namespace Tel.Egram.Services.Graphics.Avatars
 {
     public interface IAvatarLoader
     {
-        Avatar GetAvatar(TdApi.User user, bool forceFallback = false);
-        Avatar GetAvatar(TdApi.Chat chat, bool forceFallback = false);
-        IObservable<Avatar> LoadAvatar(TdApi.User user);
-        IObservable<Avatar> LoadAvatar(TdApi.Chat chat);
+        Avatar GetAvatar(TdApi.User user, AvatarSize size, bool forceFallback = false);
+        Avatar GetAvatar(TdApi.Chat chat, AvatarSize size, bool forceFallback = false);
+        IObservable<Avatar> LoadAvatar(TdApi.User user, AvatarSize size);
+        IObservable<Avatar> LoadAvatar(TdApi.Chat chat, AvatarSize size);
     }
 }
