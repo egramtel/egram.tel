@@ -4,45 +4,75 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
 using ReactiveUI;
+using Splat;
 using Tel.Egram.Model.Messenger.Catalog.Entries;
 using Tel.Egram.Services.Messaging.Chats;
 using Tel.Egram.Services.Utils.Reactive;
 
 namespace Tel.Egram.Model.Messenger.Catalog
 {
-    public class CatalogProvider : ICatalogProvider, IDisposable
+    public class CatalogProvider
     {
-        private readonly CompositeDisposable _serviceDisposable = new CompositeDisposable();
+        private readonly IChatLoader _chatLoader;
+        private readonly IChatUpdater _chatUpdater;
 
         private readonly Dictionary<long, EntryModel> _entryStore;
         private readonly SourceCache<EntryModel, long> _chats;
-        public IObservableCache<EntryModel, long> Chats => _chats;
 
         public CatalogProvider(
             IChatLoader chatLoader,
             IChatUpdater chatUpdater
             )
         {
+            _chatLoader = chatLoader;
+            _chatUpdater = chatUpdater;
+            
             _entryStore = new Dictionary<long, EntryModel>();
             _chats = new SourceCache<EntryModel, long>(m => m.Id);
+        }
+
+        public CatalogProvider()
+            : this(
+                Locator.Current.GetService<IChatLoader>(),
+                Locator.Current.GetService<IChatUpdater>())
+        {
+        }
+
+        public IDisposable Bind(CatalogModel model)
+        {
+            var entries = model.Entries;
+            var filter = model.FilterController;
+            var sorting = model.SortingController;
             
-            LoadChats(chatLoader)
-                .DisposeWith(_serviceDisposable);
+            var disposable = new CompositeDisposable();
+
+            _chats.Connect()
+                .Filter(filter)
+                .Sort(sorting)
+                .SubscribeOn(RxApp.TaskpoolScheduler)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(entries)
+                .Accept()
+                .DisposeWith(disposable);
             
-            BindOrderUpdates(chatLoader, chatUpdater)
-                .DisposeWith(_serviceDisposable);
+            LoadChats()
+                .DisposeWith(disposable);
             
-            BindEntryUpdates(chatLoader, chatUpdater)
-                .DisposeWith(_serviceDisposable);
+            BindOrderUpdates()
+                .DisposeWith(disposable);
+            
+            BindEntryUpdates()
+                .DisposeWith(disposable);
+
+            return disposable;
         }
 
         /// <summary>
         /// Load chats into observable cache
         /// </summary>
-        private IDisposable LoadChats(
-            IChatLoader chatLoader)
+        private IDisposable LoadChats()
         {
-            return chatLoader.LoadChats()
+            return _chatLoader.LoadChats()
                 .Select(GetChatEntryModel)
                 .Aggregate(new List<EntryModel>(), (list, model) =>
                 {
@@ -61,32 +91,35 @@ namespace Tel.Egram.Model.Messenger.Catalog
         /// <summary>
         /// Subscribe to updates that involve order change
         /// </summary>
-        private IDisposable BindOrderUpdates(
-            IChatLoader chatLoader,
-            IChatUpdater chatUpdater)
+        private IDisposable BindOrderUpdates()
         {
-            return chatUpdater.GetOrderUpdates()
+            return _chatUpdater.GetOrderUpdates()
                 .Buffer(TimeSpan.FromSeconds(1))
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Accept(changes =>
+                .Where(changes => changes.Count > 0)
+                .SelectSeq(_ => _chatLoader.LoadChats())
+                .Select(GetChatEntryModel)
+                .Aggregate(new List<EntryModel>(), (list, model) =>
                 {
-                    if (changes.Count > 0)
-                    {
-                        LoadChats(chatLoader)
-                            .DisposeWith(_serviceDisposable);
-                    }
+                    model.Order = list.Count;
+                    list.Add(model);
+                    return list;
+                })
+                .Synchronize(_chats)
+                .Accept(entries =>
+                {
+                    _chats.EditDiff(entries, (m1, m2) => m1.Id == m2.Id);
+                    _chats.Refresh();
                 });
         }
 
         /// <summary>
         /// Subscribe to updates for individual entries
         /// </summary>
-        private IDisposable BindEntryUpdates(
-            IChatLoader chatLoader,
-            IChatUpdater chatUpdater)
+        private IDisposable BindEntryUpdates()
         {
-            return chatUpdater.GetChatUpdates()
+            return _chatUpdater.GetChatUpdates()
                 .Buffer(TimeSpan.FromSeconds(1))
                 .SelectMany(chats => chats)
                 .Select(chat => new
@@ -127,11 +160,6 @@ namespace Tel.Egram.Model.Messenger.Catalog
             entry.Title = chatData.Title;
             entry.HasUnread = chatData.UnreadCount > 0;
             entry.UnreadCount = chatData.UnreadCount.ToString();
-        }
-
-        public void Dispose()
-        {
-            _serviceDisposable.Dispose();
         }
     }
 }

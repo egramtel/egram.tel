@@ -271,18 +271,7 @@ namespace Tel.Egram
         }
         
         public static void AddMessenger(this IMutableDependencyResolver services)
-        {
-            // catalog
-            services.RegisterLazySingleton<ICatalogProvider>(() =>
-            {
-                var chatLoader = services.GetService<IChatLoader>();
-                var chatUpdater = services.GetService<IChatUpdater>();
-                
-                return new CatalogProvider(
-                    chatLoader,
-                    chatUpdater);
-            });
-            
+        {   
             // messenger
             services.RegisterLazySingleton<IBasicMessageModelFactory>(() =>
             {
