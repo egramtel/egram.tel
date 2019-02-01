@@ -24,10 +24,10 @@ namespace Tel.Egram.Model.Messenger
             INotificationSource notificationSource,
             INotificationController notificationController)
         {
-            var chats = notificationSource.ChatNotifications();
+            //var chats = notificationSource.ChatNotifications();
             var messages = notificationSource.MessagesNotifications();
 
-            return chats.Merge(messages)
+            return messages // .Merge(chats)
                 .Buffer(TimeSpan.FromSeconds(2))
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)

@@ -80,7 +80,6 @@ namespace Tel.Egram.Model.Messenger.Catalog
                     list.Add(model);
                     return list;
                 })
-                .Synchronize(_chats)
                 .Accept(entries =>
                 {
                     _chats.EditDiff(entries, (m1, m2) => m1.Id == m2.Id);
@@ -106,7 +105,6 @@ namespace Tel.Egram.Model.Messenger.Catalog
                     list.Add(model);
                     return list;
                 })
-                .Synchronize(_chats)
                 .Accept(entries =>
                 {
                     _chats.EditDiff(entries, (m1, m2) => m1.Id == m2.Id);

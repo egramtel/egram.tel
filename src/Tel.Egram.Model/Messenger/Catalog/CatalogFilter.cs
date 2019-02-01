@@ -42,20 +42,20 @@ namespace Tel.Egram.Model.Messenger.Catalog
             switch (section)
             {
                 case Section.Bots:
-                    return CatalogFilter.BotFilter;
+                    return BotFilter;
                 
                 case Section.Channels:
-                    return CatalogFilter.ChannelFilter;
+                    return ChannelFilter;
                 
                 case Section.Groups:
-                    return CatalogFilter.GroupFilter;
+                    return GroupFilter;
                 
                 case Section.Directs:
-                    return CatalogFilter.DirectFilter;
+                    return DirectFilter;
                 
                 case Section.Home:
                 default:
-                    return CatalogFilter.All;
+                    return All;
             }
         }
 
