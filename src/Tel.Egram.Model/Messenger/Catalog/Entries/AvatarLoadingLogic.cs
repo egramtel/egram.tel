@@ -43,6 +43,11 @@ namespace Tel.Egram.Model.Messenger.Catalog.Entries
         {
             switch (entry)
             {
+                case HomeEntryModel _:
+                    return avatarLoader.GetAvatar(
+                        AvatarKind.Home,
+                        AvatarSize.Small);
+                
                 case ChatEntryModel chatEntryModel:
                     return avatarLoader.GetAvatar(chatEntryModel.Chat.ChatData, AvatarSize.Small);
                 
@@ -61,6 +66,11 @@ namespace Tel.Egram.Model.Messenger.Catalog.Entries
         {   
             switch (entry)
             {
+                case HomeEntryModel _:
+                    return avatarLoader.LoadAvatar(
+                        AvatarKind.Home,
+                        AvatarSize.Small);
+                
                 case ChatEntryModel chatEntryModel:
                     return avatarLoader.LoadAvatar(chatEntryModel.Chat.ChatData, AvatarSize.Small);
                 

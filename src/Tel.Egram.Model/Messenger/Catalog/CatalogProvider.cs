@@ -76,12 +76,15 @@ namespace Tel.Egram.Model.Messenger.Catalog
                 .Select(GetChatEntryModel)
                 .Aggregate(new List<EntryModel>(), (list, model) =>
                 {
-                    model.Order = list.Count;
                     list.Add(model);
+                    model.Order = list.Count;
                     return list;
                 })
                 .Accept(entries =>
                 {
+                    var homeEntryModel = GetHomeEntryModel();
+                    entries.Insert(0, homeEntryModel);
+                    
                     _chats.EditDiff(entries, (m1, m2) => m1.Id == m2.Id);
                     _chats.Refresh();
                 });
@@ -104,11 +107,14 @@ namespace Tel.Egram.Model.Messenger.Catalog
                 {
                     for (int i = 0; i < entries.Count; i++)
                     {
-                        entries[i].Order = i;
+                        entries[i].Order = i + 1;
                     }
                 })
                 .Accept(entries =>
                 {
+                    var homeEntryModel = GetHomeEntryModel();
+                    entries.Insert(0, homeEntryModel);
+                    
                     _chats.EditDiff(entries, (m1, m2) => m1.Id == m2.Id);
                     _chats.Refresh();
                 });
@@ -131,6 +137,16 @@ namespace Tel.Egram.Model.Messenger.Catalog
                 {
                     UpdateChatEntryModel((ChatEntryModel)item.Entry, item.Chat);
                 });
+        }
+
+        private EntryModel GetHomeEntryModel()
+        {
+            return new HomeEntryModel
+            {
+                Id = 0,
+                Title = "Home",
+                Order = 0
+            };
         }
 
         private EntryModel GetChatEntryModel(Chat chat)

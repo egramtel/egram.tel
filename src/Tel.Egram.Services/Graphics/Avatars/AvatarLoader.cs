@@ -49,28 +49,43 @@ namespace Tel.Egram.Services.Graphics.Avatars
             _locker = new object();
         }
 
-        public Avatar GetAvatar(TdApi.User user, AvatarSize size, bool forceFallback = false)
+        public Avatar GetAvatar(AvatarKind kind, AvatarSize size)
+        {
+            return new Avatar
+            {
+                Bitmap = null,
+                Color = GetColor(kind),
+                Label = GetLabel(kind)
+            };
+        }
+
+        public Avatar GetAvatar(TdApi.User user, AvatarSize size)
         {
             int s = _platform.PixelDensity * (int) size;
             
             return new Avatar
             {
-                Bitmap = forceFallback ? null : GetBitmap(user.ProfilePhoto?.Small, s),
+                Bitmap = GetBitmap(user.ProfilePhoto?.Small, s),
                 Color = GetColor(user),
                 Label = GetLabel(user)
             };
         }
 
-        public Avatar GetAvatar(TdApi.Chat chat, AvatarSize size, bool forceFallback = false)
+        public Avatar GetAvatar(TdApi.Chat chat, AvatarSize size)
         {
             int s = _platform.PixelDensity * (int) size;
             
             return new Avatar
             {
-                Bitmap = forceFallback ? null : GetBitmap(chat.Photo?.Small, s),
+                Bitmap = GetBitmap(chat.Photo?.Small, s),
                 Color = GetColor(chat),
                 Label = GetLabel(chat)
             };
+        }
+
+        public IObservable<Avatar> LoadAvatar(AvatarKind kind, AvatarSize size)
+        {
+            return Observable.Return(GetAvatar(kind, size));
         }
 
         public IObservable<Avatar> LoadAvatar(TdApi.User user, AvatarSize size)
@@ -99,6 +114,17 @@ namespace Tel.Egram.Services.Graphics.Avatars
                 });
         }
 
+        private string GetLabel(AvatarKind kind)
+        {
+            switch (kind)
+            {
+                case AvatarKind.Home:
+                    return "@";
+                default:
+                    return "";
+            }
+        }
+        
         private string GetLabel(TdApi.Chat chat)
         {
             var title = chat.Title;
@@ -123,6 +149,11 @@ namespace Tel.Egram.Services.Graphics.Avatars
             }
 
             return null;
+        }
+
+        private Color GetColor(AvatarKind kind)
+        {
+            return Color.Parse("#" + _colorMapper[(int)kind]);
         }
 
         private Color GetColor(TdApi.User user)
