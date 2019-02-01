@@ -80,8 +80,8 @@
         </Style>
         
         <Style Selector="Button Ellipse">
-            <Setter Property="Width" Value="20" />
-            <Setter Property="Height" Value="20" />
+            <Setter Property="Width" Value="22" />
+            <Setter Property="Height" Value="22" />
             <Setter Property="Fill" Value="#cccccc" />
         </Style>
         

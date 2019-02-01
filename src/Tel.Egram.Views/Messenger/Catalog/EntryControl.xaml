@@ -16,13 +16,13 @@
             Color="{Binding Color}"
             TextColor="{Binding TextColor}"
             Text="{Binding Label}"
-            Size="22"
+            Size="24"
             Margin="3,0,0,0"/>
 
         <Panel
             Classes="Title"
             Grid.Column="1"
-            Height="22"
+            Height="24"
             VerticalAlignment="Center">
 
             <TextBlock
@@ -35,7 +35,7 @@
         <Panel
             Classes="Indicator"
             Grid.Column="2"
-            Height="22"
+            Height="24"
             VerticalAlignment="Center">
             
             <Border

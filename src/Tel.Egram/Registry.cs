@@ -1,3 +1,4 @@
+using System.IO;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +42,11 @@ namespace Tel.Egram
         {
             services.RegisterLazySingleton(() =>
             {
-                Client.Log.SetVerbosityLevel(1);
+                var storage = services.GetService<IStorage>();
+                
+                Client.Log.SetFilePath(Path.Combine(storage.LogDirectory, "tdlib.log"));
+                Client.Log.SetMaxFileSize(1_000_000); // 1MB
+                Client.Log.SetVerbosityLevel(5);
                 return new Client();
             });
 
