@@ -46,6 +46,9 @@ namespace Tel.Egram.Model.Messenger.Catalog
             
             var disposable = new CompositeDisposable();
 
+            LoadHome(model)
+                .DisposeWith(disposable);
+            
             _chats.Connect()
                 .Filter(filter)
                 .Sort(sorting)
@@ -68,6 +71,19 @@ namespace Tel.Egram.Model.Messenger.Catalog
         }
 
         /// <summary>
+        /// Load home
+        /// </summary>
+        private IDisposable LoadHome(CatalogModel model)
+        {
+            model.Entries.Add(HomeEntryModel.Instance);
+            model.SelectedEntry = HomeEntryModel.Instance;
+            
+            _chats.AddOrUpdate(HomeEntryModel.Instance);
+            
+            return Disposable.Empty;
+        }
+
+        /// <summary>
         /// Load chats into observable cache
         /// </summary>
         private IDisposable LoadChats()
@@ -76,14 +92,13 @@ namespace Tel.Egram.Model.Messenger.Catalog
                 .Select(GetChatEntryModel)
                 .Aggregate(new List<EntryModel>(), (list, model) =>
                 {
-                    list.Add(model);
                     model.Order = list.Count;
+                    list.Add(model);
                     return list;
                 })
                 .Accept(entries =>
                 {
-                    var homeEntryModel = GetHomeEntryModel();
-                    entries.Insert(0, homeEntryModel);
+                    entries.Insert(0, HomeEntryModel.Instance);
                     
                     _chats.EditDiff(entries, (m1, m2) => m1.Id == m2.Id);
                     _chats.Refresh();
@@ -107,13 +122,12 @@ namespace Tel.Egram.Model.Messenger.Catalog
                 {
                     for (int i = 0; i < entries.Count; i++)
                     {
-                        entries[i].Order = i + 1;
+                        entries[i].Order = i;
                     }
                 })
                 .Accept(entries =>
                 {
-                    var homeEntryModel = GetHomeEntryModel();
-                    entries.Insert(0, homeEntryModel);
+                    entries.Insert(0, HomeEntryModel.Instance);
                     
                     _chats.EditDiff(entries, (m1, m2) => m1.Id == m2.Id);
                     _chats.Refresh();
@@ -137,16 +151,6 @@ namespace Tel.Egram.Model.Messenger.Catalog
                 {
                     UpdateChatEntryModel((ChatEntryModel)item.Entry, item.Chat);
                 });
-        }
-
-        private EntryModel GetHomeEntryModel()
-        {
-            return new HomeEntryModel
-            {
-                Id = 0,
-                Title = "Home",
-                Order = 0
-            };
         }
 
         private EntryModel GetChatEntryModel(Chat chat)
