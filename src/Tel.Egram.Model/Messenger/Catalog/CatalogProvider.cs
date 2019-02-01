@@ -55,13 +55,13 @@ namespace Tel.Egram.Model.Messenger.Catalog
                 .Accept()
                 .DisposeWith(disposable);
             
-            LoadChats()
-                .DisposeWith(disposable);
-            
             BindOrderUpdates()
                 .DisposeWith(disposable);
             
             BindEntryUpdates()
+                .DisposeWith(disposable);
+            
+            LoadChats()
                 .DisposeWith(disposable);
 
             return disposable;
@@ -93,17 +93,19 @@ namespace Tel.Egram.Model.Messenger.Catalog
         private IDisposable BindOrderUpdates()
         {
             return _chatUpdater.GetOrderUpdates()
-                .Buffer(TimeSpan.FromSeconds(1))
+                .Buffer(TimeSpan.FromSeconds(2))
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Where(changes => changes.Count > 0)
-                .SelectSeq(_ => _chatLoader.LoadChats())
-                .Select(GetChatEntryModel)
-                .Aggregate(new List<EntryModel>(), (list, model) =>
+                .SelectMany(_ => _chatLoader.LoadChats()
+                    .Select(GetChatEntryModel)
+                    .ToList())
+                .Do(entries =>
                 {
-                    model.Order = list.Count;
-                    list.Add(model);
-                    return list;
+                    for (int i = 0; i < entries.Count; i++)
+                    {
+                        entries[i].Order = i;
+                    }
                 })
                 .Accept(entries =>
                 {

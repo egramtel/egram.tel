@@ -32,12 +32,12 @@ namespace Tel.Egram.Model.Messenger.Catalog
         {
             this.WhenActivated(disposables =>
             {
-                new CatalogProvider()
-                    .Bind(this)
-                    .DisposeWith(disposables);
-                
                 new CatalogFilter()
                     .Bind(this, section)
+                    .DisposeWith(disposables);
+                
+                new CatalogProvider()
+                    .Bind(this)
                     .DisposeWith(disposables);
             });
         }
