@@ -37,7 +37,7 @@ namespace Tel.Egram.Model.Messenger.Catalog
                     .DisposeWith(disposables);
                 
                 new CatalogProvider()
-                    .Bind(this)
+                    .Bind(this, section)
                     .DisposeWith(disposables);
             });
         }

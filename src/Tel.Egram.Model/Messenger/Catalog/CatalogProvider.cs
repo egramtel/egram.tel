@@ -38,7 +38,7 @@ namespace Tel.Egram.Model.Messenger.Catalog
         {
         }
 
-        public IDisposable Bind(CatalogModel model)
+        public IDisposable Bind(CatalogModel model, Section section)
         {
             var entries = model.Entries;
             var filter = model.FilterController;
@@ -46,7 +46,7 @@ namespace Tel.Egram.Model.Messenger.Catalog
             
             var disposable = new CompositeDisposable();
 
-            LoadHome(model)
+            LoadHome(model, section)
                 .DisposeWith(disposable);
             
             _chats.Connect()
@@ -73,12 +73,15 @@ namespace Tel.Egram.Model.Messenger.Catalog
         /// <summary>
         /// Load home
         /// </summary>
-        private IDisposable LoadHome(CatalogModel model)
+        private IDisposable LoadHome(CatalogModel model, Section section)
         {
-            model.Entries.Add(HomeEntryModel.Instance);
-            model.SelectedEntry = HomeEntryModel.Instance;
+            if (section == Section.Home)
+            {
+                model.Entries.Add(HomeEntryModel.Instance);
+                model.SelectedEntry = HomeEntryModel.Instance;
             
-            _chats.AddOrUpdate(HomeEntryModel.Instance);
+                _chats.AddOrUpdate(HomeEntryModel.Instance);
+            }
             
             return Disposable.Empty;
         }

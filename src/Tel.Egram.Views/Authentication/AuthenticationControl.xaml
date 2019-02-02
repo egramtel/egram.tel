@@ -70,7 +70,8 @@
             SelectedIndex="{Binding ConfirmIndex}">
             
             <Carousel.PageTransition>
-                <PageSlide Duration="00:00:01.300" Orientation="Vertical" />
+                <!-- <PageSlide Duration="00:00:01.300" Orientation="Vertical" /> -->
+                <CrossFade Duration="00:00:01" />
             </Carousel.PageTransition>
             
             <Panel Height="300" Width="260" />
@@ -124,7 +125,8 @@
             SelectedIndex="{Binding PasswordIndex}">
             
             <Carousel.PageTransition>
-                <PageSlide Duration="00:00:00.300" Orientation="Vertical" />
+                <!-- <PageSlide Duration="00:00:00.300" Orientation="Vertical" /> -->
+                <CrossFade Duration="00:00:01" />
             </Carousel.PageTransition>
                     
             <Panel Height="300" Width="260" />
