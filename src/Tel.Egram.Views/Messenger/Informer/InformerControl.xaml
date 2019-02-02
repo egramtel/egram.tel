@@ -6,11 +6,7 @@
         Width="516"
         Classes="ChatInfo"
         ColumnDefinitions="auto,*,auto"
-        RowDefinitions="*,*">
-            
-        <Border
-            Grid.ColumnSpan="3"
-            Grid.RowSpan="2" />
+        RowDefinitions="23,23,6">
             
         <shared:AvatarControl
             DataContext="{Binding Avatar}"
@@ -50,15 +46,15 @@
             </Panel>
             
         </Button>
+        
+        <Rectangle
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="3" />
             
     </Grid>
     
     <UserControl.Styles>
-        
-        <Style Selector="Border">
-            <Setter Property="BorderThickness" Value="0,0,0,1" />
-            <Setter Property="BorderBrush" Value="#d8d8d8" />
-        </Style>
         
         <Style Selector="Image">
             <Setter Property="Margin" Value="8" />
@@ -67,7 +63,7 @@
         <Style Selector="Button">
             <Setter Property="Width" Value="26" />
             <Setter Property="Height" Value="26" />
-            <Setter Property="Margin" Value="8" />
+            <Setter Property="Margin" Value="0,2,10,0" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
@@ -80,9 +76,28 @@
         </Style>
         
         <Style Selector="Button Ellipse">
-            <Setter Property="Width" Value="22" />
-            <Setter Property="Height" Value="22" />
-            <Setter Property="Fill" Value="#cccccc" />
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Fill" Value="#5f6e8c" />
+        </Style>
+        
+        <Style Selector="Rectangle">
+            <Setter Property="Fill">
+                <Setter.Value>
+                    <LinearGradientBrush 
+                        StartPoint="0%,0%"
+                        EndPoint="0%,100%">
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStop
+                                Offset="0"
+                                Color="#f0f0f0"/>
+                            <GradientStop
+                                Offset="1"
+                                Color="Transparent"/>
+                        </LinearGradientBrush.GradientStops>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
         </Style>
         
     </UserControl.Styles>
