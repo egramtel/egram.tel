@@ -4,6 +4,7 @@ using DynamicData.Binding;
 using PropertyChanged;
 using ReactiveUI;
 using Tel.Egram.Model.Authentication.Phone;
+using Tel.Egram.Model.Authentication.Proxy;
 using Tel.Egram.Model.Authentication.Results;
 
 namespace Tel.Egram.Model.Authentication
@@ -39,10 +40,12 @@ namespace Tel.Egram.Model.Authentication
                     .Bind(this)
                     .DisposeWith(disposables);
 
-                this.BindAuthentication()
+                new AuthenticationManager()
+                    .Bind(this)
                     .DisposeWith(disposables);
 
-                this.BindProxySettings()
+                new ProxyManager()
+                    .Bind(this)
                     .DisposeWith(disposables);
             });
         }
