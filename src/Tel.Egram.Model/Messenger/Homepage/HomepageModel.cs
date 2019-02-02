@@ -4,10 +4,10 @@ using PropertyChanged;
 using ReactiveUI;
 using Tel.Egram.Model.Messenger.Explorer.Messages;
 
-namespace Tel.Egram.Model.Messenger.Home
+namespace Tel.Egram.Model.Messenger.Homepage
 {
     [AddINotifyPropertyChangedInterface]
-    public class HomeModel : ISupportsActivation
+    public class HomepageModel : ISupportsActivation
     {
         public bool IsVisible { get; set; } = true;
         
@@ -15,23 +15,19 @@ namespace Tel.Egram.Model.Messenger.Home
         
         public ObservableCollectionExtended<MessageModel> PromotedMessages { get; set; }
         
-        public HomeModel()
+        public HomepageModel()
         {
-            this.WhenActivated(disposables =>
-            {
-                this.BindSearch()
-                    .DisposeWith(disposables);
-
-                this.BindPromoted()
-                    .DisposeWith(disposables);
-            });
+//            this.WhenActivated(disposables =>
+//            {
+//                
+//            });
         }
         
         public ViewModelActivator Activator => new ViewModelActivator();
 
-        public static HomeModel Hidden()
+        public static HomepageModel Hidden()
         {
-            return new HomeModel
+            return new HomepageModel
             {
                 IsVisible = false
             };

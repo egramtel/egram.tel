@@ -6,7 +6,7 @@ using Tel.Egram.Model.Messenger.Catalog;
 using Tel.Egram.Model.Messenger.Catalog.Entries;
 using Tel.Egram.Model.Messenger.Editor;
 using Tel.Egram.Model.Messenger.Explorer;
-using Tel.Egram.Model.Messenger.Home;
+using Tel.Egram.Model.Messenger.Homepage;
 using Tel.Egram.Model.Messenger.Informer;
 using Tel.Egram.Services.Messaging.Chats;
 using Tel.Egram.Services.Utils.Reactive;
@@ -70,18 +70,18 @@ namespace Tel.Egram.Model.Messenger
 
         public static IDisposable BindHome(this MessengerModel model)
         {
-            model.HomeModel = HomeModel.Hidden();
+            model.HomepageModel = HomepageModel.Hidden();
             
             return model.SubscribeToSelection(entry =>
             {
                 switch (entry)
                 {
                     case HomeEntryModel _:
-                        model.HomeModel = new HomeModel();
+                        model.HomepageModel = new HomepageModel();
                         break;
                     
                     default:
-                        model.HomeModel = HomeModel.Hidden();
+                        model.HomepageModel = HomepageModel.Hidden();
                         break;
                 }
             });

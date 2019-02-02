@@ -4,7 +4,7 @@ using ReactiveUI;
 using Tel.Egram.Model.Messenger.Catalog;
 using Tel.Egram.Model.Messenger.Editor;
 using Tel.Egram.Model.Messenger.Explorer;
-using Tel.Egram.Model.Messenger.Home;
+using Tel.Egram.Model.Messenger.Homepage;
 using Tel.Egram.Model.Messenger.Informer;
 using Tel.Egram.Services.Messaging.Chats;
 
@@ -19,7 +19,7 @@ namespace Tel.Egram.Model.Messenger
         
         public ExplorerModel ExplorerModel { get; set; }
         
-        public HomeModel HomeModel { get; set; }
+        public HomepageModel HomepageModel { get; set; }
         
         public EditorModel EditorModel { get; set; }
 

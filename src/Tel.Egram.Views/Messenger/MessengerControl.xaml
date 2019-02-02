@@ -4,7 +4,8 @@
     xmlns:catalog="clr-namespace:Tel.Egram.Views.Messenger.Catalog"
     xmlns:informer="clr-namespace:Tel.Egram.Views.Messenger.Informer"
     xmlns:explorer="clr-namespace:Tel.Egram.Views.Messenger.Explorer"
-    xmlns:editor="clr-namespace:Tel.Egram.Views.Messenger.Editor">
+    xmlns:editor="clr-namespace:Tel.Egram.Views.Messenger.Editor"
+    xmlns:homepage="clr-namespace:Tel.Egram.Views.Messenger.Homepage">
     
     <Grid
         ColumnDefinitions="auto,*"
@@ -27,6 +28,12 @@
             IsVisible="{Binding IsVisible}"
             VisibleRange="{Binding VisibleRange, Mode=TwoWay}"
             TargetItem="{Binding TargetItem, Mode=TwoWay}"
+            Grid.Column="1"
+            Grid.Row="1" />
+        
+        <homepage:HomepageControl
+            DataContext="{Binding HomepageModel}"
+            IsVisible="{Binding IsVisible}"
             Grid.Column="1"
             Grid.Row="1" />
         
