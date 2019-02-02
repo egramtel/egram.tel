@@ -43,7 +43,8 @@ namespace Tel.Egram.Model.Authentication.Phone
                             {
                                 Code = "+" + c.Code,
                                 CountryCode = c.CountryCode,
-                                Flag = GetFlag(assetLoader, c.CountryCode)
+                                Flag = GetFlag(assetLoader, c.CountryCode),
+                                Mask = c.Mask?.ToLowerInvariant()
                             })
                             .OrderBy(m => m.CountryCode));
 

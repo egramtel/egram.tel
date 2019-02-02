@@ -27,6 +27,9 @@ namespace Tel.Egram.Model.Authentication
         public PhoneCodeModel PhoneCode { get; set; }
         
         public string PhoneNumber { get; set; }
+        public int PhoneNumberStart { get; set; }
+        public int PhoneNumberEnd { get; set; }
+        
         public string ConfirmCode { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

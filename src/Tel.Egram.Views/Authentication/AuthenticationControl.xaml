@@ -49,7 +49,9 @@
             <TextBox
                 Grid.Column="2"
                 Text="{Binding PhoneNumber, Mode=TwoWay}"
-                Watermark="Phone" />
+                SelectionStart="{Binding PhoneNumberStart, Mode=TwoWay}"
+                SelectionEnd="{Binding PhoneNumberEnd, Mode=TwoWay}"
+                Watermark="{Binding PhoneCode.Mask}" />
             
         </Grid>
         
