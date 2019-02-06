@@ -14,6 +14,10 @@ This project aims to be a full featured Telegram client with different approach 
 
 ![screenshot](https://raw.githubusercontent.com/egramtel/egram.tel/master/screenshot.png)
 
+## License
+
+Egram is MIT licensed.
+
 ## Compiling
 
 To compile and run the application, you need to [download and install latest .NET Core SDK](https://www.microsoft.com/net/learn/dotnet/hello-world-tutorial). Clone the repository using [Git](https://git-scm.com/). Then, go into `egram.tel/src/Tel.Egram` directory and run `dotnet run` command.
