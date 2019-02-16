@@ -19,4 +19,15 @@
   <ItemGroup>
     <ProjectReference Include="..\Tel.Egram.Model\Tel.Egram.Model.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Messenger\Homepage\HomepageControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Shared\Recycler\RecyclerItemsPresenter.cs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Shared\Recycler\RecyclerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
 </Project>

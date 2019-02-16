@@ -33,27 +33,27 @@ namespace Tel.Egram.Views.Messenger.Explorer
         {
             AvaloniaXamlLoader.Load(this);
             
-            _listBox = this.FindControl<ListBox>("ItemList");
+            //_listBox = this.FindControl<ListBox>("ItemList");
             
-            this.WhenActivated(disposables =>
-            {
-                var offsetChanges = _listBox.WhenAnyValue(lb => lb.Scroll.Offset)
-                    .Select(_ => Unit.Default);
-                var extentChanges = _listBox.WhenAnyValue(lb => lb.Scroll.Extent)
-                    .Select(_ => Unit.Default);
-                var viewportChanges = _listBox.WhenAnyValue(lb => lb.Scroll.Viewport)
-                    .Select(_ => Unit.Default);
+            //this.WhenActivated(disposables =>
+            //{
+            //    var offsetChanges = _listBox.WhenAnyValue(lb => lb.Scroll.Offset)
+            //        .Select(_ => Unit.Default);
+            //    var extentChanges = _listBox.WhenAnyValue(lb => lb.Scroll.Extent)
+            //        .Select(_ => Unit.Default);
+            //    var viewportChanges = _listBox.WhenAnyValue(lb => lb.Scroll.Viewport)
+            //        .Select(_ => Unit.Default);
                 
-                offsetChanges
-                    .Merge(extentChanges)
-                    .Merge(viewportChanges)
-                    .Accept(_ => HandleOffsetChange())
-                    .DisposeWith(disposables);
+            //    offsetChanges
+            //        .Merge(extentChanges)
+            //        .Merge(viewportChanges)
+            //        .Accept(_ => HandleOffsetChange())
+            //        .DisposeWith(disposables);
 
-                this.WhenAnyValue(x => x.TargetItem)
-                    .Accept(item => HandleTargetItem(item))
-                    .DisposeWith(disposables);
-            });
+            //    this.WhenAnyValue(x => x.TargetItem)
+            //        .Accept(item => HandleTargetItem(item))
+            //        .DisposeWith(disposables);
+            //});
         }
 
         private void HandleTargetItem(object item)

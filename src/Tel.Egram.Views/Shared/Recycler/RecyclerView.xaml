@@ -1,0 +1,51 @@
+﻿<TemplatedControl
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:recycler="clr-namespace:Tel.Egram.Views.Shared.Recycler">
+
+  <TemplatedControl.Styles>
+
+    <Style
+      Selector="recycler|RecyclerView">
+        
+      <Setter
+        Property="Template">
+          
+        <ControlTemplate>
+            
+          <Border
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}">
+              
+            <ScrollViewer
+              Name="PART_ScrollViewer"
+              Background="{TemplateBinding Background}"
+              HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+              VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+
+              <recycler:RecyclerPresenter
+                Name="PART_RecyclerPresenter"
+                Margin="{TemplateBinding Padding}"/>
+
+                            <!--<ItemsPresenter
+                Name="PART_ItemsPresenter"
+                Items="{TemplateBinding Items}"
+                ItemsPanel="{TemplateBinding ItemsPanel}"
+                ItemTemplate="{TemplateBinding ItemTemplate}"
+                Margin="{TemplateBinding Padding}"
+                MemberSelector="{TemplateBinding MemberSelector}"
+                VirtualizationMode="{TemplateBinding VirtualizationMode}"/>--> 
+                
+            </ScrollViewer>
+              
+          </Border>
+            
+        </ControlTemplate>
+          
+      </Setter>
+        
+    </Style>
+
+  </TemplatedControl.Styles>
+
+</TemplatedControl>
