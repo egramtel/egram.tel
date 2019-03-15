@@ -35,7 +35,7 @@
             <TextBlock
                 Grid.Column="1"
                 Grid.Row="2"
-                Text="Egram is an open source software and it is licensed under GNU GPL v3." />
+                Text="Egram is an open source software and it is licensed under MIT" />
             
             <Ellipse
                 Classes="Bullet"
