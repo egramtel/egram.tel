@@ -1,6 +1,5 @@
 ﻿using System;
 using Avalonia;
-using Avalonia.Gtk3;
 using Avalonia.Platform;
 using Splat;
 using Tel.Egram.Application;
@@ -38,31 +37,38 @@ namespace Tel.Egram
         {
             var app = resolver.GetService<MainApplication>();
             var builder = AppBuilder.Configure(app);
-            var os = builder.RuntimePlatform.GetRuntimeInfo().OperatingSystem;
+            var runtime = builder.RuntimePlatform.GetRuntimeInfo();
             var model = new MainWindowModel();
             
-            if (os == OperatingSystemType.OSX)
+            switch (runtime.OperatingSystem)
             {
-                builder.UseAvaloniaNative(null, opt =>
-                {
-                    opt.MacOptions.ShowInDock = true;
-                    opt.UseDeferredRendering = true;
-                    opt.UseGpu = true;
-                }).UseSkia();
-            }
-            else if (os == OperatingSystemType.Linux)
-            {
-                builder.UseGtk3(new Gtk3PlatformOptions
-                {
-                    UseDeferredRendering = true,
-                    UseGpuAcceleration = true
-                }).UseSkia();
-            }
-            else
-            {
-                builder.UseWin32(
-                    deferredRendering: true
-                ).UseSkia();
+                case OperatingSystemType.OSX:
+                    builder.UseAvaloniaNative()
+                        .With(new AvaloniaNativePlatformOptions
+                        {
+                            UseGpu = true,
+                            UseDeferredRendering = true
+                        })
+                        .UseSkia();
+                    break;
+                
+                case OperatingSystemType.Linux:
+                    builder.UseX11()
+                        .With(new X11PlatformOptions
+                        {
+                            UseGpu = true
+                        })
+                        .UseSkia();
+                    break;
+                
+                default:
+                    builder.UseWin32()
+                        .With(new Win32PlatformOptions
+                        {
+                            UseDeferredRendering = true
+                        })
+                        .UseSkia();
+                    break;
             }
 
             builder.UseReactiveUI();
